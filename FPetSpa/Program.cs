@@ -44,6 +44,7 @@ namespace FPetSpa
 
             app.UseAuthorization();
 
+            app.UseCors();
 
             app.MapControllers();
 
