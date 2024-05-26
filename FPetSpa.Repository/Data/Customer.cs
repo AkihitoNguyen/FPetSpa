@@ -1,0 +1,29 @@
+﻿using System;
+using System.Collections.Generic;
+
+namespace FPetSpa.Data;
+
+public partial class Customer
+{
+    public int CustomerId { get; set; }
+
+    public string? PictureName { get; set; }
+
+    public string? UserName { get; set; }
+
+    public string? Name { get; set; }
+
+    public string? Password { get; set; }
+
+    public string? Address { get; set; }
+
+    public decimal? Phone { get; set; }
+
+    public double? Coupon { get; set; }
+
+    public bool? Status { get; set; }
+
+    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+
+    public virtual ICollection<Pet> Pets { get; set; } = new List<Pet>();
+}
