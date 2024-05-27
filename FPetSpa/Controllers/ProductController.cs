@@ -21,5 +21,8 @@ namespace FPetSpa.Controllers
             var result = await _unitOfWork.ProductRepository.GetAll();
             return Ok(result);
         }
+
+
+
     }
 }
