@@ -12,6 +12,7 @@ namespace FPetSpa.Repository
     {
         private FpetSpaContext _context;
         private GenericRepository<Service> _service;
+        private GenericRepository<Product> _product;
 
         public UnitOfWork(FpetSpaContext context) {
             _context = context;
@@ -28,7 +29,17 @@ namespace FPetSpa.Repository
                 return this._service;
             }
         }
-
+        public GenericRepository<Product> ProductRepository
+        {
+            get
+            {
+                if (_product == null)
+                {
+                    this._product = new GenericRepository<Product>(_context);
+                }
+                return this._product;
+            }
+        }
         public void Save()
         {
             _context.SaveChanges();
