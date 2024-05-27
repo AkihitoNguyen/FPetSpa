@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace FPetSpa.Data;
 
@@ -10,6 +11,7 @@ public partial class Product
     public string? ProductName { get; set; }
 
     public string? PictureName { get; set; }
+
 
     public string? CategoryId { get; set; }
 
