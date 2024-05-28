@@ -4,7 +4,7 @@ import { assets } from '../../assets/assets'
 import { useNavigate } from 'react-router-dom'
 
 const Navbar = () => {
-  
+
   const navigate = useNavigate();
   const [menu, setMenu] = useState("menu");
 
@@ -23,14 +23,18 @@ const Navbar = () => {
       <div className="navbar-right">
         <img src={assets.search} alt="" className='search' />
         <div className="navbar-search-icon">
-          <img src={assets.cart} alt="" className='cart' />
+          <img onClick={() =>{ navigate("/cart")}} src={assets.cart} alt="" className='cart' />
           <div className="dot"></div>
         </div>
         <button onClick={() => {
           navigate("/login");
         }}>sign in</button>
       </div>
+      {/* --------------------------------------- */}
+
+          
     </div>
+
   )
 }
 

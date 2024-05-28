@@ -4,7 +4,7 @@ import cat_3 from './cat_3.png'
 
 import cat_spa from './cat_spa.png'
 import cat from './cat.png'
-
+import dog_spa from './dog_spa.png'
 
 import food_1 from './food_1.png'
 import food_2 from './food_2.png'
@@ -36,6 +36,7 @@ export const assets = {
     cat_2,
     cat_3,
     cat_spa,
+    dog_spa,
     cat,
     food_1,
     food_2,
