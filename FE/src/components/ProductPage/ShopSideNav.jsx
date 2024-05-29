@@ -2,7 +2,7 @@
 // import { useNavigate } from 'react-router-dom'
 // import { useState } from 'react'
 
-import '../ProductPage/CSS/ShopSideNav.css'
+import '../ProductPage/ShopSideNav.css'
 import { NavLink } from 'react-router-dom'
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from 'react'

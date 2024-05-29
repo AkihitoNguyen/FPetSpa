@@ -5,7 +5,7 @@ import { getUsersFailed, getUsersStart, getUsersSuccess } from "./userSlice";
 export const loginUser = async (user,dispatch,navigate)=>{
     dispatch(loginStart());
     try {
-        const res = await axios.post(`https://reqres.in/api/login`,user);
+        const res = await axios.post(`http://localhost:5221/api/Accounts/login`,user);
         dispatch(loginStart(res.data));
         navigate("/");
     } catch (error) {
