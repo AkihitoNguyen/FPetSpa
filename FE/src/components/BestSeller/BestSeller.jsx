@@ -63,7 +63,7 @@ const BestSeller = () => {
                 </div>
             ))}
             <div className='blog'>
-                <img src={assets.pet_group2} alt="" />
+                <img src={assets.pet_group2} alt="" className='pet-group' />
 
                 <div className="blog-content">
                     <h1>We Treat Your Pet

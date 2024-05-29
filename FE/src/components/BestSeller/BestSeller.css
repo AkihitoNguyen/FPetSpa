@@ -106,6 +106,17 @@
         width: 16rem;
     }
     .blog img{
-        width: 70rem;
+        width: 35rem;
+    }
+
+    .blog-content p {
+        margin-left: 10rem;
+    }
+
+    .blog .pet-group{
+        width: 75rem;
+    }
+    .blog-content button{
+        margin-right: 66rem;
     }
 }
