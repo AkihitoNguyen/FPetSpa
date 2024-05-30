@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react'
 import Navbar from './components/Navbar/Navbar'
 import { Route, Routes } from 'react-router-dom'
@@ -6,8 +7,8 @@ import PlaceOrder from './pages/PlaceOrder/PlaceOrder'
 import Home from './pages/Home/Home'
 import Footer from './components/Footer/Footer'
 import Login from './pages/Login/Login'
-import Service from './components/Service/Service'
 
+import Service from './components/Service/Service'
 
 const App = () => {
 
@@ -21,6 +22,7 @@ const App = () => {
           <Route path='/cart' element={<Cart />} />
           <Route path='/order' element={<PlaceOrder />} />
           <Route path='/login' element = {<Login/>}/>
+          <Route path='/signup' element = {<Signup/>}/>
         </Routes>
       </div>
       <Footer />
