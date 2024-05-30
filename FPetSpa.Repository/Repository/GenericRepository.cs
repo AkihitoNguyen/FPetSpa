@@ -60,5 +60,7 @@ namespace FPetSpa.Repository.Repository
         {
             return _context.Set<T>().Where(predicate);
         }
+
+       
     }
 }

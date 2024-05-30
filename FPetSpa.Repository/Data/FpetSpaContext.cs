@@ -14,7 +14,7 @@ public partial class FpetSpaContext : DbContext
         : base(options)
     {
     }
-
+   
     public virtual DbSet<Category> Categories { get; set; }
 
     public virtual DbSet<Customer> Customers { get; set; }

@@ -1,10 +1,15 @@
+
+﻿using FPetSpa.Repository;
+
 ﻿using FPetSpa.Data;
 using FPetSpa.Models.ProductModel;
 using FPetSpa.Repository;
+
 using Microsoft.AspNetCore.Mvc;
 
 namespace FPetSpa.Controllers
 {
+
     [Route("api/products")]
     [ApiController]
     public class ProductController : Controller
@@ -14,12 +19,14 @@ namespace FPetSpa.Controllers
         {
             _unitOfWork = unitOfWork;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var result = await _unitOfWork.ProductRepository.GetAll();
             return Ok(result);
         }
+
 
         [HttpGet("{id}")]
         public IActionResult GetProductById(string id)
@@ -73,5 +80,6 @@ namespace FPetSpa.Controllers
             _unitOfWork.Save();
             return Ok();
         }
+
     }
 }

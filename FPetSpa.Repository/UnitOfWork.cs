@@ -14,7 +14,6 @@ namespace FPetSpa.Repository
         private GenericRepository<Service> _service;
         private GenericRepository<Product> _product;
 
-
         public UnitOfWork(FpetSpaContext context) {
             _context = context;
         }
