@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from 'react'
 import './Service.css'
-import { getAllServices } from '../../api/apiService'
+import { getAllServices } from '../../api/apiService.js'
 import { assets } from '../../assets/assets';
 
 
@@ -24,12 +24,14 @@ const Service = () => {
 
   return (
     <div className='service' id='service'>
-      <h1 className="sr-only">Our <span>Service</span></h1>
+      <h1>Our <span>Service</span></h1>
       <div className="service-list">
 {serviceList && serviceList.length > 0 &&
         serviceList.map((item, index) => {
           return (
-            <div className="service-list-item" key={`table-user-${index}`}>
+
+            <div key={item.serviceId} className="service-list-item">
+
               <div className='service-img'>
               <img src={assets.food_3} alt="" />
               </div>

@@ -8,7 +8,7 @@ import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
 // import { logOut } from '../../redux/apiRequest'
 const Navbar = () => {
-  
+
   const navigate = useNavigate();
   // const dispath = useDispatch();
   // const accessToken = user?.accessToken;
@@ -25,14 +25,16 @@ const Navbar = () => {
       <ul className="navbar-menu">
         <li onClick={() => { navigate("/"); setMenu("home") }} className={menu === "home" ? "active" : ""}>home</li>
         <li onClick={() => { navigate("/"); setMenu("about-us") }} className={menu === "about-us" ? "active" : ""}>about us</li>
-        <li onClick={() => { navigate("/"); setMenu("service") }} className={menu === "service" ? "active" : ""}>service</li>
-        <li onClick={() => { navigate("/product"); setMenu("product") }} className={menu === "product" ? "active" : ""}>product</li>
+
+        <li onClick={() => { navigate("/service"); setMenu("service") }} className={menu === "service" ? "active" : ""}>service</li>
+        <li onClick={() => { navigate("/"); setMenu("product") }} className={menu === "product" ? "active" : ""}>product</li>
+
         <li onClick={() => { navigate("/"); setMenu("blog") }} className={menu === "blog" ? "active" : ""}>blog</li>
       </ul>
       <div className="navbar-right">
         <img src={assets.search} alt="" className='search' />
         <div className="navbar-search-icon">
-          <img src={assets.cart} alt="" className='cart' />
+          <img onClick={() =>{ navigate("/cart")}} src={assets.cart} alt="" className='cart' />
           <div className="dot"></div>
         </div>
         {user ? (
@@ -45,7 +47,11 @@ const Navbar = () => {
         )}
         
       </div>
+      {/* --------------------------------------- */}
+
+          
     </div>
+
   )
 }
 
