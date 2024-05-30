@@ -1,4 +1,4 @@
-﻿namespace FPetSpa.Model.ServiceModel
+﻿namespace FPetSpa.Models.ServiceModel
 {
     public class RequestSearchServiceModel
     {

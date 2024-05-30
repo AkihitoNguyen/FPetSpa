@@ -1,5 +1,5 @@
 ﻿using FPetSpa.Data;
-using FPetSpa.Model.ServiceModel;
+using FPetSpa.Models.ServiceModel;
 using FPetSpa.Repository;
 using Microsoft.AspNetCore.Mvc;
 
