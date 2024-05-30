@@ -26,8 +26,4 @@
     <ProjectReference Include="..\FPetSpa.Repository\FPetSpa.Repository.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Models\" />
-  </ItemGroup>
-
 </Project>
