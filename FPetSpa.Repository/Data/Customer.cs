@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FPetSpa.Data;
+namespace FPetSpa.Repository.Data;
 
 public partial class Customer
 {
@@ -22,6 +22,8 @@ public partial class Customer
     public double? Coupon { get; set; }
 
     public bool? Status { get; set; }
+
+    public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
     public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
 

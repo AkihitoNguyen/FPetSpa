@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace FPetSpa.Repository.Repository
 {
-    public interface IServiceRepository<T> where T : class
+    public interface IGenericRepository<T> where T : class
     {
      
         Task<IEnumerable<T>> GetAll();

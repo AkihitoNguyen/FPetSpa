@@ -1,11 +1,12 @@
 
 ﻿using FPetSpa.Repository;
 
-﻿using FPetSpa.Data;
+﻿using FPetSpa.Repository.Data;
 using FPetSpa.Models.ProductModel;
-using FPetSpa.Repository;
+
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FPetSpa.Controllers
 {
@@ -29,12 +30,16 @@ namespace FPetSpa.Controllers
 
 
         [HttpGet("{id}")]
+        [Authorize]
+
         public IActionResult GetProductById(string id)
         {
             var responseCategories = _unitOfWork.ProductRepository.GetById(id);
             return Ok(responseCategories);
         }
         [HttpPost]
+        [Authorize]
+
         public IActionResult CreateProduct(RequestCreateProductModel requestCreateProductModel)
         {
             var productEntity = new Product
@@ -53,7 +58,9 @@ namespace FPetSpa.Controllers
             return Ok();
     }
     [HttpPut("{id}")]
-     
+        [Authorize]
+
+
         public IActionResult UpdateProduct(string id, RequestCreateProductModel requestCreateProductModel)
         {
             var existedProductEntity = _unitOfWork.ProductRepository.GetById(id);

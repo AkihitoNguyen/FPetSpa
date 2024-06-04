@@ -1,7 +1,9 @@
-﻿using FPetSpa.Data;
+﻿using FPetSpa.Repository.Data;
 using FPetSpa.Models.ServiceModel;
 using FPetSpa.Repository;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Authorization;
+using FPetSpa.Repository.Helper;
 
 namespace FPetSpa.Controllers
 {
@@ -10,7 +12,6 @@ namespace FPetSpa.Controllers
     public class ServicesController : ControllerBase
     {       
         private readonly UnitOfWork _unitOfWork;
-        private object requestCreateServiceModel;
 
         public ServicesController(UnitOfWork unitOfWork) 
         {
@@ -18,6 +19,7 @@ namespace FPetSpa.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = Role.Customer)]
         public async Task<IActionResult> GetAll()
         {
             var result = await _unitOfWork.ServiceRepository.GetAll();
@@ -25,6 +27,7 @@ namespace FPetSpa.Controllers
         }
 
         [HttpGet("{id}")]
+        [Authorize(Roles = Role.Staff)]
         public IActionResult GetServiceById(String id)
         {
             var responseCategories = _unitOfWork.ServiceRepository.GetById(id);
@@ -32,6 +35,8 @@ namespace FPetSpa.Controllers
         }
 
         [HttpPost]
+        [Authorize]
+
         public IActionResult CreateService(RequestCreateServiceModel requestCreateServiceModel)
         {
             var service = new Service
@@ -52,6 +57,8 @@ namespace FPetSpa.Controllers
             return Ok();
         }
         [HttpPut("{id}")]
+        [Authorize]
+
         public IActionResult UpdateService(String id, RequestCreateServiceModel requestCreateServiceModel)
         {
             var existedServiceEntity = _unitOfWork.ServiceRepository.GetById(id);
