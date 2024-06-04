@@ -1,10 +1,17 @@
 import cat_1 from './cat_1.png'
 import cat_2 from './cat_2.png'
 import cat_3 from './cat_3.png'
+import spa_cat1 from './spa_cat1.png'
+import spa_cat from './spa_cat.png'
 
 import cat_spa from './cat_spa.png'
 import cat from './cat.png'
-
+import dog from './dog.png'
+import dog_spa from './dog_spa.png'
+import cat_banner from './cat_banner.png'
+import banner_product from './banner-product.png'
+import Un from './Un.png'
+import star_icon from './star_icon.png'
 
 import food_1 from './food_1.png'
 import food_2 from './food_2.png'
@@ -16,6 +23,7 @@ import logo from './logo.png'
 import cart from './cart.png'
 import left_arrow from './left_arrow.png'
 import right_arrow from './right_arrow.png'
+import arrow from './breadcrum_arrow.png'
 
 import pet_group from './pet_group.png'
 import pet_group2 from './pet_group2.png'
@@ -54,7 +62,16 @@ export const assets = {
     icon_3,
     facebook,
     instagram,
-    email
+    email,
+    dog,
+    cat_banner,
+    banner_product,
+    arrow,
+    spa_cat,
+    spa_cat1,
+    dog_spa,
+    Un,
+    star_icon
 }
 
 export const food_list = [
