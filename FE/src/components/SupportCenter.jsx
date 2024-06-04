@@ -30,7 +30,7 @@ const SupportCenter = () => {
     if (!formData.email.trim()) {
       errors.email = 'Email can not be blank';
     } else if (!isValidEmail(formData.email)) {
-      errors.email = 'Invalid email format';
+      errors.email = 'Invalid email format ';
     }
     if (!formData.phoneNumber.trim()) {
       errors.phoneNumber = 'Phone number can not be blank';
