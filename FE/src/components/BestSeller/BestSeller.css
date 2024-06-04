@@ -54,9 +54,9 @@
 
 .blog h1{
     display: inline;
-    font-family: Outfit;
-    font-weight: 500;
-    font-size: 60px;
+    font-family: "Poppins", sans-serif;
+    font-weight: 700;
+    font-size: 55px;
 }
 
 .blog p{
@@ -110,13 +110,14 @@
     }
 
     .blog-content p {
-        margin-left: 10rem;
+        margin-left: 4rem;
     }
 
     .blog .pet-group{
         width: 75rem;
     }
     .blog-content button{
-        margin-right: 66rem;
+        margin-right: 68rem;
+        padding: 7px 10px 7px 10px;
     }
 }

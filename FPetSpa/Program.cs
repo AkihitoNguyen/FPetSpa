@@ -43,8 +43,6 @@ namespace FPetSpa
             app.UseHttpsRedirection();
 
             app.UseAuthorization();
-            app.UseCors();
-
             app.MapControllers();
             app.UseCors();
             app.Run();
