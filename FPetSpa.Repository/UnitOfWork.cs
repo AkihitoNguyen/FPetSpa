@@ -13,6 +13,8 @@ namespace FPetSpa.Repository
         private FpetSpaContext _context;
         private GenericRepository<Service> _service;
         private GenericRepository<Product> _product;
+        private GenericRepository<FeedBack> _feedback;
+
 
 
         public UnitOfWork(FpetSpaContext context) {
@@ -38,7 +40,18 @@ namespace FPetSpa.Repository
                 {
                     this._product = new GenericRepository<Product>(_context);
                 }
-                return this._product;
+                return _product;
+            }
+        }
+        public GenericRepository<FeedBack> FeedBackRepository
+        {
+            get
+            {
+                if (_product == null)
+                {
+                    this._feedback = new GenericRepository<FeedBack>(_context);
+                }
+                return _feedback;
             }
         }
 

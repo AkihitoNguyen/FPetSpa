@@ -2,7 +2,7 @@
 {
     public class RequestCreateProductModel
     {
-        public string ProductId { get; set; }
+        
 
         public string ProductName { get; set; }
         public string PictureName { get; set; }
