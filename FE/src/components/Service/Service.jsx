@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from 'react'
 import './Service.css'
 import { getAllServices } from '../../api/apiService.js'
@@ -26,6 +27,7 @@ const Service = () => {
       <h1>Our <span>Service</span></h1>
       <p>We offer high-class care services and activities for your pets. No matter what accommodation type you choose, your pet will always receive premium meals, daily exercise and play time and constant care from our professional trained team of pet welfare staff.</p>
       <div className="service-list">
+<<<<<<< HEAD
           <div className="service-list-items">
               <img src={assets.happy} alt="" />
               <h2>Dog Grooming</h2>
@@ -50,6 +52,27 @@ const Service = () => {
                   <br />we do and need a change of scenery.</p>
                   <button>View More</button>
           </div>
+=======
+{serviceList && serviceList.length > 0 &&
+        serviceList.map((item, index) => {
+          return (
+
+            <div key={item.serviceId} className="service-list-item">
+
+              <div className='service-img'>
+              <img src={assets.food_3} alt="" />
+              </div>
+                <div className='name'>
+                <h3>{item.serviceName}</h3>
+                </div>
+                <p className='price'>${item.price}</p>
+                
+              </div>
+
+          )
+
+        })}
+>>>>>>> abfc65b35d26ddc59245c52a27bffd53b0dd3d47
 
       </div>
 
