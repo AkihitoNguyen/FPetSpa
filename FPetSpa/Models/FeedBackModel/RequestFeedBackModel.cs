@@ -1,4 +1,4 @@
-﻿using FPetSpa.Data;
+﻿using FPetSpa.Repository.Data;
 
 namespace FPetSpa.Models.FeedBackModel
 {
