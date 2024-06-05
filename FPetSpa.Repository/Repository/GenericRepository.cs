@@ -1,4 +1,4 @@
-﻿using FPetSpa.Data;
+﻿using FPetSpa.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -100,6 +100,7 @@ namespace FPetSpa.Repository.Repository
         {
             return _context.Set<T>().Where(predicate);
         }
+
         public virtual int Count(Expression<Func<T, bool>> filter = null)
         {
             IQueryable<T> query = dbSet;
@@ -110,5 +111,6 @@ namespace FPetSpa.Repository.Repository
             }
             return query.Count();
         }
+
     }
 }

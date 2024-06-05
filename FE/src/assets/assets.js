@@ -4,7 +4,7 @@ import cat_3 from './cat_3.png'
 
 import cat_spa from './cat_spa.png'
 import cat from './cat.png'
-
+import dog_spa from './dog_spa.png'
 
 import food_1 from './food_1.png'
 import food_2 from './food_2.png'
@@ -19,6 +19,8 @@ import right_arrow from './right_arrow.png'
 
 import pet_group from './pet_group.png'
 import pet_group2 from './pet_group2.png'
+import cat_happy from './cat_happy.png'
+import happy from './happy.png'
 
 import search from './search.png'
 import phone from './phone.png'
@@ -28,6 +30,7 @@ import icon_3 from './icon_3.png'
 import facebook from './facebook.png'
 import instagram from './instagram.png'
 import email from './email.png'
+import scissor from './scissors.png'
 
 export const assets = {
     logo,
@@ -36,7 +39,10 @@ export const assets = {
     cat_2,
     cat_3,
     cat_spa,
+    dog_spa,
     cat,
+    cat_happy,
+    happy,
     food_1,
     food_2,
     food_3,
@@ -54,7 +60,8 @@ export const assets = {
     icon_3,
     facebook,
     instagram,
-    email
+    email,
+    scissor
 }
 
 export const food_list = [

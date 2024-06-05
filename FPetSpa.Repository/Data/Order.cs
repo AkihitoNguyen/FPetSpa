@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FPetSpa.Data;
+namespace FPetSpa.Repository.Data;
 
 public partial class Order
 {
@@ -10,8 +10,6 @@ public partial class Order
     public int? CustomerId { get; set; }
 
     public int? StaffId { get; set; }
-
-    public int? GuestId { get; set; }
 
     public DateOnly? RequiredDate { get; set; }
 

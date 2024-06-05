@@ -1,12 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace FPetSpa.Data;
+namespace FPetSpa.Repository.Data;
 
 public partial class ProductOrderDetail
 {
-    public string? ProductOrderId { get; set; }
-
     public string? OrderId { get; set; }
 
     public string? ProductId { get; set; }

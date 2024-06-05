@@ -1,14 +1,20 @@
-﻿using FPetSpa.Data;
+
+﻿using FPetSpa.Repository;
+
+﻿using FPetSpa.Repository.Data;
 using FPetSpa.Models.ProductModel;
-using FPetSpa.Repository;
+
+
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using static FPetSpa.Models.ProductModel.RequestSearchProductModel;
 using System.Linq.Expressions;
 using FPetSpa.Repository.Services;
+using Microsoft.AspNetCore.Authorization;
 
 namespace FPetSpa.Controllers
 {
+
     [Route("api/products")]
     [ApiController]
     public class ProductController : Controller
@@ -22,6 +28,7 @@ namespace FPetSpa.Controllers
             _unitOfWork = unitOfWork;
             _productService = service;
         }
+
         /// <summary>
         /// SortBy (ProductId = 1,ProductName = 2,CategoryId = 3,ProductQuantity = 4,Price = 5,)
         /// 
@@ -32,6 +39,7 @@ namespace FPetSpa.Controllers
         [HttpGet]
         public IActionResult SearchProduct([FromQuery] RequestSearchProductModel requestSearchProductModel)
         {
+
 
             var sortBy = requestSearchProductModel.SortContent != null ? requestSearchProductModel.SortContent?.sortProductBy.ToString() : null;
             var sortType = requestSearchProductModel.SortContent != null ? requestSearchProductModel.SortContent?.sortProductType.ToString() : null;
@@ -62,13 +70,18 @@ namespace FPetSpa.Controllers
             );
             return Ok(responseCategorie);
         }
+
         [HttpGet("{id}")]
+        [Authorize]
+
         public IActionResult GetProductById(string id)
         {
             var responseCategories = _unitOfWork.ProductRepository.GetById(id);
             return Ok(responseCategories);
         }
+        
         [HttpPost]
+        [Authorize]
          public async Task<IActionResult> CreateProduct(RequestCreateProductModel requestCreateProductModel)
         {
             var newProductId = await _productService.GenerateNewProductIdAsync();
@@ -88,7 +101,9 @@ namespace FPetSpa.Controllers
             return Ok();
     }
     [HttpPut("{id}")]
-     
+        [Authorize]
+
+
         public IActionResult UpdateProduct(string id, RequestCreateProductModel requestCreateProductModel)
         {
             var existedProductEntity = _unitOfWork.ProductRepository.GetById(id);
@@ -115,5 +130,6 @@ namespace FPetSpa.Controllers
             _unitOfWork.Save();
             return Ok();
         }
+
     }
 }
