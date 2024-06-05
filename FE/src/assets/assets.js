@@ -16,11 +16,11 @@ import logo from './logo.png'
 import cart from './cart.png'
 import left_arrow from './left_arrow.png'
 import right_arrow from './right_arrow.png'
-import banner from './banner.png'
-import breadcrum_arrow from './breadcrum_arrow.png'
 
 import pet_group from './pet_group.png'
 import pet_group2 from './pet_group2.png'
+import cat_happy from './cat_happy.png'
+import happy from './happy.png'
 
 import search from './search.png'
 import phone from './phone.png'
@@ -30,10 +30,9 @@ import icon_3 from './icon_3.png'
 import facebook from './facebook.png'
 import instagram from './instagram.png'
 import email from './email.png'
+import scissor from './scissors.png'
 
 export const assets = {
-    breadcrum_arrow,
-    banner,
     logo,
     cart,
     cat_1,
@@ -42,6 +41,8 @@ export const assets = {
     cat_spa,
     dog_spa,
     cat,
+    cat_happy,
+    happy,
     food_1,
     food_2,
     food_3,
@@ -59,7 +60,8 @@ export const assets = {
     icon_3,
     facebook,
     instagram,
-    email
+    email,
+    scissor
 }
 
 export const food_list = [
