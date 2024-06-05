@@ -11,6 +11,7 @@ const Login = () => {
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch();
     const navigate = useNavigate();
+    
     const handleLogin = (e)=>{
         e.preventDefault();
 
@@ -79,7 +80,7 @@ const Login = () => {
                 onChange={handleEmailChange}
                 />
                   {errors.email && <p className="error-message">{errors.email}</p>}
-                <label>PASSWORD</label>
+                <label className="password-container">PASSWORD</label>
                 <div className="password-container">
                 <input type={isShowPassword ? "text" : "password"} 
                 placeholder="Enter your password" 
@@ -90,7 +91,7 @@ const Login = () => {
             {isShowPassword ? <VscEye /> : <VscEyeClosed />}
           </span>
                 </div>
-                <button type="submit"> Continue </button>
+                <button type="submit" className="button-continue"> Continue </button>
             </form>
             <div className="login-register"> Dont have an account yet? </div>
             <Link className="login-register-link" to="/register">Register one for free </Link>

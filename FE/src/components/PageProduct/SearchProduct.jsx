@@ -3,10 +3,10 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../PageProduct/ProductList.css';
 import '../PageProduct/SearchProduct.css';
-import { getAllProduct, getSearchProduct } from '../../api/apiService';
-import { DropdownButton, Dropdown, Form, CardBody, Card, Badge, Row, Tab, ListGroup, Col } from 'react-bootstrap';
+import { getAllProduct } from '../../api/apiService';
+import { DropdownButton, Dropdown, CardBody, Card, Row, Tab, ListGroup, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
-import Search from './Search';
+
 
 const SearchProduct = () => {
   const [productList, setProductList] = useState([]);
@@ -66,14 +66,6 @@ const SearchProduct = () => {
     setSortedProductList(sortedList);
   };
 
-  const handleSearch = async (product) => {
-    try {
-      const response = await getSearchProduct({ productName: product });
-      setProductList(response);
-    } catch (error) {
-      console.error("Error searching products:", error);
-    }
-  };
 
   return (
     <>
@@ -91,9 +83,9 @@ const SearchProduct = () => {
                   <div className="ms-2 me-auto">
                     <div className="fw-bold">Dog Food</div>
                   </div>
-                  <Badge bg="primary" pill>
+                  {/* <Badge bg="primary" pill>
                     14
-                  </Badge>
+                  </Badge> */}
                 </ListGroup.Item>
 
                 {['Cat Food', 'Balo', 'Toy', 'Cake'].map((item, index) => (
@@ -107,16 +99,16 @@ const SearchProduct = () => {
                     <div className="ms-2 me-auto">
                       <div className="fw-bold">{item}</div>
                     </div>
-                    <Badge bg="primary" pill>
+                    {/* <Badge bg="primary" pill>
                       14
-                    </Badge>
+                    </Badge> */}
                   </ListGroup.Item>
                 ))}
               </ListGroup>
-              <Search onSearch={handleSearch} />
+              
 
-              <Form.Label>Range</Form.Label>
-              <Form.Range />
+              {/* <Form.Label>Range</Form.Label>
+              <Form.Range /> */}
             </Col>
 
             <Col sm={8}>
