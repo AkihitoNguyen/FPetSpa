@@ -1,0 +1,283 @@
+/* 
+.menu-product {
+    display: flex;
+    justify-content: center;
+}
+.p-2 {
+    display: flex;
+    justify-content: center;
+}
+.list-group-item.active {
+    z-index: 2;
+    color: #000;
+    background-color: #0d6efd1c;
+    border-color: var(--bs-list-group-active-border-color);
+}
+.div#list-group-tabs-example-tabpane-\#link1 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 60px;
+}
+.col-sm-8 {
+    margin-left: 30px;
+}
+
+@media(max-width:1680px){
+    div#list-group-tabs-example-tabpane-\#link1 {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 60px;
+    }
+    .card { 
+        width: 17rem;
+        margin: -20px;
+        margin-top: auto;
+      }
+    }
+@media(max-width:1480px){
+    div#list-group-tabs-example-tabpane-\#link1 {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 55px;
+    }
+    .card { 
+       width: 15rem;; 
+        margin: -20px;
+        margin-top: auto;
+      }
+    }
+@media(max-width:1280px){
+    div#list-group-tabs-example-tabpane-\#link1 {
+        display: flex;
+        column-gap: 33%;
+        row-gap: 8rem;
+        flex-direction: row;
+        flex-wrap: wrap;
+        padding: 20px 68px
+
+    }
+        .card { 
+            width: 15rem;
+            margin: -100px;
+            margin-top: auto;
+          }
+          .col-sm-4 {
+            width: 18%;
+        }
+        .col-sm-8 {
+            flex: 0 0 auto;
+            width: 78.666667%;
+        }
+    
+    }
+    @media(max-width:1080px){
+        div#list-group-tabs-example-tabpane-\#link1 {
+            display: flex;
+            column-gap: 216px;
+        row-gap: 124px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding: 11px 68px;
+            margin-left: 10%;
+        }
+            .card { 
+                width: 13rem;
+                    margin: -100px;
+                    margin-top: auto;
+                
+              }
+              .col-sm-4 {
+                width: 18%;
+            }
+            .col-sm-8 {
+                flex: 0 0 auto;
+                width: 66.66666667%;
+            }
+        
+        }
+    @media(max-width:900){
+        div#list-group-tabs-example-tabpane-\#link1 {
+            display: flex;
+        -moz-column-gap: 216px;
+        column-gap: 229px;
+        row-gap: 124px;
+        flex-direction: column;
+        flex-wrap: wrap;
+        padding: 11px 68px;
+        }
+        .card { 
+            width: 12rem; 
+            margin: -200px;
+            margin-top: auto;
+            display: -webkit-inline-box;
+          }
+    
+    }
+    @media(max-width:400){
+        div#list-group-tabs-example-tabpane-\#link1 {
+            display: flex;
+        -moz-column-gap: 216px;
+        column-gap: 229px;
+        row-gap: 124px;
+        flex-direction: column;
+        flex-wrap: wrap;
+        padding: 11px 68px;
+        }
+        .card { 
+            width: 12rem; 
+            margin: -200px;
+            margin-top: auto;
+            display: -webkit-inline-box;
+          }
+    
+    } */
+
+    
+.menu-product {
+    display: flex;
+    justify-content: center;
+}
+.p-2 {
+    display: flex;
+    justify-content: center;
+}
+.list-group-item.active {
+    z-index: 2;
+    color: #000;
+    background-color: #0d6efd1c;
+    border-color: var(--bs-list-group-active-border-color);
+}
+.div#list-group-tabs-example-tabpane-\#link0 {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 60px;
+}
+.col-sm-8 {
+    margin-left: 30px;
+}
+.g-4.row.row-cols-md-2.row-cols-1 {
+    display: flex;
+    row-gap: 44px;
+    column-gap: 70px;
+}
+
+@media(max-width:1680px){
+    div#list-group-tabs-example-tabpane-\#link0 {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 60px;
+    }
+    .g-4.row.row-cols-md-2.row-cols-1 {
+        display: flex;
+        row-gap: 54px;
+        -moz-column-gap: 232px;
+        column-gap: 70px;
+        flex-direction: row;
+        flex-wrap: wrap;
+        margin-left: 1%;
+    
+    }
+    .card { 
+        width: 17rem;
+        margin: -20px;
+        margin-top: auto;
+      }
+    }
+@media(max-width:1480px){
+    div#list-group-tabs-example-tabpane-\#link0 {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 55px;
+        margin-left: 3%;
+    
+    }
+    .g-4.row.row-cols-md-2.row-cols-1 {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        column-gap: 51px;
+        margin-left: 1%;
+        row-gap: 46px;
+    }
+    .card { 
+       width: 15rem;; 
+        margin: -20px;
+        margin-top: auto;
+      }
+      button#dropdown-basic-button {
+        margin-left: 19%;
+        margin-top: -19%;
+    }
+    }
+@media(max-width:1280px){
+    .g-4.row.row-cols-md-2.row-cols-1 {
+        display: flex;
+        flex-wrap: wrap;
+        flex-direction: row;
+        -moz-column-gap: 51px;
+        column-gap: 230px;
+        margin-left: 14%;
+        row-gap: 121px;
+    
+    }
+        .card { 
+            width: 15rem;
+            margin: -100px;
+            margin-top: auto;
+          }
+          .col-sm-4 {
+            width: 18%;
+        }
+        .col-sm-8 {
+            flex: 0 0 auto;
+            width: 78.666667%;
+        }
+        button#dropdown-basic-button {
+            margin-left: 21%;
+            margin-top: -20%;
+        }
+    
+    }
+    @media(max-width:1080px){
+        div#list-group-tabs-example-tabpane-\#link0 {
+            display: flex;
+            column-gap: 216px;
+        row-gap: 124px;
+            flex-direction: row;
+            flex-wrap: wrap;
+            padding: 9px 40px;
+            margin-left: 10%;
+        }
+            .card { 
+                width: 13rem;
+                    margin: -100px;
+                    margin-top: auto;
+                
+              }
+              .col-sm-4 {
+                width: 18%;
+            }
+            .col-sm-8 {
+                flex: 0 0 auto;
+                width: 66.66666667%;
+            }
+            button#dropdown-basic-button {
+                margin-left: 27%;
+                margin-top: -24%;
+            }
+        
+        }
+
+
+
+  
+  
+
+  
+
+
+
+    /* button#dropdown-basic-button {
+        margin-left: 22%;
+        margin-top: -21%;
+    } */

@@ -1,12 +1,13 @@
+// src/components/Breadcrumb.js
 // eslint-disable-next-line no-unused-vars
-import React from 'react'
+import React from 'react';
 
-const Breadcrum = () => {
-  return (
-    <div>
-        Home/Product
-    </div>
+
+const Breadcrumb = () => {
+  return(
+    <div>hello</div>
   )
 }
 
-export default Breadcrum
+
+export default Breadcrumb;
