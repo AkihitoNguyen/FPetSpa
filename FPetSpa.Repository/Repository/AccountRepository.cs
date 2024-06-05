@@ -4,6 +4,7 @@ using FPetSpa.Repository.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -50,6 +51,7 @@ namespace FPetSpa.Repository.Repository
             //}
             var authClaims = new List<Claim>
             {
+                new Claim(ClaimTypes.NameIdentifier, user.Id.ToString()),
                 new Claim(ClaimTypes.Email, model.Gmail),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
@@ -70,8 +72,8 @@ namespace FPetSpa.Repository.Repository
                 claims: authClaims,
                 signingCredentials: new SigningCredentials(authenKey, SecurityAlgorithms.HmacSha256));
             var accessToken = new JwtSecurityTokenHandler().WriteToken(token);
-            //userManager.SetAuthenticationTokenAsync(user, accessToken);
-
+            await userManager.SetAuthenticationTokenAsync(user,"JWT", "AccessToken", accessToken);
+            await userManager.AddClaimsAsync(user, authClaims!);
             return new TokenModel
             {
                 FullName = user.FullName,
@@ -135,6 +137,7 @@ namespace FPetSpa.Repository.Repository
             await signInManager.SignInAsync(user, isPersistent: false);
             var authClaims = new List<Claim>
             {
+                new Claim(ClaimTypes.NameIdentifier, name),
                 new Claim(ClaimTypes.Email, gmail),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
             };
@@ -167,6 +170,20 @@ namespace FPetSpa.Repository.Repository
                 return Convert.ToBase64String(random);
             }
 
+        }
+
+        public async Task<Boolean> logOut(ClaimsPrincipal User)
+        {
+            var user = await userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return false;
+            }
+            IEnumerable<Claim> claims = await userManager.GetClaimsAsync(user);
+            await userManager.RemoveAuthenticationTokenAsync(user, "JWT", "AccessToken");
+            await userManager.RemoveClaimsAsync(user, claims);
+            await signInManager.SignOutAsync();
+            return true;
         }
     }
 }

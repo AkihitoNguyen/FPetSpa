@@ -69,11 +69,12 @@ namespace FPetSpa.Controllers
         }
 
         [HttpPost("log-out")]
-        [Authorize]
+       // [Authorize]
         public async Task<IActionResult> logOut()
         {
-            await HttpContext.SignOutAsync();
-            return Ok();
+            var check = await accountRepo.logOut(User);
+            if (check) return Ok("Log-Out sucessfully");
+            return Unauthorized();
         }
     }
 }
