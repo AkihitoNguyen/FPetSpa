@@ -3,8 +3,8 @@ import React, { useEffect, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import '../PageProduct/ProductList.css';
 import '../PageProduct/SearchProduct.css';
-import { getAllProduct } from '../../api/apiService';
-import { DropdownButton, Dropdown, CardBody, Card, Row, Tab, ListGroup, Col } from 'react-bootstrap';
+import { getAllProduct} from '../../api/apiService';
+import { DropdownButton, Dropdown, Form, CardBody, Card, Row, Tab, ListGroup, Col } from 'react-bootstrap';
 import { Link } from 'react-router-dom';
 
 
@@ -83,9 +83,7 @@ const SearchProduct = () => {
                   <div className="ms-2 me-auto">
                     <div className="fw-bold">Dog Food</div>
                   </div>
-                  {/* <Badge bg="primary" pill>
-                    14
-                  </Badge> */}
+                  
                 </ListGroup.Item>
 
                 {['Cat Food', 'Balo', 'Toy', 'Cake'].map((item, index) => (
@@ -99,16 +97,14 @@ const SearchProduct = () => {
                     <div className="ms-2 me-auto">
                       <div className="fw-bold">{item}</div>
                     </div>
-                    {/* <Badge bg="primary" pill>
-                      14
-                    </Badge> */}
+                    
                   </ListGroup.Item>
                 ))}
               </ListGroup>
               
 
-              {/* <Form.Label>Range</Form.Label>
-              <Form.Range /> */}
+              <Form.Label>Range</Form.Label>
+              <Form.Range />
             </Col>
 
             <Col sm={8}>

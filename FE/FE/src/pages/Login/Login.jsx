@@ -11,7 +11,6 @@ const Login = () => {
     const [errors, setErrors] = useState({});
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    
     const handleLogin = (e)=>{
         e.preventDefault();
 
@@ -80,7 +79,7 @@ const Login = () => {
                 onChange={handleEmailChange}
                 />
                   {errors.email && <p className="error-message">{errors.email}</p>}
-                <label className="password-container">PASSWORD</label>
+                <label>PASSWORD</label>
                 <div className="password-container">
                 <input type={isShowPassword ? "text" : "password"} 
                 placeholder="Enter your password" 
@@ -95,6 +94,7 @@ const Login = () => {
             </form>
             <div className="login-register"> Dont have an account yet? </div>
             <Link className="login-register-link" to="/register">Register one for free </Link>
+            <button type="submit"> Continue </button>
         </section>
      );
 }

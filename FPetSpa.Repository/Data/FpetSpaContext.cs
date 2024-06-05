@@ -1,10 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
-namespace FPetSpa.Data;
+namespace FPetSpa.Repository.Data;
 
-public partial class FpetSpaContext : DbContext
+public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 {
     public FpetSpaContext()
     {
@@ -14,6 +15,10 @@ public partial class FpetSpaContext : DbContext
         : base(options)
     {
     }
+
+    public virtual DbSet<Cart> Carts { get; set; }
+
+    public virtual DbSet<CartDetail> CartDetails { get; set; }
 
     public virtual DbSet<Category> Categories { get; set; }
 
@@ -44,9 +49,49 @@ public partial class FpetSpaContext : DbContext
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
+        base.OnModelCreating(modelBuilder);
+        modelBuilder.Entity<Cart>(entity =>
+        {
+            entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD79763453EE0");
+
+            entity.ToTable("Cart");
+
+            entity.Property(e => e.CartId)
+                .HasMaxLength(20)
+                .HasColumnName("CartID");
+            entity.Property(e => e.CreatedDate).HasColumnType("datetime");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
+
+            entity.HasOne(d => d.User).WithMany(p => p.Carts)
+                .HasForeignKey(d => d.UserId)
+                .HasConstraintName("FK_Cart.UserID");
+        });
+
+        modelBuilder.Entity<CartDetail>(entity =>
+        {
+            entity.HasNoKey();
+
+            entity.Property(e => e.CartId)
+                .HasMaxLength(20)
+                .HasColumnName("CartID");
+            entity.Property(e => e.Price).HasColumnType("money");
+            entity.Property(e => e.ProductId)
+                .HasMaxLength(20)
+                .HasColumnName("ProductID");
+            entity.Property(e => e.Quantity).HasColumnType("datetime");
+
+            entity.HasOne(d => d.Cart).WithMany()
+                .HasForeignKey(d => d.CartId)
+                .HasConstraintName("FK_CartDetails.CartID");
+
+            entity.HasOne(d => d.Product).WithMany()
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_CartDetails.ProductID");
+        });
+
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__19093A2B3FF221CF");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__19093A2B60E60B33");
 
             entity.ToTable("Category");
 
@@ -59,7 +104,7 @@ public partial class FpetSpaContext : DbContext
 
         modelBuilder.Entity<Customer>(entity =>
         {
-            entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64B8A14A8ADB");
+            entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64B812C7E4FE");
 
             entity.ToTable("Customer");
 
@@ -78,7 +123,7 @@ public partial class FpetSpaContext : DbContext
 
         modelBuilder.Entity<FeedBack>(entity =>
         {
-            entity.HasKey(e => e.FeedBackId).HasName("PK__FeedBack__E2CB38679E2FAE42");
+            entity.HasKey(e => e.FeedBackId).HasName("PK__FeedBack__E2CB3867C1251C5E");
 
             entity.ToTable("FeedBack");
 
@@ -98,17 +143,15 @@ public partial class FpetSpaContext : DbContext
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__Order__C3905BAF530F35C4");
+            entity.HasKey(e => e.OrderId).HasName("PK__Order__C3905BAFD18ADF9C");
 
             entity.ToTable("Order");
 
-            entity.HasIndex(e => e.GuestId, "Fk");
 
             entity.Property(e => e.OrderId)
                 .HasMaxLength(20)
                 .HasColumnName("OrderID");
             entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
-            entity.Property(e => e.GuestId).HasColumnName("GuestID");
             entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.Total).HasColumnType("decimal(20, 2)");
             entity.Property(e => e.TransactionId)
@@ -137,7 +180,7 @@ public partial class FpetSpaContext : DbContext
 
         modelBuilder.Entity<PaymentMethod>(entity =>
         {
-            entity.HasKey(e => e.MethodId).HasName("PK__PaymentM__FC681FB19630DFDE");
+            entity.HasKey(e => e.MethodId).HasName("PK__PaymentM__FC681FB1B1EDC1C8");
 
             entity.ToTable("PaymentMethod");
 
@@ -152,7 +195,7 @@ public partial class FpetSpaContext : DbContext
 
         modelBuilder.Entity<Pet>(entity =>
         {
-            entity.HasKey(e => e.PetId).HasName("PK__Pet__48E53802B5B139CF");
+            entity.HasKey(e => e.PetId).HasName("PK__Pet__48E5380209E1C170");
 
             entity.ToTable("Pet");
 
@@ -184,7 +227,7 @@ public partial class FpetSpaContext : DbContext
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Product__B40CC6EDEE4333ED");
+            entity.HasKey(e => e.ProductId).HasName("PK__Product__B40CC6EDFBA41E79");
 
             entity.ToTable("Product");
 
@@ -213,9 +256,6 @@ public partial class FpetSpaContext : DbContext
                 .HasColumnName("OrderID");
             entity.Property(e => e.Price).HasColumnType("money");
             entity.Property(e => e.ProductId).HasMaxLength(20);
-            entity.Property(e => e.ProductOrderId)
-                .HasMaxLength(20)
-                .HasColumnName("ProductOrderID");
 
             entity.HasOne(d => d.Order).WithMany()
                 .HasForeignKey(d => d.OrderId)
@@ -228,7 +268,7 @@ public partial class FpetSpaContext : DbContext
 
         modelBuilder.Entity<Service>(entity =>
         {
-            entity.HasKey(e => e.ServiceId).HasName("PK__Service__C51BB0EA57588B82");
+            entity.HasKey(e => e.ServiceId).HasName("PK__Service__C51BB0EA05A1F5B3");
 
             entity.ToTable("Service");
 
@@ -258,9 +298,6 @@ public partial class FpetSpaContext : DbContext
             entity.Property(e => e.ServiceId)
                 .HasMaxLength(20)
                 .HasColumnName("ServiceID");
-            entity.Property(e => e.ServiceOrderId)
-                .HasMaxLength(20)
-                .HasColumnName("ServiceOrderID");
 
             entity.HasOne(d => d.Order).WithMany()
                 .HasForeignKey(d => d.OrderId)
@@ -277,7 +314,7 @@ public partial class FpetSpaContext : DbContext
 
         modelBuilder.Entity<Staff>(entity =>
         {
-            entity.HasKey(e => e.StaffId).HasName("PK__Staff__96D4AAF7AEA42407");
+            entity.HasKey(e => e.StaffId).HasName("PK__Staff__96D4AAF7BDCD0930");
 
             entity.Property(e => e.StaffId)
                 .ValueGeneratedNever()
@@ -293,7 +330,7 @@ public partial class FpetSpaContext : DbContext
 
         modelBuilder.Entity<Transaction>(entity =>
         {
-            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__55433A4B42A2A488");
+            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__55433A4B636BA637");
 
             entity.Property(e => e.TransactionId)
                 .HasMaxLength(20)
@@ -307,7 +344,7 @@ public partial class FpetSpaContext : DbContext
 
         modelBuilder.Entity<Voucher>(entity =>
         {
-            entity.HasKey(e => e.VoucherId).HasName("PK__Voucher__3AEE79C1D9D4246C");
+            entity.HasKey(e => e.VoucherId).HasName("PK__Voucher__3AEE79C1F0EBB0A6");
 
             entity.ToTable("Voucher");
 

@@ -1,4 +1,4 @@
-﻿using FPetSpa.Data;
+﻿using FPetSpa.Repository.Data;
 using FPetSpa.Repository.Repository;
 using System;
 using System.Collections.Generic;
@@ -12,6 +12,7 @@ namespace FPetSpa.Repository
     {
         private FpetSpaContext _context;
         private GenericRepository<Service> _service;
+        private GenericRepository<Product> _product;
 
         public UnitOfWork(FpetSpaContext context) {
             _context = context;
@@ -26,6 +27,17 @@ namespace FPetSpa.Repository
                     this._service = new GenericRepository<Service>(_context);
                 }
                 return this._service;
+            }
+        }
+        public GenericRepository<Product> ProductRepository
+        {
+            get
+            {
+                if (_product == null)
+                {
+                    this._product = new GenericRepository<Product>(_context);
+                }
+                return this._product;
             }
         }
 

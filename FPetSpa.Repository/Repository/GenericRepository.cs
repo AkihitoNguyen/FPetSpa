@@ -1,4 +1,4 @@
-﻿using FPetSpa.Data;
+﻿using FPetSpa.Repository.Data;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -60,5 +60,7 @@ namespace FPetSpa.Repository.Repository
         {
             return _context.Set<T>().Where(predicate);
         }
+
+       
     }
 }

@@ -81,7 +81,6 @@ CREATE TABLE [Order] (
   [OrderID] nvarchar(20),
   [CustomerID] int,
   [StaffID] int,
-  [GuestID] int,
   [RequiredDate] date,
   [Total] decimal(20,2),
   [VoucherID] nvarchar(20),
@@ -113,10 +112,8 @@ CREATE TABLE [FeedBack] (
       REFERENCES [Order]([OrderID])
 );
 
-CREATE INDEX [Fk] ON  [Order] ([GuestID]);
 
 CREATE TABLE [ProductOrderDetails] (
-  [ProductOrderID] nvarchar(20),
   [OrderID] nvarchar(20),
   [ProductId] nvarchar(20),
   [Quantity] int,
@@ -163,7 +160,6 @@ CREATE TABLE [Service] (
 );
 
 CREATE TABLE [ServiceOrderDetails] (
-  [ServiceOrderID] nvarchar(20),
   [ServiceID] nvarchar(20),
   [OrderID] nvarchar(20),
   [Discount] float null,
@@ -181,8 +177,29 @@ CREATE TABLE [ServiceOrderDetails] (
       REFERENCES [Service]([ServiceID])
 );
 
+CREATE TABLE [Cart] (
+  [CartID] nvarchar(20),
+  [UserID] int,
+  [CreatedDate] datetime ,
+  PRIMARY KEY ([CartID]),
+    CONSTRAINT [FK_Cart.UserID]
+    FOREIGN KEY ([UserID])
+      REFERENCES [Customer]([CustomerID]),
+  
+);
 
-
+CREATE TABLE [CartDetails] (
+  [CartID] nvarchar(20),
+  [ProductID] nvarchar(20),
+  [Quantity] datetime ,
+  [Price] money
+  CONSTRAINT [FK_CartDetails.ProductID]
+    FOREIGN KEY ([ProductID])
+      REFERENCES [Product]([ProductID]),
+  CONSTRAINT [FK_CartDetails.CartID]
+    FOREIGN KEY ([CartID])
+      REFERENCES [Cart]([CartID]),
+);
 
 
 ----------------/////////////////////////////////////////////////////////////////////////////////////////////--------------------
