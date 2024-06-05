@@ -6,6 +6,10 @@ using FPetSpa.Models.ProductModel;
 
 
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using static FPetSpa.Models.ProductModel.RequestSearchProductModel;
+using System.Linq.Expressions;
+using FPetSpa.Repository.Services;
 using Microsoft.AspNetCore.Authorization;
 
 namespace FPetSpa.Controllers
@@ -16,18 +20,56 @@ namespace FPetSpa.Controllers
     public class ProductController : Controller
     {
         private readonly UnitOfWork _unitOfWork;
-        public ProductController(UnitOfWork unitOfWork)
+        private readonly IProducService _productService;
+
+
+        public ProductController(UnitOfWork unitOfWork, IProducService service)
         {
             _unitOfWork = unitOfWork;
+            _productService = service;
         }
 
+        /// <summary>
+        /// SortBy (ProductId = 1,ProductName = 2,CategoryId = 3,ProductQuantity = 4,Price = 5,)
+        /// 
+        /// SortType (Ascending = 1,Descending = 2,)        
+        /// </summary>
+        /// <param name="requestSearchProductModel"></param>
+        /// <returns></returns>
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public IActionResult SearchProduct([FromQuery] RequestSearchProductModel requestSearchProductModel)
         {
-            var result = await _unitOfWork.ProductRepository.GetAll();
-            return Ok(result);
-        }
 
+
+            var sortBy = requestSearchProductModel.SortContent != null ? requestSearchProductModel.SortContent?.sortProductBy.ToString() : null;
+            var sortType = requestSearchProductModel.SortContent != null ? requestSearchProductModel.SortContent?.sortProductType.ToString() : null;
+            Expression<Func<Product, bool>> filter = x =>
+                (string.IsNullOrEmpty(requestSearchProductModel.ProductName) || x.ProductName.Contains(requestSearchProductModel.ProductName)) &&
+                (x.CategoryId == requestSearchProductModel.CategoryId || requestSearchProductModel.CategoryId == null) &&
+                x.Price >= requestSearchProductModel.FromPrice &&
+                (x.Price <= requestSearchProductModel.ToPrice || requestSearchProductModel.ToPrice == null);
+            Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = null;
+
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                if (sortType == SortProductTypeEnum.Ascending.ToString())
+                {
+                    orderBy = query => query.OrderBy(p => EF.Property<object>(p, sortBy));
+                }
+                else if (sortType == SortProductTypeEnum.Descending.ToString())
+                {
+                    orderBy = query => query.OrderByDescending(p => EF.Property<object>(p, sortBy));
+                }
+            }
+            var responseCategorie = _unitOfWork.ProductRepository.Get(
+                null,
+                orderBy,
+                includeProperties: "",
+                pageIndex: requestSearchProductModel.pageIndex,
+                pageSize: requestSearchProductModel.pageSize
+            );
+            return Ok(responseCategorie);
+        }
 
         [HttpGet("{id}")]
         [Authorize]
@@ -37,15 +79,16 @@ namespace FPetSpa.Controllers
             var responseCategories = _unitOfWork.ProductRepository.GetById(id);
             return Ok(responseCategories);
         }
+        
         [HttpPost]
         [Authorize]
-
-        public IActionResult CreateProduct(RequestCreateProductModel requestCreateProductModel)
+         public async Task<IActionResult> CreateProduct(RequestCreateProductModel requestCreateProductModel)
         {
+            var newProductId = await _productService.GenerateNewProductIdAsync();
             var productEntity = new Product
-            {
-                ProductId = requestCreateProductModel.ProductId,
 
+            {
+                ProductId = newProductId,
                 ProductName = requestCreateProductModel.ProductName,
                 PictureName = requestCreateProductModel.PictureName,
                 CategoryId = requestCreateProductModel.CategoryID,
@@ -53,7 +96,7 @@ namespace FPetSpa.Controllers
                 ProductDescription = requestCreateProductModel.ProductDescription,
                 Price = requestCreateProductModel.Price,
         };
-        _unitOfWork.ProductRepository.Insert(productEntity);
+              _unitOfWork.ProductRepository.Insert(productEntity);
             _unitOfWork.Save();
             return Ok();
     }

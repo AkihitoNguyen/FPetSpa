@@ -2,6 +2,10 @@
 using FPetSpa.Repository.Data;
 using FPetSpa.Repository;
 using FPetSpa.Repository.Repository;
+using FPetSpa.Repository.Services;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.OpenApi.Models;
+using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -35,7 +39,6 @@ namespace FPetSpa
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequiredLength = 8;
-
             });
                 
 
@@ -117,7 +120,12 @@ namespace FPetSpa
                     });
                 });
 
-
+                // Set the comments path for the Swagger JSON and UI.
+                
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
+            });
 
             var app = builder.Build();
 
