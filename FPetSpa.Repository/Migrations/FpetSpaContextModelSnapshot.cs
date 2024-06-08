@@ -98,19 +98,19 @@ namespace FPetSpa.Repository.Migrations
             modelBuilder.Entity("FPetSpa.Repository.Data.Cart", b =>
                 {
                     b.Property<string>("CartId")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("CartID");
 
                     b.Property<DateTime?>("CreatedDate")
                         .HasColumnType("datetime");
 
-                    b.Property<int?>("UserId")
-                        .HasColumnType("int")
+                    b.Property<string>("UserId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("UserID");
 
                     b.HasKey("CartId")
-                        .HasName("PK__Cart__51BCD79763453EE0");
+                        .HasName("PK__Cart__51BCD797DA777D19");
 
                     b.HasIndex("UserId");
 
@@ -120,8 +120,8 @@ namespace FPetSpa.Repository.Migrations
             modelBuilder.Entity("FPetSpa.Repository.Data.CartDetail", b =>
                 {
                     b.Property<string>("CartId")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)")
+                        .HasMaxLength(450)
+                        .HasColumnType("nvarchar(450)")
                         .HasColumnName("CartID");
 
                     b.Property<decimal?>("Price")
@@ -132,8 +132,8 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasColumnName("ProductID");
 
-                    b.Property<DateTime?>("Quantity")
-                        .HasColumnType("datetime");
+                    b.Property<int?>("Quantity")
+                        .HasColumnType("int");
 
                     b.HasIndex("CartId");
 
@@ -158,51 +158,9 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("CategoryId")
-                        .HasName("PK__Category__19093A2B60E60B33");
+                        .HasName("PK__Category__19093A2B8AF4DAEB");
 
                     b.ToTable("Category", (string)null);
-                });
-
-            modelBuilder.Entity("FPetSpa.Repository.Data.Customer", b =>
-                {
-                    b.Property<int>("CustomerId")
-                        .HasColumnType("int")
-                        .HasColumnName("CustomerID");
-
-                    b.Property<string>("Address")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<double?>("Coupon")
-                        .HasColumnType("float");
-
-                    b.Property<string>("Name")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("Password")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<decimal?>("Phone")
-                        .HasColumnType("decimal(10, 0)");
-
-                    b.Property<string>("PictureName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<bool?>("Status")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(20)");
-
-                    b.HasKey("CustomerId")
-                        .HasName("PK__Customer__A4AE64B812C7E4FE");
-
-                    b.ToTable("Customer", (string)null);
                 });
 
             modelBuilder.Entity("FPetSpa.Repository.Data.FeedBack", b =>
@@ -228,7 +186,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("FeedBackId")
-                        .HasName("PK__FeedBack__E2CB3867C1251C5E");
+                        .HasName("PK__FeedBack__E2CB3867F03CCE73");
 
                     b.HasIndex("OrderId");
 
@@ -242,15 +200,17 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("nvarchar(20)")
                         .HasColumnName("OrderID");
 
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int")
+                    b.Property<string>("CustomerId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("CustomerID");
 
                     b.Property<DateOnly?>("RequiredDate")
                         .HasColumnType("date");
 
-                    b.Property<int?>("StaffId")
-                        .HasColumnType("int")
+                    b.Property<string>("StaffId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("StaffID");
 
                     b.Property<decimal?>("Total")
@@ -267,7 +227,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnName("VoucherID");
 
                     b.HasKey("OrderId")
-                        .HasName("PK__Order__C3905BAFD18ADF9C");
+                        .HasName("PK__Order__C3905BAFA501AA09");
 
                     b.HasIndex("CustomerId");
 
@@ -299,7 +259,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("MethodId")
-                        .HasName("PK__PaymentM__FC681FB1B1EDC1C8");
+                        .HasName("PK__PaymentM__FC681FB1702FF2C6");
 
                     b.ToTable("PaymentMethod", (string)null);
                 });
@@ -310,8 +270,9 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("int")
                         .HasColumnName("PetID");
 
-                    b.Property<int?>("CustomerId")
-                        .HasColumnType("int")
+                    b.Property<string>("CustomerId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
                         .HasColumnName("CustomerID");
 
                     b.Property<string>("PetGender")
@@ -341,7 +302,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("PetId")
-                        .HasName("PK__Pet__48E5380209E1C170");
+                        .HasName("PK__Pet__48E538025416C034");
 
                     b.HasIndex("CustomerId");
 
@@ -379,7 +340,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ProductId")
-                        .HasName("PK__Product__B40CC6EDFBA41E79");
+                        .HasName("PK__Product__B40CC6ED0BFF27D6");
 
                     b.HasIndex("CategoryId");
 
@@ -451,7 +412,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ServiceId")
-                        .HasName("PK__Service__C51BB0EA05A1F5B3");
+                        .HasName("PK__Service__C51BB0EA9E942AE1");
 
                     b.ToTable("Service", (string)null);
                 });
@@ -490,45 +451,6 @@ namespace FPetSpa.Repository.Migrations
                     b.ToTable("ServiceOrderDetails");
                 });
 
-            modelBuilder.Entity("FPetSpa.Repository.Data.Staff", b =>
-                {
-                    b.Property<int>("StaffId")
-                        .HasColumnType("int")
-                        .HasColumnName("StaffID");
-
-                    b.Property<DateOnly?>("Birthday")
-                        .HasColumnType("date");
-
-                    b.Property<string>("FirstName")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("LastName")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("Password")
-                        .HasMaxLength(20)
-                        .HasColumnType("nvarchar(20)");
-
-                    b.Property<string>("PictureName")
-                        .HasMaxLength(50)
-                        .HasColumnType("nvarchar(50)");
-
-                    b.Property<int?>("Role")
-                        .HasColumnType("int");
-
-                    b.Property<string>("UserName")
-                        .HasMaxLength(20)
-                        .IsUnicode(false)
-                        .HasColumnType("varchar(20)");
-
-                    b.HasKey("StaffId")
-                        .HasName("PK__Staff__96D4AAF7BDCD0930");
-
-                    b.ToTable("Staff");
-                });
-
             modelBuilder.Entity("FPetSpa.Repository.Data.Transaction", b =>
                 {
                     b.Property<string>("TransactionId")
@@ -547,11 +469,57 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("date");
 
                     b.HasKey("TransactionId")
-                        .HasName("PK__Transact__55433A4B636BA637");
+                        .HasName("PK__Transact__55433A4B2FFCE86C");
 
                     b.HasIndex("MethodId");
 
                     b.ToTable("Transactions");
+                });
+
+            modelBuilder.Entity("FPetSpa.Repository.Data.User", b =>
+                {
+                    b.Property<string>("UserId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("UserID");
+
+                    b.Property<string>("Address")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<double?>("Coupon")
+                        .HasColumnType("float");
+
+                    b.Property<string>("Name")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<string>("Password")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
+
+                    b.Property<decimal?>("Phone")
+                        .HasColumnType("decimal(10, 0)");
+
+                    b.Property<string>("PictureName")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<int?>("Role")
+                        .HasColumnType("int");
+
+                    b.Property<bool?>("Status")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserName")
+                        .HasMaxLength(20)
+                        .IsUnicode(false)
+                        .HasColumnType("varchar(20)");
+
+                    b.HasKey("UserId")
+                        .HasName("PK__User__1788CCAC56E75DF9");
+
+                    b.ToTable("User", (string)null);
                 });
 
             modelBuilder.Entity("FPetSpa.Repository.Data.Voucher", b =>
@@ -572,7 +540,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("date");
 
                     b.HasKey("VoucherId")
-                        .HasName("PK__Voucher__3AEE79C1F0EBB0A6");
+                        .HasName("PK__Voucher__3AEE79C16E25274A");
 
                     b.ToTable("Voucher", (string)null);
                 });
@@ -712,7 +680,7 @@ namespace FPetSpa.Repository.Migrations
 
             modelBuilder.Entity("FPetSpa.Repository.Data.Cart", b =>
                 {
-                    b.HasOne("FPetSpa.Repository.Data.Customer", "User")
+                    b.HasOne("FPetSpa.Repository.Data.User", "User")
                         .WithMany("Carts")
                         .HasForeignKey("UserId")
                         .HasConstraintName("FK_Cart.UserID");
@@ -749,13 +717,13 @@ namespace FPetSpa.Repository.Migrations
 
             modelBuilder.Entity("FPetSpa.Repository.Data.Order", b =>
                 {
-                    b.HasOne("FPetSpa.Repository.Data.Customer", "Customer")
-                        .WithMany("Orders")
+                    b.HasOne("FPetSpa.Repository.Data.User", "Customer")
+                        .WithMany("OrderCustomers")
                         .HasForeignKey("CustomerId")
                         .HasConstraintName("FK_Order.CustomerID");
 
-                    b.HasOne("FPetSpa.Repository.Data.Staff", "Staff")
-                        .WithMany("Orders")
+                    b.HasOne("FPetSpa.Repository.Data.User", "Staff")
+                        .WithMany("OrderStaffs")
                         .HasForeignKey("StaffId")
                         .HasConstraintName("FK_Order.StaffID");
 
@@ -780,7 +748,7 @@ namespace FPetSpa.Repository.Migrations
 
             modelBuilder.Entity("FPetSpa.Repository.Data.Pet", b =>
                 {
-                    b.HasOne("FPetSpa.Repository.Data.Customer", "Customer")
+                    b.HasOne("FPetSpa.Repository.Data.User", "Customer")
                         .WithMany("Pets")
                         .HasForeignKey("CustomerId")
                         .HasConstraintName("FK_Pet.CustomerID");
@@ -905,15 +873,6 @@ namespace FPetSpa.Repository.Migrations
                     b.Navigation("Products");
                 });
 
-            modelBuilder.Entity("FPetSpa.Repository.Data.Customer", b =>
-                {
-                    b.Navigation("Carts");
-
-                    b.Navigation("Orders");
-
-                    b.Navigation("Pets");
-                });
-
             modelBuilder.Entity("FPetSpa.Repository.Data.Order", b =>
                 {
                     b.Navigation("FeedBacks");
@@ -924,14 +883,20 @@ namespace FPetSpa.Repository.Migrations
                     b.Navigation("Transactions");
                 });
 
-            modelBuilder.Entity("FPetSpa.Repository.Data.Staff", b =>
+            modelBuilder.Entity("FPetSpa.Repository.Data.Transaction", b =>
                 {
                     b.Navigation("Orders");
                 });
 
-            modelBuilder.Entity("FPetSpa.Repository.Data.Transaction", b =>
+            modelBuilder.Entity("FPetSpa.Repository.Data.User", b =>
                 {
-                    b.Navigation("Orders");
+                    b.Navigation("Carts");
+
+                    b.Navigation("OrderCustomers");
+
+                    b.Navigation("OrderStaffs");
+
+                    b.Navigation("Pets");
                 });
 
             modelBuilder.Entity("FPetSpa.Repository.Data.Voucher", b =>

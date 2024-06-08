@@ -24,20 +24,9 @@ CREATE TABLE [Product] (
       REFERENCES [Category]([CategoryID])
 );
 
-CREATE TABLE [Staff] (
-  [StaffID] int,
-  [UserName] varchar(20),
-  [Password] nvarchar(20),
-  [FirstName] nvarchar(20),
-  [LastName] nvarchar(20),
-  [Birthday] date null,
-  [Role] int,
-  [PictureName] nvarchar(50) null,
-  PRIMARY KEY ([StaffID]),
-);
 
-CREATE TABLE [Customer] (
-  [CustomerID] int ,
+CREATE TABLE [User] (
+  [UserID] nvarchar(50) ,
   [PictureName] nvarchar(50) null,
   [UserName] varchar(20),
   [Name] nvarchar(20),
@@ -46,7 +35,8 @@ CREATE TABLE [Customer] (
   [Phone] decimal(10,0),
   [Coupon] float null,
   [Status] bit,
-  PRIMARY KEY ([CustomerID])
+  [Role] int,
+  PRIMARY KEY ([UserID])
 );
 
 CREATE TABLE [Voucher] (
@@ -79,8 +69,8 @@ CREATE TABLE [Transactions] (
 
 CREATE TABLE [Order] (
   [OrderID] nvarchar(20),
-  [CustomerID] int,
-  [StaffID] int,
+  [CustomerID] nvarchar(50),
+  [StaffID] nvarchar(50),
   [RequiredDate] date,
   [Total] decimal(20,2),
   [VoucherID] nvarchar(20),
@@ -88,10 +78,10 @@ CREATE TABLE [Order] (
   PRIMARY KEY ([OrderID]),
   CONSTRAINT [FK_Order.StaffID]
     FOREIGN KEY ([StaffID])
-      REFERENCES [Staff]([StaffID]),
+      REFERENCES [User]([UserID]),
   CONSTRAINT [FK_Order.CustomerID]
     FOREIGN KEY ([CustomerID])
-      REFERENCES [Customer]([CustomerID]),
+      REFERENCES [User]([UserID]),
   CONSTRAINT [FK_Order.VoucherID]
     FOREIGN KEY ([VoucherID])
       REFERENCES [Voucher]([VoucherID]),
@@ -133,7 +123,7 @@ CREATE TABLE [ProductOrderDetails] (
 
 CREATE TABLE [Pet] (
   [PetID] int,
-  [CustomerID] int,
+  [CustomerID] nvarchar(50),
   [Pet Name] varchar(20),
   [PictureName] nvarchar(50),
   [Pet Gender] varchar(10),
@@ -142,7 +132,7 @@ CREATE TABLE [Pet] (
   PRIMARY KEY ([PetID]),
   CONSTRAINT [FK_Pet.CustomerID]
     FOREIGN KEY ([CustomerID])
-      REFERENCES [Customer]([CustomerID])
+      REFERENCES [User]([UserID])
 );
 
 CREATE TABLE [Service] (
@@ -178,20 +168,20 @@ CREATE TABLE [ServiceOrderDetails] (
 );
 
 CREATE TABLE [Cart] (
-  [CartID] nvarchar(20),
-  [UserID] int,
+  [CartID] nvarchar(450),
+  [UserID] nvarchar(50),
   [CreatedDate] datetime ,
   PRIMARY KEY ([CartID]),
     CONSTRAINT [FK_Cart.UserID]
     FOREIGN KEY ([UserID])
-      REFERENCES [Customer]([CustomerID]),
+      REFERENCES [User]([UserID]),
   
 );
 
 CREATE TABLE [CartDetails] (
-  [CartID] nvarchar(20),
+  [CartID] nvarchar(450),
   [ProductID] nvarchar(20),
-  [Quantity] datetime ,
+  [Quantity] int ,
   [Price] money
   CONSTRAINT [FK_CartDetails.ProductID]
     FOREIGN KEY ([ProductID])
@@ -215,13 +205,7 @@ INSERT INTO [Category] VALUES ('CA04', 'Necklace', '');
 INSERT INTO [Category] VALUES ('CA05', 'Foods', '');
 INSERT INTO [Category] VALUES ('CA06', 'Shower gel', '');
  GO
----Product---
-INSERT INTO [Product] VALUES ('PRO01', 'Pate MasterCare', 'Pate-400G-Ngu-Bo.jpg',  'CA05', N'Pate MasterCare được nghiên cứu và sản xuất từ những nguyên liệu dinh dưỡng, đảm bảo an toàn cho sức khoẻ chó mèo.', 10 , 100.000);
-INSERT INTO [Product] VALUES ('PRO02', 'Pate Nature`s Recipe', 'food-2.png',  'CA05', 'No matter the life stage or nutritional needs, Nature’s Recipe® dog food is carefully crafted with pet nutritionist input using wholesome, natural ingredients with added vitamins, minerals and nutrients.', 10 , 75.000);
-INSERT INTO [Product] VALUES ('PRO03', 'Super premium dog food VEGAN', 'food-3.png',  'CA05', 'No matter the life stage or nutritional needs, Nature’s Recipe® dog food is carefully crafted with pet nutritionist input using wholesome, natural ingredients with added vitamins, minerals and nutrients.', 10 , 50.000);
-INSERT INTO [Product] VALUES ('PRO04', 'Fresh Turkey Sumply', 'food-4.png',  'CA05', 'No matter the life stage or nutritional needs, Nature’s Recipe® dog food is carefully crafted with pet nutritionist input using wholesome, natural ingredients with added vitamins, minerals and nutrients.', 10 , 120.000);
-INSERT INTO [Product] VALUES ('PRO05', 'Food Square Pet VFS', 'food-5.png',  'CA05', 'No matter the life stage or nutritional needs, Nature’s Recipe® dog food is carefully crafted with pet nutritionist input using wholesome, natural ingredients with added vitamins, minerals and nutrients.', 10 , 150.000);
-GO
+  
 ---Staff---
 INSERT INTO [Staff] VALUES (1,'sal','1', 'ADMIN SALE', 'Hung', '03/02/2003',1,null);
 INSERT INTO [Staff] VALUES (2,'ser','1', 'ADMIN SERVICE', 'Hung', '03/02/2003',0,null);

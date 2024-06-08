@@ -26,9 +26,17 @@ namespace FPetSpa.Controllers
             var result = await accountRepo.SignUpAsync(signUpModel);
             if (result.Succeeded)
             {
-                return Ok(result.Succeeded);
+                return Ok("Registration successful. Please check your email to confirm your account.");
             }
             return StatusCode(500);
+        }
+            
+        [HttpGet("confirm-email")]
+        public async Task<IActionResult> ConfirmMail(string token, string id)
+        {
+            var result = await accountRepo.ConfirmMail(token, id);
+            if (result) return Ok("Email confirmed successfully.");
+            return BadRequest("Invalid email.");
         }
 
 

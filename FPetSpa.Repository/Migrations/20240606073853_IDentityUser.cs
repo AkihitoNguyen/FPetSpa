@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 namespace FPetSpa.Repository.Migrations
 {
     /// <inheritdoc />
-    public partial class initIdentityAspNet : Migration
+    public partial class IDentityUser : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)
@@ -62,9 +62,8 @@ namespace FPetSpa.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Category__19093A2B60E60B33", x => x.CategoryID);
+                    table.PrimaryKey("PK__Category__19093A2B8AF4DAEB", x => x.CategoryID);
                 });
-
 
             migrationBuilder.CreateTable(
                 name: "PaymentMethod",
@@ -77,7 +76,7 @@ namespace FPetSpa.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__PaymentM__FC681FB1B1EDC1C8", x => x.MethodID);
+                    table.PrimaryKey("PK__PaymentM__FC681FB1702FF2C6", x => x.MethodID);
                 });
 
             migrationBuilder.CreateTable(
@@ -97,7 +96,7 @@ namespace FPetSpa.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Service__C51BB0EA05A1F5B3", x => x.ServiceID);
+                    table.PrimaryKey("PK__Service__C51BB0EA9E942AE1", x => x.ServiceID);
                 });
 
 
@@ -112,7 +111,7 @@ namespace FPetSpa.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Voucher__3AEE79C1F0EBB0A6", x => x.VoucherID);
+                    table.PrimaryKey("PK__Voucher__3AEE79C16E25274A", x => x.VoucherID);
                 });
 
             migrationBuilder.CreateTable(
@@ -235,52 +234,12 @@ namespace FPetSpa.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Product__B40CC6EDFBA41E79", x => x.ProductID);
+                    table.PrimaryKey("PK__Product__B40CC6ED0BFF27D6", x => x.ProductID);
                     table.ForeignKey(
                         name: "FK_Product.CategoryID",
                         column: x => x.CategoryID,
                         principalTable: "Category",
                         principalColumn: "CategoryID");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Cart",
-                columns: table => new
-                {
-                    CartID = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Cart__51BCD79763453EE0", x => x.CartID);
-                    table.ForeignKey(
-                        name: "FK_Cart.UserID",
-                        column: x => x.UserID,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                });
-
-            migrationBuilder.CreateTable(
-                name: "Pet",
-                columns: table => new
-                {
-                    PetID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    CustomerID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    PetName = table.Column<string>(name: "Pet Name", type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
-                    PictureName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
-                    PetGender = table.Column<string>(name: "Pet Gender", type: "varchar(10)", unicode: false, maxLength: 10, nullable: true),
-                    PetType = table.Column<string>(name: "Pet Type", type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
-                    PetWeight = table.Column<decimal>(name: "Pet Weight", type: "decimal(9,2)", nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Pet__48E5380209E1C170", x => x.PetID);
-                    table.ForeignKey(
-                        name: "FK_Pet.CustomerID",
-                        column: x => x.CustomerID,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
                 });
 
             migrationBuilder.CreateTable(
@@ -294,7 +253,7 @@ namespace FPetSpa.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__Transact__55433A4B636BA637", x => x.TransactionID);
+                    table.PrimaryKey("PK__Transact__55433A4B2FFCE86C", x => x.TransactionID);
                     table.ForeignKey(
                         name: "FK_Transactions.MethodID",
                         column: x => x.MethodID,
@@ -303,12 +262,89 @@ namespace FPetSpa.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Cart",
+                columns: table => new
+                {
+                    CartID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    UserID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    CreatedDate = table.Column<DateTime>(type: "datetime", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Cart__51BCD797DA777D19", x => x.CartID);
+                    table.ForeignKey(
+                        name: "FK_Cart.UserID",
+                        column: x => x.UserID,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Pet",
+                columns: table => new
+                {
+                    PetID = table.Column<int>(type: "int", nullable: false),
+                    CustomerID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    PetName = table.Column<string>(name: "Pet Name", type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
+                    PictureName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
+                    PetGender = table.Column<string>(name: "Pet Gender", type: "varchar(10)", unicode: false, maxLength: 10, nullable: true),
+                    PetType = table.Column<string>(name: "Pet Type", type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
+                    PetWeight = table.Column<decimal>(name: "Pet Weight", type: "decimal(9,2)", nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Pet__48E538025416C034", x => x.PetID);
+                    table.ForeignKey(
+                        name: "FK_Pet.CustomerID",
+                        column: x => x.CustomerID,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id");
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Order",
+                columns: table => new
+                {
+                    OrderID = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
+                    CustomerID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    StaffID = table.Column<string>(type: "nvarchar(450)", nullable: false),
+                    RequiredDate = table.Column<DateOnly>(type: "date", nullable: true),
+                    Total = table.Column<decimal>(type: "decimal(20,2)", nullable: true),
+                    VoucherID = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    TransactionID = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK__Order__C3905BAFA501AA09", x => x.OrderID);
+                    table.ForeignKey(
+                        name: "FK_Order.CustomerID",
+                        column: x => x.CustomerID,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Order.StaffID",
+                        column: x => x.StaffID,
+                        principalTable: "AspNetRoles",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Order.TransactionID",
+                        column: x => x.TransactionID,
+                        principalTable: "Transactions",
+                        principalColumn: "TransactionID");
+                    table.ForeignKey(
+                        name: "FK_Order.VoucherID",
+                        column: x => x.VoucherID,
+                        principalTable: "Voucher",
+                        principalColumn: "VoucherID");
+                });
+
+            migrationBuilder.CreateTable(
                 name: "CartDetails",
                 columns: table => new
                 {
-                    CartID = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
+                    CartID = table.Column<string>(type: "nvarchar(450)", maxLength: 450, nullable: true),
                     ProductID = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    Quantity = table.Column<DateTime>(type: "datetime", nullable: true),
+                    Quantity = table.Column<int>(type: "int", nullable: true),
                     Price = table.Column<decimal>(type: "money", nullable: true)
                 },
                 constraints: table =>
@@ -326,43 +362,6 @@ namespace FPetSpa.Repository.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Order",
-                columns: table => new
-                {
-                    OrderID = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: false),
-                    CustomerID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    StaffID = table.Column<string>(type: "nvarchar(450)", nullable: false),
-                    RequiredDate = table.Column<DateOnly>(type: "date", nullable: true),
-                    Total = table.Column<decimal>(type: "decimal(20,2)", nullable: true),
-                    VoucherID = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true),
-                    TransactionID = table.Column<string>(type: "nvarchar(20)", maxLength: 20, nullable: true)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK__Order__C3905BAFD18ADF9C", x => x.OrderID);
-                    table.ForeignKey(
-                        name: "FK_Order.CustomerID",
-                        column: x => x.CustomerID,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Order.StaffID",
-                        column: x => x.StaffID,
-                        principalTable: "AspNetUsers",
-                        principalColumn: "Id");
-                    table.ForeignKey(
-                        name: "FK_Order.TransactionID",
-                        column: x => x.TransactionID,
-                        principalTable: "Transactions",
-                        principalColumn: "TransactionID");
-                    table.ForeignKey(
-                        name: "FK_Order.VoucherID",
-                        column: x => x.VoucherID,
-                        principalTable: "Voucher",
-                        principalColumn: "VoucherID");
-                });
-
-            migrationBuilder.CreateTable(
                 name: "FeedBack",
                 columns: table => new
                 {
@@ -374,7 +373,7 @@ namespace FPetSpa.Repository.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK__FeedBack__E2CB3867C1251C5E", x => x.FeedBackID);
+                    table.PrimaryKey("PK__FeedBack__E2CB3867F03CCE73", x => x.FeedBackID);
                     table.ForeignKey(
                         name: "FK_FeedBack.OrderID",
                         column: x => x.OrderID,
@@ -415,7 +414,7 @@ namespace FPetSpa.Repository.Migrations
                     Discount = table.Column<double>(type: "float", nullable: true),
                     PetWeight = table.Column<decimal>(type: "decimal(5,3)", nullable: true),
                     Price = table.Column<decimal>(type: "money", nullable: true),
-                    PetID = table.Column<string>(type: "nvarchar(450)", nullable: false)
+                    PetID = table.Column<int>(type: "int", nullable: true)
                 },
                 constraints: table =>
                 {
@@ -611,16 +610,11 @@ namespace FPetSpa.Repository.Migrations
                 name: "Category");
 
             migrationBuilder.DropTable(
-                name: "Staff");
-
-            migrationBuilder.DropTable(
                 name: "Transactions");
 
             migrationBuilder.DropTable(
                 name: "Voucher");
 
-            migrationBuilder.DropTable(
-                name: "Customer");
 
             migrationBuilder.DropTable(
                 name: "PaymentMethod");

@@ -7,7 +7,7 @@ public partial class Pet
 {
     public int PetId { get; set; }
 
-    public int? CustomerId { get; set; }
+    public string? CustomerId { get; set; }
 
     public string? PetName { get; set; }
 
@@ -19,5 +19,5 @@ public partial class Pet
 
     public decimal? PetWeight { get; set; }
 
-    public virtual Customer? Customer { get; set; }
+    public virtual User? Customer { get; set; }
 }

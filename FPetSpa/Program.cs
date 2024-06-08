@@ -8,12 +8,13 @@ using Microsoft.OpenApi.Models;
 using System.Reflection;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using FPetSpa.Repository.Model;
+using Amazon.S3;
+using Quartz;
 
 namespace FPetSpa
 {
@@ -25,6 +26,7 @@ namespace FPetSpa
 
             // Add services to the container.
             //Register Database FPetDBContext
+
             builder.Services.AddDbContext<FpetSpaContext>(options =>
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("FPetDBContext"));
@@ -39,10 +41,12 @@ namespace FPetSpa
                 options.Password.RequireNonAlphanumeric = true;
                 options.Password.RequireUppercase = true;
                 options.Password.RequiredLength = 8;
+                options.SignIn.RequireConfirmedEmail = true;
             });
-                
 
-                builder.Services.AddAuthorization(options =>
+
+
+        builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireStaffRole", policy => policy.RequireRole("Staff"));
                 options.AddPolicy("RequireCustomerRole", policy => policy.RequireRole("Customer"));
@@ -79,17 +83,23 @@ namespace FPetSpa
                   {
                    options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
                    options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
-                   });
+                   //options.CallbackPath = "/signin-google";
+                  });
 
             builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
-
             builder.Services.AddTransient<UnitOfWork>();
+           // builder.Services.AddScoped<SendMailServices>();
             builder.Services.AddScoped<IEmailSenderRepository, EmailSenderRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<IProducService, ProductService>();
-
             builder.Services.AddControllers();
+            //Add AWS
+            builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
+            builder.Services.AddAWSService<IAmazonS3>();
+            builder.Services.Configure<MailSettingsModel>(builder.Configuration.GetSection("GmailSettings"));
+            builder.Services.AddScoped<SendMailServices>();
 
+    
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
                 //   builder.Services.AddSwaggerGen();
@@ -123,7 +133,6 @@ namespace FPetSpa
                     var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                     option.IncludeXmlComments(xmlPath);
                 });
- 
 
             var app = builder.Build();
 
@@ -135,9 +144,9 @@ namespace FPetSpa
             }
 
             app.UseHttpsRedirection();
-
-            app.UseAuthorization();
             app.UseAuthentication();
+            app.UseAuthorization();
+           
             app.UseCors();
 
             app.MapControllers();

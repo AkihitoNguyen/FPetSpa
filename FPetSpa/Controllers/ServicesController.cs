@@ -19,7 +19,7 @@ namespace FPetSpa.Controllers
         }
 
         [HttpGet]
-        [Authorize(Roles = Role.Customer)]
+        //[Authorize(Roles = Role.Customer)]
         public async Task<IActionResult> GetAll()
         {
             var result = await _unitOfWork.ServiceRepository.GetAll();

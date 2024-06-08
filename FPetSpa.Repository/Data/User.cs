@@ -3,9 +3,9 @@ using System.Collections.Generic;
 
 namespace FPetSpa.Repository.Data;
 
-public partial class Customer
+public partial class User
 {
-    public int CustomerId { get; set; }
+    public string UserId { get; set; } = null!;
 
     public string? PictureName { get; set; }
 
@@ -23,9 +23,13 @@ public partial class Customer
 
     public bool? Status { get; set; }
 
+    public int? Role { get; set; }
+
     public virtual ICollection<Cart> Carts { get; set; } = new List<Cart>();
 
-    public virtual ICollection<Order> Orders { get; set; } = new List<Order>();
+    public virtual ICollection<Order> OrderCustomers { get; set; } = new List<Order>();
+
+    public virtual ICollection<Order> OrderStaffs { get; set; } = new List<Order>();
 
     public virtual ICollection<Pet> Pets { get; set; } = new List<Pet>();
 }
