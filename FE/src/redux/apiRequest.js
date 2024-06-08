@@ -24,7 +24,7 @@ import {
 export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
     try {
-        const res = await axios.post("https://localhost:7055/api/account/signin/customer", user);
+        const res = await axios.post(`https://fpetspa.azurewebsites.net/api/account/signin/customer`, user);
         dispatch(loginSuccess(res.data));
         navigate("/");
     } catch (error) {
@@ -33,17 +33,36 @@ export const loginUser = async (user, dispatch, navigate) => {
     }
 };
 
+
+
+
+
 export const registerUser = async (user, dispatch, navigate) => {
     dispatch(registerStart());
     try {
-        await axios.post("https://localhost:7055/api/account/signup/customer", user);
+        await axios.post("https://fpetspa.azurewebsites.net/api/account/signup/customer", user);
         dispatch(registerSuccess());
-        navigate("/login");
+        navigate("/check-email", { state: { message: "Please check your email to confirm your registration." } });
     } catch (error) {
         console.log(error);
         dispatch(registerFailed());
     }
 };
+
+
+export const signInWithGoogle = async (googleUser, dispatch, navigate) => {
+    dispatch(loginStart());
+    try {
+        // Pass the Google user's information to the backend
+        const res = await axios.post("https://fpetspa.azurewebsites.net/api/account/login-google", googleUser);
+        dispatch(loginSuccess(res.data));
+        navigate("/");
+    } catch (error) {
+        console.log(error);
+        dispatch(loginFailed());
+    }
+};
+
 
 export const getAllUsers = async (accessToken, dispatch, axiosJWT) => {
     const userListDom = document.querySelector(".home-userlist");
@@ -85,11 +104,11 @@ export const logoutUser = async (
 ) => {
     dispatch(logoutStart());
     try {
-        await axiosJWT.post("https://localhost:7055/api/account/log-out", id, {
-            headers: { token: `Bearer ${accessToken}` },
+        await axiosJWT.post("https://fpetspa.azurewebsites.net/api/account/log-out", id, {
+            headers: { Authorization: `Bearer ${accessToken}` },
         });
         dispatch(logoutSuccess());
-        navigate("/login");
+        navigate("/");
     } catch (error) {
         dispatch(logoutFailed());
     }

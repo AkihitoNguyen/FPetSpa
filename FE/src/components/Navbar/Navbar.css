@@ -3,6 +3,7 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+   
 
 }
 
@@ -141,4 +142,20 @@
     .navbar-menu {
         display: none;
     }
+}
+.nav-login-cart button:active{
+    background: #f3f3f3;
+}
+.nav-cart-count{
+    width: 22px;
+    height: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: -37px;
+    margin-left: 15px;
+    border-radius: 11px;
+    font-size: 17px;
+    background: #bd5555;
+    color: white;
 }

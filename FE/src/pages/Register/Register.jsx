@@ -3,6 +3,34 @@ import '../Register/Register.css';
 import { registerUser } from "../../redux/apiRequest";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
+import Avatar from '@mui/material/Avatar';
+import Button from '@mui/material/Button';
+import CssBaseline from '@mui/material/CssBaseline';
+import TextField from '@mui/material/TextField';
+import FormControlLabel from '@mui/material/FormControlLabel';
+import Checkbox from '@mui/material/Checkbox';
+import { Link } from "react-router-dom";
+import Grid from '@mui/material/Grid';
+import Box from '@mui/material/Box';
+import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+import Typography from '@mui/material/Typography';
+import Container from '@mui/material/Container';
+import { createTheme, ThemeProvider } from '@mui/material/styles';
+
+function Copyright(props) {
+    return (
+        <Typography variant="body2" color="text.secondary" align="center" {...props}>
+            {'Copyright © '}
+            <Link color="inherit" to="https://mui.com/">
+                Your Website
+            </Link>{' '}
+            {new Date().getFullYear()}
+            {'.'}
+        </Typography>
+    );
+}
+
+const defaultTheme = createTheme();
 
 const Register = () => {
     const [email, setEmail] = useState("");
@@ -10,34 +38,23 @@ const Register = () => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [errors, setErrors] = useState({});
+
     const dispatch = useDispatch();
     const navigate = useNavigate();
 
     const validateEmail = (email) => {
-        if (email.startsWith(" ")) {
-            return "First character cannot have space.";
-        }
-        if (!email) {
-            return "Email must not be blank.";
-        }
+        if (email.startsWith(" ")) return "First character cannot have space.";
+        if (!email) return "Email must not be blank.";
         const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(email)) {
-            return "Email is not valid.";
-        }
+        if (!emailRegex.test(email)) return "Email is not valid.";
         return "";
     };
 
     const validateFullName = (fullName) => {
-        if (fullName.startsWith(" ")) {
-            return "First character cannot have space.";
-        }
-        if (!fullName) {
-            return "Customer name must not be blank.";
-        }
+        if (fullName.startsWith(" ")) return "First character cannot have space.";
+        if (!fullName) return "Customer name must not be blank.";
         const nameRegex = /^[a-zA-Z\s]+$/;
-        if (!nameRegex.test(fullName)) {
-            return "Numbers and special characters are not allowed.";
-        }
+        if (!nameRegex.test(fullName)) return "Numbers and special characters are not allowed.";
         return "";
     };
 
@@ -48,22 +65,11 @@ const Register = () => {
         const hasNumber = /\d/;
         const hasSpecialChar = /[!@#$%^&*(),.?":{}|<>]/;
 
-        if (!minLength.test(password)) {
-            return "Password must be at least 8 characters long.";
-        }
-        if (!hasLowerCase.test(password)) {
-            return "Password must contain at least one lowercase letter.";
-        }
-        if (!hasUpperCase.test(password)) {
-            return "Password must contain at least one uppercase letter.";
-        }
-        if (!hasNumber.test(password)) {
-            return "Password must contain at least one number.";
-        }
-        if (!hasSpecialChar.test(password)) {
-            return "Password must contain at least one special character.";
-        }
-    
+        if (!minLength.test(password)) return "Password must be at least 8 characters long.";
+        if (!hasLowerCase.test(password)) return "Password must contain at least one lowercase letter.";
+        if (!hasUpperCase.test(password)) return "Password must contain at least one uppercase letter.";
+        if (!hasNumber.test(password)) return "Password must contain at least one number.";
+        if (!hasSpecialChar.test(password)) return "Password must contain at least one special character.";
         return "";
     };
 
@@ -72,19 +78,13 @@ const Register = () => {
         const errors = {};
 
         const emailError = validateEmail(email);
-        if (emailError) {
-            errors.email = emailError;
-        }
+        if (emailError) errors.email = emailError;
 
         const fullNameError = validateFullName(fullName);
-        if (fullNameError) {
-            errors.fullName = fullNameError;
-        }
+        if (fullNameError) errors.fullName = fullNameError;
 
         const passwordError = validatePassword(password);
-        if (passwordError) {
-            errors.password = passwordError;
-        }
+        if (passwordError) errors.password = passwordError;
 
         if (password !== confirmPassword) {
             errors.confirmPassword = "Passwords do not match";
@@ -97,10 +97,10 @@ const Register = () => {
         }
 
         const newUser = {
-            gmail:email,
-            password:password,
-            fullName:fullName,
-            confirmPassword:confirmPassword
+            gmail: email,
+            password: password,
+            fullName: fullName,
+            confirmPassword: confirmPassword
         };
         registerUser(newUser, dispatch, navigate);
     };
@@ -142,52 +142,103 @@ const Register = () => {
     };
 
     return (
-        <section className="register-container">
-            <form onSubmit={handleRegister}>
-            <div className="register-title">Sign up</div>
-                <div className="input-container">
-                    <label>Full Name</label>
-                    <input
-                        type="text"
-                        placeholder="Enter your full name"
-                        onChange={handleFullNameChange}
-                        autoComplete="name"
-                    />
-                    {errors.fullName && <p className="error-message">{errors.fullName}</p>}
-                </div>
-                <div className="input-container">
-                    <label>Email</label>
-                    <input
-                        type="email"
-                        placeholder="Enter your email"
-                        onChange={handleEmailChange}
-                        autoComplete="email"
-                    />
-                    {errors.email && <p className="error-message">{errors.email}</p>}
-                </div>
-                <div className="input-container">
-                    <label>Password</label>
-                    <input
-                        type="password"
-                        placeholder="Enter your password"
-                        onChange={handlePasswordChange}
-                        autoComplete="new-password"
-                    />
-                    {errors.password && <p className="error-message">{errors.password}</p>}
-                </div>
-                <div className="input-container">
-                    <label>Confirm Password</label>
-                    <input
-                        type="password"
-                        placeholder="Confirm your password"
-                        onChange={handleConfirmPasswordChange}
-                        autoComplete="new-password"
-                    />
-                    {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
-                </div>
-                <button className="button-submit" type="submit">Create account</button>
-            </form>
-        </section>
+        <ThemeProvider theme={defaultTheme}>
+            <Container component="main" maxWidth="xs">
+                <CssBaseline />
+                <Box
+                    sx={{
+                        marginTop: 8,
+                        display: 'flex',
+                        flexDirection: 'column',
+                        alignItems: 'center',
+                    }}
+                >
+                    <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+                        <LockOutlinedIcon />
+                    </Avatar>
+                    <Typography component="h1" variant="h5">
+                        Sign up
+                    </Typography>
+                    <Box component="form" noValidate onSubmit={handleRegister} sx={{ mt: 3 }}>
+                        <Grid container spacing={2}>
+                            <Grid item xs={12}>
+                                <TextField
+                                    autoComplete="given-name"
+                                    name="fullName"
+                                    required
+                                    fullWidth
+                                    id="fullName"
+                                    label="Full Name"
+                                    autoFocus
+                                    onChange={handleFullNameChange}
+                                />
+                                {errors.fullName && <p className="error-message">{errors.fullName}</p>}
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    id="email"
+                                    label="Email Address"
+                                    name="email"
+                                    autoComplete="email"
+                                    onChange={handleEmailChange}
+                                />
+                                {errors.email && <p className="error-message">{errors.email}</p>}
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="password"
+                                    label="Password"
+                                    type="password"
+                                    id="password"
+                                    autoComplete="new-password"
+                                    onChange={handlePasswordChange}
+                                />
+                                {errors.password && <p className="error-message">{errors.password}</p>}
+                            </Grid>
+                            <Grid item xs={12}>
+                                <TextField
+                                    required
+                                    fullWidth
+                                    name="confirmPassword"
+                                    label="Confirm Password"
+                                    type="password"
+                                    id="confirmPassword"
+                                    autoComplete="new-password"
+                                    onChange={handleConfirmPasswordChange}
+                                />
+                                {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
+                            </Grid>
+                            <Grid item xs={12}>
+                                <FormControlLabel
+                                    control={<Checkbox value="allowExtraEmails" color="primary" />}
+                                    label="I want to receive inspiration, marketing promotions and updates via email."
+                                />
+                            </Grid>
+                        </Grid>
+                        <Button
+                            type="submit"
+                            fullWidth
+                            variant="contained"
+                            sx={{ mt: 3, mb: 2 }}
+                        >
+                            Sign Up
+                        </Button>
+                        <Grid container justifyContent="flex-end">
+                            <Grid item>
+                                <Link to='/login' variant="body2">
+                                    Already have an account? Sign in
+                                </Link>
+                            </Grid>
+                        </Grid>
+                    </Box>
+                </Box>
+                <Copyright sx={{ mt: 5 }} />
+            </Container>
+        </ThemeProvider>
     );
 };
 

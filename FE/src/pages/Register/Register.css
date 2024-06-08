@@ -5,17 +5,16 @@ section.register-container {
 .register-title {
   margin-left: 38%;
 }
-form {
+form.register {
   display: flex;
   margin-top: 5rem;
   font-size: 0.85rem;
   font-weight: 600;
   width: 374px;
   align-items: flex-start;
-  border: 1px solid;
   flex-direction: row;
   flex-wrap: wrap;
-  border-radius: 1rem;
+  border: 1px solid;
 }
 button.button-submit {
   margin-left: 28%;

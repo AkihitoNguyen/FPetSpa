@@ -1,13 +1,12 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useContext } from 'react'
-import './Cart.css'
+import CartItems from '../../components/CartItem/CartItem'
 const Cart = () => {
-
-  const {cartItems,product_list, removeFromCart} = useContext(Store)
 
   return (
     <div>
-
-    </div>
+    <CartItems/>
+  </div>
   )
 }
 

@@ -1,21 +1,26 @@
-.productdisplay-main {
+/* .productdisplay-main {
     margin-top: 10%;
 }
 .productdisplay{
     display: flex;
     margin: 0px 170px;
 }
-.productdisplay-left{
+.productdisplay-left {
     display: flex;
-    gap: 17px;
+    gap: 10px;
+    flex-direction: column-reverse;
+    align-items: center;
 }
-.productdisplay-img-list{
-   display: flex;
-   flex-direction: column;
-   gap: 16px; 
+.productdisplay-img-list {
+    display: flex;
+    flex-direction: row;
+    gap: 16px;
+    flex-wrap: nowrap;
+    width: 109%;
+    margin-left:12%;
 }
-.productdisplay-img {
-    margin-left: -20%;
+.productdisplay-img-list img{
+    height: 163px;
 }
 .productdisplay-main-img{
    width: 586px;
@@ -46,10 +51,6 @@
     font-size: 24px;
     font-weight: 700;
 }
-.productdisplay-right-price-old{
-    color: #818181;
-    text-decoration: line-through;
-}
 .productdisplay-right-price-new{
     color: #ff4141;
 }
@@ -77,7 +78,7 @@
     font-size: 16px;
     font-weight: 600;
     color: white;
-    background: #FF4141;
+    background: #f9c4d2;
     margin-bottom: 40px;
     border: none;
     outline: none;
@@ -92,7 +93,8 @@
 
 @media(max-width:1280px){
     .productdisplay{
-        margin: 0px 60px;
+        margin-left: 18%;
+        margin-top: 10%;
     }
     .productdisplay-left{
         gap: 10px;
@@ -108,7 +110,8 @@
         height: 510px;
     }
     .productdisplay-right{
-        margin: 0px 30px;
+        margin-left: 18%;
+        margin-top: 10%;
     }
     .productdisplay-right h1{
         font-size: 22px;
@@ -130,15 +133,23 @@
     .productdisplay-right-sizes div{
         padding: 14px 20px;
     }
-    .productdisplay-right button{
-        width: 150px;
-        padding: 15px 0px;
-        margin-bottom: 20px;
+    .productdisplay-right button {
+        width: 120px;
+        margin-bottom: 10px;
+        font-size: 13px;
     }
     .productdisplay-right-category{
         margin-top: 5px;
         font-size: 14px;
     }
+    .MuiButtonGroup-root.MuiButtonGroup-contained.css-1d9bq45-MuiButtonGroup-root {
+        display: inline-flex;
+        border-radius: 4px;
+        box-shadow: none;
+        width: 20vh;
+        height: 8vh;
+    }
+   
 }
 
 @media(max-width:1024px){
@@ -175,7 +186,7 @@ width: 15px;
         width: 120px;
         padding: 10px 0px;
         margin-bottom: 10px;
-        font-size: 14px;
+        font-size: 13px;
     }
     .productdisplay-right-category{
         font-size: 14px;
@@ -279,4 +290,308 @@ width: 13px;
     width: 123%;
     margin-top: -9%;
     margin-left: -11%;
+}
+MuiButtonGroup-root .MuiButtonGroup-middleButton {
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 1px solid #ffffff;
+    border-color: #ffffff;
+    width: 30%;
+}
+.MuiButtonGroup-root.MuiButtonGroup-contained.css-1d9bq45-MuiButtonGroup-root {
+    display: -webkit-inline-box;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    border-radius: 4px;
+    box-shadow: none;
+    width: 20vh;
+    height: 9vh;
+}
+.MuiButtonGroup-root.MuiButtonGroup-contained.css-1d9bq45-MuiButtonGroup-root :hover {
+background-color: #f9c4d2;
+}
+button {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+    outline: none;
+    border: 0;
+    vertical-align: middle;
+    text-decoration: none;
+    font-family: inherit;
+    font-size: 15px;
+   }
+   
+  
+   button.learn-more {
+    font-weight: 600;
+    color: #382b22;
+    text-transform: uppercase;
+    padding: 12.25px 13px;
+    background: #fff0f0;
+    border: 2px solid #b18597;
+    border-radius: 0.75em;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
+    -webkit-transition: background 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1);
+    margin-top: 5%;
+}
+   
+   button.learn-more::before {
+    position: absolute;
+    content: '';
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #f9c4d2;
+    border-radius: inherit;
+    -webkit-box-shadow: 0 0 0 2px #b18597, 0 0.625em 0 0 #ffe3e2;
+    box-shadow: 0 0 0 2px #b18597, 0 0.625em 0 0 #ffe3e2;
+    -webkit-transform: translate3d(0, 0.75em, -1em);
+    transform: translate3d(0, 0.75em, -1em);
+    transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), box-shadow 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-box-shadow 150ms cubic-bezier(0, 0, 0.58, 1);
+   }
+   
+   button.learn-more:hover {
+    background: #ffe9e9;
+    -webkit-transform: translate(0, 0.25em);
+    transform: translate(0, 0.25em);
+   }
+   
+   button.learn-more:hover::before {
+    -webkit-box-shadow: 0 0 0 2px #b18597, 0 0.5em 0 0 #ffe3e2;
+    box-shadow: 0 0 0 2px #b18597, 0 0.5em 0 0 #ffe3e2;
+    -webkit-transform: translate3d(0, 0.5em, -1em);
+    transform: translate3d(0, 0.5em, -1em);
+   }
+   
+   button.learn-more:active {
+    background: #ffe9e9;
+    -webkit-transform: translate(0em, 0.75em);
+    transform: translate(0em, 0.75em);
+   }
+   
+   button.learn-more:active::before {
+    -webkit-box-shadow: 0 0 0 2px #b18597, 0 0 #ffe3e2;
+    box-shadow: 0 0 0 2px #b18597, 0 0 #ffe3e2;
+    -webkit-transform: translate3d(0, 0, -1em);
+    transform: translate3d(0, 0, -1em);
+   }
+
+   button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.MuiButtonGroup-grouped.MuiButtonGroup-groupedHorizontal.MuiButtonGroup-groupedContained.MuiButtonGroup-groupedContainedHorizontal.MuiButtonGroup-groupedContainedPrimary.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.MuiButtonGroup-grouped.MuiButtonGroup-groupedHorizontal.MuiButtonGroup-groupedContained.MuiButtonGroup-groupedContainedHorizontal.MuiButtonGroup-groupedContainedPrimary.MuiButtonGroup-middleButton.css-sghohy-MuiButtonBase-root-MuiButton-root{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 1px solid #ffffff;
+    border-color: #ffffff;
+   }
+   button.MuiButtonBase-root.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.MuiButtonGroup-grouped.MuiButtonGroup-groupedHorizontal.MuiButtonGroup-groupedContained.MuiButtonGroup-groupedContainedHorizontal.MuiButtonGroup-groupedContainedPrimary.MuiButton-root.MuiButton-contained.MuiButton-containedPrimary.MuiButton-sizeMedium.MuiButton-containedSizeMedium.MuiButton-colorPrimary.MuiButtonGroup-grouped.MuiButtonGroup-groupedHorizontal.MuiButtonGroup-groupedContained.MuiButtonGroup-groupedContainedHorizontal.MuiButtonGroup-groupedContainedPrimary.MuiButtonGroup-firstButton.css-sghohy-MuiButtonBase-root-MuiButton-root{
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 1px solid #ffffff;
+    border-color: #ffffff;
+   }
+   .css-sghohy-MuiButtonBase-root-MuiButton-root:hover {
+    -webkit-text-decoration: none;
+    text-decoration: none;
+    background-color: #ffe3e2;
+} */
+
+
+.container-grid {
+    margin-top: 20px; /* Add some top margin for better spacing */
+  }
+  
+  .productdisplay-left,
+  .productdisplay-right {
+    padding: 11px; /* Add padding to the left and right sections */
+  }
+  
+  .productdisplay-img {
+    margin-bottom: 20px; /* Add some bottom margin to separate images from other content */
+  }
+  
+  .productdisplay-img img {
+    width: 100%; /* Make sure images fill their containers */
+    height: auto;
+  }
+  
+  .productdisplay-right h1 {
+    font-size: 24px; /* Increase font size for product name */
+    margin-bottom: 10px; /* Add bottom margin */
+  }
+  
+  .productdisplay-right-star img {
+    width: 20px; /* Adjust star icon size */
+  }
+  
+  .productdisplay-right-star p {
+    margin-left: 5px; /* Add some space between stars and the number */
+  }
+  
+  .productdisplay-right-prices {
+    margin-bottom: 20px; /* Add bottom margin */
+  }
+  
+  .productdisplay-right-price-new {
+    font-weight: bold; /* Make price bold */
+  }
+  
+  .producdisplay-right-desciption {
+    margin-bottom: 20px; /* Add bottom margin */
+  }
+  
+  .productdisplay-right-category {
+    margin-bottom: 20px; /* Add bottom margin */
+  }
+  
+  .productdisplay-right-quantity {
+    margin-bottom: 5px;
+}
+  
+  .learn-more {
+    font-weight: 600;
+    color: #382b22;
+    text-transform: uppercase;
+    padding: 12.25px 13px;
+    background: #fff0f0;
+    border: 2px solid #b18597;
+    border-radius: 0.75em;
+    transform-style: preserve-3d;
+    -webkit-transform-style: preserve-3d;
+    transition: transform 150ms cubic-bezier(0, 0, 0.58, 1), background 150ms cubic-bezier(0, 0, 0.58, 1);
+    -webkit-transition: background 150ms cubic-bezier(0, 0, 0.58, 1), -webkit-transform 150ms cubic-bezier(0, 0, 0.58, 1);
+    margin-top: 5%;
+  }
+  
+  .learn-more:hover {
+    background: #ffe9e9;
+    -webkit-transform: translate(0, 0.25em);
+    transform: translate(0, 0.25em);
+  }
+  .learn-more:active {
+    background: #ffe9e9;
+    -webkit-transform: translate(0em, 0.75em);
+    transform: translate(0em, 0.75em);
+   }
+   .learn-more:active::before {
+    -webkit-box-shadow: 0 0 0 2px #b18597, 0 0 #ffe3e2;
+    box-shadow: 0 0 0 2px #b18597, 0 0 #ffe3e2;
+    -webkit-transform: translate3d(0, 0, -1em);
+    transform: translate3d(0, 0, -1em);
+   }
+   .learn-more:active {
+    background: #ffe9e9;
+    -webkit-transform: translate(0em, 0.75em);
+    transform: translate(0em, 0.75em);
+   }
+   
+
+  
+  /* Styling for related products */
+  .relatedproducts {
+    margin-top: 40px; /* Add top margin */
+  }
+  
+  .relatedproducts h1 {
+    font-size: 24px; /* Increase font size for heading */
+    margin-bottom: 20px; /* Add bottom margin */
+  }
+  
+  .relatedproducts-item {
+    display: flex; /* Use flexbox for item layout */
+    flex-wrap: wrap; /* Allow items to wrap */
+    gap: 20px; /* Add gap between items */
+  }
+  
+  .product-card {
+    max-width: calc(25% - 20px); /* Set maximum width for each card */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1); /* Add box shadow */
+    border-radius: 5px; /* Add border radius */
+    overflow: hidden; /* Hide overflowing content */
+  }
+  
+  .product-card img {
+    width: 100%; /* Make sure images fill their containers */
+    height: auto;
+  }
+
+
+  @media (max-width: 1280px) {
+    .productdisplay-left, .productdisplay-right {
+        padding: 0px;
+    }
+    button.learn-more {
+        margin-left: 1%;
+        margin-top: 2%;
+        width: 45%;
+    }
+}
+@media(max-width:1024px){
+    .productdisplay-left, .productdisplay-right {
+        padding: 0px;
+    }
+    button.learn-more {
+        margin-left: 0%;
+    }
+    .productdisplay-right h1 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    .productdisplay-right-star {
+        font-size: 50%;
+    }
+    .producdisplay-right-desciption {
+        margin-bottom: 8px;
+        font-size: 82%;
+    }
+    .productdisplay-right-price-new {
+        font-weight: bold;
+        font-size: 100%;
+    }
+    .productdisplay-right-category {
+        margin-bottom: 0px;
+        font-size: 70%;
+    }
+    button.learn-more {
+        width: 35%;
+        font-size: 90%;
+    }
+}
+  
+@media(max-width:800px){
+    .productdisplay-left, .productdisplay-right {
+        padding: 0px;
+    }
+    .productdisplay-right h1 {
+        font-size: 16px;
+        margin-bottom: 10px;
+    }
+    .productdisplay-right-star {
+        font-size: 50%;
+    }
+    .producdisplay-right-desciption {
+        margin-bottom: 8px;
+        font-size: 58%;
+    }
+    .productdisplay-right-price-new {
+        font-weight: bold;
+        font-size: 70%;
+    }
+    .productdisplay-right-category {
+        margin-bottom: 0px;
+        font-size: 70%;
+    }
+    button.learn-more {
+        width: 32%;
+        font-size: 59%;
+    }
+}
+  
+  .css-11reh94-MuiGrid-root>.MuiGrid-item {
+    padding-left: 0;
 }
