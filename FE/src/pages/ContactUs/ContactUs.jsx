@@ -5,7 +5,7 @@ import SupportCenter from '../../components/SupportCenter'
 const ContactUs = () => {
   return (
     <div className=''>
-        {/* <Contact/> */}
+        <Contact/>
         <SupportCenter/>
     </div>
   )

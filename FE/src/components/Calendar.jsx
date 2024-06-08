@@ -4,16 +4,16 @@ import { DemoContainer, DemoItem } from "@mui/x-date-pickers/internals/demo";
 import { AdapterDayjs } from "@mui/x-date-pickers/AdapterDayjs";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
-const Calendar = () => {
+const Calendar = ({ formValues, onChange }) => {
   const today = dayjs();
   const tomorrow = dayjs().add(1, "day");
   return (
-    <div className="w-auto flex justify-center">
+    <div className="w-auto flex justify-center" >
       <LocalizationProvider dateAdapter={AdapterDayjs}>
         <DemoContainer components={["DatePicker"]}>
-          <DemoItem label="Select date and time">
+          <DemoItem label="Select date and time" >
             <DatePicker
-              defaultValue={today}
+              id="date" name="date" onChange={onChange} value={formValues.date}
               minDate={today}
               views={["year", "month", "day"]}
             />
