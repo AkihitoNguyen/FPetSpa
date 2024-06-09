@@ -1,0 +1,6 @@
+@FPetSpa_HostAddress = http://localhost:5221
+
+GET {{FPetSpa_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

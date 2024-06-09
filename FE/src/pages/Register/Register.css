@@ -1,0 +1,25 @@
+section.register-container {
+  display: flex;
+  justify-content: center;
+}
+.register-title {
+  margin-left: 38%;
+}
+form.register {
+  display: flex;
+  margin-top: 5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  width: 374px;
+  align-items: flex-start;
+  flex-direction: row;
+  flex-wrap: wrap;
+  border: 1px solid;
+}
+button.button-submit {
+  margin-left: 28%;
+  margin-top: 6%;
+}
+p.error-message {
+  color: red;
+}
