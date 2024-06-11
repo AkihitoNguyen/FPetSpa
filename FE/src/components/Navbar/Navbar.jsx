@@ -34,29 +34,30 @@ const Navbar = () => {
     <div className="navbar">
       <img onClick={() => navigate("/")} src={assets.logo} alt="" className="logo" />
       <ul className="navbar-menu">
-        <li onClick={() => { navigate("/"); setMenu("home") }} className={menu === "home" ? "active" : ""}>home</li>
-        <li onClick={() => { navigate("/"); setMenu("about-us") }} className={menu === "about-us" ? "active" : ""}>about us</li>
-        <li onClick={() => { navigate("/"); setMenu("service") }} className={menu === "service" ? "active" : ""}>service</li>
-        <li onClick={() => { navigate("/product"); setMenu("product") }} className={menu === "product" ? "active" : ""}>product</li>
-        <li onClick={() => { navigate("/"); setMenu("blog") }} className={menu === "blog" ? "active" : ""}>blog</li>
+        <li onClick={() => { navigate("/service"); setMenu("service") }} className={menu === "service" ? "active" : ""}>Service</li>
+        <li onClick={() => { navigate("/product"); setMenu("product") }} className={menu === "product" ? "active" : ""}>Product</li>
+        <li onClick={() => { navigate("/about-us"); setMenu("about-us") }} className={menu === "about-us" ? "active" : ""}>About us</li>
+        <li onClick={() => { navigate("/contact-us"); setMenu("contact-us") }} className={menu === "contact-us" ? "active" : ""}>Contact us</li>
       </ul>
       <div className="navbar-right">
         <img src={assets.search} alt="" className="search" />
-        <div className="navbar-search-icon">
-          <Link to='/cart'> <img src={assets.cart} alt=""  className="cart" /></Link>
-          <div className="nav-cart-count">{getTotalCartItems()}</div>
-        </div>
+        
         {user ? (
           <div>
             <p className="navbar-user">Hi, <span>{user.fullName}</span></p>
             <Link to="/logout" className="navbar-logout" onClick={handleLogout}>Log out</Link>
           </div>
         ) : (
-          <div>
-            <Link to="/login" className="navbar-login"><button onClick={() => navigate("/login")}>sign in</button></Link>
-            
+          <div className=""> 
+            <Link to="/login" className="navbar-login">
+            <img src={assets.user} alt="" className="user" />
+            <button onClick={() => navigate("/login")}>Login</button></Link>
           </div>
         )}
+        <div className="navbar-search-icon">
+          <Link to='/cart'> <img src={assets.cart} alt=""  className="cart" /></Link>
+        </div>
+        <div className="nav-cart-count">{getTotalCartItems()}</div>
       </div>
       <ToastContainer />
     </div>

@@ -3,56 +3,80 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-   
-
+    /*  */
+    overflow: hidden;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    z-index: 99; /* Đảm bảo navbar hiển thị trên các phần tử khác */
+    background-color: #fff; /* Thay đổi màu nền tùy ý */
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Thêm shadow cho navbar nếu cần */
+    /* Các thuộc tính khác bạn muốn thêm vào */
 }
 
+.navbar.hidden {
+    top: -80px; /* Độ dài của navbar, điều chỉnh tùy thuộc vào chiều cao của navbar */
+  }
+
 .navbar .logo {
-    width: 100px;
+    position: relative;
+    left: 30px;
+    width: 80px;
     cursor: pointer;
 }
 
 .navbar-menu {
     display: flex;
     list-style: none;
-    gap: 70px;
-    color: #49557e;
-    font-size: 18px;
+    gap: 50px;
+    color: #111827;
+    font-size: 15.75px;
 }
 
 
 .navbar-right {
+    position: relative;
+    top: -10px;
+    right: 37px;
     display: flex;
     align-items: center;
-    gap: 40px;
+    gap: 30px;
+    margin-right: -20rem;
 }
 
 .navbar-right .search {
-    width: 30px;
+    position: relative;
+    width: 20px;
+    right: -40px;
+    cursor: pointer;
 }
-
 
 
 .navbar-right .cart {
-    width: 30px;
+    position: relative;
+    width: 25px;    
+    right: -85px;
 }
 
 .navbar button {
-    background: transparent;
-    font-size: 16px;
-    color: #49557e;
-    /* background-color: #FF9494; */
-    border: 1px solid #FF9494;
-    padding: 10px 30px;
+    position: relative;
+    top: -13px;
+    right: -85px;
+    font-size: 12px;
+    font-weight: 500;
     border-radius: 50px;
     cursor: pointer;
     transition: 0.3s;
 }
 
-.navbar button:hover {
-    background-color: #FF9494;
-    box-shadow: rgb(255, 132, 204) 0px 7px 29px 0px;
+.navbar .user {
+    position: relative;
+    width: 23.5px;
+    right: -55px;
+    top: 12px;
 }
+
 
 .navbar .active {
     padding-bottom: 2px;
@@ -67,29 +91,11 @@
     position: relative;
 }
 
-.navbar-right .search:hover {
-    transition: 0.1s;
-    margin-top: -4px;
-    position: relative;
-    opacity: 100%;
-}
 
-.navbar-search-icon:hover {
-    transition: 0.1s;
-    margin-top: -4px;
-    position: relative;
-    opacity: 100%;
-}
 
-.navbar-search-icon .dot {
-    position: absolute;
-    min-width: 10px;
-    min-height: 10px;
-    background-color: tomato;
-    border-radius: 5px;
-    top: -8px;
-    right: -8px;
-}
+/* search */
+
+
 
 @media (max-width: 1050px) {
     .navbar .logo {
@@ -147,15 +153,18 @@
     background: #f3f3f3;
 }
 .nav-cart-count{
-    width: 22px;
+    position: relative;
+    top: 48px;
+    right: -26.5px;
+    width: 24px;
     height: 22px;
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-top: -37px;
-    margin-left: 15px;
-    border-radius: 11px;
+    margin-top: -95px;
+    margin-left: 35px;
+    border-radius: 16px;
     font-size: 17px;
-    background: #bd5555;
+    background: black;
     color: white;
 }

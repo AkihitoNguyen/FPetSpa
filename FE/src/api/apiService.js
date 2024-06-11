@@ -1,8 +1,8 @@
 import axios from '../utils/axiosClient';
 
-// const getAllServices = () =>{
-//     return axios.get('/api/services');
-// }
+const getAllServices = () =>{
+    return axios.get('https://fpetspa.azurewebsites.net/api/services');
+}
 // const getAllProduct = () => {
 //   return axios.get(`https://6652835e813d78e6d6d5ad66.mockapi.io/api/v1/Product`);
 
@@ -50,7 +50,7 @@ export const getProductName = async ({ productName = '' }) => {
 };
 
   
-  export { getProductsByCategory };
+  export { getProductsByCategory, getAllServices };
   
 
 
