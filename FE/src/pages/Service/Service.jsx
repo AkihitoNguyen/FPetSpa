@@ -1,146 +1,46 @@
-import React, { useState, useEffect } from "react";
-import FirstForm from "../../components/FormComponents/FirstForm";
-import SecondForm from "../../components/FormComponents/SecondForm";
-
+import React from "react";
+import { useNavigate } from "react-router-dom";
+import { assets } from "../../assets/assets";
+import ServiceContent from "../../components/Content/ServiceContent";
+import ServiceContent2 from "../../components/Content/ServiceContent2";
 const Service = () => {
-  const formList = ["FirstForm", "SecondForm", "ThirdForm"];
-
-  const formLength = formList.length;
-
-  const [page, setPage] = useState(0);
-  const [values, setValues] = useState({
-    fullname: "",
-    date: "",
-    pet: "",
-    petage: "",
-    pettype: "",
-    weight: "",
-    email: "",
-    phonenumber: "",
-    message: "",
-    servicetype: "",
-  });
-  const [states, setStates] = useState([]);
-
-  useEffect(() => {
-    // Gọi API của bạn ở đây để lấy dữ liệu cho tùy chọn của states
-    fetch("https://fpetspa.azurewebsites.net/api/services")
-      .then((response) => response.json())
-      .then((data) => {
-        // Cập nhật state của states với dữ liệu từ API
-        setStates(
-          data.map((item) => ({
-            name: item.serviceName,
-            //  id: item .serviceId.toString()
-          }))
-        );
-      })
-      .catch((error) => console.error("Error fetching services", error));
-  }, []);
-
-  const handlePrev = () => {
-    setPage(page === 0 ? formLength - 1 : page - 1);
-  };
-  const handleNext = () => {
-    setPage(page === formLength - 1 ? 0 : page + 1);
-  };
-
-  const [submitSuccess, setSubmitSuccess] = useState(false);
-  const handleForms = () => {
-    switch (page) {
-      case 0: {
-        return (
-          <div>
-            <FirstForm
-              formValues={values}
-              onChange={onChange}
-              option={states}></FirstForm>
-          </div>
-        );
-      }
-      case 1: {
-        return (
-          <SecondForm formValues={values} onChange={onChange}></SecondForm>
-        );
-      }
-      default:
-        return null;
-    }
-  };
-
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const response = await setTimeout(() => {
-      console.log("form", values);
-      setSubmitSuccess(true);
-    }, 2000);
-    return response;
-  };
-
-  setTimeout(() => {
-    setSubmitSuccess(false);
-  }, 2000);
-
-  const onChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    setValues({ ...values, [name]: type === "checkbox" ? checked : value });
-  };
+  const navigate = useNavigate();
 
   return (
-    <div>
-
-      <div className="grid gap-4 place-content-center  h-screen items-center place-items-center ">
-        <div className="flex-1">
-          {page === 0 ? (
-            <FirstForm
-              formValues={values}
-              onChange={onChange}
-              option={states}
-            />
-          ) : (
-            <SecondForm
-              formValues={values}
-              onChange={onChange}
-              selectedService={values.servicetype}
-            />
-          )}
-        </div>
-        <div className="grid grid-cols-2 gap-4 place-content-center items-center">
+    <div className="max-h-screen max-w-full mt-10">
+      <div className="mx-auto flex items-center flex-row justify-center gap-x-20">
+        <div className="">
+          <h6 className="text-[20px] font-normal leading-6 mt-10 text-[#000000]">
+            Discover Top-notch Pet Care Services
+          </h6>
+          <h1 className="text-[54px] font-bold leading-[64.8px] mb-8 text-[#000000]">
+            High-end pet care
+          </h1>
+          <p>
+            At Fpet, we understand that your pet is family, and we treat them as{" "}
+            <br />
+            such. With a range of services including pet sitting, and <br />
+            personalized training, we're here to support you and your pet every{" "}
+            <br />
+            step of the way. Trust us to provide the care and attention your{" "}
+            <br />
+            furry friend deserves.
+          </p>
           <button
-            onClick={handlePrev}
-            className="bg-blue-200 hover:bg-blue-300 rounded-md text-gray-800 font-bold py-2 px-4 disabled:bg-gray-400 "
-            disabled={page === 0}>
-            Prev
+            className="border rounded-full bg-black text-white py-2.5 px-16"
+            onClick={() => {
+              navigate("/booking");
+            }}>
+            Booking
           </button>
-          {page === 1 ? (
-            <button
-              onClick={handleSubmit}
-              className="bg-blue-200 hover:bg-blue-300 rounded-md text-gray-800 font-bold py-2 px-4 ">
-              Submit
-            </button>
-          ) : (
-            <button
-              onClick={handleNext}
-              className="bg-blue-200 hover:bg-blue-300 rounded-md text-gray-800 font-bold py-2 px-4 ">
-              Next
-            </button>
-          )}
+        </div>
+        <div>
+          <img src={assets.ser_1} alt="" className="w-[608px] h-[350.312px]" />
         </div>
       </div>
-      <div className="mt-36">
-        <p>aaaaaaaaaaaaaaaaaaa</p>
-        <br />
-        <p>aaaaaaaaaaaaaaaaaaa</p>
-        <br />
-        <p>aaaaaaaaaaaaaaaaaaa</p>
-        <br />
-        <p>aaaaaaaaaaaaaaaaaaa</p>
-        <br />
-        <p>aaaaaaaaaaaaaaaaaaa</p>
-        <br />
-        <p>aaaaaaaaaaaaaaaaaaa</p>
-        <br />
-
+      {/*  */}
+      <div className="bg-myCusColor">
+        <ServiceContent2/>
       </div>
     </div>
   );

@@ -3,70 +3,34 @@ import { assets } from "../../assets/assets";
 
 const FirstContent = () => {
   return (
-    <div className="flex justify-center py-5 relative flex-col w-8/12	 m-auto">
-        <div className="pb-4">
-        <h6 className="w-fit m-auto text-[20px] font-normal text-center leading-6 max-w-full tracking-tight">
-          Everything they need. Nothing they don’t.
-        </h6>
-        <h2 className="w-fit m-auto text-[46px] font-bold text-center tracking-tighter ">
-          Your pet's nutrition doesn’t need to be
-          <br /> hard.
-        </h2>
-        </div>
-      <div className="flex justify-center items-center gap-x-8">
-        <div className="grid">
-          <img src={assets.content_1} alt="" className="w-my-width h-my-height" />
-          <div className="text-center">
-            <h3 className="text-[32px] font-bold">Treats</h3>
-            <div className="text-[18px] font-normal">
-              No boring biscuits allowed.
+    <section class="max-h-screen">
+      <div class="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 sm:px-48 sm:py-16 lg:max-w-7xl lg:grid-cols-2 lg:px-8">
+        <div>
+          <h6 class="text-[20px] font-normal mt-4 text-gray-700">
+            Sample for Dogs and Cats
+          </h6>
+          <h1 class="text-custom_1 font-bold tracking-tight text-gray-900 sm:text-6xl">
+            Take the Tail-
+            <br /> Wagging Taste Test
+          </h1>
+          <div class="flex gap-x-4 py-4">
+            <div>
+              <button class="border rounded-full bg-black text-white py-2.5 px-16">
+                <a href="">Shop Dog</a>
+              </button>
             </div>
-          </div>
-          <div className="flex justify-center gap-10 py-4">
-            <button className="border rounded-full bg-black text-white py-2.5 px-12">
-              Shop
-            </button>
-            <button className="border rounded-full bg-myPink text-white py-2.5 px-12">
-              Service
-            </button>
+            <div>
+              <button class="border rounded-full bg-black text-white py-2.5 px-16">
+                <a href="">Shop Cat</a>
+              </button>
+            </div>
           </div>
         </div>
         <div>
-          <img src={assets.content_2} alt="" className="w-my-width h-my-height"  />
-          <div className="text-center">
-            <h3 className="text-[32px] font-bold">Food</h3>
-            <div className="text-[18px] font-normal">
-              Nutrition they need, the flavor they want.
-            </div>
-          </div>
-          <div className="flex justify-center gap-10 py-4">
-            <button className="border rounded-full bg-black text-white py-2.5 px-12">
-              Shop
-            </button>
-            <button className="border rounded-full bg-myPink text-white py-2.5 px-12">
-              Service
-            </button>
-          </div>
-        </div>
-        <div>
-          <img src={assets.content_3} alt="" className="w-my-width h-my-height" />
-          <div className="text-center">
-            <h3 className="text-[32px] font-bold">Supplements</h3>
-            <div className="text-[18px] font-normal">
-              Nutrition they need, the flavor they want.
-            </div>
-          </div>
-          <div className="flex justify-center gap-10 py-4">
-            <button className="border rounded-full bg-black text-white py-2.5 px-12">
-              Shop
-            </button>
-            <button className="border rounded-full bg-myPink text-white py-2.5 px-12">
-              Service
-            </button>
-          </div>
+          <img src={assets.header_img} alt="" class="w-5/6" />
         </div>
       </div>
-    </div>
+    </section>
   );
 };
 

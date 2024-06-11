@@ -21,6 +21,7 @@ import Service from "./pages/Service/Service";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import AboutUs from "./pages/AboutUs/AboutUs";
 import Navlink from "./components/Navlink/Navlink";
+import BookingService from "./pages/Service/BookingService";
 const App = () => {
   return (
     <PayPalScriptProvider
@@ -44,6 +45,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/product" element={<Product />} />
             <Route path="/search" element={<Search />} />
+            <Route path="/booking" element = {<BookingService/>}/>
             <Route
               path="/productdisplay/:productName"
               element={<ProductDisplay />}
@@ -52,7 +54,9 @@ const App = () => {
             <Route path="/check-email" element={<CheckEmail />} />
           </Routes>
         </div>
+        <div className="bg-gray-700">
         <Footer />
+        </div>
       </>
     </PayPalScriptProvider>
   );

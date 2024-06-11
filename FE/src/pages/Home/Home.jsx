@@ -2,16 +2,20 @@
 import React from 'react'
 import './Home.css'
 import Header from '../../components/Header/Header'
-import Service from '../../components/Service/Service'
 import FirstContent from '../../components/Content/FirstContent'
+import SecondContent from '../../components/Content/SecondContent'
+import ServiceContent from '../../components/Content/ServiceContent'
+import ThirdContent from '../../components/Content/ThirdContent'
 const Home = () => {
   return (
     <div>
         <Header/>
-        <div className='bg-myCusColor '>
+        <ServiceContent/>
+        <div className='bg-myCusColor'>
         <FirstContent/>
         </div>
-        <Service/>
+        <SecondContent/>
+        <ThirdContent/>
     </div>
   )
 }

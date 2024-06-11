@@ -1,18 +1,9 @@
 .navbar {
-    padding: 20px 0;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    /*  */
-    overflow: hidden;
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    z-index: 99; /* Đảm bảo navbar hiển thị trên các phần tử khác */
-    background-color: #fff; /* Thay đổi màu nền tùy ý */
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); /* Thêm shadow cho navbar nếu cần */
-    /* Các thuộc tính khác bạn muốn thêm vào */
+    margin-top: 2px;
+    margin-bottom: 1rem;
 }
 
 .navbar.hidden {
@@ -21,7 +12,7 @@
 
 .navbar .logo {
     position: relative;
-    left: 30px;
+    left: 180px;
     width: 80px;
     cursor: pointer;
 }
@@ -77,11 +68,6 @@
     top: 12px;
 }
 
-
-.navbar .active {
-    padding-bottom: 2px;
-    border-bottom: 2px solid #49557e;
-}
 
 .navbar li {
     cursor: pointer;

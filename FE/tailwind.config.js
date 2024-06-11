@@ -9,7 +9,7 @@ export default {
     fontSize: {
       custom: '16px', 
       custom_1: '54px',
-      sm: ['14px', '18px' ,'20px', '32px' ,'46px'], 
+      sm: ['14px', '15.75px', '18px' ,'20px', '32px' ,'46px'], 
     },
     extend: {
       colors: {
