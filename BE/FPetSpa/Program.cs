@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using FPetSpa.Repository.Model;
 using Amazon.S3;
 using Quartz;
+using FPetSpa.Repository.Model.VnPayModel;
+using FPetSpa.Repository.Services.VnPay;
 
 namespace FPetSpa
 {
@@ -98,8 +100,8 @@ namespace FPetSpa
             builder.Services.AddAWSService<IAmazonS3>();
             builder.Services.Configure<MailSettingsModel>(builder.Configuration.GetSection("GmailSettings"));
             builder.Services.AddScoped<SendMailServices>();
-
-    
+            builder.Services.AddSingleton<IVnPayService, VnPayService>();
+            
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
                 //   builder.Services.AddSwaggerGen();

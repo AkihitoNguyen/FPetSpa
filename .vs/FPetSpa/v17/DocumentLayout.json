@@ -1,0 +1,863 @@
+{
+  "Version": 1,
+  "WorkspaceRootPath": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\",
+  "Documents": [
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\services\\vnpay\\vnpayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\services\\vnpay\\vnpayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\services\\vnpay\\ivnpayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\services\\vnpay\\ivnpayservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\model\\vnpaymodel\\vnpayrequestmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\model\\vnpaymodel\\vnpayrequestmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\data\\serviceorderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\data\\serviceorderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\data\\productorderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\data\\productorderdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\model\\vnpaymodel\\vnpayresponsemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\model\\vnpaymodel\\vnpayresponsemodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\appsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\data\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\data\\order.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\fpetspa.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\fpetspa.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\fpetspa.repository.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\fpetspa.repository.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\controllers\\productcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\controllers\\servicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\controllers\\servicescontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\repository\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\repository\\accountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\repository\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\repository\\genericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\repository\\iaccountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\repository\\iaccountrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\controllers\\accountscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\controllers\\accountscontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\repository\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\repository\\igenericrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\controllers\\imagecontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\models\\s3model\\s3objectrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\models\\s3model\\s3objectrequest.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\controllers\\bucketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\controllers\\bucketcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\controllers\\feedbackcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\controllers\\feedbackcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\controllers\\cartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\controllers\\cartcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\fpetspa.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\fpetspa.http||{5703B403-55E7-4C63-8C88-A8F52C7A45C5}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\NCPC\\AppData\\Roaming\\Microsoft\\UserSecrets\\5a02281c-f6dd-4706-9e99-61c4246af02a\\secrets.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\model\\mailsettingsmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\model\\mailsettingsmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\controllers\\weatherforecastcontroller.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\weatherforecast.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\migrations\\20240606073853_identityuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\migrations\\20240606073853_identityuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\model\\awssetting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\model\\awssetting.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\data\\fpetspacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\data\\fpetspacontext.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\services\\sendmailservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\services\\sendmailservices.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\repository\\emailsenderrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\repository\\emailsenderrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC\\AppData\\Local\\SourceServer\\b5a3cb7a99dee30c9e2b9924e18b80465255a1ef62747465b456b318f865129b\\FPetSpa\\Controllers\\AccountsController.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\data\\feedback.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\data\\feedback.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\data\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\data\\applicationuser.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa.Repository\\Migrations\\20240606060937_IdentityASPFramework.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\data\\cartdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\data\\cartdetail.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\data\\cart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\data\\cart.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\data\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\data\\category.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\repository\\iemailsenderrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\repository\\iemailsenderrepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\model\\signupmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\model\\signupmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\mailssave\\73e12d77-96be-4d89-9b6a-0160ab24af1c.eml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\mailssave\\73e12d77-96be-4d89-9b6a-0160ab24af1c.eml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\mailssave\\a228aec6-5e95-4928-a740-1794337d7c44.eml||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\mailssave\\a228aec6-5e95-4928-a740-1794337d7c44.eml||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\model\\mailcontentmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\model\\mailcontentmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\appsettings.development.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\properties\\launchsettings.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\secret\\client_secret_554094266789-iqc14jn9mv9rucu4gdkeuibltsko48t1.apps.googleusercontent.com.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\secret\\client_secret_554094266789-iqc14jn9mv9rucu4gdkeuibltsko48t1.apps.googleusercontent.com.json||{90A6B3A7-C1A3-4009-A288-E2FF89E96FA0}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa\\fpetspa.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|",
+      "RelativeMoniker": "D:0:0:{C4677F20-070F-47CD-87FC-58A143A5224F}|FPetSpa\\FPetSpa.csproj|solutionrelative:fpetspa\\fpetspa.csproj||{04B8AB82-A572-4FEF-95CE-5222444B6B64}|"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\services\\productservice.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\NCPC\\AppData\\Local\\Temp\\.vsdbgsrc\\228cd08f06afaeeb4d8070a5babbcb7527e96827633da88a52a1406a5628e61f\\Program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|c:\\users\\pc\\downloads\\fpetspa\\fpetspa\\fpetspa\\fpetspa.repository\\model\\signinmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{C97270AC-D67C-47D5-A4C9-658304C73B66}|FPetSpa.Repository\\FPetSpa.Repository.csproj|solutionrelative:fpetspa.repository\\model\\signinmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    }
+  ],
+  "DocumentGroupContainers": [
+    {
+      "Orientation": 0,
+      "VerticalTabListWidth": 256,
+      "DocumentGroups": [
+        {
+          "DockedWidth": 200,
+          "SelectedChildIndex": 10,
+          "Children": [
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "IVnPayService.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Services\\VnPay\\IVnPayService.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Services\\VnPay\\IVnPayService.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Services\\VnPay\\IVnPayService.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Services\\VnPay\\IVnPayService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAsAAABQAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-08T11:35:35.988Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 8,
+              "Title": "Order.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\Order.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Data\\Order.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\Order.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Data\\Order.cs",
+              "ViewState": "AQIAAAgAAAAAAAAAAAAYwBAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T06:17:30.859Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "FPetSpa.csproj",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.csproj",
+              "RelativeDocumentMoniker": "FPetSpa\\FPetSpa.csproj",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.csproj",
+              "RelativeToolTip": "FPetSpa\\FPetSpa.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-06-07T21:19:32.207Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "ProductController.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\ProductController.cs",
+              "RelativeDocumentMoniker": "FPetSpa\\Controllers\\ProductController.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\ProductController.cs",
+              "RelativeToolTip": "FPetSpa\\Controllers\\ProductController.cs",
+              "ViewState": "AQIAABwAAAAAAAAAAAAgwCcAAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T21:22:34.329Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "ServicesController.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\ServicesController.cs",
+              "RelativeDocumentMoniker": "FPetSpa\\Controllers\\ServicesController.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\ServicesController.cs",
+              "RelativeToolTip": "FPetSpa\\Controllers\\ServicesController.cs",
+              "ViewState": "AQIAAAsAAAAAAAAAAAAxwBUAAAAKAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T08:00:37.859Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "AccountRepository.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Repository\\AccountRepository.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Repository\\AccountRepository.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Repository\\AccountRepository.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Repository\\AccountRepository.cs",
+              "ViewState": "AQIAAJAAAAAAAAAAAAAowJ4AAAApAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T14:51:02.405Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "ProductOrderDetail.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\ProductOrderDetail.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Data\\ProductOrderDetail.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\ProductOrderDetail.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Data\\ProductOrderDetail.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T06:17:33.563Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
+              "Title": "ServiceOrderDetail.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\ServiceOrderDetail.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Data\\ServiceOrderDetail.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\ServiceOrderDetail.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Data\\ServiceOrderDetail.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAgAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T06:17:36.396Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 2,
+              "Title": "VnPayRequestModel.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\VnPayModel\\VnPayRequestModel.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Model\\VnPayModel\\VnPayRequestModel.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\VnPayModel\\VnPayRequestModel.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Model\\VnPayModel\\VnPayRequestModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-08T11:40:50.865Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Program.cs",
+              "RelativeDocumentMoniker": "FPetSpa\\Program.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Program.cs",
+              "RelativeToolTip": "FPetSpa\\Program.cs",
+              "ViewState": "AQIAABIAAAAAAAAAAAAAAHIAAAAvAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T14:36:14.303Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "VnPayService.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Services\\VnPay\\VnPayService.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Services\\VnPay\\VnPayService.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Services\\VnPay\\VnPayService.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Services\\VnPay\\VnPayService.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAFcAAAA+AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-08T11:35:22.155Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "VnPayResponseModel.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\VnPayModel\\VnPayResponseModel.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Model\\VnPayModel\\VnPayResponseModel.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\VnPayModel\\VnPayResponseModel.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Model\\VnPayModel\\VnPayResponseModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-08T11:40:44.845Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
+              "Title": "appsettings.json",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\appsettings.json",
+              "RelativeDocumentMoniker": "FPetSpa\\appsettings.json",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\appsettings.json",
+              "RelativeToolTip": "FPetSpa\\appsettings.json",
+              "ViewState": "AQIAABgAAAAAAAAAAAAAACMAAAAPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-06-05T14:08:58.219Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
+              "Title": "FPetSpa.http",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.http",
+              "RelativeDocumentMoniker": "FPetSpa\\FPetSpa.http",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.http",
+              "RelativeToolTip": "FPetSpa\\FPetSpa.http",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003502|",
+              "WhenOpened": "2024-06-06T09:31:59.395Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "AccountsController.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\AccountsController.cs",
+              "RelativeDocumentMoniker": "FPetSpa\\Controllers\\AccountsController.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\AccountsController.cs",
+              "RelativeToolTip": "FPetSpa\\Controllers\\AccountsController.cs",
+              "ViewState": "AQIAADMAAAAAAAAAAAAMwEcAAABBAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T14:50:38.669Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "IAccountRepository.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Repository\\IAccountRepository.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Repository\\IAccountRepository.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Repository\\IAccountRepository.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Repository\\IAccountRepository.cs",
+              "ViewState": "AQIAAAMAAAAAAAAAAADgvxAAAAAwAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T14:50:48.257Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "IGenericRepository.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Repository\\IGenericRepository.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Repository\\IGenericRepository.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Repository\\IGenericRepository.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Repository\\IGenericRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T19:29:05.61Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 14,
+              "Title": "GenericRepository.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Repository\\GenericRepository.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Repository\\GenericRepository.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Repository\\GenericRepository.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Repository\\GenericRepository.cs",
+              "ViewState": "AQIAAF0AAAAAAAAAAIA4wBkAAABIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T19:29:07.926Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "FPetSpa.Repository.csproj",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\FPetSpa.Repository.csproj",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\FPetSpa.Repository.csproj",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\FPetSpa.Repository.csproj",
+              "RelativeToolTip": "FPetSpa.Repository\\FPetSpa.Repository.csproj",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-06-08T11:30:49.835Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "CartController.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\CartController.cs",
+              "RelativeDocumentMoniker": "FPetSpa\\Controllers\\CartController.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\CartController.cs",
+              "RelativeToolTip": "FPetSpa\\Controllers\\CartController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T06:19:34.416Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 21,
+              "Title": "FeedBackController.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\FeedBackController.cs",
+              "RelativeDocumentMoniker": "FPetSpa\\Controllers\\FeedBackController.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\FeedBackController.cs",
+              "RelativeToolTip": "FPetSpa\\Controllers\\FeedBackController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T08:00:31.514Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "BucketController.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\BucketController.cs",
+              "RelativeDocumentMoniker": "FPetSpa\\Controllers\\BucketController.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\BucketController.cs",
+              "RelativeToolTip": "FPetSpa\\Controllers\\BucketController.cs",
+              "ViewState": "AQIAAAYAAAAAAAAAAAAAABQAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T11:27:22.657Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ImageController.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\ImageController.cs",
+              "RelativeDocumentMoniker": "FPetSpa\\Controllers\\ImageController.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\ImageController.cs",
+              "RelativeToolTip": "FPetSpa\\Controllers\\ImageController.cs",
+              "ViewState": "AQIAAAUAAAAAAAAAAAAhwBcAAAASAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T16:16:45.019Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "S3ObjectRequest.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Models\\S3Model\\S3ObjectRequest.cs",
+              "RelativeDocumentMoniker": "FPetSpa\\Models\\S3Model\\S3ObjectRequest.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Models\\S3Model\\S3ObjectRequest.cs",
+              "RelativeToolTip": "FPetSpa\\Models\\S3Model\\S3ObjectRequest.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAAAgAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T18:59:52.848Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 31,
+              "Title": "SendMailServices.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Services\\SendMailServices.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Services\\SendMailServices.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Services\\SendMailServices.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Services\\SendMailServices.cs",
+              "ViewState": "AQIAAB4AAAAAAAAAAAAUwDQAAAAOAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T14:11:53.913Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 25,
+              "Title": "MailSettingsModel.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\MailSettingsModel.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Model\\MailSettingsModel.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\MailSettingsModel.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Model\\MailSettingsModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAqwAgAAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T14:20:58.68Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 26,
+              "Title": "WeatherForecastController.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\WeatherForecastController.cs",
+              "RelativeDocumentMoniker": "FPetSpa\\Controllers\\WeatherForecastController.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Controllers\\WeatherForecastController.cs",
+              "RelativeToolTip": "FPetSpa\\Controllers\\WeatherForecastController.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T08:00:18.682Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 24,
+              "Title": "secrets.json",
+              "DocumentMoniker": "C:\\Users\\NCPC\\AppData\\Roaming\\Microsoft\\UserSecrets\\5a02281c-f6dd-4706-9e99-61c4246af02a\\secrets.json",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\NCPC\\AppData\\Roaming\\Microsoft\\UserSecrets\\5a02281c-f6dd-4706-9e99-61c4246af02a\\secrets.json",
+              "ToolTip": "C:\\Users\\NCPC\\AppData\\Roaming\\Microsoft\\UserSecrets\\5a02281c-f6dd-4706-9e99-61c4246af02a\\secrets.json",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\NCPC\\AppData\\Roaming\\Microsoft\\UserSecrets\\5a02281c-f6dd-4706-9e99-61c4246af02a\\secrets.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAIAAABPAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-06-07T14:29:25.448Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 27,
+              "Title": "WeatherForecast.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\WeatherForecast.cs",
+              "RelativeDocumentMoniker": "FPetSpa\\WeatherForecast.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\WeatherForecast.cs",
+              "RelativeToolTip": "FPetSpa\\WeatherForecast.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-07T07:59:16.274Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 30,
+              "Title": "FpetSpaContext.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\FpetSpaContext.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Data\\FpetSpaContext.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\FpetSpaContext.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Data\\FpetSpaContext.cs",
+              "ViewState": "AQIAADABAAAAAAAAAIBJwCgAAABAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T04:46:28.096Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 32,
+              "Title": "EmailSenderRepository.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Repository\\EmailSenderRepository.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Repository\\EmailSenderRepository.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Repository\\EmailSenderRepository.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Repository\\EmailSenderRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T14:39:42.078Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 28,
+              "Title": "20240606073853_IDentityUser.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Migrations\\20240606073853_IDentityUser.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Migrations\\20240606073853_IDentityUser.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Migrations\\20240606073853_IDentityUser.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Migrations\\20240606073853_IDentityUser.cs",
+              "ViewState": "AQIAAEACAAAAAAAAAAAowGgCAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T07:38:53.234Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 29,
+              "Title": "AwsSetting.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\AwsSetting.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Model\\AwsSetting.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\AwsSetting.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Model\\AwsSetting.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA0AAAAqAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T09:31:08.609Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 37,
+              "Title": "CartDetail.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\CartDetail.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Data\\CartDetail.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\CartDetail.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Data\\CartDetail.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T04:13:43.889Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 38,
+              "Title": "Cart.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\Cart.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Data\\Cart.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\Cart.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Data\\Cart.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T04:20:31.678Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 39,
+              "Title": "Category.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\Category.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Data\\Category.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\Category.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Data\\Category.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T04:46:16.434Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 36,
+              "Title": "20240606060937_IdentityASPFramework.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa.Repository\\Migrations\\20240606060937_IdentityASPFramework.cs",
+              "RelativeDocumentMoniker": "..\\..\\FPetSpa.Repository\\Migrations\\20240606060937_IdentityASPFramework.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa.Repository\\Migrations\\20240606060937_IdentityASPFramework.cs",
+              "RelativeToolTip": "..\\..\\FPetSpa.Repository\\Migrations\\20240606060937_IdentityASPFramework.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T06:09:37.972Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 33,
+              "Title": "AccountsController.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\AppData\\Local\\SourceServer\\b5a3cb7a99dee30c9e2b9924e18b80465255a1ef62747465b456b318f865129b\\FPetSpa\\Controllers\\AccountsController.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\AppData\\Local\\SourceServer\\b5a3cb7a99dee30c9e2b9924e18b80465255a1ef62747465b456b318f865129b\\FPetSpa\\Controllers\\AccountsController.cs",
+              "ToolTip": "C:\\Users\\PC\\AppData\\Local\\SourceServer\\b5a3cb7a99dee30c9e2b9924e18b80465255a1ef62747465b456b318f865129b\\FPetSpa\\Controllers\\AccountsController.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\AppData\\Local\\SourceServer\\b5a3cb7a99dee30c9e2b9924e18b80465255a1ef62747465b456b318f865129b\\FPetSpa\\Controllers\\AccountsController.cs",
+              "ViewState": "AQIAAA4AAAAAAAAAAAAUwCMAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T06:23:19.541Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 35,
+              "Title": "ApplicationUser.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\ApplicationUser.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Data\\ApplicationUser.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\ApplicationUser.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Data\\ApplicationUser.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T06:10:32.903Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 34,
+              "Title": "FeedBack.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\FeedBack.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Data\\FeedBack.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Data\\FeedBack.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Data\\FeedBack.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-06T06:17:43.187Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 50,
+              "Title": "ProductService.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Services\\ProductService.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Services\\ProductService.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Services\\ProductService.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Services\\ProductService.cs",
+              "ViewState": "AQIAABcAAAAAAAAAAAAwwAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T16:55:29.057Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 48,
+              "Title": "client_secret_554094266789-iqc14jn9mv9rucu4gdkeuibltsko48t1.apps.googleusercontent.com.json",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Secret\\client_secret_554094266789-iqc14jn9mv9rucu4gdkeuibltsko48t1.apps.googleusercontent.com.json",
+              "RelativeDocumentMoniker": "FPetSpa\\Secret\\client_secret_554094266789-iqc14jn9mv9rucu4gdkeuibltsko48t1.apps.googleusercontent.com.json",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Secret\\client_secret_554094266789-iqc14jn9mv9rucu4gdkeuibltsko48t1.apps.googleusercontent.com.json",
+              "RelativeToolTip": "FPetSpa\\Secret\\client_secret_554094266789-iqc14jn9mv9rucu4gdkeuibltsko48t1.apps.googleusercontent.com.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-06-05T19:48:58.556Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 40,
+              "Title": "IEmailSenderRepository.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Repository\\IEmailSenderRepository.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Repository\\IEmailSenderRepository.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Repository\\IEmailSenderRepository.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Repository\\IEmailSenderRepository.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T14:21:25.325Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 41,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Program.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Program.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Program.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Program.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T14:36:09.739Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 44,
+              "Title": "a228aec6-5e95-4928-a740-1794337d7c44.eml",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\mailssave\\a228aec6-5e95-4928-a740-1794337d7c44.eml",
+              "RelativeDocumentMoniker": "FPetSpa\\mailssave\\a228aec6-5e95-4928-a740-1794337d7c44.eml",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\mailssave\\a228aec6-5e95-4928-a740-1794337d7c44.eml",
+              "RelativeToolTip": "FPetSpa\\mailssave\\a228aec6-5e95-4928-a740-1794337d7c44.eml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001861|",
+              "WhenOpened": "2024-06-05T21:31:10.234Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 43,
+              "Title": "73e12d77-96be-4d89-9b6a-0160ab24af1c.eml",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\mailssave\\73e12d77-96be-4d89-9b6a-0160ab24af1c.eml",
+              "RelativeDocumentMoniker": "FPetSpa\\mailssave\\73e12d77-96be-4d89-9b6a-0160ab24af1c.eml",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\mailssave\\73e12d77-96be-4d89-9b6a-0160ab24af1c.eml",
+              "RelativeToolTip": "FPetSpa\\mailssave\\73e12d77-96be-4d89-9b6a-0160ab24af1c.eml",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001861|",
+              "WhenOpened": "2024-06-05T21:31:09.174Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 42,
+              "Title": "SignUpModel.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\SignUpModel.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Model\\SignUpModel.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\SignUpModel.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Model\\SignUpModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABIAAAAtAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T21:39:05.554Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 45,
+              "Title": "MailContentModel.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\MailContentModel.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Model\\MailContentModel.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\MailContentModel.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Model\\MailContentModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAoAAAAIAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T14:19:33.225Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 46,
+              "Title": "appsettings.Development.json",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\appsettings.Development.json",
+              "RelativeDocumentMoniker": "FPetSpa\\appsettings.Development.json",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\appsettings.Development.json",
+              "RelativeToolTip": "FPetSpa\\appsettings.Development.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-06-05T20:22:24.292Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 47,
+              "Title": "launchSettings.json",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Properties\\launchSettings.json",
+              "RelativeDocumentMoniker": "FPetSpa\\Properties\\launchSettings.json",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\Properties\\launchSettings.json",
+              "RelativeToolTip": "FPetSpa\\Properties\\launchSettings.json",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAA4AAAAcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001642|",
+              "WhenOpened": "2024-06-05T18:42:10.718Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 49,
+              "Title": "FPetSpa",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.csproj",
+              "RelativeDocumentMoniker": "FPetSpa\\FPetSpa.csproj",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.csproj",
+              "RelativeToolTip": "FPetSpa\\FPetSpa.csproj",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
+              "WhenOpened": "2024-06-05T18:42:07.648Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 52,
+              "Title": "SignInModel.cs",
+              "DocumentMoniker": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\SignInModel.cs",
+              "RelativeDocumentMoniker": "FPetSpa.Repository\\Model\\SignInModel.cs",
+              "ToolTip": "C:\\Users\\PC\\Downloads\\FPetSpa\\FPetSpa\\FPetSpa\\FPetSpa.Repository\\Model\\SignInModel.cs",
+              "RelativeToolTip": "FPetSpa.Repository\\Model\\SignInModel.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T16:22:36.567Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 51,
+              "Title": "Program.cs",
+              "DocumentMoniker": "C:\\Users\\NCPC\\AppData\\Local\\Temp\\.vsdbgsrc\\228cd08f06afaeeb4d8070a5babbcb7527e96827633da88a52a1406a5628e61f\\Program.cs",
+              "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\NCPC\\AppData\\Local\\Temp\\.vsdbgsrc\\228cd08f06afaeeb4d8070a5babbcb7527e96827633da88a52a1406a5628e61f\\Program.cs",
+              "ToolTip": "C:\\Users\\NCPC\\AppData\\Local\\Temp\\.vsdbgsrc\\228cd08f06afaeeb4d8070a5babbcb7527e96827633da88a52a1406a5628e61f\\Program.cs",
+              "RelativeToolTip": "..\\..\\..\\..\\..\\NCPC\\AppData\\Local\\Temp\\.vsdbgsrc\\228cd08f06afaeeb4d8070a5babbcb7527e96827633da88a52a1406a5628e61f\\Program.cs",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-06-05T16:32:31.832Z"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
