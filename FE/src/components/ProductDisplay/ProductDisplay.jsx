@@ -1,14 +1,19 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useEffect, useState } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
+import { ShopContext } from '../Context/ShopContext';
 import { getProductName } from '../../api/apiService';
+import { StarIcon } from '@heroicons/react/20/solid';
+import 'react-toastify/dist/ReactToastify.css';
 import { assets } from '../../assets/assets';
 import '../ProductDisplay/ProductDisplay.css'
-import DescriptionBox from '../DescriptionBox/DescriptionBox';
 
 const ProductDisplay = () => {
   const { productName } = useParams();
+  const { addToCart } = useContext(ShopContext);
   const [product, setProduct] = useState(null);
+  const [mainImage, setMainImage] = useState('');
+  const [quantity, setQuantity] = useState(1);
 
   useEffect(() => {
     fetchProduct();
@@ -17,9 +22,28 @@ const ProductDisplay = () => {
   const fetchProduct = async () => {
     try {
       const response = await getProductName({ productName });
-      setProduct(response);
+      if (response && response.length > 0) {
+        setProduct(response[0]);
+        setMainImage(response[0].picture);
+      }
     } catch (error) {
       console.error("Error fetching product:", error);
+    }
+  };
+
+  const handleIncreaseQuantity = () => {
+    setQuantity(quantity + 1);
+  };
+
+  const handleDecreaseQuantity = () => {
+    if (quantity > 1) {
+      setQuantity(quantity - 1);
+    }
+  };
+
+  const handleAddToCart = () => {
+    if (product) {
+      addToCart(product.productId, quantity);
     }
   };
 
@@ -27,69 +51,217 @@ const ProductDisplay = () => {
     return <div>Loading...</div>;
   }
 
+  const renderStars = (rating) => {
+    const stars = [];
+    const totalStars = rating ?? 5; // Nếu không có rating, mặc định là 5 sao
+    for (let i = 0; i < totalStars; i++) {
+      stars.push(
+        <StarIcon key={i} className="h-5 w-5 text-yellow-400" /> // Đây là icon sao của bạn, thay thế bằng icon của bạn
+      );
+    }
+    return stars;
+  };
+
   return (
-<div className='productdisplay-main'>
-<div className='productdisplay'>
-<div className="productdisplay-left">
-  <div className="productdisplay-img">
-  {product.map((item,index)=>{
-              return(
-                <tr key={index}>
-                <img src={item.picture} alt={item.productName} />
-              </tr>
-              )
-            })}
+    <div className="bg-white">
+      <div className="pt-6">
+        {/* Image gallery */}
+        
+        <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-[65rem] lg:grid-cols-3 lg:gap-x-8 lg:px-8 max-w-[65rem]">
+  <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-5">
+    <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+      <img
+        src={mainImage}
+        alt={product.productName}
+        className="h-full w-full object-cover object-center"
+      />
+    </div>
+    <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
+      <img
+        src={assets.cat_2}
+        alt={product.productName}
+        className="h-full w-full object-cover object-center"
+      />
+    </div>
+  </div>
+  <div className="aspect-h-5 aspect-w-4 lg:aspect-h-4 lg:aspect-w-3 sm:overflow-hidden sm:rounded-lg lg:col-span-2">
+    <img
+      src={'https://bixbipet.com/wp-content/uploads/2022/09/WebTiles_Rawbble_Cat_Dry_ChickenSalmonIndoor_1.png'}
+      alt={product.productName}
+      className="h-full w-full object-cover object-center"
+    />
   </div>
 </div>
-<div className="productdisplay-right">
-  <h1> {product.map((item,index)=>{
-              return(
-                <tr key={index}>
-                {item.productName}
-              </tr>
-              )
-            })}</h1>
-  <div className="productdisplay-right-star">
-      <img src={assets.star_icon} alt="" />
-      <img src={assets.star_icon} alt="" />
-      <img src={assets.star_icon} alt="" />
-      <img src={assets.star_icon} alt="" />
-      <img src={assets.star_icon} alt="" />
-      <p>(122)</p>
-  </div>
-  <div className="productdisplay-right-prices">
-      <div className="productdisplay-right-price-new">
-        {product.map((item,index)=>{
-              return(
-                <tr key={index}>
-                {item.price}
-              </tr>
-              )
-            })}
+
+        {/* Product info */}
+        <div className="mx-auto max-w-2xl px-4 pb-16 pt-10 sm:px-6 lg:grid lg:max-w-7xl lg:grid-cols-3 lg:grid-rows-[auto,auto,1fr] lg:gap-x-8 lg:px-8 lg:pb-24 lg:pt-16">
+          <div className="lg:col-span-2 lg:border-r lg:border-gray-200 lg:pr-8">
+            <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{product.productName}</h1>
+          </div>
+
+          {/* Options */}
+          <div className="mt-4 lg:row-span-3 lg:mt-0">
+            <h2 className="sr-only">Product information</h2>
+            <p className="text-3xl tracking-tight text-gray-900">${product.price}</p>
+
+            {/* Reviews */}
+            <div className="mt-6">
+              <h3 className="sr-only">Reviews</h3>
+              <div className="flex items-center">
+                <div className="flex items-center">
+                  {renderStars(product.averageRating)}
+                </div>
+                <p className="sr-only">{product.averageRating} out of 5 stars</p>
+                <a href="#reviews" className="ml-3 text-sm font-medium text-indigo-600 hover:text-indigo-500">
+                  {product.totalReviews} reviews
+                </a>
+              </div>
             </div>
 
-  </div>
-  <div className="producdisplay-right-desciption">
-      Qua la tuyet voi luon quy di khan gia
-      cam mon vi da ghe qua xem san pham nha chung em
-  </div>
-  <div className="productdisplay-right-size">
-      <h1>Select Size</h1>
-      <div className="productdisplay-right-sizes">
-          <div>S</div>
-          <div>M</div>
-          <div>L</div>
-          <div>XL</div>
-          <div>XXL</div>
+            {/* Quantity Selector */}
+            <div className="mt-6">
+              <div className="flex items-center space-x-2">
+                <button onClick={handleDecreaseQuantity} className="px-4 py-2 border">-</button>
+                <span>{quantity}</span>
+                <button onClick={handleIncreaseQuantity} className="px-4 py-2 border">+</button>
+              </div>
+            </div>
+
+            <button
+              className="mt-10 w-full flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              onClick={handleAddToCart}
+            >
+              Add to cart
+            </button>
+          </div>
+
+          <div className="py-10 lg:col-span-2 lg:col-start-1 lg:border-r lg:border-gray-200 lg:pb-16 lg:pr-8 lg:pt-6">
+            {/* Description and details */}
+            <div>
+              <h3 className="sr-only">Description</h3>
+              <div className="space-y-6">
+                <p className="text-base text-gray-900">{product.description}</p>
+              </div>
+            </div>
+
+            {/* <div className="mt-10">
+              <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
+              <div className="mt-4">
+                <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
+                  {product.highlights.map((highlight, index) => (
+                    <li key={index} className="text-gray-400">
+                      <span className="text-gray-600">{highlight}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div> */}
+
+            <div className="mt-10">
+              <h2 className="text-sm font-medium text-gray-900">Details</h2>
+              <div className="mt-4 space-y-6">
+                <p className="text-sm text-gray-600">{product.details}</p>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
-  </div>
-  <button>Add To Cart</button>
-  <p className='productdisplay-right-category'><span>Categogy :</span>Women, T-Shirt, Crop-Top</p>
-  <p className='productdisplay-right-category'><span>Tags :</span>Modern, Latest</p>
-</div>
-</div>
-<div className='description'><DescriptionBox/></div>
-</div>
+      
+      <section className="bde-section-145096-100 bde-section">
+        <div className="section-container">
+          <div className="bde-globalblock-145096-101 bde-globalblock">
+            <div className="breakdance">
+              <section className="bde-section-145113-100 bde-section">
+              <div className='section-container'>
+        <h1 className='bde-heading-145113-101 bde-heading'>
+        We craft each recipe for superior nutrition and flavor using trusted ingredient sourcing and thorough product testing
+        </h1>
+        <div className="b-product-features-box-145113-124 b-product-features-box">
+          <div className="swiper-wrapper b-features-ticker" style={{'--features-count': 8}}>
+            <div className="ticker-wrapper">
+            <div className="swiper-slide">
+              <div className="b-feature">
+                <div className="b-feature__icon-box">
+                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Digestive-Health-300x300.png"} 
+                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
+                  sizes="(max-width: 300px) 100vw, 300px"/>
+                  <h6 className="b-feature__title">Digestive Health</h6>
+                </div>
+              </div>
+            </div>
+            <div className="swiper-slide">
+              <div className="b-feature">
+                <div className="b-feature__icon-box">
+                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Freeze-Dried-Raw-Coated-300x300.png"} 
+                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
+                  sizes="(max-width: 300px) 100vw, 300px"/>
+                  <h6 className="b-feature__title">Digestive Health</h6>
+                </div>
+              </div>
+            </div>
+            <div className="swiper-slide">
+              <div className="b-feature">
+                <div className="b-feature__icon-box">
+                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Digestive-Health-300x300.png"} 
+                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
+                  sizes="(max-width: 300px) 100vw, 300px"/>
+                  <h6 className="b-feature__title">Freeze-Dried Raw Coated</h6>
+                </div>
+              </div>
+            </div>
+            <div className="swiper-slide">
+              <div className="b-feature">
+                <div className="b-feature__icon-box">
+                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Digestive-Health-300x300.png"} 
+                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
+                  sizes="(max-width: 300px) 100vw, 300px"/>
+                  <h6 className="b-feature__title">Freeze-Dried Raw Coated</h6>
+                </div>
+              </div>
+            </div>
+            <div className="swiper-slide">
+              <div className="b-feature">
+                <div className="b-feature__icon-box">
+                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Digestive-Health-300x300.png"} 
+                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
+                  sizes="(max-width: 300px) 100vw, 300px"/>
+                  <h6 className="b-feature__title">Freeze-Dried Raw Coated</h6>
+                </div>
+              </div>
+            </div>
+            <div className="swiper-slide">
+              <div className="b-feature">
+                <div className="b-feature__icon-box">
+                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Digestive-Health-300x300.png"} 
+                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
+                  sizes="(max-width: 300px) 100vw, 300px"/>
+                  <h6 className="b-feature__title">Freeze-Dried Raw Coated</h6>
+                </div>
+              </div>
+            </div>
+            <div className="swiper-slide">
+              <div className="b-feature">
+                <div className="b-feature__icon-box">
+                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Digestive-Health-300x300.png"} 
+                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
+                  sizes="(max-width: 300px) 100vw, 300px"/>
+                  <h6 className="b-feature__title">Freeze-Dried Raw Coated</h6>
+                </div>
+              </div>
+            </div>
+     
+            </div>
+          </div>
+        </div>
+      </div>
+      
+              </section>
+            </div>
+          </div>         
+        </div>
+      </section>
+    </div>
+    
   );
 };
 

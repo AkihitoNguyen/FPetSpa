@@ -53,6 +53,7 @@ const authSlice = createSlice({
             state.logout.isFetching = false;
             state.logout.error = false;
             state.login.currentUser = null;
+            state.cartItems = {};
         },
         logoutFailed: (state) => {
             state.logout.isFetching = false;

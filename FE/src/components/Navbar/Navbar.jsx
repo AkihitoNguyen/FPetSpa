@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useContext } from "react";
 import "../Navbar/Navbar.css";
 import { assets } from "../../assets/assets";
 import { Link, useNavigate } from "react-router-dom";
@@ -6,7 +6,9 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/apiRequest";
 import { createAxiosInstance } from "../../createInstance";
 import { logoutSuccess } from "../../redux/authSlice";
-
+import { ShopContext } from '../Context/ShopContext'
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -14,11 +16,18 @@ const Navbar = () => {
   const id = user?._id;
   const accessToken = user?.accessToken;
   let axiosJWT = createAxiosInstance(user, dispatch, logoutSuccess);
-
+  const{getTotalCartItems} = useContext(ShopContext);
   const [menu, setMenu] = useState("menu");
 
   const handleLogout = () => {
-    logoutUser(accessToken, id, dispatch, navigate, axiosJWT);
+    logoutUser(accessToken, id, dispatch, navigate, axiosJWT)
+      .then(() => {
+        toast.success("Logout successful!");
+      })
+      .catch((error) => {
+        toast.error("Logout failed. Please try again.");
+        console.error("Logout error:", error);
+      });
   };
 
   return (
@@ -34,8 +43,8 @@ const Navbar = () => {
       <div className="navbar-right">
         <img src={assets.search} alt="" className="search" />
         <div className="navbar-search-icon">
-          <img src={assets.cart} alt="" className="cart" />
-          <div className="dot"></div>
+          <Link to='/cart'> <img src={assets.cart} alt=""  className="cart" /></Link>
+          <div className="nav-cart-count">{getTotalCartItems()}</div>
         </div>
         {user ? (
           <div>
@@ -49,6 +58,7 @@ const Navbar = () => {
           </div>
         )}
       </div>
+      <ToastContainer />
     </div>
   );
 };

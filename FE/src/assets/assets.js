@@ -27,6 +27,7 @@ import arrow from './breadcrum_arrow.png'
 
 import pet_group from './pet_group.png'
 import pet_group2 from './pet_group2.png'
+import catanddog from './catanddog.png'
 
 import search from './search.png'
 import phone from './phone.png'
@@ -38,6 +39,7 @@ import instagram from './instagram.png'
 import email from './email.png'
 
 export const assets = {
+    catanddog,
     logo,
     cart,
     cat_1,

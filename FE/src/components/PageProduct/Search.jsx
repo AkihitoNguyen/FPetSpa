@@ -1,30 +1,24 @@
-// Search.jsx
 // eslint-disable-next-line no-unused-vars
-import React, { useState } from 'react';
-import { Button, Form } from 'react-bootstrap';
+import React from 'react';
 import PropTypes from 'prop-types';
-const Search = ({ onSearch }) => {
-  const [searchQuery, setSearchQuery] = useState('');
+import '../PageProduct/Search.css'
 
-  const handleSearch = () => {
-    // Gửi yêu cầu tìm kiếm đến component cha
-    onSearch(searchQuery);
-  };
-  Search.propTypes = {
-    onSearch: PropTypes.func.isRequired,
+const Search = ({ searchQuery, setSearchQuery }) => {
+  const handleChange = (event) => {
+    setSearchQuery(event.target.value);
   };
 
   return (
-    <div>
-      <Form.Control
-        type="text"
-        placeholder="Search products..."
-        value={searchQuery}
-        onChange={(e) => setSearchQuery(e.target.value)}
-      />
-      <Button variant="primary" onClick={handleSearch}>Search</Button>
-    </div>
+    <div className="search">
+    <input value={searchQuery} onChange={handleChange} placeholder="Search..." type="text"/>
+    <button type="submit">Go</button>
+  </div>
   );
-}
+};
+
+Search.propTypes = {
+  searchQuery: PropTypes.string.isRequired,
+  setSearchQuery: PropTypes.func.isRequired,
+};
 
 export default Search;
