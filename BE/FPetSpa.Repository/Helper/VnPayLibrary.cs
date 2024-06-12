@@ -162,5 +162,4 @@ namespace FPetSpa.Repository.Helper
             return vnpCompare.Compare(x, y, CompareOptions.Ordinal);
         }
     }
-
 }

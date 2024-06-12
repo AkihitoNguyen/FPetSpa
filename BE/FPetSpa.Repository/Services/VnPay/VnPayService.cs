@@ -22,7 +22,7 @@ namespace FPetSpa.Repository.Services.VnPay
             _configuration = config;
         }
 
-        public string CreatePaymentURl(HttpContext httpContext, VnPayRequestModel vnPayRequestModel)
+        public string CreatePaymentURl(VnPayRequestModel vnPayRequestModel, HttpContext context)
         {
             var tick = DateTime.Now.Ticks.ToString();
 
@@ -38,18 +38,18 @@ namespace FPetSpa.Repository.Services.VnPay
 
             vnpay.AddRequestData("vnp_CreateDate", vnPayRequestModel.CreatedDate.ToString("yyyyMMddHHmmss"));
             vnpay.AddRequestData("vnp_CurrCode", _configuration["VnPay:CurrCode"]!);
-            vnpay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress(httpContext));
             vnpay.AddRequestData("vnp_Locale", _configuration["VnPay:Locale"]!);
-
+            vnpay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress(context));
             vnpay.AddRequestData("vnp_OrderInfo", "Thanh toán cho đơn hàng:" + vnPayRequestModel.OrderId);
             vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
+           // vnpay.AddRequestData("vnp_ExpireDate, ", vnPayRequestModel.ExpiredDate.ToString("yyyyMMddHHmmss"));
             vnpay.AddRequestData("vnp_ReturnUrl", _configuration["VnPay:PaymentBackReturnUrl"]!);
 
-            vnpay.AddRequestData("vnp_TxnRef", tick); // Mã tham chiếu của giao dịch tại hệ 
+            vnpay.AddRequestData("vnp_TxnRef", vnPayRequestModel.OrderId); // Mã tham chiếu của giao dịch tại hệ 
             //thống của merchant.Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY.Không được
             //    trùng lặp trong ngày
 
-            var paymentUrl = vnpay.CreateRequestUrl(_configuration["VnPay:BaseUrl"]!, _configuration["VnPay:HashSecret"]!);
+            var paymentUrl = vnpay.CreateRequestUrl(_configuration["VnPay:Url"]!, _configuration["VnPay:HashSecret"]!);
        
             return paymentUrl;
         }
@@ -71,7 +71,7 @@ namespace FPetSpa.Repository.Services.VnPay
             var vnp_ResponseCode = vnpay.GetResponseData("vnp_ResponseCode");
             var vnp_OrderInfo = vnpay.GetResponseData("vnp_OrderInfo");
 
-            bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, _configuration["VnPay:HashSecret"]);
+            bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, _configuration["VnPay:HashSecret"]!);
             if (!checkSignature)
             {
                 return new VnPayResponseModel
