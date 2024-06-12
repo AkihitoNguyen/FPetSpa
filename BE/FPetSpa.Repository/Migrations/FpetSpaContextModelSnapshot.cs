@@ -110,7 +110,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnName("UserID");
 
                     b.HasKey("CartId")
-                        .HasName("PK__Cart__51BCD797DA777D19");
+                        .HasName("PK__Cart__51BCD79747FAC93A");
 
                     b.HasIndex("UserId");
 
@@ -158,17 +158,13 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("nvarchar(100)");
 
                     b.HasKey("CategoryId")
-                        .HasName("PK__Category__19093A2B8AF4DAEB");
+                        .HasName("PK__Category__19093A2B022D7698");
 
                     b.ToTable("Category", (string)null);
                 });
 
             modelBuilder.Entity("FPetSpa.Repository.Data.FeedBack", b =>
                 {
-                    b.Property<int>("FeedBackId")
-                        .HasColumnType("int")
-                        .HasColumnName("FeedBackID");
-
                     b.Property<string>("Description")
                         .HasMaxLength(300)
                         .HasColumnType("nvarchar(300)");
@@ -185,10 +181,14 @@ namespace FPetSpa.Repository.Migrations
                     b.Property<int?>("Star")
                         .HasColumnType("int");
 
-                    b.HasKey("FeedBackId")
-                        .HasName("PK__FeedBack__E2CB3867F03CCE73");
+                    b.Property<string>("UserFeedBackId")
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)")
+                        .HasColumnName("UserFeedBackID");
 
                     b.HasIndex("OrderId");
+
+                    b.HasIndex("UserFeedBackId");
 
                     b.ToTable("FeedBack", (string)null);
                 });
@@ -227,7 +227,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnName("VoucherID");
 
                     b.HasKey("OrderId")
-                        .HasName("PK__Order__C3905BAFA501AA09");
+                        .HasName("PK__Order__C3905BAF71F59845");
 
                     b.HasIndex("CustomerId");
 
@@ -259,7 +259,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("float");
 
                     b.HasKey("MethodId")
-                        .HasName("PK__PaymentM__FC681FB1702FF2C6");
+                        .HasName("PK__PaymentM__FC681FB19861E276");
 
                     b.ToTable("PaymentMethod", (string)null);
                 });
@@ -302,7 +302,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("nvarchar(50)");
 
                     b.HasKey("PetId")
-                        .HasName("PK__Pet__48E538025416C034");
+                        .HasName("PK__Pet__48E538029A90B6D1");
 
                     b.HasIndex("CustomerId");
 
@@ -340,7 +340,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ProductId")
-                        .HasName("PK__Product__B40CC6ED0BFF27D6");
+                        .HasName("PK__Product__B40CC6ED118BD779");
 
                     b.HasIndex("CategoryId");
 
@@ -412,7 +412,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("int");
 
                     b.HasKey("ServiceId")
-                        .HasName("PK__Service__C51BB0EA9E942AE1");
+                        .HasName("PK__Service__C51BB0EAC4D88B37");
 
                     b.ToTable("Service", (string)null);
                 });
@@ -469,7 +469,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("date");
 
                     b.HasKey("TransactionId")
-                        .HasName("PK__Transact__55433A4B2FFCE86C");
+                        .HasName("PK__Transact__55433A4B99715DB2");
 
                     b.HasIndex("MethodId");
 
@@ -517,7 +517,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("varchar(20)");
 
                     b.HasKey("UserId")
-                        .HasName("PK__User__1788CCAC56E75DF9");
+                        .HasName("PK__User__1788CCACDACE5146");
 
                     b.ToTable("User", (string)null);
                 });
@@ -540,7 +540,7 @@ namespace FPetSpa.Repository.Migrations
                         .HasColumnType("date");
 
                     b.HasKey("VoucherId")
-                        .HasName("PK__Voucher__3AEE79C16E25274A");
+                        .HasName("PK__Voucher__3AEE79C1F400B288");
 
                     b.ToTable("Voucher", (string)null);
                 });
@@ -708,11 +708,18 @@ namespace FPetSpa.Repository.Migrations
             modelBuilder.Entity("FPetSpa.Repository.Data.FeedBack", b =>
                 {
                     b.HasOne("FPetSpa.Repository.Data.Order", "Order")
-                        .WithMany("FeedBacks")
+                        .WithMany()
                         .HasForeignKey("OrderId")
                         .HasConstraintName("FK_FeedBack.OrderID");
 
+                    b.HasOne("FPetSpa.Repository.Data.User", "UserFeedBack")
+                        .WithMany()
+                        .HasForeignKey("UserFeedBackId")
+                        .HasConstraintName("FK_FeedBack.UserFeedBackId");
+
                     b.Navigation("Order");
+
+                    b.Navigation("UserFeedBack");
                 });
 
             modelBuilder.Entity("FPetSpa.Repository.Data.Order", b =>
@@ -871,11 +878,6 @@ namespace FPetSpa.Repository.Migrations
             modelBuilder.Entity("FPetSpa.Repository.Data.Category", b =>
                 {
                     b.Navigation("Products");
-                });
-
-            modelBuilder.Entity("FPetSpa.Repository.Data.Order", b =>
-                {
-                    b.Navigation("FeedBacks");
                 });
 
             modelBuilder.Entity("FPetSpa.Repository.Data.PaymentMethod", b =>

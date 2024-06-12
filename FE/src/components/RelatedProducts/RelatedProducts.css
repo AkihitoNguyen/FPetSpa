@@ -65,7 +65,7 @@
         padding: 4px;
     }
 }
-/* @media(max-width:1150px){
+@media(max-width:1150px){
     .productdisplay-right h1 {
         font-size: 34px;
         margin-bottom: -7px;
@@ -110,7 +110,7 @@
         margin-top: 3%;
         width: 38%;
     }
-} */
+}
 @media(max-width:800px){
     .relatedproducts{
         height: 50vh;

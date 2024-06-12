@@ -109,7 +109,7 @@ namespace FPetSpa.Repository.Repository
                 var tokenCode =  await userManager.GenerateEmailConfirmationTokenAsync(user);
                 var encodeToken = HttpUtility.UrlEncode(tokenCode);
                 
-                var callBackUrl = $"https://localhost:7055/api/account/confirm-email?token={encodeToken}&id={user.Id}";
+                var callBackUrl = $"https://fpetspa.azurewebsites.net/api/account/confirm-email?token={encodeToken}&id={user.Id}";
 
                 await sendMailServices.SendEmailAsync(
                     user.Email,

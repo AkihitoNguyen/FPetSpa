@@ -1,7 +1,7 @@
 // eslint-disable-next-line no-unused-vars
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router-dom';
-import { getProductName, getProductsByCategory } from '../../api/apiService'; // Ensure both functions are imported
+import { getProductName, getAllProduct } from '../../api/apiService'; // Ensure both functions are imported
 import '../RelatedProducts/RelatedProducts.css';
 import Card from '@mui/material/Card';
 import CardMedia from '@mui/material/CardMedia';
@@ -32,7 +32,7 @@ const RelatedProducts = () => {
 
   const fetchRelatedProducts = async (categoryName) => {
     try {
-      const response = await getProductsByCategory({ category: categoryName });
+      const response = await getAllProduct({ category: categoryName });
       console.log('Related Products:', response); // Log related products to check structure
       setRelatedProducts(response);
     } catch (error) {

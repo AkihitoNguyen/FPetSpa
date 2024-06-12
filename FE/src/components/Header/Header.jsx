@@ -1,36 +1,41 @@
 // eslint-disable-next-line no-unused-vars
-import React from 'react'
-import './Header.css'
-import { assets } from '../../assets/assets'
+import React from "react";
+import { assets } from "../../assets/assets";
+import { useNavigate } from "react-router-dom";
+
 const Header = () => {
+
+  const navigate = useNavigate();
+
+
   return (
-    <div className='header'>
-      <div>
-        <div className="header-contents">
-          <h1>Your Pet Care</h1>
-          <h2>Center</h2>
-          <p>Lorem ipsum available, but the majority
-            <br />have suffered alteration in some form.</p>
+    <section className="max-h-screen">
+      <div className="mx-auto grid max-w-2xl grid-cols-1 items-center gap-x-8 gap-y-16 sm:px-48 sm:py-16 lg:max-w-7xl lg:grid-cols-2 lg:px-8">
+        <div>
+          <h6 className="text-[20px] font-normal mt-4 text-gray-700">
+            Sample for Dogs and Cats
+          </h6>
+          <h1 className="text-custom_1 font-bold tracking-tight text-gray-900 sm:text-6xl">
+          Relaxing retreat for
+            <br /> furry friends
+          </h1>
+          <div className="flex gap-x-4 py-4">
+            <div>
+              <button  onClick={() => {
+              navigate("/service");
+            }} className="border rounded-full bg-black text-white py-2.5 px-16">
+                <a href="">Service</a>
+              </button>
+            </div>
 
-          <img src={assets.cat} alt="" className='cat-item-1' />
-          <img src={assets.cat_2} alt="" className='cat-item-2' />
-          <img src={assets.cat_3} alt="" className='cat-item-3' />
-
-
-
-          <button>Show Now</button>
-
-          <img src={assets.phone} alt="" className='phone' />
-          <p className='call'>Schedule a Call</p>
-
-          <img src={assets.icon_1} alt="" className='prod-item-1' />
-          <img src={assets.icon_2} alt="" className='prod-item-2' />
-          <img src={assets.icon_3} alt="" className='prod-item-3' />
+          </div>
+        </div>
+        <div>
+          <img src={assets.Soapy} alt="" className="w-5/6" />
         </div>
       </div>
+    </section>
+  );
+};
 
-    </div>
-  )
-}
-
-export default Header
+export default Header;

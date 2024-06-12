@@ -21,8 +21,6 @@ public partial class Order
 
     public virtual User? Customer { get; set; }
 
-    public virtual ICollection<FeedBack> FeedBacks { get; set; } = new List<FeedBack>();
-
     public virtual User? Staff { get; set; }
 
     public virtual Transaction? Transaction { get; set; }

@@ -1,7 +1,6 @@
 // eslint-disable-next-line no-unused-vars
 import React from 'react';
 import PropTypes from 'prop-types';
-import '../PageProduct/Search.css'
 
 const Search = ({ searchQuery, setSearchQuery }) => {
   const handleChange = (event) => {
@@ -9,10 +8,14 @@ const Search = ({ searchQuery, setSearchQuery }) => {
   };
 
   return (
-    <div className="search">
-    <input value={searchQuery} onChange={handleChange} placeholder="Search..." type="text"/>
-    <button type="submit">Go</button>
-  </div>
+    <div>
+      <input
+        type="text"
+        placeholder="Search for products..."
+        value={searchQuery}
+        onChange={handleChange}
+      />
+    </div>
   );
 };
 

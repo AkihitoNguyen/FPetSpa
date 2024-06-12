@@ -7,6 +7,7 @@ import Grid from '@mui/material/Grid';
 import ListItemText from '@mui/material/ListItemText';
 import { ShopContext } from '../Context/ShopContext';
 import { Link } from 'react-router-dom';
+// import { BsCart4 } from 'react-icons/bs';
 import '../PageProduct/ProductList.css';
 import OutlinedInput from '@mui/material/OutlinedInput';
 import InputLabel from '@mui/material/InputLabel';
@@ -14,6 +15,7 @@ import MenuItem from '@mui/material/MenuItem';
 import FormControl from '@mui/material/FormControl';
 import Select from '@mui/material/Select';
 import Checkbox from '@mui/material/Checkbox';
+// import Rating from '@mui/material/Rating';
 const ProductList = () => {
   const [productList, setProductList] = useState([]);
   const [sortedProductList, setSortedProductList] = useState([]);

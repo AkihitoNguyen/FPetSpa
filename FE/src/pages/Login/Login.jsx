@@ -14,7 +14,7 @@ import Box from '@mui/material/Box';
 import Paper from '@mui/material/Paper';
 import Typography from '@mui/material/Typography';
 import { createTheme, ThemeProvider } from '@mui/material/styles';
-import { GoogleLogin } from "react-google-login";
+// import { GoogleLogin } from "react-google-login";
 import { useLocation } from "react-router-dom";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -100,7 +100,7 @@ function Login() {
                     sm={4}
                     md={7}
                     sx={{
-                        backgroundImage: `url(${assets.catanddog})`,
+                        backgroundImage: `url(${assets.valorant})`,
                         backgroundRepeat: 'no-repeat',
                         backgroundColor: (t) =>
                             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -185,11 +185,11 @@ function Login() {
                                     </RouterLink>
                                 </Grid>
                             </Grid>
-                            <GoogleLogin
+                            {/* <GoogleLogin
                                 clientId="YOUR_GOOGLE_CLIENT_ID"
                                 buttonText="Login with Google"
                                 cookiePolicy={'single_host_origin'}
-                            />
+                            /> */}
                         </Box>
                     </Box>
                 </Grid>

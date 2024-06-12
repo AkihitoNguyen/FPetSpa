@@ -15,7 +15,7 @@ import {
 export const loginUser = async (user, dispatch, navigate) => {
     dispatch(loginStart());
     try {
-        const res = await axios.post(`https://localhost:7055/api/account/signin/customer`, user);
+        const res = await axios.post(` https://fpetspa.azurewebsites.net/api/account/signin/customer`, user);
         dispatch(loginSuccess(res.data));
         navigate("/");
     } catch (error) {
@@ -66,7 +66,7 @@ export const logoutUser = async (
 ) => {
     dispatch(logoutStart());
     try {
-        await axiosJWT.post("https://localhost:7055/api/account/log-out", id, {
+        await axiosJWT.post("https://fpetspa.azurewebsites.net/api/account/log-out", id, {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
         dispatch(logoutSuccess());

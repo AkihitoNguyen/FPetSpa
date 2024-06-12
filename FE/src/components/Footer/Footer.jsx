@@ -1,62 +1,69 @@
 import React from 'react'
-import './Footer.css'
 import { assets } from '../../assets/assets'
-import { useNavigate } from 'react-router-dom'
 const Footer = () => {
 
-    const navigate = useNavigate();
-
-
-    //scrollToTop
-    function scrollToTop() {
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth' // cuộn mượt
-        });
-    }
-
-    //reload Homepage
-
-    function reloadPage() {
-        window.location.reload();
-    }
-
     return (
+        <div className='flex items-center flex-col text-white'>
+            <img src={assets.logo} alt="" className='block w-[124px] h-[124px] mt-14 mb-10'/>
+            <h2 className='text-[54px] block leading-[64.8px] mb-6 font-bold'>Level up your inbox</h2>
 
-        <div className='footer' id='footer'>
-            <hr />
-            <div className="footer-content">
-                <div className="footer-content-left">
-                    <img onClick={() => { scrollToTop()}} src={assets.logo} alt="" />
-                    <p>Lorem ipsum available, but the majority
-                        <br />have suffered alteration in some form.</p>
-                    <div className="footer-social-icons">
-                        <img src={assets.facebook} alt=""/>
-                        <img src={assets.instagram} alt="" />
-                        <img src={assets.email} alt="" />
-                    </div>
+            <div className='flex gap-4 mb-10'>
+                <div>
+                    <input type="text" placeholder='Email address*' className=' text-black cursor-text block text-[16px] px-[24px] py-[8px]  font-normal rounded-[2rem] leading-[1.8px]'/>
                 </div>
-                <div className="footer-content-center">
-                    <h2>COMPANY</h2>
-                    <ul>
-                        <li>Home</li>
-                        <li>About us</li>
-                        <li>Service</li>
-                        <li>Product</li>
-                        <li>Blog</li>
-                        <li>Privacy policy</li>
+                <div>
+                    <button className='border-[1px] rounded-[2rem] bg-white text-[#000000] px-[24px] py-[11.2px] cursor-pointer text-[14px] font-semibold'>Sign Up</button>
+                </div>
+            </div>
+
+            <div className='flex items-start gap-80 text-start'>
+                <div className='flex items-start flex-col bg-cover text-left relative'>
+                    <h6 className='pl-8'>Support</h6>
+                    <ul className=''>
+                        <li className='text-start'>
+                            <a href="">FAQs</a>
+                        </li>
+                        <li>
+                            <a href="">Quality Assurance</a>
+                        </li>
+                        <li>
+                            <a href="">Return Policy</a>
+                        </li>
+                        <li>
+                            <a href="">Privacy Policy</a>
+                        </li>
                     </ul>
                 </div>
-                <div className="footer-content-right">
-                    <h2>GET IN TOUCH</h2>
+                <div>
+                    <h6 className='pl-8'>Fpet Spa</h6>
                     <ul>
-                        <li>+123 456 7890</li>
-                        <li>fpet@gmail.com</li>
+                        <li>
+                            <a href="">About Fpet</a>
+                        </li>
+                        <li>
+                            <a href="">Find a Store</a>
+                        </li>
+                    </ul>
+                </div>
+                <div>
+                    <h6 className='pl-8'>Connect</h6>
+                    <ul>
+                        <li>
+                            <a href="">Contact Us</a>
+                        </li>
+                        <li>
+                            <a href="">fpet@gmail.com</a>
+                        </li>
+                        <li>
+                            <div className='w-10 flex gap-4'>
+                                <img src={assets.facebook} alt="" className='' />
+                                <img src={assets.instagram} alt="" className='' />
+                                <img src={assets.email} alt="" className=''/>
+                            </div>
+                        </li>
                     </ul>
                 </div>
             </div>
-            <hr />
-            <p className="">Copyright 2024 © Fpet.com - All Right Reserved</p>
         </div>
     )
 }
