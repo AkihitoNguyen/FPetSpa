@@ -73,6 +73,7 @@ namespace FPetSpa.Controllers
 
             Expression<Func<Service, bool>> filter = x =>
                 x.MinWeight <= request.Weight && x.MaxWeight >= request.Weight;
+             
 
             var services = _unitOfWork.ServiceRepository.Get(filter);
 
