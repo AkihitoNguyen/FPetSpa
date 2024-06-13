@@ -15,7 +15,7 @@ public partial class ServiceOrderDetail
 
     public decimal? Price { get; set; }
 
-    public int? PetId { get; set; }
+    public string? PetId { get; set; }
 
     public virtual Order? Order { get; set; }
 
