@@ -5,7 +5,7 @@ namespace FPetSpa.Repository.Data;
 
 public partial class Pet
 {
-    public int PetId { get; set; }
+    public string PetId { get; set; }
 
     public string? CustomerId { get; set; }
 
