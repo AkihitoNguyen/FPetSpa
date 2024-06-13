@@ -48,7 +48,7 @@ namespace FPetSpa
 
 
 
-        builder.Services.AddAuthorization(options =>
+            builder.Services.AddAuthorization(options =>
             {
                 options.AddPolicy("RequireStaffRole", policy => policy.RequireRole("Staff"));
                 options.AddPolicy("RequireCustomerRole", policy => policy.RequireRole("Customer"));
@@ -56,12 +56,12 @@ namespace FPetSpa
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-          //      options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-          //     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                //      options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                //     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
-                
+
             }).AddJwtBearer(options =>
             {
                 options.SaveToken = true;
@@ -82,18 +82,19 @@ namespace FPetSpa
                 options.SlidingExpiration = true;
             })
               .AddGoogle(GoogleDefaults.AuthenticationScheme, options =>
-                  {
-                   options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
-                   options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
-                   //options.CallbackPath = "/signin-google";
-                  });
+              {
+                  options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
+                  options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
+                  //options.CallbackPath = "/signin-google";
+              });
 
             builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
             builder.Services.AddTransient<UnitOfWork>();
-           // builder.Services.AddScoped<SendMailServices>();
+            // builder.Services.AddScoped<SendMailServices>();
             builder.Services.AddScoped<IEmailSenderRepository, EmailSenderRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<IProducService, ProductService>();
+            builder.Services.AddScoped<IIdService, IdService>();
             builder.Services.AddControllers();
             //Add AWS
             builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
@@ -101,23 +102,23 @@ namespace FPetSpa
             builder.Services.Configure<MailSettingsModel>(builder.Configuration.GetSection("GmailSettings"));
             builder.Services.AddScoped<SendMailServices>();
             builder.Services.AddSingleton<IVnPayService, VnPayService>();
-            
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
-                //   builder.Services.AddSwaggerGen();
-                builder.Services.AddSwaggerGen(option =>
+            //   builder.Services.AddSwaggerGen();
+            builder.Services.AddSwaggerGen(option =>
+            {
+                option.SwaggerDoc("v1", new OpenApiInfo { Title = "Book API", Version = "v1" });
+                option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
-                    option.SwaggerDoc("v1", new OpenApiInfo { Title = "Book API", Version = "v1" });
-                    option.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
-                    {
-                        In = ParameterLocation.Header,
-                        Description = "Please enter a valid token",
-                        Name = "Authorization",
-                        Type = SecuritySchemeType.Http,
-                        BearerFormat = "JWT",
-                        Scheme = "Bearer"
-                    });
-                    option.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    In = ParameterLocation.Header,
+                    Description = "Please enter a valid token",
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.Http,
+                    BearerFormat = "JWT",
+                    Scheme = "Bearer"
+                });
+                option.AddSecurityRequirement(new OpenApiSecurityRequirement
                     {
                         {
                             new OpenApiSecurityScheme
@@ -131,10 +132,10 @@ namespace FPetSpa
                             new string[] { }
                         }
                     });
-                    var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
-                    var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-                    option.IncludeXmlComments(xmlPath);
-                });
+                var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
+                var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                option.IncludeXmlComments(xmlPath);
+            });
 
             var app = builder.Build();
 
@@ -148,7 +149,7 @@ namespace FPetSpa
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
-           
+
             app.UseCors();
 
             app.MapControllers();

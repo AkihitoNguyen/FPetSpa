@@ -8,15 +8,16 @@ using System.Threading.Tasks;
 
 namespace FPetSpa.Repository
 {
-    public class UnitOfWork 
+    public class UnitOfWork
     {
         private FpetSpaContext _context;
         private GenericRepository<Service> _service;
         private GenericRepository<Product> _product;
         private GenericRepository<FeedBack> _feedback;
-       
+        private ServiceOrderDetailRepository<ServiceOrderDetail> _serviceOrderDetailRepository;
 
-        public UnitOfWork(FpetSpaContext context) {
+        public UnitOfWork(FpetSpaContext context)
+        {
             _context = context;
         }
 
@@ -24,7 +25,7 @@ namespace FPetSpa.Repository
         {
             get
             {
-                if(_service == null)
+                if (_service == null)
                 {
                     this._service = new GenericRepository<Service>(_context);
                 }
@@ -53,7 +54,22 @@ namespace FPetSpa.Repository
                 return _feedback;
             }
         }
+        public ServiceOrderDetailRepository<ServiceOrderDetail> ServiceOrderDetailRepository
+        {
+            get
+            {
+                if (_serviceOrderDetailRepository == null)
+                {
+                    _serviceOrderDetailRepository = new ServiceOrderDetailRepository<ServiceOrderDetail>(_context);
+                }
+                return _serviceOrderDetailRepository;
+            }
+        }
 
+        public async Task<int> SaveChangesAsync()
+        {
+            return await _context.SaveChangesAsync();
+        }
         public void Save()
         {
             _context.SaveChanges();
