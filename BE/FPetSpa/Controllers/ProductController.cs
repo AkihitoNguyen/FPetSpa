@@ -11,6 +11,7 @@ using static FPetSpa.Models.ProductModel.RequestSearchProductModel;
 using System.Linq.Expressions;
 using FPetSpa.Repository.Services;
 using Microsoft.AspNetCore.Authorization;
+using FPetSpa.Repository.Helper;
 
 namespace FPetSpa.Controllers
 {
@@ -72,7 +73,7 @@ namespace FPetSpa.Controllers
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+        //[Authorize]
 
         public IActionResult GetProductById(string id)
         {
@@ -81,7 +82,7 @@ namespace FPetSpa.Controllers
         }
         
         [HttpPost]
-        [Authorize]
+       // [Authorize]
          public async Task<IActionResult> CreateProduct(RequestCreateProductModel requestCreateProductModel)
         {
             var newProductId = await _productService.GenerateNewProductIdAsync();
@@ -100,7 +101,15 @@ namespace FPetSpa.Controllers
             _unitOfWork.Save();
             return Ok();
     }
-    [HttpPut("{id}")]
+        [HttpGet("searchByName/{productName}")]
+        [Authorize]
+
+        public async Task<IActionResult> GetProductByName(string productName)
+        {
+            var products = await _productService.SearchProductsByNameAsync(productName);
+            return Ok(products);
+        }
+        [HttpPut("{id}")]
         [Authorize]
 
 
@@ -130,6 +139,6 @@ namespace FPetSpa.Controllers
             _unitOfWork.Save();
             return Ok();
         }
-
+    
     }
 }

@@ -34,7 +34,7 @@ namespace FPetSpa.Controllers
         {
             var feedback = new FeedBack
             {
-                UserFeedBackId = requestFeedBackModel.UserId,
+                FeedBackId = requestFeedBackModel.FeedBackId,
                 PictureName = requestFeedBackModel.PictureName,
                 Star = requestFeedBackModel.Star,
                 Description = requestFeedBackModel.Description,

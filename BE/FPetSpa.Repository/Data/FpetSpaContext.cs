@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
@@ -23,6 +22,8 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<Category> Categories { get; set; }
 
+    public virtual DbSet<Customer> Customers { get; set; }
+
     public virtual DbSet<FeedBack> FeedBacks { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
@@ -39,26 +40,27 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<ServiceOrderDetail> ServiceOrderDetails { get; set; }
 
+    public virtual DbSet<Staff> Staff { get; set; }
+
     public virtual DbSet<Transaction> Transactions { get; set; }
 
-    public virtual DbSet<User> Users { get; set; }
-
     public virtual DbSet<Voucher> Vouchers { get; set; }
+
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
         modelBuilder.Entity<Cart>(entity =>
         {
-            entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD79747FAC93A");
+            entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD79763453EE0");
 
             entity.ToTable("Cart");
 
-            entity.Property(e => e.CartId).HasColumnName("CartID");
+            entity.Property(e => e.CartId)
+                .HasMaxLength(20)
+                .HasColumnName("CartID");
             entity.Property(e => e.CreatedDate).HasColumnType("datetime");
-            entity.Property(e => e.UserId)
-                .HasMaxLength(50)
-                .HasColumnName("UserID");
+            entity.Property(e => e.UserId).HasColumnName("UserID");
 
             entity.HasOne(d => d.User).WithMany(p => p.Carts)
                 .HasForeignKey(d => d.UserId)
@@ -70,12 +72,13 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
             entity.HasNoKey();
 
             entity.Property(e => e.CartId)
-                .HasMaxLength(450)
+                .HasMaxLength(20)
                 .HasColumnName("CartID");
             entity.Property(e => e.Price).HasColumnType("money");
             entity.Property(e => e.ProductId)
                 .HasMaxLength(20)
                 .HasColumnName("ProductID");
+            entity.Property(e => e.Quantity).HasColumnType("datetime");
 
             entity.HasOne(d => d.Cart).WithMany()
                 .HasForeignKey(d => d.CartId)
@@ -88,7 +91,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<Category>(entity =>
         {
-            entity.HasKey(e => e.CategoryId).HasName("PK__Category__19093A2B022D7698");
+            entity.HasKey(e => e.CategoryId).HasName("PK__Category__19093A2B60E60B33");
 
             entity.ToTable("Category");
 
@@ -99,45 +102,57 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.Description).HasMaxLength(100);
         });
 
+        modelBuilder.Entity<Customer>(entity =>
+        {
+            entity.HasKey(e => e.CustomerId).HasName("PK__Customer__A4AE64B812C7E4FE");
+
+            entity.ToTable("Customer");
+
+            entity.Property(e => e.CustomerId)
+                .ValueGeneratedNever()
+                .HasColumnName("CustomerID");
+            entity.Property(e => e.Address).HasMaxLength(20);
+            entity.Property(e => e.Name).HasMaxLength(20);
+            entity.Property(e => e.Password).HasMaxLength(20);
+            entity.Property(e => e.Phone).HasColumnType("decimal(10, 0)");
+            entity.Property(e => e.PictureName).HasMaxLength(50);
+            entity.Property(e => e.UserName)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<FeedBack>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("FeedBack");
+            entity.HasKey(e => e.FeedBackId).HasName("PK__FeedBack__E2CB3867C1251C5E");
 
+            entity.ToTable("FeedBack");
+
+            entity.Property(e => e.FeedBackId)
+                .ValueGeneratedNever()
+                .HasColumnName("FeedBackID");
             entity.Property(e => e.Description).HasMaxLength(300);
             entity.Property(e => e.OrderId)
                 .HasMaxLength(20)
                 .HasColumnName("OrderID");
             entity.Property(e => e.PictureName).HasMaxLength(50);
-            entity.Property(e => e.UserFeedBackId)
-                .HasMaxLength(50)
-                .HasColumnName("UserFeedBackID");
 
-            entity.HasOne(d => d.Order).WithMany()
+            entity.HasOne(d => d.Order).WithMany(p => p.FeedBacks)
                 .HasForeignKey(d => d.OrderId)
                 .HasConstraintName("FK_FeedBack.OrderID");
-
-            entity.HasOne(d => d.UserFeedBack).WithMany()
-                .HasForeignKey(d => d.UserFeedBackId)
-                .HasConstraintName("FK_FeedBack.UserFeedBackId");
         });
 
         modelBuilder.Entity<Order>(entity =>
         {
-            entity.HasKey(e => e.OrderId).HasName("PK__Order__C3905BAF71F59845");
+            entity.HasKey(e => e.OrderId).HasName("PK__Order__C3905BAFD18ADF9C");
 
             entity.ToTable("Order");
+
 
             entity.Property(e => e.OrderId)
                 .HasMaxLength(20)
                 .HasColumnName("OrderID");
-            entity.Property(e => e.CustomerId)
-                .HasMaxLength(50)
-                .HasColumnName("CustomerID");
-            entity.Property(e => e.StaffId)
-                .HasMaxLength(50)
-                .HasColumnName("StaffID");
+            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
+            entity.Property(e => e.StaffId).HasColumnName("StaffID");
             entity.Property(e => e.Total).HasColumnType("decimal(20, 2)");
             entity.Property(e => e.TransactionId)
                 .HasMaxLength(20)
@@ -146,11 +161,11 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
                 .HasMaxLength(20)
                 .HasColumnName("VoucherID");
 
-            entity.HasOne(d => d.Customer).WithMany(p => p.OrderCustomers)
+            entity.HasOne(d => d.Customer).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.CustomerId)
                 .HasConstraintName("FK_Order.CustomerID");
 
-            entity.HasOne(d => d.Staff).WithMany(p => p.OrderStaffs)
+            entity.HasOne(d => d.Staff).WithMany(p => p.Orders)
                 .HasForeignKey(d => d.StaffId)
                 .HasConstraintName("FK_Order.StaffID");
 
@@ -165,7 +180,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<PaymentMethod>(entity =>
         {
-            entity.HasKey(e => e.MethodId).HasName("PK__PaymentM__FC681FB19861E276");
+            entity.HasKey(e => e.MethodId).HasName("PK__PaymentM__FC681FB1B1EDC1C8");
 
             entity.ToTable("PaymentMethod");
 
@@ -180,16 +195,14 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<Pet>(entity =>
         {
-            entity.HasKey(e => e.PetId).HasName("PK__Pet__48E538029A90B6D1");
+            entity.HasKey(e => e.PetId).HasName("PK__Pet__48E5380209E1C170");
 
             entity.ToTable("Pet");
 
             entity.Property(e => e.PetId)
                 .ValueGeneratedNever()
                 .HasColumnName("PetID");
-            entity.Property(e => e.CustomerId)
-                .HasMaxLength(50)
-                .HasColumnName("CustomerID");
+            entity.Property(e => e.CustomerId).HasColumnName("CustomerID");
             entity.Property(e => e.PetGender)
                 .HasMaxLength(10)
                 .IsUnicode(false)
@@ -214,7 +227,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<Product>(entity =>
         {
-            entity.HasKey(e => e.ProductId).HasName("PK__Product__B40CC6ED118BD779");
+            entity.HasKey(e => e.ProductId).HasName("PK__Product__B40CC6EDFBA41E79");
 
             entity.ToTable("Product");
 
@@ -255,7 +268,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<Service>(entity =>
         {
-            entity.HasKey(e => e.ServiceId).HasName("PK__Service__C51BB0EAC4D88B37");
+            entity.HasKey(e => e.ServiceId).HasName("PK__Service__C51BB0EA05A1F5B3");
 
             entity.ToTable("Service");
 
@@ -299,9 +312,25 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
                 .HasConstraintName("FK_ServiceOrderDetails.ServiceID");
         });
 
+        modelBuilder.Entity<Staff>(entity =>
+        {
+            entity.HasKey(e => e.StaffId).HasName("PK__Staff__96D4AAF7BDCD0930");
+
+            entity.Property(e => e.StaffId)
+                .ValueGeneratedNever()
+                .HasColumnName("StaffID");
+            entity.Property(e => e.FirstName).HasMaxLength(20);
+            entity.Property(e => e.LastName).HasMaxLength(20);
+            entity.Property(e => e.Password).HasMaxLength(20);
+            entity.Property(e => e.PictureName).HasMaxLength(50);
+            entity.Property(e => e.UserName)
+                .HasMaxLength(20)
+                .IsUnicode(false);
+        });
+
         modelBuilder.Entity<Transaction>(entity =>
         {
-            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__55433A4B99715DB2");
+            entity.HasKey(e => e.TransactionId).HasName("PK__Transact__55433A4B636BA637");
 
             entity.Property(e => e.TransactionId)
                 .HasMaxLength(20)
@@ -313,28 +342,9 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
                 .HasConstraintName("FK_Transactions.MethodID");
         });
 
-        modelBuilder.Entity<User>(entity =>
-        {
-            entity.HasKey(e => e.UserId).HasName("PK__User__1788CCACDACE5146");
-
-            entity.ToTable("User");
-
-            entity.Property(e => e.UserId)
-                .HasMaxLength(50)
-                .HasColumnName("UserID");
-            entity.Property(e => e.Address).HasMaxLength(20);
-            entity.Property(e => e.Name).HasMaxLength(20);
-            entity.Property(e => e.Password).HasMaxLength(20);
-            entity.Property(e => e.Phone).HasColumnType("decimal(10, 0)");
-            entity.Property(e => e.PictureName).HasMaxLength(50);
-            entity.Property(e => e.UserName)
-                .HasMaxLength(20)
-                .IsUnicode(false);
-        });
-
         modelBuilder.Entity<Voucher>(entity =>
         {
-            entity.HasKey(e => e.VoucherId).HasName("PK__Voucher__3AEE79C1F400B288");
+            entity.HasKey(e => e.VoucherId).HasName("PK__Voucher__3AEE79C1F0EBB0A6");
 
             entity.ToTable("Voucher");
 

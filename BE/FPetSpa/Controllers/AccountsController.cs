@@ -26,17 +26,9 @@ namespace FPetSpa.Controllers
             var result = await accountRepo.SignUpAsync(signUpModel);
             if (result.Succeeded)
             {
-                return Ok("Registration successful. Please check your email to confirm your account.");
+                return Ok(result.Succeeded);
             }
             return StatusCode(500);
-        }
-            
-        [HttpGet("confirm-email")]
-        public async Task<IActionResult> ConfirmMail(string token, string id)
-        {
-            var result = await accountRepo.ConfirmMail(token, id);
-            if (result) return Ok("Email confirmed successfully.");
-            return BadRequest("Invalid email.");
         }
 
 
@@ -77,12 +69,11 @@ namespace FPetSpa.Controllers
         }
 
         [HttpPost("log-out")]
-       // [Authorize]
+        [Authorize]
         public async Task<IActionResult> logOut()
         {
-            var check = await accountRepo.logOut(User);
-            if (check) return Ok("Log-Out sucessfully");
-            return Unauthorized();
+            await HttpContext.SignOutAsync();
+            return Ok();
         }
     }
 }

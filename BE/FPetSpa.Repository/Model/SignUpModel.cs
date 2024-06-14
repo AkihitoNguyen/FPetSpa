@@ -16,7 +16,6 @@ namespace FPetSpa.Repository.Model
         [Required]
         public string Password { get; set; } = null!;
         [Required]
-        [Compare("Password", ErrorMessage = "The password and confirmation password do not match.")]
         public string ConfirmPassword { get; set; } = null!;
     }
 }

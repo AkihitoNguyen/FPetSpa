@@ -1,4 +1,4 @@
-﻿using FPetSpa.Repository.Data;
+﻿ using FPetSpa.Repository.Data;
 using FPetSpa.Repository.Repository;
 using System;
 using System.Collections.Generic;
@@ -8,16 +8,16 @@ using System.Threading.Tasks;
 
 namespace FPetSpa.Repository
 {
-    public class UnitOfWork
+    public class UnitOfWork 
     {
         private FpetSpaContext _context;
         private GenericRepository<Service> _service;
         private GenericRepository<Product> _product;
         private GenericRepository<FeedBack> _feedback;
-        private ServiceOrderDetailRepository<ServiceOrderDetail> _serviceOrderDetailRepository;
-
-        public UnitOfWork(FpetSpaContext context)
-        {
+        private ProductOrderDetailRepositoty<ProductOrderDetail> _productOrderDetailRepository;
+        private GenericRepository<Pet> _pet;
+        private OrderRepository<Order> _orderRepository;
+        public UnitOfWork(FpetSpaContext context) {
             _context = context;
         }
 
@@ -25,7 +25,7 @@ namespace FPetSpa.Repository
         {
             get
             {
-                if (_service == null)
+                if(_service == null)
                 {
                     this._service = new GenericRepository<Service>(_context);
                 }
@@ -47,28 +47,45 @@ namespace FPetSpa.Repository
         {
             get
             {
-                if (_product == null)
+                if (_feedback == null)
                 {
                     this._feedback = new GenericRepository<FeedBack>(_context);
                 }
                 return _feedback;
             }
         }
-        public ServiceOrderDetailRepository<ServiceOrderDetail> ServiceOrderDetailRepository
+        public ProductOrderDetailRepositoty<ProductOrderDetail> productOrderDetailRepository
         {
             get
             {
-                if (_serviceOrderDetailRepository == null)
+                if (_productOrderDetailRepository == null)
                 {
-                    _serviceOrderDetailRepository = new ServiceOrderDetailRepository<ServiceOrderDetail>(_context);
+                    _productOrderDetailRepository = new ProductOrderDetailRepositoty<ProductOrderDetail>(_context);
                 }
-                return _serviceOrderDetailRepository;
+                return _productOrderDetailRepository;
             }
         }
-
-        public async Task<int> SaveChangesAsync()
+        public GenericRepository<Pet> PetRepository
         {
-            return await _context.SaveChangesAsync();
+            get
+            {
+                if (_pet == null)
+                {
+                    this._pet = new GenericRepository<Pet>(_context);
+                }
+                return _pet;
+            }
+        }
+        public OrderRepository<Order> OrderRepository
+        {
+            get
+            {
+                if (_orderRepository == null)
+                {
+                    this._orderRepository = new OrderRepository<Order>(_context);
+                }
+                return _orderRepository;
+            }
         }
         public void Save()
         {
@@ -94,6 +111,8 @@ namespace FPetSpa.Repository
             Dispose(true);
             GC.SuppressFinalize(this);
         }
+
+       
     }
 }
 
