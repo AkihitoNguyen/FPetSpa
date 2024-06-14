@@ -4,7 +4,7 @@ namespace FPetSpa.Models.FeedBackModel
 {
     public class RequestFeedBackModel
     {
-        public int FeedBackId { get; set; }
+        public string UserId { get; set; }
 
         public string OrderId { get; set; }
 

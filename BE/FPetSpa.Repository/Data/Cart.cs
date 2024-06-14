@@ -11,5 +11,5 @@ public partial class Cart
 
     public DateTime? CreatedDate { get; set; }
 
-    public virtual Customer? User { get; set; }
+    public virtual User? User { get; set; }
 }

@@ -2,7 +2,7 @@
 {
     public class RequestCreateServiceModel
     {
-        public string ServiceId { get; set; } = null!;
+      //  public string ServiceId { get; set; } = null!;
 
         public string? PictureName { get; set; }
 

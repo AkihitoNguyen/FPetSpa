@@ -1,5 +1,5 @@
 ﻿using FPetSpa.Repository.Model;
-using Microsoft.AspNetCore.Authentication.Google.Apis.Auth.OAuth2;
+using Google.Apis.Auth.OAuth2;
 using Google.Apis.Util.Store;
 using MailKit.Net.Smtp;
 using MailKit.Security;

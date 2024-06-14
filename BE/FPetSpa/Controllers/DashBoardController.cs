@@ -15,12 +15,12 @@ namespace FPetSpa.Controllers
         {
             _unitOfWork = unitOfWork;
         }
-        [HttpGet("total-revenue")]
-        public async Task<IActionResult> GetTotalRevenue()
-        {
-            var revenue = await _unitOfWork.productOrderDetailRepository.GetTotalRevenue();
-            return Ok(revenue);
-        }
+        //[HttpGet("total-revenue")]
+        //public async Task<IActionResult> GetTotalRevenue()
+        //{
+        //    var revenue = await _unitOfWork.productOrderDetailRepository.GetTotalRevenue();
+        //    return Ok(revenue);
+        //}
         [HttpGet("order-count")]
         public async Task<IActionResult> GetOrderCount()
         {

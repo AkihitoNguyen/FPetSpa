@@ -11,7 +11,6 @@ using static FPetSpa.Models.ProductModel.RequestSearchProductModel;
 using System.Linq.Expressions;
 using FPetSpa.Repository.Services;
 using Microsoft.AspNetCore.Authorization;
-using FPetSpa.Repository.Helper;
 
 namespace FPetSpa.Controllers
 {
@@ -40,15 +39,15 @@ namespace FPetSpa.Controllers
         [HttpGet]
         public IActionResult SearchProduct([FromQuery] RequestSearchProductModel requestSearchProductModel)
         {
+            var sortBy = requestSearchProductModel.SortContent?.sortProductBy.ToString();
+            var sortType = requestSearchProductModel.SortContent?.sortProductType.ToString();
 
-
-            var sortBy = requestSearchProductModel.SortContent != null ? requestSearchProductModel.SortContent?.sortProductBy.ToString() : null;
-            var sortType = requestSearchProductModel.SortContent != null ? requestSearchProductModel.SortContent?.sortProductType.ToString() : null;
             Expression<Func<Product, bool>> filter = x =>
-                (string.IsNullOrEmpty(requestSearchProductModel.ProductName) || x.ProductName.Contains(requestSearchProductModel.ProductName)) &&
-                (x.CategoryId == requestSearchProductModel.CategoryId || requestSearchProductModel.CategoryId == null) &&
-                x.Price >= requestSearchProductModel.FromPrice &&
-                (x.Price <= requestSearchProductModel.ToPrice || requestSearchProductModel.ToPrice == null);
+                (string.IsNullOrEmpty(requestSearchProductModel.ProductName) || x.ProductName.ToLower().Contains(requestSearchProductModel.ProductName.ToLower())) &&
+                (requestSearchProductModel.CategoryId == null || x.CategoryId == requestSearchProductModel.CategoryId) &&
+                (requestSearchProductModel.FromPrice == null || x.Price >= requestSearchProductModel.FromPrice) &&
+                (requestSearchProductModel.ToPrice == null || x.Price <= requestSearchProductModel.ToPrice);
+
             Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = null;
 
             if (!string.IsNullOrEmpty(sortBy))
@@ -62,18 +61,21 @@ namespace FPetSpa.Controllers
                     orderBy = query => query.OrderByDescending(p => EF.Property<object>(p, sortBy));
                 }
             }
-            var responseCategorie = _unitOfWork.ProductRepository.Get(
-                null,
+
+            var responseProducts = _unitOfWork.ProductRepository.Get(
+                filter,
                 orderBy,
                 includeProperties: "",
                 pageIndex: requestSearchProductModel.pageIndex,
                 pageSize: requestSearchProductModel.pageSize
             );
-            return Ok(responseCategorie);
+
+            return Ok(responseProducts);
         }
 
+
         [HttpGet("{id}")]
-        //[Authorize]
+        [Authorize]
 
         public IActionResult GetProductById(string id)
         {
@@ -82,7 +84,7 @@ namespace FPetSpa.Controllers
         }
         
         [HttpPost]
-       // [Authorize]
+        [Authorize]
          public async Task<IActionResult> CreateProduct(RequestCreateProductModel requestCreateProductModel)
         {
             var newProductId = await _productService.GenerateNewProductIdAsync();
@@ -101,15 +103,7 @@ namespace FPetSpa.Controllers
             _unitOfWork.Save();
             return Ok();
     }
-        [HttpGet("searchByName/{productName}")]
-        [Authorize]
-
-        public async Task<IActionResult> GetProductByName(string productName)
-        {
-            var products = await _productService.SearchProductsByNameAsync(productName);
-            return Ok(products);
-        }
-        [HttpPut("{id}")]
+    [HttpPut("{id}")]
         [Authorize]
 
 
@@ -139,6 +133,6 @@ namespace FPetSpa.Controllers
             _unitOfWork.Save();
             return Ok();
         }
-    
+
     }
 }

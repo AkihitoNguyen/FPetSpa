@@ -5,6 +5,8 @@ namespace FPetSpa.Repository.Data;
 
 public partial class Service
 {
+    public readonly int? CategoryId;
+    public readonly decimal? UnitPrice;
     public string ServiceId { get; set; } = null!;
 
     public string? PictureName { get; set; }

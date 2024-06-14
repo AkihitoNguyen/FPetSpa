@@ -9,7 +9,7 @@ public partial class CartDetail
 
     public string? ProductId { get; set; }
 
-    public DateTime? Quantity { get; set; }
+    public int? Quantity { get; set; }
 
     public decimal? Price { get; set; }
 
