@@ -28,7 +28,7 @@ namespace FPetSpa.Repository.Services
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            UserCredential credential;
+            //serCredential credential;
 
             //using(var stream = new FileStream(_gmailSettings.ClientSecretFilePath, FileMode.Open, FileAccess.Read))
             //{

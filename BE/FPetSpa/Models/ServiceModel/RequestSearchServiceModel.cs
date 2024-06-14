@@ -5,7 +5,7 @@
     {
         public string? ServiceName { get; set; }
         public int? CategoryId { get; set; }
-        public decimal? FromUnitPrice { get; set; } = decimal.Zero;
+        public decimal? FromUnitPrice { get; set; } = null;
         public decimal? ToUnitPrice { get; set; } = null;
         public SortContent? SortContent { get; set; }
         public int pageIndex { get; set; } = 1;

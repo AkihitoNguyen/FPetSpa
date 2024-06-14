@@ -17,7 +17,7 @@ namespace FPetSpa.Controllers
 
     [Route("api/products")]
     [ApiController]
-    public class ProductController : Controller
+    public class ProductController : ControllerBase
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IProducService _productService;

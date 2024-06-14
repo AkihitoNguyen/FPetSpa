@@ -2,6 +2,7 @@
 using FPetSpa.Repository.Helper;
 using FPetSpa.Repository.Model;
 using FPetSpa.Repository.Services;
+using Hangfire;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Identity;
@@ -111,6 +112,7 @@ namespace FPetSpa.Repository.Repository
                 
                 var callBackUrl = $"https://fpetspa.azurewebsites.net/api/account/confirm-email?token={encodeToken}&id={user.Id}";
 
+                BackgroundJob.Schedule(() => DeleteUnConfirmedUser(user.Id), TimeSpan.FromMinutes(15));
                 await sendMailServices.SendEmailAsync(
                     user.Email,
                     "[Confirm your email to active account]",
@@ -203,6 +205,15 @@ namespace FPetSpa.Repository.Repository
                 AccessToken = accessToken,
                 RefreshToken = GenerateRefeshToken()
             };
+        }
+
+            public async Task DeleteUnConfirmedUser(string id)
+        {
+                var user = await userManager.FindByIdAsync(id);
+                if(user != null && (userManager.IsEmailConfirmedAsync(user).Result == false))
+            {
+                await userManager.DeleteAsync(user);
+            }
         }
 
             public string GenerateRefeshToken()

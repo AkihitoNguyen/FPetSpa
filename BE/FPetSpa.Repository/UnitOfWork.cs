@@ -15,10 +15,12 @@ namespace FPetSpa.Repository
         private GenericRepository<Product> _product;
         private GenericRepository<FeedBack> _feedback;
         private ServiceOrderDetailRepository<ServiceOrderDetail> _serviceOrderDetailRepository;
+        public IAccountRepository _IaccountRepository;
 
-        public UnitOfWork(FpetSpaContext context)
+        public UnitOfWork(FpetSpaContext context, IAccountRepository accountRepository)
         {
             _context = context;
+            _IaccountRepository = accountRepository; 
         }
 
         public GenericRepository<Service> ServiceRepository

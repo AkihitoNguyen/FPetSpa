@@ -17,6 +17,7 @@ using Amazon.S3;
 using Quartz;
 using FPetSpa.Repository.Model.VnPayModel;
 using FPetSpa.Repository.Services.VnPay;
+using Hangfire;
 
 namespace FPetSpa
 {
@@ -102,7 +103,8 @@ namespace FPetSpa
             builder.Services.Configure<MailSettingsModel>(builder.Configuration.GetSection("GmailSettings"));
             builder.Services.AddScoped<SendMailServices>();
             builder.Services.AddSingleton<IVnPayService, VnPayService>();
-
+            builder.Services.AddHangfire(config => config.UseSqlServerStorage(builder.Configuration.GetConnectionString("FPetDBContext")));
+            builder.Services.AddHangfireServer();
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             //   builder.Services.AddSwaggerGen();
@@ -150,6 +152,7 @@ namespace FPetSpa
             app.UseAuthentication();
             app.UseAuthorization();
 
+            app.UseHangfireDashboard();
             app.UseCors();
 
             app.MapControllers();
