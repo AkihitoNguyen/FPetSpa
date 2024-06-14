@@ -1,6 +1,6 @@
 # 💫About Me :
 FPetSpa - Pet's Spa Management  
-FE: NodeJs, ReactJs, Tailwind
+FE: NodeJs, ReactJs, Tailwind </br>
 BE: C#, Asp.Net API </br>
  --***Member***--
 >> BE: Lê Văn Phước, Huy Ninh, Minh Hoàng, Phi Hùng </br>
