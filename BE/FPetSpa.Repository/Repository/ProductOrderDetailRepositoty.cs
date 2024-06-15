@@ -93,15 +93,8 @@ namespace FPetSpa.Repository.Repository
             }
         }
 
-        //public async Task<decimal> GetTotalRevenue()
-        //{
-        //    return await _context.ProductOrderDetails.SumAsync(p => p.Quantity * p.Price);
-        //}
 
-        public async Task<int> GetOrderCount()
-        {
-            return await _context.Orders.CountAsync();
-        }
+       
 
 
     }

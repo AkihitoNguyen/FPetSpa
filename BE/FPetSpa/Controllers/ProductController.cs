@@ -1,7 +1,7 @@
 
-﻿using FPetSpa.Repository;
+using FPetSpa.Repository;
 
-﻿using FPetSpa.Repository.Data;
+using FPetSpa.Repository.Data;
 using FPetSpa.Models.ProductModel;
 
 
@@ -17,7 +17,7 @@ namespace FPetSpa.Controllers
 
     [Route("api/products")]
     [ApiController]
-    public class ProductController : Controller
+    public class ProductController : ControllerBase
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IProducService _productService;
@@ -39,15 +39,15 @@ namespace FPetSpa.Controllers
         [HttpGet]
         public IActionResult SearchProduct([FromQuery] RequestSearchProductModel requestSearchProductModel)
         {
-            var sortBy = requestSearchProductModel.SortContent?.sortProductBy.ToString();
-            var sortType = requestSearchProductModel.SortContent?.sortProductType.ToString();
 
+
+            var sortBy = requestSearchProductModel.SortContent != null ? requestSearchProductModel.SortContent?.sortProductBy.ToString() : null;
+            var sortType = requestSearchProductModel.SortContent != null ? requestSearchProductModel.SortContent?.sortProductType.ToString() : null;
             Expression<Func<Product, bool>> filter = x =>
-                (string.IsNullOrEmpty(requestSearchProductModel.ProductName) || x.ProductName.ToLower().Contains(requestSearchProductModel.ProductName.ToLower())) &&
-                (requestSearchProductModel.CategoryId == null || x.CategoryId == requestSearchProductModel.CategoryId) &&
-                (requestSearchProductModel.FromPrice == null || x.Price >= requestSearchProductModel.FromPrice) &&
-                (requestSearchProductModel.ToPrice == null || x.Price <= requestSearchProductModel.ToPrice);
-
+                (string.IsNullOrEmpty(requestSearchProductModel.ProductName) || x.ProductName.Contains(requestSearchProductModel.ProductName)) &&
+                (x.CategoryId == requestSearchProductModel.CategoryId || requestSearchProductModel.CategoryId == null) &&
+                x.Price >= requestSearchProductModel.FromPrice &&
+                (x.Price <= requestSearchProductModel.ToPrice || requestSearchProductModel.ToPrice == null);
             Func<IQueryable<Product>, IOrderedQueryable<Product>> orderBy = null;
 
             if (!string.IsNullOrEmpty(sortBy))
@@ -61,31 +61,28 @@ namespace FPetSpa.Controllers
                     orderBy = query => query.OrderByDescending(p => EF.Property<object>(p, sortBy));
                 }
             }
-
-            var responseProducts = _unitOfWork.ProductRepository.Get(
-                filter,
+            var responseCategorie = _unitOfWork.ProductRepository.Get(
+                null,
                 orderBy,
                 includeProperties: "",
                 pageIndex: requestSearchProductModel.pageIndex,
                 pageSize: requestSearchProductModel.pageSize
             );
-
-            return Ok(responseProducts);
+            return Ok(responseCategorie);
         }
 
-
         [HttpGet("{id}")]
-        [Authorize]
+        //[Authorize]
 
         public IActionResult GetProductById(string id)
         {
             var responseCategories = _unitOfWork.ProductRepository.GetById(id);
             return Ok(responseCategories);
         }
-        
-        [HttpPost]
-        [Authorize]
-         public async Task<IActionResult> CreateProduct(RequestCreateProductModel requestCreateProductModel)
+
+        [HttpPost("Create-Product")]
+       // [Authorize]
+        public async Task<IActionResult> CreateProduct(RequestCreateProductModel requestCreateProductModel)
         {
             var newProductId = await _productService.GenerateNewProductIdAsync();
             var productEntity = new Product
@@ -98,13 +95,13 @@ namespace FPetSpa.Controllers
                 ProductQuantity = requestCreateProductModel.ProductQuantity,
                 ProductDescription = requestCreateProductModel.ProductDescription,
                 Price = requestCreateProductModel.Price,
-        };
-              _unitOfWork.ProductRepository.Insert(productEntity);
+            };
+            _unitOfWork.ProductRepository.Insert(productEntity);
             _unitOfWork.Save();
             return Ok();
-    }
-    [HttpPut("{id}")]
-        [Authorize]
+        }
+        [HttpPut("{id}")]
+        //[Authorize]
 
 
         public IActionResult UpdateProduct(string id, RequestCreateProductModel requestCreateProductModel)
