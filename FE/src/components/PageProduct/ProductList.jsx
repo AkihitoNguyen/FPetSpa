@@ -38,7 +38,7 @@ const ProductList = () => {
     try {
       let response;
       if (selectedCategories.length === 0) {
-        response = await getAllProduct(); // Gọi hàm mà không truyền đối số
+        response = await getAllProduct(); 
       } else {
         const promises = selectedCategories.map(category => getProductsByCategory({ category }));
         response = await Promise.all(promises).then(responses => responses.flat());

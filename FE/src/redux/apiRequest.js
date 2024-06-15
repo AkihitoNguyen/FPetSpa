@@ -12,16 +12,19 @@ import {
     logoutFailed,
 } from "./authSlice";
 
-export const loginUser = async (user, dispatch, navigate) => {
-    dispatch(loginStart());
-    try {
-        const res = await axios.post(` https://fpetspa.azurewebsites.net/api/account/signin/customer`, user);
-        dispatch(loginSuccess(res.data));
-        navigate("/");
-    } catch (error) {
-        console.log(error);
-        dispatch(loginFailed());
-    }
+export const loginUser = (user, dispatch, navigate) => {
+  dispatch(loginStart());
+  return axios.post(`https://fpetspa.azurewebsites.net/api/account/signin/customer
+`, user)
+      .then((res) => {
+          dispatch(loginSuccess(res.data));
+          navigate("/");
+          return res.data;
+      })
+      .catch((error) => {
+          dispatch(loginFailed());
+          throw error;
+      });
 };
 // https://localhost:7055/api/account/signin/customer
 // https://fpetspa.azurewebsites.net/api/account/signin/customer
@@ -29,16 +32,19 @@ export const loginUser = async (user, dispatch, navigate) => {
 
 
 export const registerUser = async (user, dispatch, navigate) => {
-    dispatch(registerStart());
-    try {
-        await axios.post("https://fpetspa.azurewebsites.net/api/account/signup/customer", user);
-        dispatch(registerSuccess());
-        navigate("/check-email", { state: { message: "Please check your email to confirm your registration." } });
-    } catch (error) {
-        console.log(error);
-        dispatch(registerFailed());
-    }
+  dispatch(registerStart());
+  try {
+      await axios.post("https://fpetspa.azurewebsites.net/api/account/signup/customer", user);
+      dispatch(registerSuccess());
+      navigate("/check-email", { state: { message: "Please check your email to confirm your registration." } });
+  } catch (error) {
+      console.error("Register error:", error); 
+      dispatch(registerFailed());
+      throw error;  
+  }
 };
+//https://localhost:7055/api/account/signup/customer
+// /https://fpetspa.azurewebsites.net/api/account/signup/customer
 
 
 export const signInWithGoogle = async (googleUser, dispatch, navigate) => {

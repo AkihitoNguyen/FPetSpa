@@ -3,7 +3,7 @@ import '../Register/Register.css';
 import { registerUser } from "../../redux/apiRequest";
 import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-import Avatar from '@mui/material/Avatar';
+
 import Button from '@mui/material/Button';
 import CssBaseline from '@mui/material/CssBaseline';
 import TextField from '@mui/material/TextField';
@@ -11,11 +11,13 @@ import FormControlLabel from '@mui/material/FormControlLabel';
 import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
-import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
+
 import Typography from '@mui/material/Typography';
 import { assets } from "../../assets/assets";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
+import { ToastContainer, toast } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 function Copyright(props) {
     return (
@@ -76,34 +78,43 @@ const Register = () => {
     const handleRegister = (e) => {
         e.preventDefault();
         const errors = {};
-
+    
         const emailError = validateEmail(email);
         if (emailError) errors.email = emailError;
-
+    
         const fullNameError = validateFullName(fullName);
         if (fullNameError) errors.fullName = fullNameError;
-
+    
         const passwordError = validatePassword(password);
         if (passwordError) errors.password = passwordError;
-
+    
         if (password !== confirmPassword) {
             errors.confirmPassword = "Passwords do not match";
         }
-
+    
         setErrors(errors);
-
+    
         if (Object.keys(errors).length > 0) {
             return;
         }
-
+    
         const newUser = {
             gmail: email,
             password: password,
             fullName: fullName,
             confirmPassword: confirmPassword
         };
-        registerUser(newUser, dispatch, navigate);
+    
+        registerUser(newUser, dispatch, navigate)
+        .then(() => {
+            toast.success("Register successful!");
+        })
+        .catch((error) => {
+            toast.error("Register failed. Please try again.");
+            console.error("Register error:", error);
+        });
     };
+    
 
     const handleEmailChange = (e) => {
         const email = e.target.value;
@@ -151,7 +162,7 @@ const Register = () => {
                     sm={4}
                     md={7}
                     sx={{
-                        backgroundImage: `url(${assets.valorant})`,
+                        backgroundImage: `url(${assets.spa})`,
                         backgroundRepeat: 'no-repeat',
                         backgroundColor: (t) =>
                             t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
@@ -169,12 +180,10 @@ const Register = () => {
                             alignItems: 'center',
                         }}
                     >
-                        <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-                            <LockOutlinedIcon />
-                        </Avatar>
-                        <Typography component="h1" variant="h5">
-                            Sign up
-                        </Typography>
+                        <div className="text-center">
+                            <h2 className="block antialiased tracking-normal font-sans text-4xl leading-[1.3] text-inherit font-bold mb-4">Join Us Today</h2>
+                            <p className="block antialiased font-sans text-blue-gray-900 text-lg font-normal">Enter your email and password to register.</p>
+                        </div>
                         <Box component="form" noValidate onSubmit={handleRegister} sx={{ mt: 3 }}>
                             <Grid container spacing={2}>
                                 <Grid item xs={12}>
@@ -246,7 +255,8 @@ const Register = () => {
                             <Grid container justifyContent="flex-end">
                                 <Grid item>
                                     <Link to='/login' variant="body2">
-                                        Already have an account? Sign in
+                                    <p className="block antialiased font-sans text-base leading-relaxed text-center text-blue-gray-500 font-medium mt-4">Already have an account?
+                                        <a className="hover:text-blue-800 ml-1" >Sign in</a></p>
                                     </Link>
                                 </Grid>
                             </Grid>
@@ -255,6 +265,18 @@ const Register = () => {
                     <Copyright sx={{ mt: 5 }} />
                 </Grid>
             </Grid>
+            <ToastContainer
+                position="top-right"
+                autoClose={5000}
+                hideProgressBar={false}
+                newestOnTop={false}
+                closeOnClick
+                rtl={false}
+                pauseOnFocusLoss
+                draggable
+                pauseOnHover
+                theme="dark"
+            />
         </ThemeProvider>
     );
 };

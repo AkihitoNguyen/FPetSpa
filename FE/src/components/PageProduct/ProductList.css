@@ -141,14 +141,10 @@ label {
   }
   @media (min-width: 1536px) {
     .MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12.MuiGrid-grid-sm-6.MuiGrid-grid-md-4.css-11l5t4l-MuiGrid-root {
-        -webkit-flex-basis: 33.333333%;
-        -ms-flex-preferred-size: 33.333333%;
         flex-basis: 33.333333%;
-        -webkit-box-flex: 0;
-        -webkit-flex-grow: 0;
-        -ms-flex-positive: 0;
         flex-grow: 0;
-        max-width: 24.333333%;
+        max-width: 21.333333%;
+        margin-left: 2%;
     }
     .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2.css-mhc70k-MuiGrid-root {
         width: calc(104% + 8px);

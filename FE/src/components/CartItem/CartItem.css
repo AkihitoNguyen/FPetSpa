@@ -156,7 +156,7 @@ img.carticon-product-icon {
 }
 
 .Btn {
-    width: 130px;
+    width: 180px;
     height: 40px;
     display: flex;
     align-items: center;
@@ -182,7 +182,7 @@ img.carticon-product-icon {
   }
   
   .Btn::before {
-    width: 130px;
+    width: 180px;
     height: 130px;
     position: absolute;
     content: "";
@@ -218,9 +218,7 @@ img.carticon-product-icon {
     margin-top: 0px;
     margin-left: 8px;
 }
-.checkout-paypal {
-    margin-bottom: -18%;
-}
+
 .cartitems-total-item1 {
     margin-bottom: 24%;
 }

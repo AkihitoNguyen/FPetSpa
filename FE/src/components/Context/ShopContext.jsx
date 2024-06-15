@@ -4,6 +4,8 @@ import { getProductById } from '../../api/apiService';
 import PropTypes from 'prop-types';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
+import Modal from '../Modal/Modal';  // import Modal component
+
 export const ShopContext = createContext(null);
 
 const ShopContextProvider = (props) => {
@@ -11,6 +13,7 @@ const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [isModalOpen, setIsModalOpen] = useState(false); 
 
   useEffect(() => {
     fetchProducts();
@@ -32,7 +35,7 @@ const ShopContextProvider = (props) => {
       const productsList = await getProductById();
       setProducts(productsList);
       setLoading(false);
-      console.log(productsList);
+      // console.log(productsList);
     } catch (error) {
       setError(error.message || 'Error fetching products');
       setLoading(false);
@@ -48,21 +51,20 @@ const ShopContextProvider = (props) => {
     }
     setCartItems(newCartItems);
     toast.success('Product added to cart successfully!');
+    
   };
 
-  const removeFromCart = (itemId) => {
-    if (cartItems[itemId] > 0) {
-      const newCartItems = { ...cartItems, [itemId]: cartItems[itemId] - 1 };
-      setCartItems(newCartItems);
-    }
-    toast.success('Item Remove to cart successfully!');
+  const removeFromCart = (productId) => {
+    // Example logic to remove item from cartItems
+    const updatedCartItems = { ...cartItems };
+    delete updatedCartItems[productId];
+    setCartItems(updatedCartItems);
   };
 
   const getTotalCartAmount = () => {
     if (products.length === 0) {
       return 0; 
     }
-    
 
     let totalAmount = 0;
     for (const item in cartItems) {
@@ -100,8 +102,8 @@ const ShopContextProvider = (props) => {
   return (
     <ShopContext.Provider value={contextValue}>
       {props.children}
+      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} /> 
     </ShopContext.Provider>
-    
   );
 };
 
