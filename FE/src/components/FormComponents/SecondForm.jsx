@@ -87,7 +87,7 @@ const SecondForm = ({ selectedService  }) => {
                   id="price"
                   type="text"
                   value={selectedService}
-                  readOnly // Make it read-only so users can't change it
+                  readOnly
                 />
               </div>
             </form>

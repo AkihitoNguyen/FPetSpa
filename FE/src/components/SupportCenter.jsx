@@ -94,7 +94,7 @@ const SupportCenter = () => {
           Get in touch with us
         </h2>
       </div>
-      <form onSubmit={handleSubmit} className="mx-auto mt-16 w-4/5 sm:mt-20 sm:sm:w-4/6 ">
+      <form onSubmit={handleSubmit} className="mx-auto mt-16 w-4/6 sm:mt-20 sm:w-4/5 lg:w-4/5 ">
         <div className="grid grid-cols-1 gap-y-10">
          <div className="grid grid-cols-2">
          <div>

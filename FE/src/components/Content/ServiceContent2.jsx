@@ -1,34 +1,40 @@
-import axios from 'axios';
-import React, { useEffect, useState } from 'react'
+import axios from "axios";
+import React, { useEffect, useState } from "react";
+import { assets } from "../../assets/assets";
 
 const ServiceContent2 = () => {
-
   const [service, setService] = useState([]);
 
-  useEffect(() =>{
-    axios.get('https://fpetspa.azurewebsites.net/api/services')
-      .then(res =>{
+  useEffect(() => {
+    axios
+      .get("https://fpetspa.azurewebsites.net/api/services")
+      .then((res) => {
         setService(res.data);
       })
-      .catch(error =>{
+      .catch((error) => {
         console.error(error);
-      })
+      });
   }, []);
 
   return (
-    <div className='mx-auto mt-20'>
+    <div className="flex flex-col mx-auto">
       <div>
-        <h2 className='text-[42px] font-bold text-center'>Our Services</h2>
+        <h2 className="text-[42px] font-bold text-center">Our Services</h2>
       </div>
       <div>
-          <ul className='flex justify-center items-center'>
-          {service.map(item =>(
-            <li key={item.serviceId}>{item.serviceName}</li>
+        <div className="flex justify-center items-center gap-20 text-[18px] text-center font-medium ">
+          {service.map((item) => (
+            <div className="" key={item.serviceId}>
+                <img src={assets.Soapy} alt="" />
+                <p className="">{item.serviceName}</p>
+                <p className="">${item.price}</p>
+            </div>
           ))}
-          </ul>
+        </div>
+        
       </div>
     </div>
-  )
-}
+  );
+};
 
-export default ServiceContent2
+export default ServiceContent2;

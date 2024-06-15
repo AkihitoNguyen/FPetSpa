@@ -6,7 +6,7 @@ const Service = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="max-h-screen max-w-full mt-10">
+    <div className="max-w-full mt-10">
       <div className="mx-auto flex items-center flex-row justify-center gap-x-20">
         <div className="">
           <h6 className="text-[20px] font-normal leading-6 mt-10 text-[#000000]">
@@ -33,7 +33,7 @@ const Service = () => {
             Booking
           </button>
         </div>
-        <div>
+        <div className="">
           <img src={assets.ser_1} alt="" className="w-[608px] h-[350.312px]" />
         </div>
       </div>
