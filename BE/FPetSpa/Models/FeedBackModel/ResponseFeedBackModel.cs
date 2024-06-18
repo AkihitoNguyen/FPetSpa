@@ -1,6 +1,6 @@
 ﻿namespace FPetSpa.Models.FeedBackModel
 {
-    public class ResponseFeedBaclModel
+    public class ResponseFeedBackModel
     {
     }
 }

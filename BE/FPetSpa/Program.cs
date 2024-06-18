@@ -95,6 +95,8 @@ namespace FPetSpa
             builder.Services.AddScoped<IEmailSenderRepository, EmailSenderRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<IProducService, ProductService>();
+            builder.Services.AddScoped<IPetService, PetService>();
+
             builder.Services.AddScoped<IIdService, IdService>();
             builder.Services.AddControllers();
             //Add AWS

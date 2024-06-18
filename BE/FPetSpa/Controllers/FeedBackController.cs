@@ -29,21 +29,21 @@ namespace FPetSpa.Controllers
             var responseCategories = _unitOfWork.FeedBackRepository.GetById(id);
             return Ok(responseCategories);
         }
-        [HttpPost]
-        public IActionResult CreateFeedBackk(RequestFeedBackModel requestFeedBackModel)
-        {
-            var feedback = new FeedBack
-            {
-                UserFeedBackId = requestFeedBackModel.UserId,
-                PictureName = requestFeedBackModel.PictureName,
-                Star = requestFeedBackModel.Star,
-                Description = requestFeedBackModel.Description,
+        //[HttpPost]
+        //public IActionResult CreateFeedBackk(RequestFeedBackModel requestFeedBackModel)
+        //{
+        //    var feedback = new FeedBack
+        //    {
+        //        UserFeedBackId = requestFeedBackModel.UserId,
+        //        PictureName = requestFeedBackModel.PictureName,
+        //        Star = requestFeedBackModel.Star,
+        //        Description = requestFeedBackModel.Description,
             
-            };
-            _unitOfWork.FeedBackRepository.Insert(feedback);
-            _unitOfWork.Save();
-            return Ok();
-        }
+        //    };
+        //    _unitOfWork.FeedBackRepository.Insert(feedback);
+        //    _unitOfWork.Save();
+        //    return Ok();
+        //}
         [HttpPut("{id}")]
 
         public IActionResult UpdateFeedBack(int id, RequestFeedBackModel requestFeedBackModel)
