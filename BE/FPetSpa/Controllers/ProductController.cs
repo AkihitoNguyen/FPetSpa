@@ -62,13 +62,25 @@ namespace FPetSpa.Controllers
                 }
             }
             var responseCategorie = _unitOfWork.ProductRepository.Get(
-                null,
+                filter,
                 orderBy,
                 includeProperties: "",
                 pageIndex: requestSearchProductModel.pageIndex,
                 pageSize: requestSearchProductModel.pageSize
             );
-            return Ok(responseCategorie);
+
+            var result = responseCategorie.Select(p => new ResponseProductSearchModel
+            {
+                ProductId = p.ProductId,
+                ProductName = p.ProductName,
+                ProductDescription = p.ProductDescription,
+                CategoryName = _unitOfWork.CategoryRepository.Get().FirstOrDefault(c => c.CategoryId == p.CategoryId)?.CategoryName,
+                PictureName = p.PictureName,
+                Price = p.Price,
+                ProductQuantity = p.ProductQuantity
+            });
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]

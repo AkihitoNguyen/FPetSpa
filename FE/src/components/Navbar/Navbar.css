@@ -4,6 +4,7 @@
     align-items: center;
     margin-top: 2px;
     margin-bottom: 1rem;
+    
 }
 
 .navbar.hidden {
@@ -19,41 +20,47 @@
 
 .navbar-menu {
     display: flex;
+    margin: auto;
     list-style: none;
     gap: 50px;
     color: #111827;
     font-size: 15.75px;
+    font-weight: 500;
 }
 
 
 .navbar-right {
-    position: relative;
-    top: -10px;
-    right: 37px;
+    width: fit-content;
     display: flex;
+    flex-wrap: wrap;
     align-items: center;
     gap: 30px;
-    margin-right: -20rem;
+    margin-bottom: 12px;
 }
 
 .navbar-right .search {
-    position: relative;
     width: 20px;
-    right: -40px;
     cursor: pointer;
 }
 
 
 .navbar-right .cart {
-    position: relative;
     width: 25px;    
-    right: -85px;
 }
 
-.navbar button {
-    position: relative;
+/* .navbar button {
     top: -13px;
     right: -85px;
+    font-size: 12px;
+    font-weight: 500;
+    border-radius: 50px;
+    cursor: pointer;
+    transition: 0.3s;
+} */
+
+.navbar button {
+    top: -4px;
+    right: -7px;
     font-size: 12px;
     font-weight: 500;
     border-radius: 50px;
@@ -62,20 +69,19 @@
 }
 
 .navbar .user {
-    position: relative;
     width: 23.5px;
     right: -55px;
     top: 12px;
-}   
+}
 
-
+.navbar-login{
+    display: flex;
+    gap: 7px;
+}
 .navbar li {
     cursor: pointer;
 }
 
-.navbar-search-icon {
-    position: relative;
-}
 
 
 
@@ -141,7 +147,7 @@
 .nav-cart-count{
     position: relative;
     top: 48px;
-    right: -26.5px;
+    right: 55px;
     width: 24px;
     height: 22px;
     display: flex;

@@ -5,7 +5,7 @@
     <Controller_SelectedScaffolderID>ApiControllerEmptyScaffolder</Controller_SelectedScaffolderID>
     <Controller_SelectedScaffolderCategoryPath>root/Common/Api</Controller_SelectedScaffolderCategoryPath>
     <WebStackScaffolding_ControllerDialogWidth>650.4</WebStackScaffolding_ControllerDialogWidth>
-    <NameOfLastUsedPublishProfile>C:\Users\PC\Downloads\FPetSpa\FPetSpa\FPetSpa\BE\FPetSpa\Properties\PublishProfiles\Fpetspa - FTP1.pubxml</NameOfLastUsedPublishProfile>
+    <NameOfLastUsedPublishProfile>C:\Users\NCPC\Downloads\FPetSpa\Demo\FPetSpa\BE\FPetSpa\Properties\PublishProfiles\Fpetspa - Web Deploy.pubxml</NameOfLastUsedPublishProfile>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
     <DebuggerFlavor>ProjectDebugger</DebuggerFlavor>

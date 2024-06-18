@@ -30,9 +30,9 @@ namespace FPetSpa.Controllers
             var sortType = requestSearchServiceModel.SortContent != null ? requestSearchServiceModel.SortContent?.sortServiceType.ToString() : null;
             Expression<Func<Service, bool>> filter = x =>
                 (string.IsNullOrEmpty(requestSearchServiceModel.ServiceName) || x.ServiceName.Contains(requestSearchServiceModel.ServiceName)) &&
-                (x.CategoryId == requestSearchServiceModel.CategoryId || requestSearchServiceModel.CategoryId == null) &&
-                x.UnitPrice >= requestSearchServiceModel.FromUnitPrice &&
-                (x.UnitPrice <= requestSearchServiceModel.ToUnitPrice || requestSearchServiceModel.ToUnitPrice == null);
+                (requestSearchServiceModel.FromUnitPrice == null || x.Price > requestSearchServiceModel.FromUnitPrice) &&
+                (requestSearchServiceModel.ToUnitPrice == null || x.Price < requestSearchServiceModel.ToUnitPrice) &&
+                (x.MinWeight < 1 && x.MaxWeight > 2);
             Func<IQueryable<Service>, IOrderedQueryable<Service>> orderBy = null;
 
             if (!string.IsNullOrEmpty(sortBy))
@@ -47,7 +47,7 @@ namespace FPetSpa.Controllers
                 }
             }
             var responseCategorie = _unitOfWork.ServiceRepository.Get(
-                null,
+                filter,
                 orderBy,
                 includeProperties: "",
                 pageIndex: requestSearchServiceModel.pageIndex,

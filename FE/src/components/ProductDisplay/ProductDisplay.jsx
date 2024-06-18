@@ -7,6 +7,7 @@ import { StarIcon } from '@heroicons/react/20/solid';
 import 'react-toastify/dist/ReactToastify.css';
 import { assets } from '../../assets/assets';
 import '../ProductDisplay/ProductDisplay.css'
+import RelatedProduct from '../../components/RelatedProducts/RelatedProduct'
 
 const ProductDisplay = () => {
   const { productName } = useParams();
@@ -67,7 +68,7 @@ const ProductDisplay = () => {
       <div className="pt-6">
         {/* Image gallery */}
         
-        <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-[65rem] lg:grid-cols-3 lg:gap-x-8 lg:px-8 max-w-[65rem]">
+        <div className="mx-auto mt-6 max-w-2xl sm:px-6 lg:grid lg:max-w-[65rem] lg:grid-cols-3 lg:gap-x-8 lg:px-8 ">
   <div className="hidden lg:grid lg:grid-cols-1 lg:gap-y-5">
     <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
       <img
@@ -166,101 +167,405 @@ const ProductDisplay = () => {
           </div>
         </div>
       </div>
-      
-      <section className="bde-section-145096-100 bde-section">
-        <div className="section-container">
-          <div className="bde-globalblock-145096-101 bde-globalblock">
-            <div className="breakdance">
-              <section className="bde-section-145113-100 bde-section">
-              <div className='section-container'>
-        <h1 className='bde-heading-145113-101 bde-heading'>
-        We craft each recipe for superior nutrition and flavor using trusted ingredient sourcing and thorough product testing
-        </h1>
-        <div className="b-product-features-box-145113-124 b-product-features-box">
-          <div className="swiper-wrapper b-features-ticker" style={{'--features-count': 8}}>
-            <div className="ticker-wrapper">
-            <div className="swiper-slide">
-              <div className="b-feature">
-                <div className="b-feature__icon-box">
-                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Digestive-Health-300x300.png"} 
-                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
-                  sizes="(max-width: 300px) 100vw, 300px"/>
-                  <h6 className="b-feature__title">Digestive Health</h6>
+      <div className='breakdance1'>
+      <section className='bde-section-145096-100 bde-section'>
+        <div className='section-container'>
+          <div className='bde-globalblock-145096-101 bde-globalblock'>
+            <div className='breakdance1'>
+              <section className='bde-section-145113-100 bde-section'>
+                <div className='section-container'>
+                  <h1 className='bde-heading-145113-101 bde-heading'>
+                    We craft each recipe for superior nutrition and flavor using trusted ingredient sourcing and thorough product testing
+                  </h1>
+                  <div className='b-product-features-box-145113-124 b-product-features-box'>
+                    <div className='swiper-wrapper b-features-ticker' style={{ '--features-count': 6 }}>
+                        <div className='ticker-wrapper'>
+                          <div className='swiper-slide'>
+                            <div className='b-feature'>
+                              <div className='b-feature__icon-box'>
+                              <img
+                                width="300"
+                                height="300"
+                                src="https://bixbipet.com/wp-content/uploads/2023/02/icons_Grain-Free-Recipe-300x300.png"
+                                className="b-feature__icon"
+                                alt=""
+                                decoding="async"
+                                loading="lazy"
+                                srcSet="https://bixbipet.com/wp-content/uploads/2023/02/icons_Grain-Free-Recipe-300x300.png 300w, https://bixbipet.com/wp-content/uploads/2023/02/icons_Grain-Free-Recipe-150x150.png 150w, https://bixbipet.com/wp-content/uploads/2023/02/icons_Grain-Free-Recipe-100x100.png 100w, https://bixbipet.com/wp-content/uploads/2023/02/icons_Grain-Free-Recipe.png 500w"
+                                sizes="(max-width: 300px) 100vw, 300px"
+                              />
+                              </div>
+                              <h6 className="b-feature__title">Grain Free Recipe†</h6>
+                            </div>
+                          </div>
+
+                          <div className='swiper-slide'>
+                            <div className='b-feature'>
+                              <div className='b-feature__icon-box'>
+                              <img
+                                width="300"
+                                height="300"
+                                src="https://bixbipet.com/wp-content/uploads/2023/02/icons_Great-for-Picky-Eaters-300x300.png"
+                                className="b-feature__icon"
+                                alt=""
+                                decoding="async"
+                                loading="lazy"
+                                srcSet="https://bixbipet.com/wp-content/uploads/2023/02/icons_Great-for-Picky-Eaters-300x300.png 300w, https://bixbipet.com/wp-content/uploads/2023/02/icons_Great-for-Picky-Eaters-300x300.png 150w, https://bixbipet.com/wp-content/uploads/2023/02/icons_Great-for-Picky-Eaters-300x300.png 100w, https://bixbipet.com/wp-content/uploads/2023/02/icons_Great-for-Picky-Eaters-300x300.png 500w"
+                                sizes="(max-width: 300px) 100vw, 300px"
+                              />
+                              </div>
+                              <h6 className="b-feature__title">Great for Picky Eaters</h6>
+                            </div>
+                          </div>
+
+                          <div className='swiper-slide'>
+                            <div className='b-feature'>
+                              <div className='b-feature__icon-box'>
+                              <img
+                                width="300"
+                                height="300"
+                                src="https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Added-Colors-300x300.png"
+                                className="b-feature__icon"
+                                alt=""
+                                decoding="async"
+                                loading="lazy"
+                                srcSet="https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Added-Colors-300x300.png 300w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Added-Colors-300x300.png 150w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Added-Colors-300x300.png 100w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Added-Colors-300x300.png 500w"
+                                sizes="(max-width: 300px) 100vw, 300px"
+                              />
+                              </div>
+                              <h6 className="b-feature__title">No Added Colors</h6>
+                            </div>
+                          </div>
+
+                          <div className='swiper-slide'>
+                            <div className='b-feature'>
+                              <div className='b-feature__icon-box'>
+                              <img
+                                width="300"
+                                height="300"
+                                src="https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Artifical-Preservatives-300x300.png"
+                                className="b-feature__icon"
+                                alt=""
+                                decoding="async"
+                                loading="lazy"
+                                srcSet="https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Artifical-Preservatives-300x300.png 300w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Artifical-Preservatives-300x300.png 150w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Artifical-Preservatives-300x300.png 100w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Artifical-Preservatives-300x300.png 500w"
+                                sizes="(max-width: 300px) 100vw, 300px"
+                              />
+                              </div>
+                              <h6 className="b-feature__title">No Artificial Preservatives</h6>
+                            </div>
+                          </div>
+
+                          <div className='swiper-slide'>
+                            <div className='b-feature'>
+                              <div className='b-feature__icon-box'>
+                              <img
+                                width="300"
+                                height="300"
+                                src="https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Meat-Meals-300x300.png"
+                                className="b-feature__icon"
+                                alt=""
+                                decoding="async"
+                                loading="lazy"
+                                srcSet="https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Meat-Meals-300x300.png 300w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Meat-Meals-300x300.png 150w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Meat-Meals-300x300.png 100w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Meat-Meals-300x300.png 500w"
+                                sizes="(max-width: 300px) 100vw, 300px"
+                              />
+                              </div>
+                              <h6 className="b-feature__title">No Meat Meals</h6>
+                            </div>
+                          </div>
+
+                          <div className='swiper-slide'>
+                            <div className='b-feature'>
+                              <div className='b-feature__icon-box'>
+                              <img
+                                width="300"
+                                height="300"
+                                src="https://bixbipet.com/wp-content/uploads/2023/02/icons_USA-Made-300x300.png"
+                                className="b-feature__icon"
+                                alt=""
+                                decoding="async"
+                                loading="lazy"
+                                srcSet="https://bixbipet.com/wp-content/uploads/2023/02/icons_USA-Made-300x300.png 300w, https://bixbipet.com/wp-content/uploads/2023/02/icons_USA-Made-300x300.png 150w, https://bixbipet.com/wp-content/uploads/2023/02/icons_USA-Made-300x300.png 100w, https://bixbipet.com/wp-content/uploads/2023/02/icons_USA-Made-300x300.png 500w"
+                                sizes="(max-width: 300px) 100vw, 300px"
+                              />
+                              </div>
+                              <h6 className="b-feature__title">USA Made*</h6>
+                            </div>
+                          </div>
+
+                          <div className='swiper-slide'>
+                            <div className='b-feature'>
+                              <div className='b-feature__icon-box'>
+                              <img
+                                width="300"
+                                height="300"
+                                src="https://bixbipet.com/wp-content/uploads/2023/02/icons_Grain-Free-Recipe-300x300.png"
+                                className="b-feature__icon"
+                                alt=""
+                                decoding="async"
+                                loading="lazy"
+                                srcSet="https://bixbipet.com/wp-content/uploads/2023/02/icons_Grain-Free-Recipe-300x300.png 300w, https://bixbipet.com/wp-content/uploads/2023/02/icons_Grain-Free-Recipe-300x300.png 150w, https://bixbipet.com/wp-content/uploads/2023/02/icons_Grain-Free-Recipe-300x300.png 100w, https://bixbipet.com/wp-content/uploads/2023/02/icons_Grain-Free-Recipe-300x300.png 500w"
+                                sizes="(max-width: 300px) 100vw, 300px"
+                              />
+                              </div>
+                              <h6 className="b-feature__title">Grain Free Recipe†</h6>
+                            </div>
+                          </div>
+
+                          <div className='swiper-slide'>
+                            <div className='b-feature'>
+                              <div className='b-feature__icon-box'>
+                              <img
+                                width="300"
+                                height="300"
+                                src="https://bixbipet.com/wp-content/uploads/2023/02/icons_Great-for-Picky-Eaters-300x300.png"
+                                className="b-feature__icon"
+                                alt=""
+                                decoding="async"
+                                loading="lazy"
+                                srcSet="https://bixbipet.com/wp-content/uploads/2023/02/icons_Great-for-Picky-Eaters-300x300.png 300w, https://bixbipet.com/wp-content/uploads/2023/02/icons_Great-for-Picky-Eaters-300x300.png 150w, https://bixbipet.com/wp-content/uploads/2023/02/icons_Great-for-Picky-Eaters-300x300.png 100w, https://bixbipet.com/wp-content/uploads/2023/02/icons_Great-for-Picky-Eaters-300x300.png 500w"
+                                sizes="(max-width: 300px) 100vw, 300px"
+                              />
+                              </div>
+                              <h6 className="b-feature__title">Great for Picky Eaters</h6>
+                            </div>
+                          </div>
+
+                          <div className='swiper-slide'>
+                            <div className='b-feature'>
+                              <div className='b-feature__icon-box'>
+                              <img
+                                width="300"
+                                height="300"
+                                src="https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Added-Colors-300x300.png"
+                                className="b-feature__icon"
+                                alt=""
+                                decoding="async"
+                                loading="lazy"
+                                srcSet="https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Added-Colors-300x300.png 300w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Added-Colors-300x300.png 150w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Added-Colors-300x300.png 100w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Added-Colors-300x300.png 500w"
+                                sizes="(max-width: 300px) 100vw, 300px"
+                              />
+                              </div>
+                              <h6 className="b-feature__title">No Added Colors</h6>
+                            </div>
+                          </div>
+
+                          <div className='swiper-slide'>
+                            <div className='b-feature'>
+                              <div className='b-feature__icon-box'>
+                              <img
+                                width="300"
+                                height="300"
+                                src="https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Artifical-Preservatives-300x300.png"
+                                className="b-feature__icon"
+                                alt=""
+                                decoding="async"
+                                loading="lazy"
+                                srcSet="https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Artifical-Preservatives-300x300.png 300w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Artifical-Preservatives-300x300.png 150w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Artifical-Preservatives-300x300.png 100w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Artifical-Preservatives-300x300.png 500w"
+                                sizes="(max-width: 300px) 100vw, 300px"
+                              />
+                              </div>
+                              <h6 className="b-feature__title">No Artificial Preservatives</h6>
+                            </div>
+                          </div>
+
+                          <div className='swiper-slide'>
+                            <div className='b-feature'>
+                              <div className='b-feature__icon-box'>
+                              <img
+                                width="300"
+                                height="300"
+                                src="https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Meat-Meals-300x300.png"
+                                className="b-feature__icon"
+                                alt=""
+                                decoding="async"
+                                loading="lazy"
+                                srcSet="https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Meat-Meals-300x300.png 300w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Meat-Meals-300x300.png 150w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Meat-Meals-300x300.png 100w, https://bixbipet.com/wp-content/uploads/2023/02/icons_No-Meat-Meals-300x300.png 500w"
+                                sizes="(max-width: 300px) 100vw, 300px"
+                              />
+                              </div>
+                              <h6 className="b-feature__title">No Meat Meals</h6>
+                            </div>
+                          </div>
+
+                          <div className='swiper-slide'>
+                            <div className='b-feature'>
+                              <div className='b-feature__icon-box'>
+                              <img
+                                width="300"
+                                height="300"
+                                src="https://bixbipet.com/wp-content/uploads/2023/02/icons_USA-Made-300x300.png"
+                                className="b-feature__icon"
+                                alt=""
+                                decoding="async"
+                                loading="lazy"
+                                srcSet="https://bixbipet.com/wp-content/uploads/2023/02/icons_USA-Made-300x300.png 300w, https://bixbipet.com/wp-content/uploads/2023/02/icons_USA-Made-300x300.png 150w, https://bixbipet.com/wp-content/uploads/2023/02/icons_USA-Made-300x300.png 100w, https://bixbipet.com/wp-content/uploads/2023/02/icons_USA-Made-300x300.png 500w"
+                                sizes="(max-width: 300px) 100vw, 300px"
+                              />
+                              </div>
+                              <h6 className="b-feature__title">USA Made*</h6>
+                            </div>
+                          </div>
+
+                        </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-            </div>
-            <div className="swiper-slide">
-              <div className="b-feature">
-                <div className="b-feature__icon-box">
-                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Freeze-Dried-Raw-Coated-300x300.png"} 
-                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
-                  sizes="(max-width: 300px) 100vw, 300px"/>
-                  <h6 className="b-feature__title">Digestive Health</h6>
-                </div>
-              </div>
-            </div>
-            <div className="swiper-slide">
-              <div className="b-feature">
-                <div className="b-feature__icon-box">
-                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Digestive-Health-300x300.png"} 
-                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
-                  sizes="(max-width: 300px) 100vw, 300px"/>
-                  <h6 className="b-feature__title">Freeze-Dried Raw Coated</h6>
-                </div>
-              </div>
-            </div>
-            <div className="swiper-slide">
-              <div className="b-feature">
-                <div className="b-feature__icon-box">
-                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Digestive-Health-300x300.png"} 
-                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
-                  sizes="(max-width: 300px) 100vw, 300px"/>
-                  <h6 className="b-feature__title">Freeze-Dried Raw Coated</h6>
-                </div>
-              </div>
-            </div>
-            <div className="swiper-slide">
-              <div className="b-feature">
-                <div className="b-feature__icon-box">
-                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Digestive-Health-300x300.png"} 
-                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
-                  sizes="(max-width: 300px) 100vw, 300px"/>
-                  <h6 className="b-feature__title">Freeze-Dried Raw Coated</h6>
-                </div>
-              </div>
-            </div>
-            <div className="swiper-slide">
-              <div className="b-feature">
-                <div className="b-feature__icon-box">
-                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Digestive-Health-300x300.png"} 
-                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
-                  sizes="(max-width: 300px) 100vw, 300px"/>
-                  <h6 className="b-feature__title">Freeze-Dried Raw Coated</h6>
-                </div>
-              </div>
-            </div>
-            <div className="swiper-slide">
-              <div className="b-feature">
-                <div className="b-feature__icon-box">
-                  <img width={300} height={300} src={"https://bixbipet.com/wp-content/uploads/2023/02/icons_Digestive-Health-300x300.png"} 
-                  className="b-feature__icon" alt="" decoding="async" loading="lazy"
-                  sizes="(max-width: 300px) 100vw, 300px"/>
-                  <h6 className="b-feature__title">Freeze-Dried Raw Coated</h6>
-                </div>
-              </div>
-            </div>
-     
+              </section>
             </div>
           </div>
         </div>
-      </div>
-      
-              </section>
-            </div>
-          </div>         
-        </div>
       </section>
+
+      <section className='bde-section-145096-168 bde-section'>
+      <div className="flex justify-center items-center flex-row flex-nowrap gap-x-7 mt-[72px]">
+      <div>
+        <img
+          src={assets.content_6}
+          alt=""
+          className="w-[624px] h-[604.450px]"
+        />
+      </div>
+
+      <div className="leading-6 mt-[30px]">
+        <h6 className="text-[20px] font-normal">FPet delivered</h6>
+        <h2 className="text-[42px] font-bold m-0">Subscribe & Save 10%</h2>
+        <div className="max-w-full text-[18px] font-normal">
+          What’s better than FPet food, treats, and supplements? Getting FPET{" "}
+          <br />
+          food, treats, and supplements automatically delivered to your front{" "}
+          <br />
+          door with a bunch of other awesome benefits:
+        </div>
+        <div className="max-w-full flex  text-left mt-4 font-semibold tracking-[-0.52px] ">
+          <ul className="flex flex-col p-0 text-[26px] gap-y-[20px] ">
+            <li className="">
+              <div className="flex items-center gap-[14px]">
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="33.601"
+                    height="24"
+                    viewBox="0 0 33.601 24">
+                    <path
+                      id="check"
+                      d="M32.9,96.714a2.4,2.4,0,0,1,0,3.39l-19.2,19.2a2.4,2.4,0,0,1-3.39,0l-9.6-9.6a2.4,2.4,0,0,1,3.395-3.39l7.836,7.9,17.574-17.5a2.392,2.392,0,0,1,3.39,0Z"
+                      transform="translate(0 -96.01)"
+                      fill="#24b1ac"></path>
+                  </svg>
+                </span>
+                <span className="">Easy to manage delivery dates</span>
+              </div>
+            </li>
+            <li>
+              <div className="flex items-center gap-[14px]">
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="33.601"
+                    height="24"
+                    viewBox="0 0 33.601 24">
+                    <path
+                      id="check"
+                      d="M32.9,96.714a2.4,2.4,0,0,1,0,3.39l-19.2,19.2a2.4,2.4,0,0,1-3.39,0l-9.6-9.6a2.4,2.4,0,0,1,3.395-3.39l7.836,7.9,17.574-17.5a2.392,2.392,0,0,1,3.39,0Z"
+                      transform="translate(0 -96.01)"
+                      fill="#24b1ac"></path>
+                  </svg>
+                </span>
+                <span className="">Priority shipping</span>
+              </div>
+            </li>
+            <li>
+              <div className="flex items-center gap-[14px]">
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="33.601"
+                    height="24"
+                    viewBox="0 0 33.601 24">
+                    <path
+                      id="check"
+                      d="M32.9,96.714a2.4,2.4,0,0,1,0,3.39l-19.2,19.2a2.4,2.4,0,0,1-3.39,0l-9.6-9.6a2.4,2.4,0,0,1,3.395-3.39l7.836,7.9,17.574-17.5a2.392,2.392,0,0,1,3.39,0Z"
+                      transform="translate(0 -96.01)"
+                      fill="#24b1ac"></path>
+                  </svg>
+                </span>
+                <span className="">Guaranteed in-stock</span>
+              </div>
+            </li>
+            <li>
+              <div className="flex items-center gap-[14px]">
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="33.601"
+                    height="24"
+                    viewBox="0 0 33.601 24">
+                    <path
+                      id="check"
+                      d="M32.9,96.714a2.4,2.4,0,0,1,0,3.39l-19.2,19.2a2.4,2.4,0,0,1-3.39,0l-9.6-9.6a2.4,2.4,0,0,1,3.395-3.39l7.836,7.9,17.574-17.5a2.392,2.392,0,0,1,3.39,0Z"
+                      transform="translate(0 -96.01)"
+                      fill="#24b1ac"></path>
+                  </svg>
+                </span>
+                <span className="">10% off all products</span>
+              </div>
+            </li>
+            <li>
+              <div className="flex items-center gap-[14px]">
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="33.601"
+                    height="24"
+                    viewBox="0 0 33.601 24">
+                    <path
+                      id="check"
+                      d="M32.9,96.714a2.4,2.4,0,0,1,0,3.39l-19.2,19.2a2.4,2.4,0,0,1-3.39,0l-9.6-9.6a2.4,2.4,0,0,1,3.395-3.39l7.836,7.9,17.574-17.5a2.392,2.392,0,0,1,3.39,0Z"
+                      transform="translate(0 -96.01)"
+                      fill="#24b1ac"></path>
+                  </svg>
+                </span>
+                <span className="">Free bonus products</span>
+              </div>
+            </li>
+            <li>
+              <div className="flex items-center gap-[14px]">
+                <span>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="33.601"
+                    height="24"
+                    viewBox="0 0 33.601 24">
+                    <path
+                      id="check"
+                      d="M32.9,96.714a2.4,2.4,0,0,1,0,3.39l-19.2,19.2a2.4,2.4,0,0,1-3.39,0l-9.6-9.6a2.4,2.4,0,0,1,3.395-3.39l7.836,7.9,17.574-17.5a2.392,2.392,0,0,1,3.39,0Z"
+                      transform="translate(0 -96.01)"
+                      fill="#24b1ac"></path>
+                  </svg>
+                </span>
+                <span className="">
+                  A great reason to get excited when the doorbell rings
+                </span>
+              </div>
+            </li>
+          </ul>
+        </div>
+        <div className="mt-10">
+          <button className="border rounded-full bg-black text-white  py-2.5 px-8">
+            <a href="">Learn More</a>
+          </button>
+        </div>
+      </div>
     </div>
+      </section>
+      </div>
+      <div className='related-product'>
+        <RelatedProduct/>
+      </div>
+    </div>  
+      
     
   );
 };

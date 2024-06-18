@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authorization;
+using FPetSpa.Repository;
 
 namespace FPetSpa.Controllers
 {
@@ -13,17 +14,17 @@ namespace FPetSpa.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
-        private readonly IAccountRepository accountRepo;
+        private readonly UnitOfWork _unitOfWork;
 
-        public AccountsController(IAccountRepository repo)
+        public AccountsController(UnitOfWork unitOfWork)
         {
-            accountRepo = repo;
+            _unitOfWork = unitOfWork;
         }
         
         [HttpPost("signup/customer")]
         public async Task<IActionResult> SignUp(SignUpModel signUpModel)
         {
-            var result = await accountRepo.SignUpAsync(signUpModel);
+            var result = await _unitOfWork._IaccountRepository.SignUpAsync(signUpModel);
             if (result.Succeeded)
             {
                 return Ok("Registration successful. Please check your email to confirm your account.");
@@ -34,8 +35,12 @@ namespace FPetSpa.Controllers
         [HttpGet("confirm-email")]
         public async Task<IActionResult> ConfirmMail(string token, string id)
         {
-            var result = await accountRepo.ConfirmMail(token, id);
-            if (result) return Ok("Email confirmed successfully.");
+            var result = await _unitOfWork._IaccountRepository.ConfirmMail(token, id);
+            if (result)
+            {
+                await _unitOfWork.SaveChangesAsync();
+                return Ok("Email confirmed successfully.");
+            }
             return BadRequest("Invalid email.");
         }
 
@@ -43,7 +48,7 @@ namespace FPetSpa.Controllers
         [HttpPost("signin/customer")]
         public async Task<IActionResult> SignIn(SignInModel signInModel)
             {
-            var result = await accountRepo.SignInAsync(signInModel);
+            var result = await _unitOfWork._IaccountRepository.SignInAsync(signInModel);
             if (result == null)
             {
                 return Unauthorized();
@@ -69,7 +74,7 @@ namespace FPetSpa.Controllers
                 var gmail = claims?.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
                 if (gmail != null)
                 {
-                   var token = await accountRepo.SignInWithGoogle(gmail, Name);  
+                   var token = await _unitOfWork._IaccountRepository.SignInWithGoogle(gmail, Name);  
                     return Ok(token);
                 }
             }
@@ -80,7 +85,7 @@ namespace FPetSpa.Controllers
        // [Authorize]
         public async Task<IActionResult> logOut()
         {
-            var check = await accountRepo.logOut(User);
+            var check = await _unitOfWork._IaccountRepository.logOut(User);
             if (check) return Ok("Log-Out sucessfully");
             return Unauthorized();
         }

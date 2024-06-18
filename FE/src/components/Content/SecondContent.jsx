@@ -1,3 +1,4 @@
+// eslint-disable-next-line no-unused-vars
 import React from "react";
 import { assets } from "../../assets/assets";
 
@@ -9,7 +10,7 @@ const SecondContent = () => {
           Everything they need. Nothing they don’t.
         </h6>
         <h2 className="m-auto text-[46px] font-bold text-center tracking-tighter ">
-          Your pet's nutrition doesn’t need to be
+          Your pet’s nutrition doesn’t need to be
           <br /> hard.
         </h2>
       </div>

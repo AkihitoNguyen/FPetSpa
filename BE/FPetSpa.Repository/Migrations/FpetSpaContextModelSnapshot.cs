@@ -139,7 +139,7 @@ namespace FPetSpa.Repository.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("CartDetails");
+                    b.ToTable("CartDetails", (string)null);
                 });
 
             modelBuilder.Entity("FPetSpa.Repository.Data.Category", b =>
@@ -371,7 +371,7 @@ namespace FPetSpa.Repository.Migrations
 
                     b.HasIndex("ProductId");
 
-                    b.ToTable("ProductOrderDetails");
+                    b.ToTable("ProductOrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("FPetSpa.Repository.Data.Service", b =>
@@ -448,7 +448,7 @@ namespace FPetSpa.Repository.Migrations
 
                     b.HasIndex("ServiceId");
 
-                    b.ToTable("ServiceOrderDetails");
+                    b.ToTable("ServiceOrderDetails", (string)null);
                 });
 
             modelBuilder.Entity("FPetSpa.Repository.Data.Transaction", b =>
@@ -473,7 +473,7 @@ namespace FPetSpa.Repository.Migrations
 
                     b.HasIndex("MethodId");
 
-                    b.ToTable("Transactions");
+                    b.ToTable("Transactions", (string)null);
                 });
 
             modelBuilder.Entity("FPetSpa.Repository.Data.User", b =>

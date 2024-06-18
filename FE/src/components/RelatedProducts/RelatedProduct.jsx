@@ -49,7 +49,7 @@ const RelatedProducts = () => {
       <h1>Related Products</h1>
       <hr />
       <div className="relatedproducts-item">
-        {relatedProducts.slice(0, 3).map((product, index) => (
+        {relatedProducts.slice(0, 6).map((product, index) => (
           <Card sx={{ maxWidth: 300 }} className="product-card" key={index}>
             <CardActionArea>
               <Link to={`/productdisplay/${product.productName}`}>

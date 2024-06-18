@@ -13,22 +13,17 @@ import Product from "./pages/Product/Product";
 import ProductDisplay from "./components/ProductDisplay/ProductDisplay";
 import ConfirmEmail from "./pages/ConfirmEmail/ConfirmEmail";
 import CheckEmail from "./pages/CheckEmail/CheckEmail";
-import Checkout from "./components/Checkout/Checkout";
 import "react-toastify/dist/ReactToastify.css";
-import { PayPalScriptProvider } from "@paypal/react-paypal-js";
-import Search from "./components/PageProduct/Search";
+
 import Service from "./pages/Service/Service";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import AboutUs from "./pages/AboutUs/AboutUs";
 import Navlink from "./components/Navlink/Navlink";
 import BookingService from "./pages/Service/BookingService";
+import Modal from "./components/Modal/Modal"
+
 const App = () => {
   return (
-    <PayPalScriptProvider
-      options={{
-        "client-id":
-          "Acu-Lmk731qYDK8sCNwvcy77bP49dVd0VvuNFByVU41LL3m3mdKn8GrSIfGj8H7s-XGHSP-_wg5zmUzs",
-      }}>
       <>
         <div className="app">
           <Navlink />
@@ -41,11 +36,10 @@ const App = () => {
             <Route path="/cart" element={<Cart />} />
             <Route path="/order" element={<PlaceOrder />} />
             <Route path="/login" element={<Login />} />
-            <Route path="/checkout" element={<Checkout />} />
             <Route path="/register" element={<Register />} />
             <Route path="/product" element={<Product />} />
-            <Route path="/search" element={<Search />} />
             <Route path="/booking" element = {<BookingService/>}/>
+            <Route path="/modal" element={<Modal />}/>
             <Route
               path="/productdisplay/:productName"
               element={<ProductDisplay />}
@@ -58,7 +52,6 @@ const App = () => {
         <Footer />
         </div>
       </>
-    </PayPalScriptProvider>
   );
 };
 
