@@ -1,11 +1,15 @@
 ﻿using FPetSpa.Repository.Data;
+using FPetSpa.Repository.Model;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Amazon.S3.Util.S3EventNotification;
 
 namespace FPetSpa.Repository.Repository
 {
@@ -64,8 +68,106 @@ namespace FPetSpa.Repository.Repository
             return await _context.Set<T>().ToListAsync();
         }
 
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await _context.Set<T>().ToListAsync();
+        }
+        public async Task<T> GetByIdAsync(string cartId, string productId) {
+          return await _context.Set<T>().FindAsync(cartId, productId);
+
+        }
+        public async Task<T> GetByIdAsync(string id)
+        {
+            return await dbSet.FindAsync(id);
+        }
+
+        public async Task AddAsync(AddToCartModel request)
+        {
+            if (request == null)
+            {
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            var cart = new Cart
+            {
+                CartId = Guid.NewGuid().ToString(),
+                UserId = request.UserId,
+                CreatedDate = DateTime.UtcNow
+            };
+
+            var product = await _context.Products.FindAsync(request.ProductId);
+            if (product == null)
+            {
+                throw new ArgumentException("Product not found");
+            }
+
+            var cartDetail = new CartDetail
+            {
+                CartId = cart.CartId,
+                ProductId = request.ProductId,
+                Quantity = request.Quantity,
+                Price = product.Price * request.Quantity
+            };
+
+            await _context.Carts.AddAsync(cart);
+            await _context.CartDetails.AddAsync(cartDetail);
+            await _context.SaveChangesAsync();
+        }
+        public async Task UpdateAsync(string cartId, string productId, int quantity)
+        {
+            var product = await _context.Products.FindAsync(productId);
+            if (product == null)
+            {
+                throw new Exception("Product not found");
+            }
+            decimal newPrice = (decimal)(product.Price * quantity);
+
+            try
+            {
+                var sql = "UPDATE CartDetails SET Quantity = @Quantity, Price = @Price WHERE CartId = @CartId AND ProductId = @ProductId";
+                var parameters = new[] {
+
+            new SqlParameter("@Quantity", quantity),
+             new SqlParameter("@Price", newPrice),
+            new SqlParameter("@CartId", cartId),
+            new SqlParameter("@ProductId", productId),
+
+                };
+
+                _context.Database.ExecuteSqlRaw(sql, parameters);
 
 
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine($"An error occurred while updating the product cartdetail's quantity: {ex.Message}");
+                throw;
+            }
+        }
+        public async Task DeleteCartAsync(string cartId)
+        {
+            var cart = await _context.Carts.Include(c => c.CartDetails).FirstOrDefaultAsync(c => c.CartId == cartId);
+            if (cart != null)
+            {
+                 _context.CartDetails.RemoveRange(cart.CartDetails);
+                _context.Carts.Remove(cart);
+                await _context.SaveChangesAsync();
+            }
+        }
+
+        public async Task DeleteAsync(string cartId, string productId)
+        {
+            var cartDetail = await _context.CartDetails
+                .FirstOrDefaultAsync(cd => cd.CartId == cartId && cd.ProductId == productId);
+
+            if (cartDetail == null)
+            {
+                throw new Exception("Cart detail not found");
+            }
+
+            _context.CartDetails.Remove(cartDetail);
+            await _context.SaveChangesAsync();
+        }
         public void DeleteById(object id)
         {
              var toDelete = GetById(id);
@@ -112,5 +214,6 @@ namespace FPetSpa.Repository.Repository
             return query.Count();
         }
 
+        
     }
 }

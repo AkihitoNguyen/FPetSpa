@@ -12,4 +12,5 @@ public partial class Cart
     public DateTime? CreatedDate { get; set; }
 
     public virtual User? User { get; set; }
+    public virtual ICollection<CartDetail> CartDetails { get; set; } = new List<CartDetail>(); // Navigation property
 }

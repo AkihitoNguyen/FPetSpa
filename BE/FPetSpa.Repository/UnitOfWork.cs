@@ -13,6 +13,8 @@ namespace FPetSpa.Repository
         private FpetSpaContext _context;
         private GenericRepository<Service> _service;
         private GenericRepository<Product> _product;
+        private GenericRepository<Cart> _cart;
+        private GenericRepository<CartDetail> _cartDetails;
         private GenericRepository<FeedBack> _feedback;
         private ServiceOrderDetailRepository<ServiceOrderDetail> _serviceOrderDetailRepository;
         public IAccountRepository _IaccountRepository;
@@ -32,6 +34,28 @@ namespace FPetSpa.Repository
                     this._service = new GenericRepository<Service>(_context);
                 }
                 return this._service;
+            }
+        }
+        public GenericRepository<Cart> Carts
+        {
+            get
+            {
+                if (_cart == null)
+                {
+                    this._cart = new GenericRepository<Cart>(_context);
+                }
+                return this._cart;
+            }
+        }
+        public GenericRepository<CartDetail> CartDetails
+        {
+            get
+            {
+                if (_cart == null)
+                {
+                    this._cartDetails = new GenericRepository<CartDetail>(_context);
+                }
+                return this._cartDetails;
             }
         }
         public GenericRepository<Product> ProductRepository

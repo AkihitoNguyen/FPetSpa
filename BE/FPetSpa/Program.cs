@@ -105,6 +105,8 @@ namespace FPetSpa
             builder.Services.AddSingleton<IVnPayService, VnPayService>();
             builder.Services.AddHangfire(config => config.UseSqlServerStorage(builder.Configuration.GetConnectionString("FPetDBContext")));
             builder.Services.AddHangfireServer();
+            //Add Cart
+            
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             //   builder.Services.AddSwaggerGen();
