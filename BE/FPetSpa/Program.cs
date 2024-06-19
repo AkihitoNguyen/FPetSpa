@@ -18,6 +18,7 @@ using Quartz;
 using FPetSpa.Repository.Model.VnPayModel;
 using FPetSpa.Repository.Services.VnPay;
 using Hangfire;
+using FPetSpa.Controllers;
 
 namespace FPetSpa
 {
@@ -97,7 +98,7 @@ namespace FPetSpa
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<IProducService, ProductService>();
             builder.Services.AddScoped<IPetService, PetService>();
-
+            builder.Services.AddScoped<ImageController>();
             builder.Services.AddScoped<IIdService, IdService>();
             builder.Services.AddControllers();
             //Add AWS

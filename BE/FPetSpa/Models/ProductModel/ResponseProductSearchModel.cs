@@ -6,7 +6,7 @@
 
         public string ProductName { get; set; }
 
-        public string? PictureName { get; set; }
+        public string PictureName { get; set; }
 
         public string CategoryName { get; set; }
 

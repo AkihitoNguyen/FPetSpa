@@ -72,8 +72,6 @@ namespace FPetSpa.Controllers
             return Ok();
         }
         [HttpGet("search/{petName}")]
-  
-
         public async Task<IActionResult> GetPetByName(string petName)
         {
             var Pets = await _petService.SearchPetByName(petName);

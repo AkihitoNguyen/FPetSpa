@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.Runtime.CompilerServices;
 
 namespace FPetSpa.Models.ProductModel
 {
@@ -12,7 +13,7 @@ namespace FPetSpa.Models.ProductModel
         public SortContent? SortContent { get; set; }
         public int pageIndex { get; set; } = 1;
         public int pageSize { get; set; } = 10;
-
+        public string? CategoryName { get; set; }
     }
     public class SortContent
     {
