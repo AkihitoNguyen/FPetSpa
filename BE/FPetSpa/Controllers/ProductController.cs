@@ -1,7 +1,7 @@
 
-﻿using FPetSpa.Repository;
+using FPetSpa.Repository;
 
-﻿using FPetSpa.Repository.Data;
+using FPetSpa.Repository.Data;
 using FPetSpa.Models.ProductModel;
 
 
@@ -62,27 +62,39 @@ namespace FPetSpa.Controllers
                 }
             }
             var responseCategorie = _unitOfWork.ProductRepository.Get(
-                null,
+                filter,
                 orderBy,
                 includeProperties: "",
                 pageIndex: requestSearchProductModel.pageIndex,
                 pageSize: requestSearchProductModel.pageSize
             );
-            return Ok(responseCategorie);
+
+            var result = responseCategorie.Select(p => new ResponseProductSearchModel
+            {
+                ProductId = p.ProductId,
+                ProductName = p.ProductName,
+                ProductDescription = p.ProductDescription,
+                CategoryName = _unitOfWork.CategoryRepository.Get().FirstOrDefault(c => c.CategoryId == p.CategoryId)?.CategoryName,
+                PictureName = p.PictureName,
+                Price = p.Price,
+                ProductQuantity = p.ProductQuantity
+            });
+
+            return Ok(result);
         }
 
         [HttpGet("{id}")]
-        [Authorize]
+        //[Authorize]
 
         public IActionResult GetProductById(string id)
         {
             var responseCategories = _unitOfWork.ProductRepository.GetById(id);
             return Ok(responseCategories);
         }
-        
-        [HttpPost]
-        [Authorize]
-         public async Task<IActionResult> CreateProduct(RequestCreateProductModel requestCreateProductModel)
+
+        [HttpPost("Create-Product")]
+       // [Authorize]
+        public async Task<IActionResult> CreateProduct(RequestCreateProductModel requestCreateProductModel)
         {
             var newProductId = await _productService.GenerateNewProductIdAsync();
             var productEntity = new Product
@@ -95,13 +107,13 @@ namespace FPetSpa.Controllers
                 ProductQuantity = requestCreateProductModel.ProductQuantity,
                 ProductDescription = requestCreateProductModel.ProductDescription,
                 Price = requestCreateProductModel.Price,
-        };
-              _unitOfWork.ProductRepository.Insert(productEntity);
+            };
+            _unitOfWork.ProductRepository.Insert(productEntity);
             _unitOfWork.Save();
             return Ok();
-    }
-    [HttpPut("{id}")]
-        [Authorize]
+        }
+        [HttpPut("{id}")]
+        //[Authorize]
 
 
         public IActionResult UpdateProduct(string id, RequestCreateProductModel requestCreateProductModel)

@@ -17,13 +17,18 @@ namespace FPetSpa.Repository
         private CartDetailRepository<CartDetail> _cartDetails;
         private GenericRepository<FeedBack> _feedback;
         private ServiceOrderDetailRepository<ServiceOrderDetail> _serviceOrderDetailRepository;
-        public IAccountRepository _IaccountRepository;
+        private ProductOrderDetailRepositoty<ProductOrderDetail> _productOrderDetailRepository;
+        private GenericRepository<Pet> _pet;
+        private OrderRepository<Order> _orderRepository;
+        private GenericRepository<Category> _category;
 
+        public IAccountRepository _IaccountRepository { get;}
         public UnitOfWork(FpetSpaContext context, IAccountRepository accountRepository)
         {
             _context = context;
             _IaccountRepository = accountRepository; 
         }
+
 
         public GenericRepository<Service> ServiceRepository
         {
@@ -73,11 +78,22 @@ namespace FPetSpa.Repository
         {
             get
             {
-                if (_product == null)
+                if (_feedback == null)
                 {
                     this._feedback = new GenericRepository<FeedBack>(_context);
                 }
                 return _feedback;
+            }
+        }
+        public ProductOrderDetailRepositoty<ProductOrderDetail> productOrderDetailRepository
+        {
+            get
+            {
+                if (_productOrderDetailRepository == null)
+                {
+                    _productOrderDetailRepository = new ProductOrderDetailRepositoty<ProductOrderDetail>(_context);
+                }
+                return _productOrderDetailRepository;
             }
         }
         public ServiceOrderDetailRepository<ServiceOrderDetail> ServiceOrderDetailRepository
@@ -91,7 +107,40 @@ namespace FPetSpa.Repository
                 return _serviceOrderDetailRepository;
             }
         }
-
+  
+              public GenericRepository<Pet> PetRepository
+        {
+            get
+            {
+                if (_pet == null)
+                {
+                    this._pet = new GenericRepository<Pet>(_context);
+                }
+                return _pet;
+            }
+        }
+        public OrderRepository<Order> OrderRepository
+        {
+            get
+            {
+                if (_orderRepository == null)
+                {
+                    this._orderRepository = new OrderRepository<Order>(_context);
+                }
+                return _orderRepository;
+            }
+        }
+        public GenericRepository<Category> CategoryRepository
+        {
+            get
+            {
+                if (_category == null)
+                {
+                    this._category = new GenericRepository<Category>(_context);
+                }
+                return this._category;
+            }
+        }
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
