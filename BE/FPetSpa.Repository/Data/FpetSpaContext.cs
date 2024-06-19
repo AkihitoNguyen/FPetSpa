@@ -60,15 +60,15 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
                 .HasMaxLength(50)
                 .HasColumnName("UserID");
 
-            entity.HasOne(d => d.User).WithMany(p => p.Carts)
+            entity.HasOne(d => d.User)
+                .WithMany(p => p.Carts)
                 .HasForeignKey(d => d.UserId)
                 .HasConstraintName("FK_Cart.UserID");
         });
 
         modelBuilder.Entity<CartDetail>(entity =>
         {
-            entity.HasNoKey();
-
+            entity.HasKey(cd => new { cd.CartId, cd.ProductId });
             entity.Property(e => e.CartId)
                 .HasMaxLength(450)
                 .HasColumnName("CartID");
@@ -77,13 +77,16 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
                 .HasMaxLength(20)
                 .HasColumnName("ProductID");
 
-            entity.HasOne(d => d.Cart).WithMany()
+            entity.HasOne(d => d.Cart)
+                .WithMany(c => c.CartDetails)
                 .HasForeignKey(d => d.CartId)
+                  .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_CartDetails.CartID");
 
-            entity.HasOne(d => d.Product).WithMany()
-                .HasForeignKey(d => d.ProductId)
-                .HasConstraintName("FK_CartDetails.ProductID");
+            //entity.HasOne(d => d.Product)
+            //    .WithMany()
+            //    .HasForeignKey(d => d.ProductId)
+            //    .HasConstraintName("FK_CartDetails.ProductID");
         });
 
         modelBuilder.Entity<Category>(entity =>

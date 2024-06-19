@@ -1,11 +1,15 @@
 ﻿using FPetSpa.Repository.Data;
+using FPetSpa.Repository.Model;
+using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
+using static Amazon.S3.Util.S3EventNotification;
 
 namespace FPetSpa.Repository.Repository
 {
@@ -64,8 +68,16 @@ namespace FPetSpa.Repository.Repository
             return await _context.Set<T>().ToListAsync();
         }
 
-
-
+        public async Task<IEnumerable<T>> GetAllAsync()
+        {
+            return await _context.Set<T>().ToListAsync();
+        }
+     
+        public async Task<T> GetByIdAsync(string id)
+        {
+            return await dbSet.FindAsync(id);
+        }
+       
         public void DeleteById(object id)
         {
              var toDelete = GetById(id);
@@ -112,5 +124,6 @@ namespace FPetSpa.Repository.Repository
             return query.Count();
         }
 
+        
     }
 }

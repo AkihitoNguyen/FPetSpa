@@ -5,6 +5,8 @@ namespace FPetSpa.Repository.Data;
 
 public partial class Product
 {
+
+
     public string ProductId { get; set; } = null!;
 
     public string? ProductName { get; set; }
@@ -20,4 +22,5 @@ public partial class Product
     public decimal? Price { get; set; }
 
     public virtual Category? Category { get; set; }
+    public ICollection<CartDetail> CartDetails { get; set; } = new List<CartDetail>();
 }
