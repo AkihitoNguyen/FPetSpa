@@ -11,6 +11,7 @@ using static FPetSpa.Models.ProductModel.RequestSearchProductModel;
 using System.Linq.Expressions;
 using FPetSpa.Repository.Services;
 using Microsoft.AspNetCore.Authorization;
+using System.Configuration;
 
 namespace FPetSpa.Controllers
 {
@@ -21,12 +22,13 @@ namespace FPetSpa.Controllers
     {
         private readonly UnitOfWork _unitOfWork;
         private readonly IProducService _productService;
+        private readonly ImageController _imageController;
 
-
-        public ProductController(UnitOfWork unitOfWork, IProducService service)
+        public ProductController(UnitOfWork unitOfWork, IProducService service, ImageController image)
         {
             _unitOfWork = unitOfWork;
             _productService = service;
+            _imageController = image;
         }
 
         /// <summary>
@@ -37,10 +39,8 @@ namespace FPetSpa.Controllers
         /// <param name="requestSearchProductModel"></param>
         /// <returns></returns>
         [HttpGet]
-        public IActionResult SearchProduct([FromQuery] RequestSearchProductModel requestSearchProductModel)
+        public async Task<IActionResult> SearchProduct([FromQuery] RequestSearchProductModel requestSearchProductModel)
         {
-
-
             var sortBy = requestSearchProductModel.SortContent != null ? requestSearchProductModel.SortContent?.sortProductBy.ToString() : null;
             var sortType = requestSearchProductModel.SortContent != null ? requestSearchProductModel.SortContent?.sortProductType.ToString() : null;
             Expression<Func<Product, bool>> filter = x =>
@@ -68,17 +68,24 @@ namespace FPetSpa.Controllers
                 pageIndex: requestSearchProductModel.pageIndex,
                 pageSize: requestSearchProductModel.pageSize
             );
-
-            var result = responseCategorie.Select(p => new ResponseProductSearchModel
+            var categoryDictionary = _unitOfWork.CategoryRepository.Get().ToDictionary(c => c.CategoryId, c => c.CategoryName);
+            var resultTask = responseCategorie.Select( async p => new ResponseProductSearchModel
             {
                 ProductId = p.ProductId,
-                ProductName = p.ProductName,
-                ProductDescription = p.ProductDescription,
-                CategoryName = _unitOfWork.CategoryRepository.Get().FirstOrDefault(c => c.CategoryId == p.CategoryId)?.CategoryName,
-                PictureName = p.PictureName,
+                ProductName = p.ProductName!,
+                ProductDescription = p.ProductDescription!,
+                CategoryName = categoryDictionary.TryGetValue(p.CategoryId, out var categoryName)? categoryName : null,
+                PictureName =  await _imageController.GetLinkByName("productfpetspa", p.PictureName!),
                 Price = p.Price,
                 ProductQuantity = p.ProductQuantity
             });
+
+            var result = await Task.WhenAll(resultTask);
+
+            if(requestSearchProductModel.CategoryName != null)
+            {
+                return Ok(result.Where(c => c.CategoryName == requestSearchProductModel.CategoryName));
+            }    
 
             return Ok(result);
         }
@@ -114,8 +121,6 @@ namespace FPetSpa.Controllers
         }
         [HttpPut("{id}")]
         //[Authorize]
-
-
         public IActionResult UpdateProduct(string id, RequestCreateProductModel requestCreateProductModel)
         {
             var existedProductEntity = _unitOfWork.ProductRepository.GetById(id);

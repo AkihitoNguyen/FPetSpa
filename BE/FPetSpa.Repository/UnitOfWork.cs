@@ -20,8 +20,9 @@ namespace FPetSpa.Repository
         private ProductOrderDetailRepositoty<ProductOrderDetail> _productOrderDetailRepository;
         private GenericRepository<Pet> _pet;
         private OrderRepository<Order> _orderRepository;
+        private GenericRepository<Order> _orderGenericRepository;
         private GenericRepository<Category> _category;
-
+        
         public IAccountRepository _IaccountRepository { get;}
         public UnitOfWork(FpetSpaContext context, IAccountRepository accountRepository)
         {
@@ -139,6 +140,18 @@ namespace FPetSpa.Repository
                     this._category = new GenericRepository<Category>(_context);
                 }
                 return this._category;
+            }
+        }
+
+        public GenericRepository<Order> OrderGenericRepo
+        {
+            get
+            {
+                if(_orderGenericRepository == null)
+                {
+                    this._orderGenericRepository = new GenericRepository<Order>(_context);
+                }
+                return this._orderGenericRepository;
             }
         }
         public async Task<int> SaveChangesAsync()
