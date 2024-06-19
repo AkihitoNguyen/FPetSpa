@@ -15,11 +15,15 @@ namespace FPetSpa.Controllers
     {
        
         private readonly UnitOfWork _unitOfWork;
+        private readonly ILogger<CartController> _logger;
 
-        public CartController(UnitOfWork unitOfWork)
+        public CartController(UnitOfWork unitOfWork,ILogger<CartController> logger)
         {
            
             _unitOfWork = unitOfWork;
+            _logger = logger;
+
+
         }
 
 
@@ -43,8 +47,25 @@ namespace FPetSpa.Controllers
         [HttpPost("AddtoCart")]
         public async Task<ActionResult> Create(AddToCartModel request)
         {
-            await _unitOfWork.Carts.AddAsync(request);
-            return CreatedAtAction(nameof(GetById), new { id = request.UserId }, request);
+            try
+            {
+                await _unitOfWork.Carts.AddAsync(request);
+                return CreatedAtAction(nameof(GetById), new { id = request.UserId }, request);
+            }
+            catch (InvalidOperationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
+            catch (ArgumentException ex)
+            {
+                return NotFound(new { message = ex.Message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "An error occurred while adding to the cart.");
+                return StatusCode(500, "An error occurred while processing your request.");
+            }
+
         }
 
         [HttpDelete("Delete")]

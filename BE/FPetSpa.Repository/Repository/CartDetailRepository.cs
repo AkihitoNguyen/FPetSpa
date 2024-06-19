@@ -10,6 +10,7 @@ using static Amazon.S3.Util.S3EventNotification;
 
 namespace FPetSpa.Repository.Repository
 {
+
     public class CartDetailRepository<T> where T : class
     {
         protected readonly FpetSpaContext _context;

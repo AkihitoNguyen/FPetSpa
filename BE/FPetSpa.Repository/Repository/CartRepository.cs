@@ -25,34 +25,67 @@ namespace FPetSpa.Repository.Repository
 
         public async Task<Cart> GetByIdAsync(string id)
         {
-            return await _context.Carts.Include(c => c.CartDetails).FirstOrDefaultAsync(c => c.CartId == id);
+            return await _context.Carts.FindAsync(id);
         }
 
         public async Task AddAsync(AddToCartModel request)
         {
-            var cart = new Cart
+            if (request == null)
             {
-                CartId = Guid.NewGuid().ToString(),
-                UserId = request.UserId,
-                CreatedDate = DateTime.UtcNow
-            };
+                throw new ArgumentNullException(nameof(request));
+            }
+
+            // Check if the user already has a cart
+            var cart = await _context.Carts
+                .FirstOrDefaultAsync(c => c.UserId == request.UserId);
+
+            if (cart == null)
+            {
+                // Create a new cart if the user doesn't have one
+                cart = new Cart
+                {
+                    CartId = Guid.NewGuid().ToString(),
+                    UserId = request.UserId,
+                    CreatedDate = DateTime.UtcNow
+                };
+
+                await _context.Carts.AddAsync(cart);
+            }
 
             var product = await _context.Products.FindAsync(request.ProductId);
-            var productPrice = product?.Price ?? 0m; 
-            var cartDetail = new CartDetail
+            if (product == null)
             {
-                CartId = cart.CartId,
-                ProductId = request.ProductId,
-                Quantity = request.Quantity,
-                Price = productPrice * request.Quantity  // Update this based on product price
-            };
+                throw new ArgumentException("Product not found");
+            }
 
-            await _context.Carts.AddAsync(cart);
-            await _context.CartDetails.AddAsync(cartDetail);
- 
+            // Check if the cart already contains the product
+            var cartDetail = await _context.CartDetails
+                .FirstOrDefaultAsync(cd => cd.CartId == cart.CartId && cd.ProductId == request.ProductId);
+
+            if (cartDetail == null)
+            {
+                // Add new product to the cart if it doesn't exist
+                cartDetail = new CartDetail
+                {
+                    CartId = cart.CartId,
+                    ProductId = request.ProductId,
+                    Quantity = request.Quantity,
+                    Price = product.Price * request.Quantity
+                };
+
+                await _context.CartDetails.AddAsync(cartDetail);
+            }
+            else
+            {
+                // Update quantity and price if the product already exists in the cart
+                cartDetail.Quantity += request.Quantity;
+                cartDetail.Price += product.Price * request.Quantity;
+
+                _context.CartDetails.Update(cartDetail);
+            }
+
+            await _context.SaveChangesAsync();
         }
-
-
         public async Task DeleteCartAsync(string cartId)
         {
             var cart = await _context.Carts.Include(c => c.CartDetails).FirstOrDefaultAsync(c => c.CartId == cartId);
