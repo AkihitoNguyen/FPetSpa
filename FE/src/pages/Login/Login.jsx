@@ -92,7 +92,7 @@ function Login() {
                 <CssBaseline />
                 <Grid
     item
-    xs={false}
+    xs={false} 
     sm={4}
     md={7}
     sx={{

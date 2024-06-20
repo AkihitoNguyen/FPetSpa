@@ -1,10 +1,8 @@
-// eslint-disable-next-line no-unused-vars
-import React, { createContext, useState, useEffect } from "react";
+import { createContext, useState, useEffect } from "react";
 import { getProductById } from '../../api/apiService';
 import PropTypes from 'prop-types';
 import 'react-toastify/dist/ReactToastify.css';
 import { toast } from 'react-toastify';
-import Modal from '../Modal/Modal';  // import Modal component
 
 export const ShopContext = createContext(null);
 
@@ -13,7 +11,6 @@ const ShopContextProvider = (props) => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [isModalOpen, setIsModalOpen] = useState(false); 
 
   useEffect(() => {
     fetchProducts();
@@ -32,10 +29,9 @@ const ShopContextProvider = (props) => {
 
   const fetchProducts = async () => {
     try {
-      const productsList = await getProductById();
-      setProducts(productsList);
+      const productList = await getProductById(); // Adjust this call based on your API
+      setProducts(productList);
       setLoading(false);
-      // console.log(productsList);
     } catch (error) {
       setError(error.message || 'Error fetching products');
       setLoading(false);
@@ -51,27 +47,25 @@ const ShopContextProvider = (props) => {
     }
     setCartItems(newCartItems);
     toast.success('Product added to cart successfully!');
-    
   };
 
-  const removeFromCart = (productId) => {
-    // Example logic to remove item from cartItems
-    const updatedCartItems = { ...cartItems };
-    delete updatedCartItems[productId];
-    setCartItems(updatedCartItems);
+  const removeFromCart = (itemId) => {
+    if (cartItems[itemId] > 0) {
+      const newCartItems = { ...cartItems, [itemId]: cartItems[itemId] - 1 };
+      setCartItems(newCartItems);
+    }
+    toast.success('Item removed from cart successfully!');
   };
 
   const getTotalCartAmount = () => {
-    if (products.length === 0) {
-      return 0; 
-    }
-
     let totalAmount = 0;
-    for (const item in cartItems) {
-      if (cartItems[item] > 0) {
-        const itemInfo = products.find((product) => product.productId === Number(item));
+  
+    for (const itemId in cartItems) {
+      if (cartItems[itemId] > 0) {
+        const itemInfo = products.find((product) => product.productId === itemId);
+  
         if (itemInfo) {
-          totalAmount += itemInfo.price * cartItems[item];
+          totalAmount += itemInfo.price * cartItems[itemId];
         }
       }
     }
@@ -102,7 +96,6 @@ const ShopContextProvider = (props) => {
   return (
     <ShopContext.Provider value={contextValue}>
       {props.children}
-      <Modal isOpen={isModalOpen} onClose={() => setIsModalOpen(false)} /> 
     </ShopContext.Provider>
   );
 };

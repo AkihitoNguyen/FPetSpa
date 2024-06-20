@@ -14,13 +14,12 @@ import ProductDisplay from "./components/ProductDisplay/ProductDisplay";
 import ConfirmEmail from "./pages/ConfirmEmail/ConfirmEmail";
 import CheckEmail from "./pages/CheckEmail/CheckEmail";
 import "react-toastify/dist/ReactToastify.css";
-
 import Service from "./pages/Service/Service";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import AboutUs from "./pages/AboutUs/AboutUs";
 import Navlink from "./components/Navlink/Navlink";
 import BookingService from "./pages/Service/BookingService";
-import Modal from "./components/Modal/Modal"
+
 
 const App = () => {
   return (
@@ -39,7 +38,7 @@ const App = () => {
             <Route path="/register" element={<Register />} />
             <Route path="/product" element={<Product />} />
             <Route path="/booking" element = {<BookingService/>}/>
-            <Route path="/modal" element={<Modal />}/>
+            
             <Route
               path="/productdisplay/:productName"
               element={<ProductDisplay />}

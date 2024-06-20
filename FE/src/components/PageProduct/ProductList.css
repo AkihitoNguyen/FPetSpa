@@ -1,7 +1,5 @@
 
-svg.cart-icon {
-    margin-left: 43%;
-}
+
 .align-items-center.row {
     margin-left: 105%;
     margin-top: -32%;
@@ -27,7 +25,7 @@ label {
     font-size: 0.9em;
   }
   label#demo-multiple-checkbox-label {
-    margin-top: 38px;
+    margin-top: 0px;
 }
 .flex-pr {
     display: flex;
@@ -36,109 +34,7 @@ label {
     flex-direction: column;
 }
 
-
-
- .card {
-    width: 300px;
-    height: 400px;
-    padding: 0.8em;
-    background: #f5f5f5;
-    position: relative;
-    overflow: visible;
-    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-} 
-   
-   .card-img {
-    background-color: #ffcaa6;
-    height: 40%;
-    width: 100%;
-    border-radius: .5rem;
-    transition: .3s ease;
-   }
-   
-   .card-info {
-    padding-top: 22%;
-   }
-   
-   svg {
-    width: 20px;
-    height: 20px;
-   }
-   .card-footer {
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-top: 10px;
-    margin-top: 23px;
-    border-top: 1px solid #ddd;
-}
-   
-   /*Text*/
-   .text-title {
-    font-weight: 900;
-    font-size: 1.2em;
-    line-height: 1.5;
-   }
-   
-   .text-body {
-    font-size: .9em;
-    padding-bottom: 14px;
-   }
-   
-   /*Button*/
-   .card-button {
-    border: 1px solid #252525;
-    display: flex;
-    padding: .3em;
-    cursor: pointer;
-    border-radius: 50px;
-    transition: .3s ease-in-out;
-   }
-   
-   /*Hover*/
-   .card-img:hover {
-    transform: translateY(-10%);
-    box-shadow: rgba(226, 196, 63, 0.25) 0px 13px 47px -5px, rgba(180, 71, 71, 0.3) 0px 8px 16px -8px;
-   }
-   
-   .card-button:hover {
-    border: 1px solid #ffcaa6;
-    background-color: #ffcaa6;
-   }
-   nav.MuiTypography-root.MuiTypography-body1.MuiBreadcrumbs-root.breadcrum.css-63vwl1-MuiTypography-root-MuiBreadcrumbs-root {
-    border: 1px solid #a89393;
-    margin-bottom: 10px;
-    border-radius: 8px;
-    background-color: #ffcbcb;
-}
-
-
-.article-wrapper {
-    position: relative;
-    margin: 10px;
-    overflow: hidden;
-  }
   
-  .container-project {
-    position: relative;
-    overflow: hidden;
-    border-radius: 15px;
-  }
-  
-  .project-info {
-    padding: 10px;
-  }
-  
-  .flex-pr {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-  }
-  
-  .project-title {
-    font-weight: bold;
-  }
   @media (min-width: 1536px) {
     .MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12.MuiGrid-grid-sm-6.MuiGrid-grid-md-4.css-11l5t4l-MuiGrid-root {
         flex-basis: 33.333333%;
@@ -164,7 +60,7 @@ label {
     }
     .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2.product.css-mhc70k-MuiGrid-root {
         margin-top: 1%;
-        margin-left: 0%;
+        margin-left: -2%;
         gap: 0px;
     }
     .col-auto {
@@ -180,15 +76,7 @@ label {
         flex-direction: column;
         align-content: center;
     }
-    .card {
-        width: 300px;
-        height: 400px;
-        padding: 0.8em;
-        background: #f5f5f5;
-        position: relative;
-        overflow: visible;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    } 
+
 }
 @media (max-width: 1024px) {
     nav.MuiList-root.MuiList-padding.MuiList-subheader.css-i7rae6-MuiList-root {
@@ -202,7 +90,7 @@ label {
     }
     .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2.product.css-mhc70k-MuiGrid-root {
         margin-top: 1%;
-        margin-left: -11%;
+        margin-left: -3%;
         gap: 0px;
         width: calc(102% + 16px);
     }
@@ -211,16 +99,7 @@ label {
         width: auto;
         margin-left: -4%;
     }
-    .card {
-        width: 241px;
-        height: 372px;
-        padding: 0.6em;
-        background: #f5f5f5;
-        position: relative;
-        overflow: visible;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-        margin-left: 74px;
-    }
+
 }
 @media (max-width: 900px) {
     nav.MuiList-root.MuiList-padding.MuiList-subheader.css-i7rae6-MuiList-root {
@@ -234,7 +113,7 @@ label {
     }
     .MuiGrid-root.MuiGrid-container.MuiGrid-spacing-xs-2.product.css-mhc70k-MuiGrid-root {
         margin-top: 1%;
-        margin-left: -11%;
+        margin-left: -3%;
         gap: 0px;
     }
     .col-auto {
@@ -242,40 +121,9 @@ label {
         width: auto;
         margin-left: -4%;
     }
-    .card {
-        width: 200px;
-        height: 300px;
-        padding: 0.4em;
-        background: #f5f5f5;
-        position: relative;
-        overflow: visible;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.12), 0 1px 2px rgba(0, 0, 0, 0.24);
-    }
     .text-title {
         font-weight: 900;
         font-size: 1.2em;
         line-height: 0;
     }
 }
-
-
-  
-  /* .project-hover {
-    display: none;
-  }
-  
-  .article-wrapper:hover .project-hover {
-    display: block;
-  } */
-  
-  /* .project-type {
-    display: inline-block;
-    padding: 5px;
-    border-radius: 5px;
-  }
-   */
-  /* .cart-icon {
-    cursor: pointer;
-    font-size: 5vh;
-    margin-left: 10px;
-  } */
