@@ -1,62 +1,42 @@
 import axios from '../utils/axiosClient';
 
-// const getAllServices = () =>{
-//     return axios.get('/api/services');
-// }
 export const getAllProduct = () => {
-  return axios.get(`https://666110b863e6a0189fe85550.mockapi.io/Product`);
+  return axios.get(`https://fpetspa.azurewebsites.net/api/products?pageSize=100`);
 };
-
-// const getProductsByCategory = (categoryName) => {
-//   return axios.get(`https://666110b863e6a0189fe85550.mockapi.io/Product?categoryName=${categoryName}`);
-
-// };
-
 
 export const getSearchProduct = async ({ product = '' }) => {
-  const response = await fetch(`hhttps://666110b863e6a0189fe85550.mockapi.io/Product?productName=${product}`);
+  const response = await fetch(`https://666110b863e6a0189fe85550.mockapi.io/Product?productName=${product}`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
   return response.json();
 };
 
-export const getProductsByCategory= async ({ category = '' }) => {
-  const response = await fetch(`https://666110b863e6a0189fe85550.mockapi.io/Product?&categoryName=${category}`);
+export const getProductsByCategory = async ({ category = '' }) => {
+  const response = await fetch(`https://fpetspa.azurewebsites.net/api/products?pageSize=100&categoryName=${category}`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
   return response.json();
 };
-// export const getAllProduct= async () => {
-//   const response = await fetch('https://666110b863e6a0189fe85550.mockapi.io/Product');
-//   if (!response.ok) {
-//     throw new Error('Network response was not ok');
-//   }
-//   return response.json();
-// };
 
-export const getProductById = async (productId = '') => {
-  const url = productId 
-    ? `https://666110b863e6a0189fe85550.mockapi.io/Product?productId=${productId}` 
-    : 'https://666110b863e6a0189fe85550.mockapi.io/Product';
+export const getProductById = async (id = '') => {
+  const url = id 
+    ? `https://fpetspa.azurewebsites.net/api/products/${id}` 
+    : 'https://fpetspa.azurewebsites.net/api/products?pageSize=100';
   const response = await fetch(url);
+
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
+
   return response.json();
 };
 
 export const getProductName = async ({ productName = '' }) => {
-  const response = await fetch(`https://666110b863e6a0189fe85550.mockapi.io/Product?productName=${productName}`);
+  const response = await fetch(`https://fpetspa.azurewebsites.net/api/products?productName=${productName}`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
   return response.json();
 };
-
-  
-
-
-
-

@@ -1,4 +1,3 @@
-// Navbar.jsx
 
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useContext } from "react";
@@ -15,9 +14,6 @@ import Stack from '@mui/material/Stack';
 import Button from '@mui/material/Button';
 import Menu from '@mui/material/Menu';
 import MenuItem from '@mui/material/MenuItem';
-
-
-import Modal from "../Modal/Modal";
 import { assets } from "../../assets/assets";
 import "../Navbar/Navbar.css";
 
@@ -28,11 +24,12 @@ const Navbar = () => {
   const id = user?._id;
   const accessToken = user?.accessToken;
   let axiosJWT = createAxiosInstance(user, dispatch, logoutSuccess);
-  const { getTotalCartItems } = useContext(ShopContext);
+  const { getTotalCartItems } = useContext(ShopContext) || { getTotalCartItems: () => 0 };
+  
 
   const [anchorEl, setAnchorEl] = useState('');
   const open = Boolean(anchorEl);
-  const [isModalOpen, setModalOpen] = useState(false); // State to control modal visibility
+ 
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
@@ -69,10 +66,9 @@ const Navbar = () => {
 
   function stringAvatar(name) {
     if (!name || typeof name !== 'string') {
-      // Handle case where name is undefined, null, or not a string
       return {
         sx: {
-          bgcolor: '#000000', // Default color if name is invalid
+          bgcolor: '#000000',
         },
         children: '',
       };
@@ -80,21 +76,19 @@ const Navbar = () => {
   
     const nameParts = name.split(' ');
     if (nameParts.length < 2) {
-      // Handle case where name doesn't have a space (single part name)
       return {
         sx: {
-          bgcolor: stringToColor(name), // Use color based on full name
+          bgcolor: stringToColor(name), 
         },
-        children: name.charAt(0), // Use the first character of the name
+        children: name.charAt(0), 
       };
     }
-  
-    // Normal case where name has two or more parts
+
     return {
       sx: {
-        bgcolor: stringToColor(name), // Use color based on full name
+        bgcolor: stringToColor(name), 
       },
-      children: `${nameParts[0][0]}${nameParts[1][0]}`, // First characters of first and last name
+      children: `${nameParts[0][0]}${nameParts[1][0]}`, 
     };
   }
   
@@ -111,7 +105,7 @@ const Navbar = () => {
       <ul className="navbar-menu">
         <li onClick={() => navigate("/service")}>Service</li>
         <li onClick={() => navigate("/product")}>Product</li>
-        <li onClick={() => navigate("/about-us")}>About us</li>
+        <li onClick={() => navigate("/cart")}>About us</li>
         <li onClick={() => navigate("/contact-us")}>Contact us</li>
       </ul>
       <div className="navbar-right">
@@ -139,7 +133,7 @@ const Navbar = () => {
               }}
             >
               <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+              <MenuItem onClick={handleClose}>My Account</MenuItem>
               <MenuItem onClick={handleClose}>
                 <Link to="/logout" className="navbar-logout" onClick={handleLogout}>
                   Logout
@@ -156,11 +150,12 @@ const Navbar = () => {
           </div>
         )}
         <div className="navbar-cart-icon">
-            <img src={assets.cart} alt="" className="cart" onClick={() => setModalOpen(true)}/>
+        <Link to="/cart">
+              <img src={assets.cart} alt="" className="cart" />
+              <div className="nav-cart-count">{getTotalCartItems()}</div>
+            </Link>
         </div>
-        <div className="nav-cart-count">{getTotalCartItems()}</div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} /> {/* Pass props to Modal */}
       <ToastContainer />
     </div>
   );

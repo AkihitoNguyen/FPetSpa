@@ -56,7 +56,7 @@ const RelatedProducts = () => {
                 <CardMedia
                   component="img"
                   height="140"
-                  image={product.picture}
+                  image={product.pictureName}
                   alt={product.productName}
                 />
               </Link>
