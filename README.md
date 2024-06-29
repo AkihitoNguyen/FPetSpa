@@ -36,4 +36,4 @@ BE: C#, Asp.Net API </br>
 | H.Ninh|UC-06 |
 | Hùng |UC-01, UC-02, UC-06  |
 | T.Anh (FE) |UC-01,UC-03, UC-05 |
-| Sơn (FE)|UC-05, UC-06, UC-09,UC-11	 |
+| Sơn (FE)|UC-02,UC-05, UC-06,UC-11	 |
