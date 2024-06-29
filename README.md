@@ -22,8 +22,8 @@ BE: C#, Asp.Net API </br>
 # SPRINT - USECASE
 | SPRINT | USECASE   |
 |:--:|:------------:|
-| 1 | UC-01, UC-02 ,UC-03, UC-05, UC-06, UC-11	 |
-| 2 |UC-09,	UC-10,	UC-12,	UC-19,	UC-14,	UC-24	|
+| 1 | UC-01, UC-02 ,UC-03, UC-05, UC-06, UC-11, UC-10	 |
+| 2 |UC-09, 	UC-12,	UC-19,	UC-14,	UC-24	|
 | 3 |UC-17, UC-18,	UC-04,	UC-13,	UC-20,	UC-21	 |
 | 4 |UC-15, UC-16,	UC-23,	UC-07	UC-08,	UC-22	 |
 
@@ -33,7 +33,7 @@ BE: C#, Asp.Net API </br>
 |:--:|:------------:|
 | Phước | UC-01, UC-03 |
 | Hoàng | UC-03, UC-05, UC-11|
-| H.Ninh|UC-06 |
+| H.Ninh| UC-06, UC-10 |
 | Hùng |UC-01, UC-02, UC-06  |
 | T.Anh (FE) |UC-01,UC-03, UC-05 |
 | Sơn (FE)|UC-02,UC-05, UC-06,UC-11	 |
