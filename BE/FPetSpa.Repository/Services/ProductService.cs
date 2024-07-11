@@ -1,11 +1,4 @@
-﻿using FPetSpa.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace FPetSpa.Repository.Services
+﻿namespace FPetSpa.Repository.Services
 {
 
     public interface IProducService
@@ -15,9 +8,9 @@ namespace FPetSpa.Repository.Services
 
     public class ProductService : IProducService
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ProductService(UnitOfWork unitOfWork)
+        public ProductService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

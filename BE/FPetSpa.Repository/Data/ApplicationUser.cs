@@ -1,9 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Twilio.Types;
 
 namespace FPetSpa.Repository.Data
 {
@@ -11,5 +7,7 @@ namespace FPetSpa.Repository.Data
     {
         public string FullName { get; set; } = null!;
         public string Gmail { get; set; } = null!;
+        public string PhoneNumber { get; set; } = null!;
+        public bool PhoneNumberConfirmed { get; set; } = false;
     }
 }

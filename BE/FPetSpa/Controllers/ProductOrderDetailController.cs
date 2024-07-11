@@ -5,11 +5,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using FPetSpa.Models.ProductModel;
 using FPetSpa.Repository.Data;
-using FPetSpa.Models.ProductOrderDetailModel;
 using NuGet.Protocol.Core.Types;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.CodeAnalysis;
 using Azure.Core;
+using FPetSpa.Repository.Model.ProductOrderDetailModel;
+using FPetSpa.Models.ProductOrderDetailModel;
 
 namespace FPetSpa.Controllers
 {
@@ -17,11 +18,13 @@ namespace FPetSpa.Controllers
     [ApiController]
     public class ProductOrderDetailController : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ImageController _image;
 
-        public ProductOrderDetailController(UnitOfWork unitOfWork)
+        public ProductOrderDetailController(IUnitOfWork unitOfWork, ImageController image)
         {
             _unitOfWork = unitOfWork;
+            _image = image;
         }
 
         [HttpGet]
@@ -38,6 +41,27 @@ namespace FPetSpa.Controllers
 
             return Ok(productOrderDetails);
         }
+        [HttpGet("getOrderById")]
+        public async Task<IActionResult> GetByOrderIdOnly(string orderId)
+        {
+            var order = await _unitOfWork.productOrderDetailRepository.getByOrderIdOnly(orderId);
+            if (order != null)
+            {
+                var result = order.Select(async x => new ResponseProductOrderDetailModel
+                { 
+                    OrderId = x.OrderId!,
+                    ProductId = x.ProductId!,
+                    ProductName = _unitOfWork.ProductRepository.GetByIdAsync(x.ProductId!).Result.ProductName!,
+                    PictureName = await _image.GetLinkByName("productfpetspa", _unitOfWork.ProductRepository.GetById(x.ProductId!).PictureName!),
+                    Price = x.Price,
+                    ProductQuantity = x.Quantity
+                }
+                ).ToList();
+                return Ok(await Task.WhenAll(result));
+            }
+            return BadRequest();    
+        }
+
         [HttpDelete("{orderId}&{productId}")]
         public async Task<IActionResult> DeleteProduct(string orderId, string productId)
         {

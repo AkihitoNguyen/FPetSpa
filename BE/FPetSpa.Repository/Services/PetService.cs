@@ -11,9 +11,9 @@ namespace FPetSpa.Repository.Services
     }
     public class PetService : IPetService
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public PetService(UnitOfWork unitOfWork)
+        public PetService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

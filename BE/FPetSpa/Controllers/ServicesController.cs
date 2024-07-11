@@ -7,17 +7,16 @@ using static FPetSpa.Model.ServiceModel.RequestSearchServiceModel;
 using System.Linq.Expressions;
 using FPetSpa.Repository.Services;
 using FPetSpa.Models.ServiceModel;
-using FPetSpa.Repository.Data;
 namespace FPetSpa.Controllers
 {
     [Route("api/services")]
     [ApiController]
     public class ServicesController : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IIdService _idService;
 
-        public ServicesController(UnitOfWork unitOfWork, IIdService service)
+        public ServicesController(IUnitOfWork unitOfWork, IIdService service)
         {
             _unitOfWork = unitOfWork;
             _idService = service;

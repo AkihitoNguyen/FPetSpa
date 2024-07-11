@@ -11,8 +11,8 @@ namespace FPetSpa.Controllers
     [ApiController]
     public class FeedBackController : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
-        public FeedBackController(UnitOfWork unitOfWork)
+        private readonly IUnitOfWork _unitOfWork;
+        public FeedBackController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

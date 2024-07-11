@@ -95,10 +95,10 @@ namespace FPetSpa.Controllers
             if (!bucketExists) return string.Empty;
             var s3Object = await _s3Clients.GetObjectAsync(bucketName, key);
             var result = new GetPreSignedUrlRequest
-            { 
+            {
                 BucketName = s3Object.BucketName,
                 Key = s3Object.Key,
-                Expires = DateTime.UtcNow.AddMinutes(1) 
+                Expires = DateTime.UtcNow.AddSeconds(15)
             };
             return  _s3Clients.GetPreSignedURL(result);
         }

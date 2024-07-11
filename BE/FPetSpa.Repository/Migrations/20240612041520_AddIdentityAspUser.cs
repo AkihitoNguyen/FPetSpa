@@ -1,5 +1,4 @@
-﻿using System;
-using Microsoft.EntityFrameworkCore.Migrations;
+﻿using Microsoft.EntityFrameworkCore.Migrations;
 
 #nullable disable
 
@@ -283,7 +282,7 @@ namespace FPetSpa.Repository.Migrations
                 name: "Pet",
                 columns: table => new
                 {
-                    PetID = table.Column<int>(type: "int", nullable: false),
+                    PetID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     CustomerID = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     PetName = table.Column<string>(name: "Pet Name", type: "varchar(20)", unicode: false, maxLength: 20, nullable: true),
                     PictureName = table.Column<string>(type: "nvarchar(50)", maxLength: 50, nullable: true),
@@ -418,7 +417,7 @@ namespace FPetSpa.Repository.Migrations
                     Discount = table.Column<double>(type: "float", nullable: true),
                     PetWeight = table.Column<decimal>(type: "decimal(5,3)", nullable: true),
                     Price = table.Column<decimal>(type: "money", nullable: true),
-                    PetID = table.Column<int>(type: "int", nullable: true)
+                    PetID = table.Column<string>(type: "nvarchar(450)", nullable: false)
                 },
                 constraints: table =>
                 {

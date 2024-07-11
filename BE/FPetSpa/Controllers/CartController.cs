@@ -14,10 +14,10 @@ namespace FPetSpa.Controllers
     public class CartController : ControllerBase
     {
        
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<CartController> _logger;
 
-        public CartController(UnitOfWork unitOfWork,ILogger<CartController> logger)
+        public CartController(IUnitOfWork unitOfWork,ILogger<CartController> logger)
         {
            
             _unitOfWork = unitOfWork;
@@ -44,13 +44,14 @@ namespace FPetSpa.Controllers
             }
             return Ok(cart);
         }
+    
         [HttpPost("AddtoCart")]
         public async Task<ActionResult> Create(AddToCartModel request)
         {
             try
             {
-                await _unitOfWork.Carts.AddAsync(request);
-                return CreatedAtAction(nameof(GetById), new { id = request.UserId }, request);
+                var cartId = await _unitOfWork.Carts.AddAsync(request);
+                return CreatedAtAction(nameof(GetById), new { id = request.UserId }, cartId);
             }
             catch (InvalidOperationException ex)
             {

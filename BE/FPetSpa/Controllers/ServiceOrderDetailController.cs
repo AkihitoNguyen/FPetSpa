@@ -1,6 +1,6 @@
-﻿using FPetSpa.Models.ServiceOrderDetailModel;
-using FPetSpa.Repository;
+﻿using FPetSpa.Repository;
 using FPetSpa.Repository.Data;
+using FPetSpa.Repository.Model.ServiceOrderDetailModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -10,9 +10,9 @@ namespace FPetSpa.Controllers
     [ApiController]
     public class ServiceOrderDetailController : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public ServiceOrderDetailController(UnitOfWork unitOfWork)
+        public ServiceOrderDetailController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

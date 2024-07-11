@@ -10,9 +10,9 @@ namespace FPetSpa.Controllers
     [ApiController]
     public class DashBoardController : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public DashBoardController(UnitOfWork unitOfWork)
+        public DashBoardController(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

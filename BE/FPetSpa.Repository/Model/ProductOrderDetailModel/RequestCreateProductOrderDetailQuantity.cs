@@ -1,4 +1,4 @@
-﻿namespace FPetSpa.Models.ProductOrderDetailModel
+﻿namespace FPetSpa.Repository.Model.ProductOrderDetailModel
 {
     public class RequestCreateProductOrderDetailQuantity
     {
