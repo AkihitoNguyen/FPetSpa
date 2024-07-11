@@ -23,5 +23,3 @@ const DashBoard = () => {
 };
 
 export default DashBoard;
-
-// Các component OrderManagement và Transaction có thể thay thế cho các component hiển thị đơn hàng và giao dịch của bạn.

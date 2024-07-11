@@ -15,7 +15,7 @@ const GetService = () => {
 
   useEffect(() => {
     axios
-      .get("https://fpetspa.azurewebsites.net/api/Order/GetAllOrder")
+      .get("https://fpetspa.azurewebsites.net/api/Order/GetAllOrderService")
       .then((response) => {
         const allOrders = response.data;
         setOrders(allOrders);
@@ -345,7 +345,7 @@ const GetService = () => {
                           updateOrderStatus(order.orderId, "PROCESSING")
                         }
                         className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
-                        Pending
+                        Processing
                       </button>
                     </span>
                   )}
