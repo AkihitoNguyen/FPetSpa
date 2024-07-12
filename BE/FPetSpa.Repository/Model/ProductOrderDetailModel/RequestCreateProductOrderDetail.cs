@@ -1,7 +1,4 @@
-﻿using FPetSpa.Repository.Data;
-using System.ComponentModel.DataAnnotations;
-
-namespace FPetSpa.Models.ProductOrderDetailModel
+﻿namespace FPetSpa.Repository.Model.ProductOrderDetailModel
 {
     public class RequestCreateProductOrderDetail
     {

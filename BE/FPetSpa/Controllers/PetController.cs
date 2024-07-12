@@ -14,9 +14,9 @@ namespace FPetSpa.Controllers
     [ApiController]
     public class PetController : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IPetService _petService;
-        public PetController(UnitOfWork unitOfWork, IPetService service)
+        public PetController(IUnitOfWork unitOfWork, IPetService service)
         {
             _unitOfWork = unitOfWork;
             _petService = service;
@@ -40,8 +40,7 @@ namespace FPetSpa.Controllers
         {
             var newPetId = await _petService.GenerateNewPetId();
             var pet = new Pet
-            {
-            
+            {   
                 PetId  = newPetId,
                 CustomerId = requestCreatePetModel.CustomerId,
                 PetName = requestCreatePetModel.PetName,

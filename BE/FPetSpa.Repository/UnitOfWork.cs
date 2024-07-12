@@ -1,14 +1,9 @@
 ﻿using FPetSpa.Repository.Data;
 using FPetSpa.Repository.Repository;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPetSpa.Repository
 {
-    public class UnitOfWork
+    public class UnitOfWork : IUnitOfWork
     {
         private FpetSpaContext _context;
         private GenericRepository<Service> _service;
@@ -19,15 +14,18 @@ namespace FPetSpa.Repository
         private ServiceOrderDetailRepository<ServiceOrderDetail> _serviceOrderDetailRepository;
         private ProductOrderDetailRepositoty<ProductOrderDetail> _productOrderDetailRepository;
         private GenericRepository<Pet> _pet;
-        private OrderRepository<Order> _orderRepository;
         private GenericRepository<Order> _orderGenericRepository;
         private GenericRepository<Category> _category;
-        
-        public IAccountRepository _IaccountRepository { get;}
-        public UnitOfWork(FpetSpaContext context, IAccountRepository accountRepository)
+        private GenericRepository<Transaction> _transaction;
+        private GenericRepository<Voucher> _voucher;
+
+        public OrderRepository OrderRepository { get; }
+        public IAccountRepository _IaccountRepository { get; }
+        public UnitOfWork(FpetSpaContext context, IAccountRepository accountRepository, OrderRepository orderRepository)
         {
             _context = context;
-            _IaccountRepository = accountRepository; 
+            _IaccountRepository = accountRepository;
+            this.OrderRepository = orderRepository;
         }
 
 
@@ -108,8 +106,8 @@ namespace FPetSpa.Repository
                 return _serviceOrderDetailRepository;
             }
         }
-  
-              public GenericRepository<Pet> PetRepository
+
+        public GenericRepository<Pet> PetRepository
         {
             get
             {
@@ -120,17 +118,7 @@ namespace FPetSpa.Repository
                 return _pet;
             }
         }
-        public OrderRepository<Order> OrderRepository
-        {
-            get
-            {
-                if (_orderRepository == null)
-                {
-                    this._orderRepository = new OrderRepository<Order>(_context);
-                }
-                return _orderRepository;
-            }
-        }
+
         public GenericRepository<Category> CategoryRepository
         {
             get
@@ -147,13 +135,38 @@ namespace FPetSpa.Repository
         {
             get
             {
-                if(_orderGenericRepository == null)
+                if (_orderGenericRepository == null)
                 {
                     this._orderGenericRepository = new GenericRepository<Order>(_context);
                 }
                 return this._orderGenericRepository;
             }
         }
+
+        public GenericRepository<Voucher> VoucherRepository
+        {
+            get
+            {
+                if (_voucher == null)
+                {
+                    this._voucher = new GenericRepository<Voucher>(_context);
+                }
+                return this._voucher;
+            }
+        }
+        public GenericRepository<Transaction> TransactionRepository
+        {
+            get
+            {
+                if (_transaction == null)
+                {
+                    this._transaction = new GenericRepository<Transaction>(_context);
+                }
+                return this._transaction;
+            }
+        }
+
+
         public async Task<int> SaveChangesAsync()
         {
             return await _context.SaveChangesAsync();
@@ -179,7 +192,7 @@ namespace FPetSpa.Repository
 
         public void Dispose()
         {
-            Dispose(true);
+                Dispose(true);
             GC.SuppressFinalize(this);
         }
     }

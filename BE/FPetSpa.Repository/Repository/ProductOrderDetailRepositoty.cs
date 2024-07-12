@@ -1,11 +1,6 @@
 ﻿using FPetSpa.Repository.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPetSpa.Repository.Repository
 {
@@ -26,6 +21,12 @@ namespace FPetSpa.Repository.Repository
         public async Task<ProductOrderDetail> GetByOrderID(string orderId, string productId)
         {
             return await _context.ProductOrderDetails.FirstOrDefaultAsync(p => p.OrderId == orderId && p.ProductId == productId);
+        }
+
+        public async Task<IEnumerable<ProductOrderDetail>> getByOrderIdOnly(string orderId)
+        {
+            var orderDetail = _context.ProductOrderDetails.Where(x => x.OrderId == orderId).ToList();
+            return orderDetail;
         }
 
 
@@ -64,11 +65,11 @@ namespace FPetSpa.Repository.Repository
                     new SqlParameter("@NewQuantity", newQuantity),
                     new SqlParameter("@OrderId", orderId),
                     new SqlParameter("@ProductId", productId));
-            }   
+            }
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred while updating the product order detail quantity: {ex.Message}");
-                throw; 
+                throw;
             }
         }
         public async Task AddProductOrderDetailAsync(string orderId, string productId, int quantity, decimal price, double discount)
@@ -89,18 +90,14 @@ namespace FPetSpa.Repository.Repository
             catch (Exception ex)
             {
                 Console.WriteLine($"An error occurred while adding the product order detail: {ex.Message}");
-                throw; 
+                throw;
             }
         }
-
-
-       
-
 
     }
 
 }
-    
 
-   
+
+
 

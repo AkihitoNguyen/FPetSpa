@@ -1,33 +1,25 @@
 ﻿using FPetSpa.Repository.Data;
-using FPetSpa.Repository.Model;
-using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using Org.BouncyCastle.Asn1;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
-using System.Threading.Tasks;
-using static Amazon.S3.Util.S3EventNotification;
 
 namespace FPetSpa.Repository.Repository
 {
     public class GenericRepository<T> where T : class
     {
 
-        private  FpetSpaContext _context;
-        private  DbSet<T> dbSet;
+        private FpetSpaContext _context;
+        private DbSet<T> dbSet;
 
 
-        public GenericRepository(FpetSpaContext context) {
-            this._context  = context;
+        public GenericRepository(FpetSpaContext context)
+        {
+            this._context = context;
             this.dbSet = context.Set<T>();
 
         }
         public virtual IEnumerable<T> Get(
            Expression<Func<T, bool>> filter = null!,
-           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null!    ,
+           Func<IQueryable<T>, IOrderedQueryable<T>> orderBy = null!,
            string includeProperties = "",
            int? pageIndex = null, // Optional parameter for pagination (page number)
            int? pageSize = null)  // Optional parameter for pagination (number of records per page)
@@ -68,34 +60,34 @@ namespace FPetSpa.Repository.Repository
             return await _context.Set<T>().ToListAsync();
         }
 
-        public async Task<IEnumerable<T>> GetAllAsync()
+        public virtual async Task<IEnumerable<T>> GetAllAsync()
         {
             return await _context.Set<T>().ToListAsync();
         }
-     
+
         public async Task<T> GetByIdAsync(string id)
         {
             return await dbSet.FindAsync(id);
         }
-       
+
         public void DeleteById(object id)
         {
-             var toDelete = GetById(id);
+            var toDelete = GetById(id);
             if (toDelete != null)
             {
-               _context.Set<T>().Remove(toDelete);
+                _context.Set<T>().Remove(toDelete);
             }
         }
 
 
         public void Delete(T entity)
         {
-               _context.Set<T>().Remove(entity);
+            _context.Set<T>().Remove(entity);
         }
 
-        public  T GetById(object id)
+        public T GetById(object id)
         {
-            return  _context.Set<T>().Find(id)!;
+            return _context.Set<T>().Find(id)!;
         }
 
         public void Insert(T entity)
@@ -124,6 +116,6 @@ namespace FPetSpa.Repository.Repository
             return query.Count();
         }
 
-        
+
     }
 }

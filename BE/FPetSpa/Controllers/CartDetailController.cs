@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Cors.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using FPetSpa.Repository.Model;
+using FPetSpa.Repository.Model.CartDetailModel;
 
 namespace FPetSpa.Controllers
 {
@@ -11,11 +12,13 @@ namespace FPetSpa.Controllers
     [ApiController]
     public class CartDetailController : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ImageController image;
 
-        public CartDetailController(UnitOfWork unitOfWork)
+        public CartDetailController(IUnitOfWork unitOfWork, ImageController imageController)
         {
             _unitOfWork = unitOfWork;
+            this.image = imageController;
         }
 
 
@@ -27,15 +30,24 @@ namespace FPetSpa.Controllers
         }
 
         [HttpGet("Getbyid")]
-        public async Task<ActionResult<CartDetail>> GetById(string cartId, string productId)
+        public async Task<ActionResult> GetById(string userId)
         {
-            var cartDetail = await _unitOfWork.CartDetails.GetByIdAsync(cartId, productId);
-            if (cartDetail == null)
+            var cartDetail = await _unitOfWork.CartDetails.GetByIdAsync(userId);
+            if (cartDetail != null)
             {
-                return NotFound();
-            }
-            return Ok(cartDetail);
+                var result = cartDetail.Select(async p => new CartDetailResponse
+                {
+                    CartId = p.CartId,
+                    ProductId = p.ProductId,
+                    ProductName = _unitOfWork.ProductRepository.GetById(p.ProductId!).ProductName!,
+                    Price = p.Price,
+                    PictureName = await image.GetLinkByName("productfpetspa", _unitOfWork.ProductRepository.GetById(p.ProductId!).PictureName!),
+                    Quantity = p.Quantity
+                });
+                return Ok(await Task.WhenAll(result));
+            }else return Ok("Empty Cart");
         }
+        
 
         [HttpPut("Update")]
         public async Task<IActionResult> Update(string cartId, string productId, RequestQuantityCartDetail request)

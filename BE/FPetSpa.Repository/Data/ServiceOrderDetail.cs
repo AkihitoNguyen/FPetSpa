@@ -1,10 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace FPetSpa.Repository.Data;
+﻿namespace FPetSpa.Repository.Data;
 
 public partial class ServiceOrderDetail
 {
+    public int Id { get; set; }
+
     public string? ServiceId { get; set; }
 
     public string? OrderId { get; set; }

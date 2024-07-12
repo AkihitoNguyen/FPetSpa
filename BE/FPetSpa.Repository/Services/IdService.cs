@@ -1,12 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using FPetSpa.Repository.Data;
-using FPetSpa.Repository;
-
-namespace FPetSpa.Repository.Services
+﻿namespace FPetSpa.Repository.Services
 {
     public interface IIdService
     {
@@ -15,9 +7,9 @@ namespace FPetSpa.Repository.Services
 
     public class IdService : IIdService
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
 
-        public IdService(UnitOfWork unitOfWork)
+        public IdService(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }

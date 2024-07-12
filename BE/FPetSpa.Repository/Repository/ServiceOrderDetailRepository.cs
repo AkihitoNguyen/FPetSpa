@@ -1,11 +1,6 @@
 ﻿using FPetSpa.Repository.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPetSpa.Repository.Repository
 {
@@ -70,7 +65,7 @@ namespace FPetSpa.Repository.Repository
             }
         }
 
-        public async Task AddServiceOrderDetailAsync(string serviceId, string orderId, double discount, decimal petWeight, decimal price, string petId)
+        public async Task AddServiceOrderDetailAsync(string serviceId, string orderId, double? discount, decimal? petWeight, decimal? price, string petId)
         {
             try
             {

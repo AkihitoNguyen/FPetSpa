@@ -92,13 +92,13 @@ namespace FPetSpa.Controllers
         {
             var _s3Clients = new AmazonS3Client(credentials, Amazon.RegionEndpoint.APSoutheast2);
             var bucketExists = await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Clients, bucketName);
-            if (!bucketExists) return string.Empty;
+            if (!bucketExists) return null!;
             var s3Object = await _s3Clients.GetObjectAsync(bucketName, key);
             var result = new GetPreSignedUrlRequest
-            { 
+            {
                 BucketName = s3Object.BucketName,
                 Key = s3Object.Key,
-                Expires = DateTime.UtcNow.AddMinutes(1) 
+                Expires = DateTime.UtcNow.AddSeconds(15)
             };
             return  _s3Clients.GetPreSignedURL(result);
         }

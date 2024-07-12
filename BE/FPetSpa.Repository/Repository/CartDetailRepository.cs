@@ -1,12 +1,6 @@
 ﻿using FPetSpa.Repository.Data;
 using Microsoft.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static Amazon.S3.Util.S3EventNotification;
 
 namespace FPetSpa.Repository.Repository
 {
@@ -39,10 +33,12 @@ namespace FPetSpa.Repository.Repository
                 }).ToListAsync();
         }
 
-        public async Task<CartDetail> GetByIdAsync(string cartId, string productId)
+        public async Task<List<CartDetail>> GetByIdAsync(string userId)
         {
-            return await _context.CartDetails
-                .FirstOrDefaultAsync(cd => cd.CartId == cartId && cd.ProductId == productId);
+            var list = _context.Carts.Include(c => c.CartDetails).FirstOrDefault(c => c.UserId == userId);
+
+            if (list != null) return list.CartDetails.ToList();
+            else return null!;
         }
         public async Task AddAsync(CartDetail cartDetail)
         {
@@ -50,7 +46,7 @@ namespace FPetSpa.Repository.Repository
         }
         public async Task DeleteAsync(string cartId, string productId)
         {
-            var cartDetail = await GetByIdAsync(cartId, productId);
+            var cartDetail = await _context.CartDetails.FirstOrDefaultAsync(cd => cd.CartId == cartId && cd.ProductId == productId);
             if (cartDetail != null)
             {
                 _context.CartDetails.Remove(cartDetail);

@@ -1,4 +1,4 @@
-﻿namespace FPetSpa.Models.ServiceOrderDetailModel
+﻿namespace FPetSpa.Repository.Model.ServiceOrderDetailModel
 {
     public class RequestUpdateServiceOrderDetail
     {

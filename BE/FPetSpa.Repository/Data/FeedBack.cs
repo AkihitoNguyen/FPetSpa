@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace FPetSpa.Repository.Data;
+﻿namespace FPetSpa.Repository.Data;
 
 public partial class FeedBack
 {
