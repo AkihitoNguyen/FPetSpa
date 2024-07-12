@@ -129,13 +129,10 @@ const Dashboards = () => {
       {
         label: "Expense",
         backgroundColor: "#f44336",
-        data: [3490, 3000, 2000, 2780],
+        data: [3490, 3000, 2000, 967.01
+        ],
       },
-      {
-        label: "Income",
-        backgroundColor: "#4caf50",
-        data: [4300, 4000, 3500, 3900],
-      },
+      
     ],
   };
 
@@ -259,7 +256,6 @@ const Dashboards = () => {
           {/* Income vs Expense chart */}
           <div className="bg-white p-4 rounded-lg shadow-sm">
             <strong className="text-lg font-semibold text-blue-900">
-              Income vs Expense
             </strong>
             <Bar data={barData} />
           </div>

@@ -69,7 +69,7 @@ const BookingService = () => {
 
   useEffect(() => {
     axios
-      .get(`${API_BASE_URL}/services`)
+      .get(`${API_BASE_URL}/services/Search`)
       .then((response) => {
         setServices(response.data);
       })

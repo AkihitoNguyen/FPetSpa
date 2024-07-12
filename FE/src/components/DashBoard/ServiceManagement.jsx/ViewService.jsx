@@ -2,16 +2,20 @@ import React, { useEffect, useState, useRef } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
 import Loading from "../../Loading";
+
 const ViewService = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [confirmDelete, setConfirmDelete] = useState(false);
+  const [serviceToDelete, setServiceToDelete] = useState(null);
+  const [successMessage, setSuccessMessage] = useState("");
   const dropdownRefs = useRef([]);
 
   useEffect(() => {
     const fetchServices = async () => {
       try {
         const response = await axios.get(
-          "https://fpetspa.azurewebsites.net/api/services"
+          "https://fpetspa.azurewebsites.net/api/services/Search"
         );
         setServices(response.data);
         setLoading(false); // Dừng loading khi dữ liệu đã được fetch thành công
@@ -24,15 +28,19 @@ const ViewService = () => {
     fetchServices();
   }, []);
 
-  const handleDelete = async (serviceId) => {
+  const handleDelete = async () => {
     try {
       await axios.delete(
-        `https://fpetspa.azurewebsites.net/api/services/${serviceId}`
+        `https://fpetspa.azurewebsites.net/api/services/${serviceToDelete}`
       );
       const updatedServices = services.filter(
-        (service) => service.servicesId !== serviceId
+        (service) => service.servicesId !== serviceToDelete
       );
       setServices(updatedServices);
+      setServiceToDelete(null);
+      setConfirmDelete(false);
+      setSuccessMessage("Service deleted successfully!");
+      setTimeout(() => setSuccessMessage(""), 3000);
     } catch (error) {
       console.error("Error deleting service:", error);
     }
@@ -48,6 +56,34 @@ const ViewService = () => {
 
   return (
     <div className="container mx-auto mt-4">
+      {successMessage && (
+        <div className="fixed top-4 right-4 bg-green-500 text-white p-4 rounded-md">
+          {successMessage}
+        </div>
+      )}
+
+      {confirmDelete && (
+        <div className="fixed inset-0 flex items-center justify-center bg-gray-800 bg-opacity-50">
+          <div className="bg-white p-6 rounded-md shadow-lg">
+            <h2 className="text-xl mb-4">Are you sure to delete this service?</h2>
+            <div className="flex justify-end">
+              <button
+                onClick={() => setConfirmDelete(false)}
+                className="bg-gray-500 text-white px-4 py-2 rounded-md mr-2"
+              >
+                Cancel
+              </button>
+              <button
+                onClick={handleDelete}
+                className="bg-red-500 text-white px-4 py-2 rounded-md"
+              >
+                Delete
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
       <table className="min-w-full divide-y">
         <thead>
           <tr>
@@ -123,7 +159,10 @@ const ViewService = () => {
                         </button>
                       </Link>
                       <button
-                        onClick={() => handleDelete(service.servicesId)}
+                        onClick={() => {
+                          setServiceToDelete(service.servicesId);
+                          setConfirmDelete(true);
+                        }}
                         className="block px-[9.75px] py-[8.45px] text-sm text-gray-700 hover:bg-[#E9F3FF] rounded-md w-[120px] text-left">
                         Delete
                       </button>

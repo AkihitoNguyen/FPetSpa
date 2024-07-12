@@ -6,14 +6,14 @@ const EditService = () => {
   const { servicesId } = useParams();
   const [serviceName, setServiceName] = useState("");
   const [price, setPrice] = useState("");
-  const [thumbnail, setThumbnail] = useState("");
+  const [thumbnail, setThumbnail] = useState(null); // Changed to null to handle file object
   const [description, setDescription] = useState("");
 
   useEffect(() => {
     const fetchServiceDetails = async () => {
       try {
         const response = await axios.get(
-          `https://fpetspa.azurewebsites.net/api/services/${servicesId}`
+          `https://fpetspa.azurewebsites.net/api/services/Search/${servicesId}`
         );
         const { serviceName, price, pictureServices, description } = response.data;
         setServiceName(serviceName);
@@ -27,8 +27,6 @@ const EditService = () => {
   
     fetchServiceDetails();
   }, [servicesId]);
-  
-  
 
   const handleTextChange = (e) => {
     const { name, value } = e.target;
@@ -43,19 +41,28 @@ const EditService = () => {
 
   const handleThumbnailChange = (e) => {
     const file = e.target.files[0];
-    // Handle file upload or display preview if needed
+    setThumbnail(file);
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    const formData = new FormData();
+    formData.append("id", servicesId);
+    formData.append("ServiceName", serviceName);
+    formData.append("Description", description);
+    formData.append("Price", price);
+    if (thumbnail) {
+      formData.append("file", thumbnail);
+    }
+
     try {
       await axios.put(
-        `https://fpetspa.azurewebsites.net/api/services/${servicesId}`,
+        `https://fpetspa.azurewebsites.net/api/services/UpdateServices`,
+        formData,
         {
-          serviceName,
-          price,
-          pictureServices: thumbnail,
-          description,
+          headers: {
+            "Content-Type": "multipart/form-data",
+          },
         }
       );
       alert("Service updated successfully!");
@@ -90,7 +97,7 @@ const EditService = () => {
                   />
                   <label htmlFor="file-input">
                     <img
-                      src={thumbnail}
+                      src={thumbnail ? URL.createObjectURL(thumbnail) : ""}
                       alt="Thumbnail Preview"
                       className="image-input-wrapper w-40 h-40 border-[0.4px] rounded-md shadow-xl cursor-pointer"
                     />
