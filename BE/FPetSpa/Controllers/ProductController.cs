@@ -1,4 +1,4 @@
-
+    
 using FPetSpa.Repository;
 
 using FPetSpa.Repository.Data;
@@ -13,6 +13,8 @@ using FPetSpa.Repository.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Configuration;
 using FPetSpa.Repository.Model.ProductOrderDetailModel;
+using FPetSpa.Models.ServiceModel;
+
 
 namespace FPetSpa.Controllers
 {
@@ -128,11 +130,17 @@ namespace FPetSpa.Controllers
         
         [HttpPut("{id}")]
         //[Authorize]
-        public IActionResult UpdateProduct(string id, RequestUpdateProductModel requestCreateProductModel)
+        public async Task<IActionResult> UpdateProduct(string id, RequestUpdateProductModel requestCreateProductModel)
         {
             var existedProductEntity = _unitOfWork.ProductRepository.GetById(id);
             if (existedProductEntity != null)
             {
+                if(requestCreateProductModel.file != null)
+                {
+                    await _imageController.DeleteFileAsync("productfpetspa", existedProductEntity.PictureName!);
+                    await _imageController.UploadFileAsync(requestCreateProductModel.file, "productfpetspa", null);
+                    existedProductEntity.PictureName = requestCreateProductModel.file.FileName;
+                }
                 if (requestCreateProductModel.ProductQuantity != null)
                 existedProductEntity.ProductQuantity = requestCreateProductModel.ProductQuantity;
                 if(requestCreateProductModel.Price != null)
@@ -143,12 +151,17 @@ namespace FPetSpa.Controllers
             return Ok();
         }
         [HttpDelete("{id}")]
-        public IActionResult DeleteProduct(string id)
+        public async Task<IActionResult> DeleteProduct(string id)
         {
             var existedCategoryEntity = _unitOfWork.ProductRepository.GetById(id);
-            _unitOfWork.ProductRepository.Delete(existedCategoryEntity);
-            _unitOfWork.Save();
-            return Ok();
+            if (existedCategoryEntity != null)
+            {
+                await _imageController.DeleteFileAsync("productfpetspa", existedCategoryEntity.ProductName!);
+                _unitOfWork.ProductRepository.Delete(existedCategoryEntity);
+                _unitOfWork.Save();
+                return Ok();
+            }
+            return BadRequest();
         }
 
     }

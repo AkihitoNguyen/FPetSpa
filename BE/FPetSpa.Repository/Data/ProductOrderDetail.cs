@@ -2,6 +2,7 @@
 
 public partial class ProductOrderDetail
 {
+    public int Id { get; set; }
     public string? OrderId { get; set; }
 
     public string? ProductId { get; set; }

@@ -6,17 +6,17 @@ using FPetSpa.Repository.Model;
 using FPetSpa.Repository.Model.VnPayModel;
 using FPetSpa.Repository.Services;
 using FPetSpa.Repository.Services.PayPal;
-using FPetSpa.Repository.Services.VnPay;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
-using Newtonsoft.Json;
+using QRCoder;
 using System.Globalization;
-using System.Reflection.Metadata.Ecma335;
-
+using System.Drawing;
+using System;
+using System.IO;
+using System.Drawing.Imaging;
 public class OrderRepository
 {
     private readonly UserManager<ApplicationUser> _userManager;
@@ -73,139 +73,6 @@ public class OrderRepository
         return await query.SumAsync(o => o.Total ?? 0);
     }
 
-    //public async Task<string> StartCheckoutProduct(string customerId, string staffId, string Method, string voucherId)
-    //{
-    //    var methodIn = _context.PaymentMethods.ToDictionary(p => p.MethodName, p => p.MethodId);
-    //    var methodId = methodIn.TryGetValue(Method.ToUpper(), out var resultMethodId) ? resultMethodId : -1;
-    //    if (resultMethodId == -1)
-    //    {
-    //        return null;
-    //    }
-    //    var user = await _userManager.FindByIdAsync(customerId);
-    //    if (user != null)
-    //    {
-    //        var cart = await _context.Carts
-    //            .Include(c => c.CartDetails)
-    //            .FirstOrDefaultAsync(c => c.UserId == customerId);
-    //        if (cart == null)
-    //        {
-    //            return null!;
-    //        }
-    //        string PaymentUrl = null!;
-    //        string OrderIdTemp = GenerateNewOrderIdProductAsync();
-    //        using (var transactionCheck = await _context.Database.BeginTransactionAsync())
-    //        {
-    //            try
-    //            {
-    //                switch (Method.ToUpper())
-    //                {
-    //                    case "VNPAY":
-    //                        var exchangeRate = await new ConvertUSDtoVND().GetExchangeRateAsync();
-    //                        double totalInVND = (Double)Math.Round(exchangeRate * cart.CartDetails.Sum(m => m.Quantity * m.Price).Value, 0, MidpointRounding.AwayFromZero);
-    //                        var vnPayModel = new VnPayRequestModel
-    //                        {
-    //                            Description = user.FullName + " payment product for FPetSpa",
-    //                            OrderId = OrderIdTemp + "_" + Guid.NewGuid().ToString(),
-    //                            Amount = (Double)totalInVND,
-    //                            CreatedDate = DateTime.Now,
-    //                            ExpiredDate = DateTime.Now.AddSeconds(60),
-    //                            ResponseUrl = $"{_Iconfiguration["VnPay:PaymentBackReturnUrl"]}?method=VNPAY&orderId={OrderIdTemp}"
-    //                        };
-    //                        PaymentUrl = _vnpayServices.CreatePaymentURl(vnPayModel, _httpContextAccessor.HttpContext);
-    //                        break;
-    //                    case "PAYPAL":
-    //                        var paymentRequest = new PaymentRequest
-    //                        {
-    //                            intent = "sale",
-    //                            payer = new Payer { payment_method = "paypal" },
-    //                            transactions = new[]
-    //                            {
-    //                        new TransactionPayPal
-    //                        {
-    //                            description = "PayPal Method",
-    //                            amount = new Amount{ currency = "USD", total = cart.CartDetails.Sum(c => c.Quantity * c.Price).Value.ToString(CultureInfo.InvariantCulture) },
-    //                            item_list = new ItemList
-    //                            {
-    //                                items = new[]
-    //                                {
-    //                                     new Item
-    //                                     {
-    //                                        name = "Name Product",
-    //                                        currency = "USD",
-    //                                        price = "10.00",
-    //                                        quantity = "1"
-    //                                     }
-    //                                }
-    //                            }
-
-    //                        }
-    //                    },
-    //                            redirect_urls = new RedirectUrls
-    //                            {
-    //                                return_url = RETURN_URL,
-    //                                cancel_url = CANCEL_URL
-    //                            }
-
-
-    //                        };
-    //                        var paymentResponse = await _paypalServices.CreatePaymentAsync(paymentRequest);
-    //                        PaymentUrl = paymentResponse.links.FirstOrDefault(link => link.rel == "approval_url")?.href;
-    //                        break;
-    //                    default:
-    //                        return null;
-    //                }
-    //                var transaction = new FPetSpa.Repository.Data.Transaction
-    //                {
-    //                    TransactionId = GenerateNewTransactionIDAsync(),
-    //                    MethodId = methodId,
-    //                    Status = (int)TransactionStatus.NOTPAID,
-    //                    TransactionDate = DateOnly.FromDateTime(DateTime.Now)
-    //                };
-
-    //                Order orderTemp = new Order
-    //                {
-    //                    OrderId = OrderIdTemp,
-    //                    StaffId = staffId,
-    //                    CustomerId = customerId,
-    //                    Total = cart.CartDetails.Sum(cd => cd.Quantity * cd.Price),
-    //                    ProductOrderDetails = cart.CartDetails.Select(cd => new ProductOrderDetail
-    //                    {
-    //                        OrderId = OrderIdTemp,
-    //                        ProductId = cd.ProductId,
-    //                        Quantity = cd.Quantity,
-    //                        Price = cd.Price
-    //                    }).ToList(),
-    //                    TransactionId = transaction.TransactionId,
-    //                    RequiredDate = DateTime.Now,
-    //                    Status = (byte)OrderStatusEnum.Pending
-    //                };
-    //                Product product;
-    //                foreach (var item in orderTemp.ProductOrderDetails)
-    //                {
-    //                    product = _context.Products.Find(item.ProductId)!;
-    //                    if (product == null) { continue; }
-    //                    product.ProductQuantity -= item.Quantity;
-    //                    var tracker = _context.Products.Attach(product);
-    //                    tracker.State = EntityState.Modified;
-    //                    _context.SaveChanges();
-    //                }
-
-    //                _context.Transactions.Add(transaction);
-    //                _context.Orders.Add(orderTemp);
-    //                _context.Remove(cart);
-    //                await _context.SaveChangesAsync();
-    //                await _context.Database.CommitTransactionAsync();
-
-    //                return PaymentUrl;
-    //            }
-    //            catch (Exception e)
-    //            {
-    //                await _context.Database.RollbackTransactionAsync();
-    //            }
-    //        }
-    //    }
-    //    return null;
-    //}
     public async Task<string> StartCheckoutProduct(string customerId, string staffId, string method, string? voucherCode = null)
     {
         var methodIn = _context.PaymentMethods.ToDictionary(p => p.MethodName, p => p.MethodId);
@@ -411,133 +278,6 @@ public class OrderRepository
         }
         return false;
     }
-
-    //public async Task<string> StartCheckoutServices(string ServicesId, string CustomerId, string PetId, string PaymentMethod, DateTime bookingDateTime)
-    //{
-    //    const string staffID = "fee3ede4-5aa2-484b-bc12-7cdc4d9437ac";
-    //    var methodIn = _context.PaymentMethods.ToDictionary(p => p.MethodName, p => p.MethodId);
-    //    var methodId = methodIn.TryGetValue(PaymentMethod.ToUpper(), out var resultMethodId) ? resultMethodId : -1;
-    //    if (resultMethodId == -1)
-    //    {
-    //        return null;
-    //    }
-    //    var user = await _userManager.FindByIdAsync(CustomerId);
-    //    if (user != null)
-    //    {
-    //        if (ServicesId == null)
-    //        {
-    //            return null!;
-    //        }
-    //        if (PetId == null)
-    //        {
-    //            return null!;
-    //        }
-    //        var pet = await _context.Pets.FindAsync(PetId);
-    //        var service = await _context.Services.FindAsync(ServicesId);
-    //        var totalPriceInUSD = await CalculateServicePrice(service!, pet!.PetWeight);
-    //        string PaymentUrl = null!;
-    //        string OrderIdTemp = GenerateNewOrderIdServicesAsync();
-    //        using (var transactionResult = await _context.Database.BeginTransactionAsync())
-    //        {
-    //            switch (PaymentMethod.ToUpper())
-    //            {
-    //                case "VNPAY":
-    //                    var exchangeRate = await new ConvertUSDtoVND().GetExchangeRateAsync();
-    //                    double totalInVND = (Double)Math.Round(exchangeRate * totalPriceInUSD, 0, MidpointRounding.AwayFromZero);
-    //                    var vnPayModel = new VnPayRequestModel
-    //                    {
-    //                        Description = user.FullName + " payment product for FPetSpa",
-    //                        OrderId = OrderIdTemp + Guid.NewGuid().ToString(),
-    //                        Amount = (Double)totalInVND,
-    //                        CreatedDate = DateTime.Now,
-    //                        ExpiredDate = DateTime.Now.AddSeconds(60),
-    //                        ResponseUrl = $"{_Iconfiguration["VnPay:PaymentBackReturnUrl"]}?method=VNPAY&orderId={OrderIdTemp}"
-    //                    };
-    //                    PaymentUrl = _vnpayServices.CreatePaymentURl(vnPayModel, _httpContextAccessor.HttpContext);
-    //                    break;
-    //                case "PAYPAL":
-    //                    var paymentRequest = new PaymentRequest
-    //                    {
-    //                        intent = "sale",
-    //                        payer = new Payer { payment_method = "paypal" },
-    //                        transactions = new[]
-    //                        {
-    //                        new TransactionPayPal
-    //                        {
-    //                            description = "PayPal Method",
-    //                            amount = new Amount{ currency = "USD", total = totalPriceInUSD.ToString(CultureInfo.InvariantCulture) },
-    //                            item_list = new ItemList
-    //                            {
-    //                                items = new[]
-    //                                {
-    //                                     new Item
-    //                                     {
-    //                                        name = "Name Product",
-    //                                        currency = "USD",
-    //                                        price = "10.00",
-    //                                        quantity = "1"
-    //                                     }
-    //                                }
-    //                            }
-
-    //                        }
-    //                    },
-    //                        redirect_urls = new RedirectUrls
-    //                        {
-    //                            return_url = RETURN_URL,
-    //                            cancel_url = CANCEL_URL
-    //                        }
-
-
-    //                    };
-    //                    var paymentResponse = await _paypalServices.CreatePaymentAsync(paymentRequest);
-    //                    PaymentUrl = paymentResponse.links.FirstOrDefault(link => link.rel == "approval_url")?.href;
-    //                    break;
-    //                default:
-    //                    return null;
-    //            }
-    //            var transaction = new FPetSpa.Repository.Data.Transaction
-    //            {
-    //                TransactionId = GenerateNewTransactionIDAsync(),
-    //                MethodId = methodId,
-    //                Status = (int)TransactionStatus.NOTPAID,
-    //                TransactionDate = DateOnly.FromDateTime(DateTime.Now)
-    //            };
-
-    //            Order orderTemp = new Order
-    //            {
-    //                OrderId = OrderIdTemp,
-    //                StaffId = staffID,
-    //                CustomerId = CustomerId,
-    //                Total = totalPriceInUSD,
-    //                TransactionId = transaction.TransactionId,
-    //                RequiredDate = bookingDateTime,
-    //                Status = (int)OrderStatusEnum.Pending
-    //            };
-
-    //            ServiceOrderDetail serviceOrderDetail = new ServiceOrderDetail
-    //            {
-
-    //                ServiceId = service.ServiceId,
-    //                OrderId = OrderIdTemp,
-    //                PetId = PetId,
-    //                Discount = 0,
-    //                Price = totalPriceInUSD,
-    //                PetWeight = pet.PetWeight
-
-    //            };
-
-    //            _context.Transactions.Add(transaction);
-    //            _context.Orders.Add(orderTemp);
-    //            _context.ServiceOrderDetails.Add(serviceOrderDetail);
-    //            await _context.SaveChangesAsync();
-    //            await _context.Database.CommitTransactionAsync();
-    //            return PaymentUrl;
-
-    //        }
-    //    }
-    //    return null;
-    //}
     public async Task<string> StartCheckoutServices(string ServicesId, string CustomerId, string PetId, string PaymentMethod, DateTime bookingDateTime, string? voucherCode = null)
     {
         const string staffID = "fee3ede4-5aa2-484b-bc12-7cdc4d9437ac";
@@ -616,26 +356,26 @@ public class OrderRepository
                             payer = new Payer { payment_method = "paypal" },
                             transactions = new[]
                             {
-                            new TransactionPayPal
-                            {
-                                description = "PayPal Method",
-                                amount = new Amount{ currency = "USD", total = totalPriceInUSD.ToString(CultureInfo.InvariantCulture) },
-                                item_list = new ItemList
-                                {
-                                    items = new[]
-                                    {
-                                        new Item
-                                        {
-                                            name = "Name Product",
-                                            currency = "USD",
-                                            price = "10.00",
-                                            quantity = "1"
-                                        }
-                                    }
-                                }
-                            }
-                        },
-                            redirect_urls = new RedirectUrls
+                         new TransactionPayPal
+                         {
+                             description = "PayPal Method",
+                             amount = new Amount{ currency = "USD", total = totalPriceInUSD.ToString(CultureInfo.InvariantCulture) },
+                             item_list = new ItemList
+                             {
+                                 items = new[]
+                                 {
+                                     new Item
+                                     {
+                                         name = "Name Product",
+                                         currency = "USD",
+                                         price = "10.00",
+                                         quantity = "1"
+                                     }
+                                 }
+                             }
+                         }
+                     },
+          redirect_urls = new RedirectUrls
                             {
                                 return_url = RETURN_URL,
                                 cancel_url = CANCEL_URL
@@ -694,7 +434,6 @@ public class OrderRepository
         }
         return null;
     }
-
     public virtual async Task<Boolean> AfterCheckOutService(string orderId)
     {
         Order order = await _context.Orders.FindAsync(orderId);
@@ -713,7 +452,9 @@ public class OrderRepository
                 var tracker = _context.Transactions.Attach(transaction);
                 tracker.State = EntityState.Modified;
                 await _context.SaveChangesAsync();
-                await _sendMailServicers.SendEmailAsync(
+                byte[] qrCodeBase64 = GenerateQRCode($"{orderId}");
+                await _sendMailServicers.SendEmailWithQRCodeAsync(
+
                     user.Email!,
                     "[CHECKOUT MAIL]",
                      $"<h3>Thank you {user.FullName} for using our services, </h3> " +
@@ -729,7 +470,8 @@ public class OrderRepository
                      $"Price will increace 50% from 20 - 30Kg" + "<br></br>" +
                      $"Price will increace double upper than 30kg" + "<br></br>" +
                     $"Trasaction Date: {transaction.TransactionDate} " + "<br></br>" +
-                     "We hope you'll have a best day <3 <3 <3");
+                     @$"We hope you'll have a best day <3. Please give this QR for staff when you come to using our services for check in.
+                        <img src='cid:qrcode' alt='QR Code' /><br />", qrCodeBase64);
                 return true;
             }
         }
@@ -1101,7 +843,31 @@ public class OrderRepository
         }
         return null;
     }
+    public byte[] GenerateQRCode(string text)
+    {
+        using (var qrGenerator = new QRCodeGenerator())
+        {
+            var qrCodeData = qrGenerator.CreateQrCode(text, QRCodeGenerator.ECCLevel.Q);
+            var qrCode = new PngByteQRCode(qrCodeData);
+            return qrCode.GetGraphic(20);
 
+        }
+    }
+
+
+    public async Task<Boolean> CheckInService(string OrderId)
+    {
+        Order order = await _context.Orders.FindAsync(OrderId);
+        if(order != null && OrderId.StartsWith("ORS"))
+        {
+            if(order.Status == (byte)OrderStatusEnum.StaffAccepted)
+            {
+                order.Status = (byte)OrderStatusEnum.Processing;
+                return true;
+            }
+        }
+        return false;
+    }
 }
 
 

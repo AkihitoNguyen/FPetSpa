@@ -1,7 +1,12 @@
-﻿using FPetSpa.Repository.Model;
+
+﻿using FPetSpa.Repository.Data;
+using FPetSpa.Repository.Model;
 using MailKit.Net.Smtp;
 using Microsoft.Extensions.Options;
 using MimeKit;
+using System.Net.Mail;
+using System.Net.Mime;
+
 
 namespace FPetSpa.Repository.Services
 {
@@ -18,21 +23,6 @@ namespace FPetSpa.Repository.Services
 
         public async Task SendEmailAsync(string email, string subject, string htmlMessage)
         {
-            //serCredential credential;
-
-            //using(var stream = new FileStream(_gmailSettings.ClientSecretFilePath, FileMode.Open, FileAccess.Read))
-            //{
-            //    string credPath = "token.json";
-            //    credential = await GoogleWebAuthorizationBroker.AuthorizeAsync(
-            //        GoogleClientSecrets.FromStream(stream).Secrets,
-            //        Scopes,
-            //        "user",
-            //        CancellationToken.None,
-            //        new FileDataStore(credPath, true));
-            //}   
-
-            //var accessToken = await credential.GetAccessTokenForRequestAsync();
-
             var message = new MimeMessage();
             message.From.Add(new MailboxAddress("FpetSpa", "hungnpse172907@fpt.edu.vn"));
             message.To.Add(new MailboxAddress("", email));
@@ -45,7 +35,7 @@ namespace FPetSpa.Repository.Services
 
             try
             {
-                using (var client = new SmtpClient())
+                using (var client = new MailKit.Net.Smtp.SmtpClient())
                 {
                     await client.ConnectAsync("smtp.gmail.com", 587, MailKit.Security.SecureSocketOptions.StartTls);
                     // var oauth2 = new SaslMechanismOAuth2("hungnpse172907@fpt.edu.vn", accessToken);
@@ -63,7 +53,45 @@ namespace FPetSpa.Repository.Services
                 await message.WriteToAsync(emailsavefile);
 
             }
+        }
 
+        public async Task SendEmailWithQRCodeAsync(string email, string subject, string htmlMessage, byte[] qrCodeBytes)
+        {
+
+            var messageMail = new MailMessage
+            {
+                From = new MailAddress("hungnpse172907@fpt.edu.vn", "FpetSpa"),
+                Subject = subject,
+                Body = htmlMessage,
+                IsBodyHtml = true
+            };
+
+
+            messageMail.To.Add(email);
+
+
+            var qrCodeAttachment = new Attachment(new MemoryStream(qrCodeBytes), "qrcode.png", MediaTypeNames.Image.Jpeg);
+            qrCodeAttachment.ContentId = "qrcode";
+            qrCodeAttachment.ContentDisposition.Inline = true;
+            qrCodeAttachment.ContentDisposition.DispositionType = DispositionTypeNames.Inline;
+
+            messageMail.Attachments.Add(qrCodeAttachment);
+
+
+            try
+            {
+                using (var client = new System.Net.Mail.SmtpClient("smtp.gmail.com"))
+                {
+                    client.Port = 587;
+                    client.Credentials = new System.Net.NetworkCredential("hungnpse172907@fpt.edu.vn", _gmailSettings.Password);
+                    client.EnableSsl = true;
+                    await client.SendMailAsync(messageMail);
+                }
+            }
+            catch (Exception ex)
+            {
+
+            }
 
         }
     }

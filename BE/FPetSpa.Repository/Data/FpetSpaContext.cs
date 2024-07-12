@@ -232,7 +232,9 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<ProductOrderDetail>(entity =>
         {
-            entity.HasKey(cd => new { cd.OrderId, cd.ProductId });
+
+            entity.HasKey(cd => cd.Id);
+            entity.Property(i => i.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.OrderId)
                 .HasMaxLength(20)
                 .HasColumnName("OrderID");
@@ -240,11 +242,8 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.ProductId).HasMaxLength(20);
 
             entity.HasOne(d => d.Order).WithMany(p => p.ProductOrderDetails)
-                .HasForeignKey(d => d.OrderId)
                 .HasConstraintName("FK_ProductOrderDetails.OrderID");
-
             entity.HasOne(d => d.Product).WithMany()
-                .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("FK_ProductOrderDetails.ProductId");
 
 
@@ -272,8 +271,9 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<ServiceOrderDetail>(entity =>
         {
-            entity.HasKey(cd => new { cd.OrderId, cd.ServiceId });
 
+            entity.HasKey(cd => cd.Id);
+            entity.Property(i => i.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.OrderId)
                 .HasMaxLength(20)
                 .HasColumnName("OrderID");
@@ -285,15 +285,12 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
                 .HasColumnName("ServiceID");
 
             entity.HasOne(d => d.Order).WithMany()
-                .HasForeignKey(d => d.OrderId)
                 .HasConstraintName("FK_ServiceOrderDetails.OrderID");
 
             entity.HasOne(d => d.Pet).WithMany()
-                .HasForeignKey(d => d.PetId)
                 .HasConstraintName("FK_ServiceOrderDetails.PetID");
 
             entity.HasOne(d => d.Service).WithMany()
-                .HasForeignKey(d => d.ServiceId)
                 .HasConstraintName("FK_ServiceOrderDetails.ServiceID");
         });
 

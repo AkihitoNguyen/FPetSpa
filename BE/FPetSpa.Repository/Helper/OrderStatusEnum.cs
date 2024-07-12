@@ -10,8 +10,10 @@ namespace FPetSpa.Repository.Helper
     {
         Pending = 0,
         Processing = 1,
-        Sucessfully = 2,
-        Cancel = 3,
-        False = 4
+        StaffAccepted = 2,
+        Sucessfully = 3,
+        Cancel = 4,
+        False = 5
+
     }
 }

@@ -135,29 +135,24 @@ namespace FPetSpa.Controllers
                 model.PetId,
                 model.PaymentMethod,
                 model.bookingDateTime,
-                model.VoucherId
+                 model.VoucherId
                 );
-            if(result != null) return Ok(result);
-            return BadRequest("Something went wrong!!!");    
+            if (result != null) return Ok(result);
+            return BadRequest("Something went wrong!!!");
         }
-            
 
-        
         [HttpPost("StartCheckoutProduct")]
         public async Task<IActionResult> StartcheckoutProduct(OrderProductModelRequest model)
         {
             const string idAdminAuto = "fee3ede4-5aa2-484b-bc12-7cdc4d9437ac";
             if (model != null)
             {
-              var result = await _unitOfWork.OrderRepository.StartCheckoutProduct(model.CustomerId, idAdminAuto, model.PaymentMethod, model.VoucherId);
+                var result = await _unitOfWork.OrderRepository.StartCheckoutProduct(model.CustomerId, idAdminAuto, model.PaymentMethod, model.VoucherId);
                 if (result != null) return Ok(result);
                 return BadRequest("Something went wrong!!");
             }
             return BadRequest("Cracking...Please comeback latter");
         }
-
-
-
         [HttpGet("ResponeCheckOut")]
         public async Task<IActionResult> ResponseCheckOut()
         {
@@ -195,7 +190,7 @@ namespace FPetSpa.Controllers
                 }
                 else if (orderId.StartsWith("ORS"))
                 {
-                    if ((orderId.StartsWith("ORS") || _unitOfWork.productOrderDetailRepository.getByOrderIdOnly(orderId) != null))
+                    if (!_unitOfWork.productOrderDetailRepository.getByOrderIdOnly(orderId).Result.IsNullOrEmpty())
                         result = await _unitOfWork.OrderRepository.AfterCheckOutServiceAddMoreProduct(orderId);
                     else result = await _unitOfWork.OrderRepository.AfterCheckOutService(orderId);
                 }
@@ -233,13 +228,14 @@ namespace FPetSpa.Controllers
             {
                 if (!string.IsNullOrEmpty(status))
                 {
-                    if (status.ToUpper().Equals("PROCESSING") || status.ToUpper().Equals("SUCCESSFULLY"))
+                    if (status.ToUpper().Equals("PROCESSING") || status.ToUpper().Equals("STAFFACCEPTED") || status.ToUpper().Equals("SUCCESSFULLY"))
                     {
                         if (status.ToUpper().Equals("PROCESSING")) order.Status = (byte)OrderStatusEnum.Processing;
+                        else if (status.ToUpper().Equals("STAFFACCEPTED")) order.Status = (byte)OrderStatusEnum.StaffAccepted;
                         else order.Status = (byte)OrderStatusEnum.Sucessfully;
                         await _unitOfWork.SaveChangesAsync() ;
                         return Ok("Update Successfully");
-                    }
+                    }else if(status.ToUpper().Equals("CANCEL")) order.Status = (byte)OrderStatusEnum.Cancel;
                     return BadRequest("Field Status incorrect");
                 }
             }
@@ -287,6 +283,16 @@ namespace FPetSpa.Controllers
                 if(result != null) return Ok(result);
             }
             return BadRequest();    
+        }
+        [HttpPut("CheckInSerivces")]
+        public async Task<IActionResult> checkInService(string orderId)
+        {
+            if(orderId != null)
+            {
+                var check = _unitOfWork.OrderRepository.CheckInService(orderId);
+                if(check != null) return Ok("Check-In Successfully");
+            }
+            return BadRequest();
         }
     }
 }

@@ -51,8 +51,8 @@ namespace FPetSpa.Controllers
                 { 
                     OrderId = x.OrderId!,
                     ProductId = x.ProductId!,
-                    ProductName = _unitOfWork.ProductRepository.GetByIdAsync(x.ProductId!).Result.ProductName!,
-                    PictureName = await _image.GetLinkByName("productfpetspa", _unitOfWork.ProductRepository.GetById(x.ProductId!).PictureName!),
+                    ProductName = _unitOfWork.ProductRepository.GetByIdAsync(x.ProductId).Result.ProductName ?? "Product Removed",
+                    PictureName = await _image.GetLinkByName("productfpetspa", _unitOfWork.ProductRepository.GetById(x.ProductId!).PictureName!) ?? await _image.GetLinkByName("errorbuckett", "avatar.png"),
                     Price = x.Price,
                     ProductQuantity = x.Quantity
                 }

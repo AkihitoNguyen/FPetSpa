@@ -50,11 +50,6 @@ namespace FPetSpa.Repository.Repository
             {
                 return null;
             }
-            //var result = await signInManager.PasswordSignInAsync(model.Gmail, model.Password, false, false);
-            //if(!result.Succeeded)
-            //{
-            //    return String.Empty;
-            //}
             if (userManager.IsEmailConfirmedAsync(user).Result == true)
             {
                 var authClaims = new List<Claim>
@@ -132,6 +127,7 @@ namespace FPetSpa.Repository.Repository
             return resutl;
         }
 
+
         public async Task<Boolean> ConfirmMail(string token, string id)
         {
             var user = await userManager.FindByIdAsync(id);
@@ -147,7 +143,6 @@ namespace FPetSpa.Repository.Repository
             }
             return false;
         }
-
         public async Task<TokenModel> SignInWithGoogle(string gmail, string name)
         {
             var user = await userManager.FindByEmailAsync(gmail);
@@ -305,6 +300,7 @@ namespace FPetSpa.Repository.Repository
             return resutl;
         }
 
+
         public Task<IdentityResult> ForgotPassword(string password)
         {
             return null;
@@ -341,7 +337,8 @@ namespace FPetSpa.Repository.Repository
 
             var verificationCode = new Random().Next(100000, 999999).ToString();
                 
-            TwilioClient.Init("ACafb376ac605551d73af92971182b9a25", "e8b93d47d36b636cb690d9164d1c6e64");
+
+            TwilioClient.Init("ACafb376ac605551d73af92971182b9a25", "066b8f1330debc674d30e24f6996ac0a");
             var verification = MessageResource.Create(
                      body: $"Your verification code is {verificationCode}",
                      from: new PhoneNumber("+12404938489"),

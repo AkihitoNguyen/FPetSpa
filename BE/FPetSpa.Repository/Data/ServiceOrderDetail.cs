@@ -2,6 +2,8 @@
 
 public partial class ServiceOrderDetail
 {
+    public int Id { get; set; }
+
     public string? ServiceId { get; set; }
 
     public string? OrderId { get; set; }

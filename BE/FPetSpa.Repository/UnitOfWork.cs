@@ -152,7 +152,17 @@ namespace FPetSpa.Repository
                 return this._orderGenericRepository;
             }
         }
-
+        public GenericRepository<Voucher> VoucherRepository
+        {
+            get
+            {
+                if (_voucher == null)
+                {
+                    this._voucher = new GenericRepository<Voucher>(_context);
+                }
+                return this._voucher;
+            }
+        }
         public GenericRepository<Transaction> TransactionRepository
         {
             get

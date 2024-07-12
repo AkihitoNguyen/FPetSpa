@@ -1,7 +1,8 @@
 ﻿using FPetSpa.Repository.Data;
 using FPetSpa.Repository;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 using FPetSpa.Models.VoucherModel;
 
 namespace FPetSpa.Controllers
@@ -55,22 +56,21 @@ namespace FPetSpa.Controllers
         [HttpPut("Update")]
         public async Task<IActionResult> UpdateVoucher(string id, RequestVoucher requestVoucher)
         {
-            if (id != requestVoucher.VoucherId)
-            {
-
+            if (id != requestVoucher.VoucherId) 
+            { 
+            
                 return BadRequest();
             }
-            var checkExits = await _unitOfWork.VoucherRepository.GetByIdAsync(id);
-            if (checkExits != null)
+        var checkExits = await _unitOfWork.VoucherRepository.GetByIdAsync(id);
+        if(checkExits != null)
             {
                 checkExits.VoucherId = requestVoucher.VoucherId;
                 checkExits.Description = requestVoucher.Description;
                 checkExits.StartDate = requestVoucher.StartDate;
                 checkExits.EndDate = requestVoucher.EndDate;
-
             }
-            _unitOfWork.VoucherRepository.Update(checkExits);
-            _unitOfWork.SaveChangesAsync();
+             _unitOfWork.VoucherRepository.Update(checkExits);
+             _unitOfWork.SaveChangesAsync();
             return Ok();
         }
 

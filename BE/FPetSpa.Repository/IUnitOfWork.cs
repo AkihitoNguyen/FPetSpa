@@ -16,8 +16,8 @@ namespace FPetSpa.Repository
         CartDetailRepository<CartDetail> CartDetails { get; }
         ServiceOrderDetailRepository<ServiceOrderDetail> ServiceOrderDetailRepository { get; }
         ProductOrderDetailRepositoty<ProductOrderDetail> productOrderDetailRepository { get; }
-        OrderRepository OrderRepository { get; }
         GenericRepository<Voucher> VoucherRepository { get; }
+        OrderRepository OrderRepository { get; }
         IAccountRepository _IaccountRepository { get; }
         Task<int> SaveChangesAsync();
         void Save();
