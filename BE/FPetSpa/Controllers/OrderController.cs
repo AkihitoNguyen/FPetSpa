@@ -134,7 +134,8 @@ namespace FPetSpa.Controllers
                 model.CustomerId!,
                 model.PetId,
                 model.PaymentMethod,
-                model.bookingDateTime
+                model.bookingDateTime,
+                model.VoucherId
                 );
             if(result != null) return Ok(result);
             return BadRequest("Something went wrong!!!");    
@@ -148,7 +149,7 @@ namespace FPetSpa.Controllers
             const string idAdminAuto = "fee3ede4-5aa2-484b-bc12-7cdc4d9437ac";
             if (model != null)
             {
-              var result = await _unitOfWork.OrderRepository.StartCheckoutProduct(model.CustomerId, idAdminAuto, model.PaymentMethod);
+              var result = await _unitOfWork.OrderRepository.StartCheckoutProduct(model.CustomerId, idAdminAuto, model.PaymentMethod, model.VoucherId);
                 if (result != null) return Ok(result);
                 return BadRequest("Something went wrong!!");
             }
