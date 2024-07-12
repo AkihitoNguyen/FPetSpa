@@ -95,7 +95,7 @@ const Register = () => {
     
         registerUser(newUser, dispatch, navigate)
         .then(() => {
-            toast.success("Register successful!");
+            toast.success("Register successful!Pls confirm email");
         })
         .catch((error) => {
             toast.error("Register failed. Please try again.");

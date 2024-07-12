@@ -1,7 +1,9 @@
+// eslint-disable-next-line no-unused-vars
 import React, { useState } from 'react'
 import SidebarProfile from '../../components/Profile/SidebarProfile'
 import UserProfile from '../../components/Profile/UserProfile';
 import PetInfor from '../../components/Profile/PetInfor';
+import OrderManagement from '../../components/Profile/OrderManagement';
 
 const Profile = () => {
 
@@ -19,10 +21,7 @@ const Profile = () => {
           <PetInfor/>
         )}
         {activeSection === 'order-management' && (
-          <div>
-            <h1 className="text-2xl font-bold">Quản lý đơn hàng</h1>
-            <p className="mt-4">Chi tiết về đơn hàng...</p>
-          </div>
+          <OrderManagement/>
         )}
       </div>
     </div>
