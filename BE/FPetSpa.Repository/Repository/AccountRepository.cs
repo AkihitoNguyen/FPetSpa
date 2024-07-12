@@ -299,13 +299,6 @@ namespace FPetSpa.Repository.Repository
             }
             return resutl;
         }
-
-
-        public Task<IdentityResult> ForgotPassword(string password)
-        {
-            return null;
-        }
-
         public async Task<ApplicationUser> GetCustomerByEmail(string mail)
         {
             if (mail != null)
@@ -377,5 +370,68 @@ namespace FPetSpa.Repository.Repository
 
             return false;
         }
+
+        public async Task<IdentityResult> ForgotPassword(string email)
+        {
+            var user = await userManager.FindByEmailAsync(email);
+            if (user == null) return null;
+            else
+            {
+                var tokenCode = await userManager.GeneratePasswordResetTokenAsync(user);
+                var encodeToken = HttpUtility.UrlEncode(tokenCode);
+
+                var callBackUrl = $"https://fpetspa.azurewebsites.net/api/account/confirm-email?token={encodeToken}&id={user.Id}";
+                await sendMailServices.SendEmailAsync(
+                    user.Email,
+                    "[ResetPassword]",
+                    $"Please click into this link <a href='{callBackUrl}'>Click here</a> to start <b>RESET YOUR PASSWORD</b>"
+                    );
+                return IdentityResult.Success;
+            }
+        }
+
+        public async Task<IdentityResult> ResetPasswordForget(string id, string password, string token)
+        {
+            var user = await userManager.FindByIdAsync(id);
+            if(user != null) 
+            { 
+                var result = await userManager.ChangePasswordAsync(user, password, token);
+                if(result.Succeeded)
+                {
+                    return IdentityResult.Success;
+                }
+                return IdentityResult.Failed();
+            }
+            return null;
+        }
+
+        public async Task<IdentityResult> RemoveAccount(string email, string password)
+        {
+            var user = await userManager.FindByNameAsync(email);
+            if (user != null)
+            {
+                var check = await userManager.CheckPasswordAsync(user, password);
+                if(check == true)
+                {
+                  var result =  await userManager.DeleteAsync(user);
+                    if( result.Succeeded ) return IdentityResult.Success;
+                }
+            }
+            return IdentityResult.Failed();
+        }
+
+
+        public async Task<IdentityResult> ChangePasswork(string email, string passwordOld, string passworkNew)
+        {
+            var user = await userManager.FindByNameAsync(email);
+            if (user != null)
+            {
+                var check = await userManager.ChangePasswordAsync(user, passwordOld, passworkNew);
+                if (check.Succeeded) return IdentityResult.Success;
+            }
+            return IdentityResult.Failed();
+        }
+
+
     }
 }

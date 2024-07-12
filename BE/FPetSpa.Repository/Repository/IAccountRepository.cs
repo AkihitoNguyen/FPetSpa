@@ -18,11 +18,13 @@ namespace FPetSpa.Repository.Repository
         public Task<IEnumerable> getAllCustomer();
         public Task<IEnumerable> getAllAdmin();
         public Task<IdentityResult> SignUpAdmin(SignUpModel admin);
-        public Task<IdentityResult> ForgotPassword(string password);
+        public Task<IdentityResult> ForgotPassword(string email);
+        public Task<IdentityResult> ResetPasswordForget(string mail, string password, string token);
         public Task<ApplicationUser> GetCustomerByEmail(string mail);
         public Task<ApplicationUser> GetCustomerById(string mail);
         public Task<Boolean> SendVerificationCode(string phone, Guid userId);
         public Task<Boolean> VerifyPhoneNumber(string Code, Guid userId);
-
+        public Task<IdentityResult> ChangePasswork(string email, string passwordOld, string passworkNew);
+        public Task<IdentityResult> RemoveAccount(string email, string password);
     }
 }
