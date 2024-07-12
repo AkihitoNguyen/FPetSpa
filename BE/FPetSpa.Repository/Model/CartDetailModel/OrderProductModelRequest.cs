@@ -4,5 +4,6 @@
     {
         public string CustomerId { get; set; }
         public string PaymentMethod { get; set; }
+        public string VoucherId { get; set; }
     }
 }

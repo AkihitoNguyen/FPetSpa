@@ -17,6 +17,7 @@ namespace FPetSpa.Repository
         private GenericRepository<Order> _orderGenericRepository;
         private GenericRepository<Category> _category;
         private GenericRepository<Transaction> _transaction;
+        private GenericRepository<Voucher> _voucher;
 
         public OrderRepository OrderRepository { get; }
         public IAccountRepository _IaccountRepository { get; }
@@ -27,7 +28,17 @@ namespace FPetSpa.Repository
             this.OrderRepository = orderRepository;
         }
 
-
+        public GenericRepository<Voucher> VoucherRepository
+        {
+            get
+            {
+                if (_voucher == null)
+                {
+                    this._voucher = new GenericRepository<Voucher>(_context);
+                }
+                return this._voucher;
+            }
+        }
         public GenericRepository<Service> ServiceRepository
         {
             get
