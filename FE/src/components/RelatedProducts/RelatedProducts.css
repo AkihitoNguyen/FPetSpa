@@ -1,4 +1,4 @@
-.relatedproducts {
+/* .relatedproducts {
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -16,13 +16,7 @@
     border-radius: 10px;
     background: #252525;
 }
-.relatedproducts-item {
-    display: flex;
-    gap: 1rem;
-    flex-wrap: nowrap;
-    flex-direction: row;
-    margin-left: 12px;
-}
+
 
 
 @media(max-width:1280px){
@@ -152,4 +146,4 @@
     vertical-align: top;
   }
    
-
+ */
