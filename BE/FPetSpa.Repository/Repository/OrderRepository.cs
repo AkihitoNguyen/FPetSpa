@@ -1,4 +1,6 @@
-﻿using FPetSpa.Repository.Data;
+﻿using Amazon.Runtime.Internal.Auth;
+using Amazon.S3.Model;
+using FPetSpa.Repository.Data;
 using FPetSpa.Repository.Helper;
 using FPetSpa.Repository.Model;
 using FPetSpa.Repository.Model.VnPayModel;
@@ -276,7 +278,6 @@ public class OrderRepository
         }
         return false;
     }
-
     public async Task<string> StartCheckoutServices(string ServicesId, string CustomerId, string PetId, string PaymentMethod, DateTime bookingDateTime, string? voucherCode = null)
     {
         const string staffID = "fee3ede4-5aa2-484b-bc12-7cdc4d9437ac";
@@ -374,7 +375,7 @@ public class OrderRepository
                              }
                          }
                      },
-                            redirect_urls = new RedirectUrls
+          redirect_urls = new RedirectUrls
                             {
                                 return_url = RETURN_URL,
                                 cancel_url = CANCEL_URL
@@ -433,8 +434,6 @@ public class OrderRepository
         }
         return null;
     }
-
-
     public virtual async Task<Boolean> AfterCheckOutService(string orderId)
     {
         Order order = await _context.Orders.FindAsync(orderId);
@@ -454,8 +453,8 @@ public class OrderRepository
                 tracker.State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 byte[] qrCodeBase64 = GenerateQRCode($"{orderId}");
-    
                 await _sendMailServicers.SendEmailWithQRCodeAsync(
+
                     user.Email!,
                     "[CHECKOUT MAIL]",
                      $"<h3>Thank you {user.FullName} for using our services, </h3> " +
@@ -844,9 +843,6 @@ public class OrderRepository
         }
         return null;
     }
-
-
-
     public byte[] GenerateQRCode(string text)
     {
         using (var qrGenerator = new QRCodeGenerator())

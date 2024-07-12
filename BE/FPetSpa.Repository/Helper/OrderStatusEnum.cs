@@ -14,5 +14,6 @@ namespace FPetSpa.Repository.Helper
         Sucessfully = 3,
         Cancel = 4,
         False = 5
+
     }
 }

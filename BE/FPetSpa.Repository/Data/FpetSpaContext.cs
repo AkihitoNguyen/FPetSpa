@@ -232,6 +232,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<ProductOrderDetail>(entity =>
         {
+
             entity.HasKey(cd => cd.Id);
             entity.Property(i => i.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.OrderId)
@@ -242,7 +243,6 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
             entity.HasOne(d => d.Order).WithMany(p => p.ProductOrderDetails)
                 .HasConstraintName("FK_ProductOrderDetails.OrderID");
-
             entity.HasOne(d => d.Product).WithMany()
                 .HasConstraintName("FK_ProductOrderDetails.ProductId");
 
@@ -271,6 +271,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<ServiceOrderDetail>(entity =>
         {
+
             entity.HasKey(cd => cd.Id);
             entity.Property(i => i.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.OrderId)

@@ -1,210 +1,230 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
+const FirstForm = ({ formValues, onChange, services, userPets }) => {
+  const today = dayjs().format("YYYY-MM-DD"); // Ngày hiện tại dùng cho min của input date
+  const currentTime = dayjs().format("HH:mm:ss"); // Thời gian hiện tại dùng để disable các khung giờ trong quá khứ
 
-const FirstForm = ({ formValues, onChange, option }) => {
-  const today = dayjs().format("YYYY-MM-DD");
+  // State để lưu trữ số slot còn lại
+  const [remainingSlots, setRemainingSlots] = useState([]);
+
+  // Hàm sinh danh sách các khung giờ từ 08:00 đến 19:00 cách nhau 30 phút
+  const generateTimeSlots = () => {
+    const slots = [];
+    let currentTime = dayjs().hour(8).minute(0).second(0);
+    const endTime = dayjs().hour(19).minute(0).second(0);
+
+    while (currentTime.isBefore(endTime)) {
+      slots.push(currentTime.format("HH:mm:ss"));
+      currentTime = currentTime.add(60, "minute");
+    }
+
+    return slots;
+  };
+
+  // Hàm gọi API để lấy dữ liệu booking
+  const fetchBookings = async () => {
+    try {
+      const response = await fetch(
+        "https://fpetspa.azurewebsites.net/api/Order/GetAllOrderService"
+      );
+      if (!response.ok) {
+        throw new Error("Failed to fetch bookings");
+      }
+      const bookings = await response.json();
+      return bookings;
+    } catch (error) {
+      console.error("Error fetching bookings:", error);
+      throw error;
+    }
+  };
+
+  // Hàm tính toán số slot còn lại dựa trên dữ liệu từ API
+  const calculateRemainingSlots = async () => {
+    try {
+      const bookings = await fetchBookings();
+
+      const remaining = generateTimeSlots().map((timeSlot) => {
+        // Tính tổng số lượng đã đặt cho từng khung giờ
+        const bookedCount = bookings
+          .filter(
+            (booking) =>
+              booking.bookingDate === formValues.date &&
+              booking.timeSlot === timeSlot
+          )
+          .reduce((total, booking) => total + booking.quantity, 0);
+
+        const remainingSlots = 10 - bookedCount; // Giả sử mỗi khung giờ có tối đa 10 slot
+
+        return { timeSlot, remaining: remainingSlots };
+      });
+
+      setRemainingSlots(remaining);
+    } catch (error) {
+      console.error("Error calculating remaining slots:", error);
+    }
+  };
+
+  // Sử dụng useEffect để tính toán số slot còn lại khi ngày hoặc khung giờ thay đổi
+  useEffect(() => {
+    calculateRemainingSlots();
+  }, [formValues.date, formValues.timeSlot]);
+
+  // Xử lý sự kiện thay đổi input
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    // Kiểm tra ngày không được trong quá khứ
+    if (name === "date" && value < today) {
+      alert("Ngày không thể là ngày trong quá khứ!");
+      return;
+    }
+
+    // Kiểm tra khung giờ không được trong quá khứ nếu ngày là hôm nay
+    if (name === "timeSlot" && formValues.date === today && value < currentTime) {
+      alert("Khung giờ không thể trong quá khứ!");
+      return;
+    }
+
+    // Truyền sự kiện thay đổi lên component cha (nếu cần)
+    onChange(e);
+  };
 
   return (
-    //
     <div className="">
-      <div className="mx-auto mt-32 max-w-2xl text-center ">
-        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          Customer Information
-        </h2>
-      </div>
-      <form action="#" method="POST" className="mx-auto max-w-xl">
-        {/* name */}
-        <div className="grid grid-cols-3 gap-x-8 gap-y-6 sm:grid-cols-2">
-          <div>
-            <label
-              htmlFor="full-name"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Full name
-            </label>
-            <div className="mt-2.5">
-              <input
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                type="text"
-                name="fullname"
-                id="full-name"
-                onChange={onChange}
-                value={formValues.fullname}
-              />
-            </div>
-          </div>
-
-          {/* phonenumber */}
-          <div>
-            <label
-              htmlFor="phone-number"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Phone number
-            </label>
-            <div className="mt-2.5">
-              <input
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                type="text"
-                name="phonenumber"
-                id="phone-number"
-                onChange={onChange}
-                value={formValues.phonenumber}
-              />
-            </div>
-          </div>
-        </div>
-      </form>
-
+      {/* Phần thông tin thú cưng */}
       <div className="mx-auto max-w-2xl text-center mt-5">
         <h3 className="text-xl font-semibold tracking-tight text-gray-900 sm:text-xl">
-          Pet Information
+          Đặt dịch vụ
         </h3>
       </div>
-      <form className="mx-auto mt-2 max-w-xl sm:mt-5">
+      <div className="mx-auto mt-2 max-w-xl sm:mt-5">
         <div className="grid grid-cols-3 gap-x-8 gap-y-6 sm:grid-cols-2">
-          {/* petname */}
+          {/* Chọn thú cưng */}
           <div className="">
             <label
-              htmlFor="pet"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Pet name
+              htmlFor="pet-id"
+              className="block text-sm font-semibold leading-6 text-gray-900"
+            >
+              Chọn thú cưng
             </label>
             <div className="mt-2.5">
-              <input
-                type="text"
-                name="pet"
-                id="pet"
-                onChange={onChange}
-                value={formValues.pet}
+              <select
+                name="petId"
+                id="pet-id"
+                onChange={handleInputChange}
+                value={formValues.petId}
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
+              >
+                <option value="">Chọn thú cưng</option>
+                {userPets.map((pet) => (
+                  <option key={pet.petId} value={pet.petId}>
+                    {pet.petName}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
-          {/* pet age */}
+          {/* Chọn ngày */}
           <div className="">
             <label
-              htmlFor="pet-age"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Pet age
+              htmlFor="date"
+              className="block text-sm font-semibold leading-6 text-gray-900"
+            >
+              Ngày
             </label>
             <div className="mt-2.5">
               <input
-                type="text"
-                name="petage"
-                id="pet-age"
-                onChange={onChange}
-                value={formValues.petage}
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          {/* type pet */}
-          <div className="">
-            <label
-              htmlFor="pet-type"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Type pet
-            </label>
-            <div className="mt-2.5">
-              <input
-                type="text"
-                name="pettype"
-                id="pet-type"
-                onChange={onChange}
-                value={formValues.pettype}
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-          {/* weight pet */}
-          <div className="">
-            <label
-              htmlFor="weight"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Weight
-            </label>
-            <div className="mt-2.5">
-              <input
-                type="text"
-                name="weight"
-                id="weight"
-                onChange={onChange}
-                value={formValues.weight}
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          {/* time */}
-          <div className="">
-            <label
-              htmlFor="time"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Time
-            </label>
-            <div className="mt-2.5">
-              <input
-                className="border rounded-lg"
                 type="date"
                 id="date"
                 name="date"
-                onChange={onChange}
+                onChange={handleInputChange}
                 value={formValues.date}
                 min={today}
               />
             </div>
           </div>
 
-          {/* service name */}
-          <div className="sm:col-span-2">
+          {/* Chọn khung giờ */}
+          <div className="">
             <label
-              htmlFor="service-type"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Select type
-            </label>
-            <div className="mb-6">
-              <select
-                className="block shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="servicetype"
-                name="servicetype"
-                onChange={onChange}
-                value={formValues.servicetype}>
-
-                {option && option.length > 0 ? (
-                  option.map((state) => (
-                    <option key={state.id} value={state.id}>
-                      {state.name}
-                    </option>
-                  ))
-                ) : (
-                  <option value="">No options available</option>
-                )}
-              </select>
-            </div>{" "}
-          </div>
-
-          <div className="sm:col-span-2">
-            <label
-              htmlFor="message"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Note
+              htmlFor="time-slot"
+              className="block text-sm font-semibold leading-6 text-gray-900"
+            >
+              Chọn khung giờ
             </label>
             <div className="mt-2.5">
-              <textarea
-                onChange={onChange}
-                value={formValues.message}
-                name="message"
-                id="message"
-                rows={4}
+              <select
+                name="timeSlot"
+                id="time-slot"
+                onChange={handleInputChange}
+                value={formValues.timeSlot}
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                defaultValue={""}
-              />
+              >
+                {remainingSlots.map((slot) => (
+                  <option
+                    key={slot.timeSlot}
+                    value={slot.timeSlot}
+                    disabled={formValues.date === today && slot.timeSlot < currentTime}
+                  >
+                    {`${slot.timeSlot} (${slot.remaining} slots left)`}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Chọn dịch vụ */}
+          <div className="sm:col-span-2 mt-4">
+            <label
+              htmlFor="serviceId"
+              className="block text-sm font-semibold leading-6 text-gray-900"
+            >
+              Chọn dịch vụ
+            </label>
+            <div className="mt-2.5">
+              <select
+                name="serviceId"
+                id="serviceId"
+                onChange={handleInputChange}
+                value={formValues.serviceId}
+                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              >
+                <option value="">Chọn dịch vụ</option>
+                {services.map((service) => (
+                  <option key={service.serviceId} value={service.serviceId}>
+                    {service.serviceName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Chọn phương thức thanh toán */}
+          <div className="sm:col-span-2 mt-4">
+            <label
+              htmlFor="payment-method"
+              className="block text-sm font-semibold leading-6 text-gray-900"
+            >
+              Phương thức thanh toán
+            </label>
+            <div className="mt-2.5">
+              <select
+                className="block shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="payment-method"
+                name="paymentMethod"
+                onChange={handleInputChange}
+                value={formValues.paymentMethod}
+              >
+                <option value="">Chọn phương thức thanh toán</option>
+                <option value="VNPay">VNPay</option>
+              </select>
             </div>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

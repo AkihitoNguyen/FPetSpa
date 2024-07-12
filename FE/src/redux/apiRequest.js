@@ -12,20 +12,38 @@ import {
     logoutFailed,
 } from "./authSlice";
 
+
+import {jwtDecode} from "jwt-decode";
+
+
 export const loginUser = (user, dispatch, navigate) => {
   dispatch(loginStart());
-  return axios.post(`https://fpetspa.azurewebsites.net/api/account/signin/customer
-`, user)
-      .then((res) => {
-          dispatch(loginSuccess(res.data));
-          navigate("/");
-          return res.data;
-      })
-      .catch((error) => {
-          dispatch(loginFailed());
-          throw error;
-      });
+  return axios.post(`https://fpetspa.azurewebsites.net/api/account/signin/customer`, user)
+    .then((res) => {
+      const accessToken = res.data.accessToken;
+      const refreshToken = res.data.refreshToken;
+      const decodedToken = jwtDecode(accessToken);
+      const userId = decodedToken["http://schemas.xmlsoap.org/ws/2005/05/identity/claims/nameidentifier"];
+      const fullName = res.data.fullName;
+
+      const userData = {
+        accessToken,
+        refreshToken,
+        userId,
+        fullName,
+      };
+
+      dispatch(loginSuccess(userData));
+      navigate("/");
+      return userData;
+    })
+    .catch((error) => {
+      dispatch(loginFailed());
+      throw error;
+    });
 };
+
+
 // https://localhost:7055/api/account/signin/customer
 // https://fpetspa.azurewebsites.net/api/account/signin/customer
 
@@ -92,18 +110,17 @@ export const addToCart = async (userId, productId, quantity) => {
       productId,
       quantity
     });
-    return response.data; // Assuming the response contains the updated cart data
+    return response.data; 
   } catch (error) {
     throw new Error('Failed to add item to cart');
   }
 };
 
-export const removeFromCart = async (userId, productId) => {
+export const removeFromCart = async (cartId) => {
   try {
     const response = await axios.delete('https://localhost:7055/api/Cart', {
       data: {
-        userId,
-        productId
+        cartId
       }
     });
     return response.data; // Assuming the response contains the updated cart data

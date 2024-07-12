@@ -141,9 +141,6 @@ namespace FPetSpa.Controllers
             return BadRequest("Something went wrong!!!");
         }
 
-
-
-
         [HttpPost("StartCheckoutProduct")]
         public async Task<IActionResult> StartcheckoutProduct(OrderProductModelRequest model)
         {
@@ -156,9 +153,6 @@ namespace FPetSpa.Controllers
             }
             return BadRequest("Cracking...Please comeback latter");
         }
-
-
-
         [HttpGet("ResponeCheckOut")]
         public async Task<IActionResult> ResponseCheckOut()
         {
@@ -241,7 +235,7 @@ namespace FPetSpa.Controllers
                         else order.Status = (byte)OrderStatusEnum.Sucessfully;
                         await _unitOfWork.SaveChangesAsync() ;
                         return Ok("Update Successfully");
-                    }else if(status.ToUpper().Equals("CANCEL")) order.Status = (byte)OrderStatusEnum.Cancel;    
+                    }else if(status.ToUpper().Equals("CANCEL")) order.Status = (byte)OrderStatusEnum.Cancel;
                     return BadRequest("Field Status incorrect");
                 }
             }
@@ -290,7 +284,6 @@ namespace FPetSpa.Controllers
             }
             return BadRequest();    
         }
-
         [HttpPut("CheckInSerivces")]
         public async Task<IActionResult> checkInService(string orderId)
         {

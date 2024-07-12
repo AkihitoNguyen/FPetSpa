@@ -1,5 +1,3 @@
-// Navbar.jsx
-
 // eslint-disable-next-line no-unused-vars
 import React, { useState, useContext } from "react";
 import { Link, useNavigate } from "react-router-dom";
@@ -7,17 +5,14 @@ import { useDispatch, useSelector } from "react-redux";
 import { logoutUser } from "../../redux/apiRequest";
 import { createAxiosInstance } from "../../createInstance";
 import { logoutSuccess } from "../../redux/authSlice";
-import { ShopContext } from '../../components/Context/ShopContext'
+import { ShopContext } from "../../components/Context/ShopContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
-import Button from '@mui/material/Button';
-import Menu from '@mui/material/Menu';
-import MenuItem from '@mui/material/MenuItem';
-
-
-import Modal from "../Modal/Modal";
+import Avatar from "@mui/material/Avatar";
+import Stack from "@mui/material/Stack";
+import Button from "@mui/material/Button";
+import Menu from "@mui/material/Menu";
+import MenuItem from "@mui/material/MenuItem";
 import { assets } from "../../assets/assets";
 import "../Navbar/Navbar.css";
 
@@ -28,18 +23,19 @@ const Navbar = () => {
   const id = user?._id;
   const accessToken = user?.accessToken;
   let axiosJWT = createAxiosInstance(user, dispatch, logoutSuccess);
-  const { getTotalCartItems } = useContext(ShopContext);
+  const { getTotalCartItems } = useContext(ShopContext) || {
+    getTotalCartItems: () => 0,
+  };
 
-  const [anchorEl, setAnchorEl] = useState('');
+  const [anchorEl, setAnchorEl] = useState("");
   const open = Boolean(anchorEl);
-  const [isModalOpen, setModalOpen] = useState(false); // State to control modal visibility
 
   const handleClick = (event) => {
     setAnchorEl(event.currentTarget);
   };
 
   const handleClose = () => {
-    setAnchorEl('');
+    setAnchorEl("");
   };
 
   const handleLogout = () => {
@@ -59,7 +55,7 @@ const Navbar = () => {
     for (i = 0; i < string.length; i += 1) {
       hash = string.charCodeAt(i) + ((hash << 5) - hash);
     }
-    let color = '#';
+    let color = "#";
     for (i = 0; i < 3; i += 1) {
       const value = (hash >> (i * 8)) & 0xff;
       color += `00${value.toString(16)}`.slice(-2);
@@ -68,37 +64,32 @@ const Navbar = () => {
   }
 
   function stringAvatar(name) {
-    if (!name || typeof name !== 'string') {
-      // Handle case where name is undefined, null, or not a string
+    if (!name || typeof name !== "string") {
       return {
         sx: {
-          bgcolor: '#000000', // Default color if name is invalid
+          bgcolor: "#000000",
         },
-        children: '',
+        children: "",
       };
     }
-  
-    const nameParts = name.split(' ');
+
+    const nameParts = name.split(" ");
     if (nameParts.length < 2) {
-      // Handle case where name doesn't have a space (single part name)
       return {
         sx: {
-          bgcolor: stringToColor(name), // Use color based on full name
+          bgcolor: stringToColor(name),
         },
-        children: name.charAt(0), // Use the first character of the name
+        children: name.charAt(0),
       };
     }
-  
-    // Normal case where name has two or more parts
+
     return {
       sx: {
-        bgcolor: stringToColor(name), // Use color based on full name
+        bgcolor: stringToColor(name),
       },
-      children: `${nameParts[0][0]}${nameParts[1][0]}`, // First characters of first and last name
+      children: `${nameParts[0][0]}${nameParts[1][0]}`,
     };
   }
-  
-
 
   return (
     <div className="navbar">
@@ -111,7 +102,7 @@ const Navbar = () => {
       <ul className="navbar-menu">
         <li onClick={() => navigate("/service")}>Service</li>
         <li onClick={() => navigate("/product")}>Product</li>
-        <li onClick={() => navigate("/about-us")}>About us</li>
+        <li onClick={() => navigate("/cart")}>About us</li>
         <li onClick={() => navigate("/contact-us")}>Contact us</li>
       </ul>
       <div className="navbar-right">
@@ -120,13 +111,13 @@ const Navbar = () => {
           <div>
             <Button
               id="basic-button"
-              aria-controls={open ? 'basic-menu' : undefined}
+              aria-controls={open ? "basic-menu" : undefined}
               aria-haspopup="true"
-              aria-expanded={open ? 'true' : undefined}
-              onClick={handleClick}
-            >
+              aria-expanded={open ? "true" : undefined}
+              onClick={handleClick}>
               <Stack direction="row" spacing={2}>
                 <Avatar {...stringAvatar(user.fullName)} />
+                {/* <Avatar {...stringAvatar(user.id)} /> */}
               </Stack>
             </Button>
             <Menu
@@ -135,13 +126,19 @@ const Navbar = () => {
               open={open}
               onClose={handleClose}
               MenuListProps={{
-                'aria-labelledby': 'basic-button',
-              }}
-            >
-              <MenuItem onClick={handleClose}>Profile</MenuItem>
-              <MenuItem onClick={handleClose}>My account</MenuItem>
+                "aria-labelledby": "basic-button",
+              }}>
               <MenuItem onClick={handleClose}>
-                <Link to="/logout" className="navbar-logout" onClick={handleLogout}>
+                <Link to="/profile">Profile</Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link to="/booking-history">Booking history</Link>
+              </MenuItem>
+              <MenuItem onClick={handleClose}>
+                <Link
+                  to="/logout"
+                  className="navbar-logout"
+                  onClick={handleLogout}>
                   Logout
                 </Link>
               </MenuItem>
@@ -156,11 +153,12 @@ const Navbar = () => {
           </div>
         )}
         <div className="navbar-cart-icon">
-            <img src={assets.cart} alt="" className="cart" onClick={() => setModalOpen(true)}/>
+          <Link to="/cart">
+            <img src={assets.cart} alt="" className="cart" />
+            <div className="nav-cart-count">{getTotalCartItems()}</div>
+          </Link>
         </div>
-        <div className="nav-cart-count">{getTotalCartItems()}</div>
       </div>
-      <Modal isOpen={isModalOpen} onClose={() => setModalOpen(false)} /> {/* Pass props to Modal */}
       <ToastContainer />
     </div>
   );

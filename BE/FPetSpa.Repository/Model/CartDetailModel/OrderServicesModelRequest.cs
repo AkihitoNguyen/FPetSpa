@@ -12,6 +12,5 @@ namespace FPetSpa.Repository.Model.OrderModel
         [Required]
         public DateTime bookingDateTime { get; set; }
         public string VoucherId { get; set; }
-
     }
 }
