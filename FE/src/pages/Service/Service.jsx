@@ -19,6 +19,7 @@ const Service = () => {
   };
 
   return (
+    
     <div className="min-h-screen max-w-full mt-10">
       <div className="mx-auto flex flex-col lg:flex-row items-center justify-center gap-x-20 lg:gap-x-0">
         <div className="lg:text-left">
@@ -52,7 +53,6 @@ const Service = () => {
           />
         </div>
       </div>
-      {/*  */}
       <div className="bg-myCusColor">
         <ServiceContent2 />
       </div>

@@ -27,6 +27,10 @@ import AddOrder from "./components/DashBoard/ServiceManagement.jsx/AddOrder";
 import Layout from "./components/Layout";
 import User from "./components/DashBoard/User";
 import GetProduct from "./components/DashBoard/ProductManage.jsx/GetProduct";
+import Dashboards from "./components/DashBoard/Dashboards";
+import AddService from "./components/DashBoard/ServiceManagement.jsx/AddService";
+import EditService from "./components/DashBoard/ServiceManagement.jsx/EditService";
+import ViewService from "./components/DashBoard/ServiceManagement.jsx/ViewService";
 
 const App = () => {
   const [showNavbarAndFooter, setShowNavbarAndFooter] = useState(true);
@@ -65,8 +69,12 @@ const App = () => {
           <Route path="/dashboard" element={<DashBoard />} />
 
           <Route path="/layout" element={<Layout />}>
+            <Route path="/layout/dashboards" element={<Dashboards />} />
             <Route path="/layout/add-order/:orderId" element={<AddOrder />} />
             <Route path="/layout/service-info" element={<GetService />} />
+            <Route path="/layout/add-service" element={<AddService />} />
+            <Route path="/layout/edit-service/:servicesId" element={<EditService />} />
+            <Route path="/layout/view-service" element={<ViewService />} />
             <Route path="/layout/account-info" element={<User />} />
             <Route path="/layout/product-info" element={<GetProduct />} />
           </Route>

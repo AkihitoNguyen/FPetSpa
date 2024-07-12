@@ -19,27 +19,28 @@ const UserProfile = () => {
             headers: { Authorization: `Bearer ${user.accessToken}` },
           }
         );
-
-        const customer = response.data.find((customer) => customer._id === user._id);
-
-        if (customer) {
-          setFullName(customer.fullName);
-          setEmail(customer.email);
-          setPhoneNumber(customer.phoneNumber);
+        console.log(response.data); // Ghi log phản hồi API để kiểm tra dữ liệu
+  
+        const currentUser = response.data.find((customer) => customer.id === user.userId);
+  
+        if (currentUser) {
+          setFullName(currentUser.fullName);
+          setEmail(currentUser.email);
+          setPhoneNumber(currentUser.phoneNumber);
         }
       } catch (err) {
         setError(err.message);
         alert("Failed to fetch user details. Please try again.");
       }
     };
-
+  
     if (user) {
       fetchUserDetails();
     }
   }, [user]);
 
   if (!user) {
-    return <div>Loading...</div>;
+    return <div><Loading/></div>;
   }
 
   return (

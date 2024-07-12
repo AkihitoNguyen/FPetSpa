@@ -4,6 +4,7 @@ import axios from "axios";
 import AddNewPet from "./AddNewPet";
 import UpdatePet from "./UpdatePet";
 import DeletePet from "./DeletePet";
+import Loading from "../Loading";
 
 const PetProfile = () => {
   const currentUser = useSelector((state) => state.auth.login.currentUser);
@@ -216,7 +217,7 @@ const PetProfile = () => {
       </div>
 
       {isLoading ? (
-        <div>Đang tải dữ liệu...</div>
+        <Loading/>
       ) : (
         <>
           <div className="mb-6">

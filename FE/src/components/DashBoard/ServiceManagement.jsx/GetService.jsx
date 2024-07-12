@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import Loading from "../../Loading";
 const GetService = () => {
   const [orders, setOrders] = useState([]);
   const [filteredOrders, setFilteredOrders] = useState([]);
@@ -10,10 +11,16 @@ const GetService = () => {
   const [currentPage, setCurrentPage] = useState(1);
   const [pageSize] = useState(6); // Số lượng đơn hàng trên mỗi trang
   const [searchTerm, setSearchTerm] = useState(""); // Từ khóa tìm kiếm
+  const [isLoading, setIsLoading] = useState(false);
 
   const navigate = useNavigate();
 
   useEffect(() => {
+    fetchOrders();
+  }, []);
+
+  const fetchOrders = () => {
+    setIsLoading(true);
     axios
       .get("https://fpetspa.azurewebsites.net/api/Order/GetAllOrder")
       .then((response) => {
@@ -27,8 +34,11 @@ const GetService = () => {
       })
       .catch((error) => {
         console.error("Error fetching orders:", error);
+      })
+      .finally(() => {
+        setIsLoading(false);
       });
-  }, []);
+  };
 
   // Tính toán danh sách đơn hàng hiển thị trên từng trang
   const indexOfLastOrder = currentPage * pageSize;
@@ -39,6 +49,7 @@ const GetService = () => {
   );
 
   const updateOrderStatus = async (orderId, newStatus) => {
+    setIsLoading(true);
     try {
       const response = await axios.put(
         "https://fpetspa.azurewebsites.net/api/Order/UpdateOrderStatus",
@@ -65,6 +76,8 @@ const GetService = () => {
       setFilteredOrders(updatedFilteredOrders);
     } catch (error) {
       console.error("Error updating order status:", error);
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -130,7 +143,7 @@ const GetService = () => {
   };
 
   const handleAddOrder = () => {
-    if (selectedOrders) {
+    if (selectedOrders.length > 0) {
       navigate(`/layout/add-order/${selectedOrders}`);
     } else {
       alert("Please select an order to add.");
@@ -168,85 +181,89 @@ const GetService = () => {
     <div className="p-4">
       <h1 className="text-[17.592px] font-semibold mb-4">Booking Listing</h1>
 
-      <div className="flex items-center space-x-4 mt-4 mb-1.5">
-        <div>
-          <input
-            type="text"
-            placeholder="Search Order"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            className="inline-flex items-center justify-between w-[222px] h-[41.57px] px-[13px] py-[10.075px] rounded-md text-[#99A1B7] outline-none bg-[#F9F9F9] text-sm font-medium hover:bg-gray-50"
-          />
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className="flex items-center space-x-4 mt-4 mb-1.5">
+          <div>
+            <input
+              type="text"
+              placeholder="Search Order"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="inline-flex items-center justify-between w-[222px] h-[41.57px] px-[13px] py-[10.075px] rounded-md text-[#99A1B7] outline-none bg-[#F9F9F9] text-sm font-medium hover:bg-gray-50"
+            />
+            <button
+              onClick={handleSearch}
+              className="ml-2 px-4 py-2 bg-[#1B84FF] text-white rounded-md ">
+              Search
+            </button>
+          </div>
+
+          <div className="relative inline-block text-left">
+            <button
+              onClick={() => toggleDropdown("statusDropdown")}
+              className="inline-flex items-center justify-between w-[146px] rounded-md px-4 py-2 text-[#99A1B7] bg-[#F9F9F9] text-sm font-medium hover:bg-gray-50">
+              <span>
+                {currentStatus ? statusText(parseInt(currentStatus)) : "Status"}
+              </span>
+              <svg
+                className="ml-2 -mr-1 h-5 w-5 mb-[3px] transform transition-transform duration-200"
+                xmlns="http://www.w3.org/2000/svg"
+                viewBox="0 0 20 20"
+                fill="currentColor"
+                aria-hidden="true">
+                <path
+                  fillRule="evenodd"
+                  d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
+                  clipRule="evenodd"
+                />
+              </svg>
+            </button>
+
+            {dropdownState["statusDropdown"] && (
+              <div className="absolute right-0 mt-2 w-[146px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
+                <button
+                  onClick={() => handleSelect("")}
+                  className="block w-full px-4 py-2 text-[13px] font-normal text-left text-[#4B5675] hover:bg-gray-100 hover:text-gray-900">
+                  All
+                </button>
+                <button
+                  onClick={() => handleSelect(0)}
+                  className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
+                  Pending
+                </button>
+                <button
+                  onClick={() => handleSelect(1)}
+                  className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
+                  Staff Accepted
+                </button>
+                <button
+                  onClick={() => handleSelect(2)}
+                  className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
+                  Completed
+                </button>
+                <button
+                  onClick={() => handleSelect(3)}
+                  className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
+                  Cancelled
+                </button>
+                <button
+                  onClick={() => handleSelect(4)}
+                  className="block w-full px-4 py-2 text-[13px] text-left text-gray-700 hover:bg-gray-100 hover:text-gray-900">
+                  Failed
+                </button>
+              </div>
+            )}
+          </div>
+
           <button
-            onClick={handleSearch}
-            className="ml-2 px-4 py-2 bg-[#1B84FF] text-white rounded-md ">
-            Search
+            onClick={handleAddOrder}
+            className="inline-flex items-center justify-center w-[109.5px] h-[40.3906px] px-[20.5px] py-[11.075px] text-[13.2px] font-medium text-white bg-[#1B84FF] rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
+            Add Order
           </button>
         </div>
-
-        <div className="relative inline-block text-left">
-          <button
-            onClick={() => toggleDropdown("statusDropdown")}
-            className="inline-flex items-center justify-between w-[146px] rounded-md px-4 py-2 text-[#99A1B7] bg-[#F9F9F9] text-sm font-medium hover:bg-gray-50">
-            <span>
-              {currentStatus ? statusText(parseInt(currentStatus)) : "Status"}
-            </span>
-            <svg
-              className="ml-2 -mr-1 h-5 w-5 mb-[3px] transform transition-transform duration-200"
-              xmlns="http://www.w3.org/2000/svg"
-              viewBox="0 0 20 20"
-              fill="currentColor"
-              aria-hidden="true">
-              <path
-                fillRule="evenodd"
-                d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                clipRule="evenodd"
-              />
-            </svg>
-          </button>
-
-          {dropdownState["statusDropdown"] && (
-            <div className="absolute right-0 mt-2 w-[146px] rounded-md shadow-lg bg-white ring-1 ring-black ring-opacity-5">
-              <button
-                onClick={() => handleSelect("")}
-                className="block w-full px-4 py-2 text-[13px] font-normal text-left text-[#4B5675] hover:bg-gray-100 hover:text-gray-900">
-                All
-              </button>
-              <button
-                onClick={() => handleSelect(0)}
-                className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
-                Pending
-              </button>
-              <button
-                onClick={() => handleSelect(1)}
-                className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
-                Staff Accepted
-              </button>
-              <button
-                onClick={() => handleSelect(2)}
-                className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
-                Completed
-              </button>
-              <button
-                onClick={() => handleSelect(3)}
-                className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
-                Cancelled
-              </button>
-              <button
-                onClick={() => handleSelect(4)}
-                className="block w-full px-4 py-2 text-[13px] text-left text-gray-700 hover:bg-gray-100 hover:text-gray-900">
-                Failed
-              </button>
-            </div>
-          )}
-        </div>
-
-        <button
-          onClick={handleAddOrder}
-          className="inline-flex items-center justify-center w-[109.5px] h-[40.3906px] px-[20.5px] py-[11.075px] text-[13.2px] font-medium text-white bg-[#1B84FF] rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-          Add Order
-        </button>
-      </div>
+      )}
 
       <table className="min-w-full bg-white border border-gray-200 rounded-md mt-4">
         <thead>
@@ -254,8 +271,7 @@ const GetService = () => {
             <th className="w-[20px] px-6 py-3 text-left text-[12.35px] font-semibold text-gray-500 uppercase tracking-wider">
               <input
                 type="checkbox"
-                onChange={() => {
-                }}
+                onChange={() => {}}
                 className="cursor-pointer"
               />
             </th>
@@ -315,7 +331,7 @@ const GetService = () => {
                 <div className="relative inline-block text-left">
                   <button
                     onClick={() => toggleDropdown(order.orderId)}
-                    className="inline-flex items-center justify-center w-full px-3.5 py-[8.15px] bg-[#F9F9F9] text-[12.35px] font-medium text-gray-700 rounded-md hover:bg-gray-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500">
+                    className="inline-flex items-center justify-center w-full px-3.5 py-[8.15px] bg-[#F9F9F9] text-[12.35px] font-medium text-gray-700 rounded-md hover:bg-[#E9F3FF] hover:text-[#1B84FF]">
                     Actions
                     <svg
                       className="-mr-1 ml-2 h-4 w-4 mb-[3px] transform transition-transform duration-200"
@@ -345,7 +361,7 @@ const GetService = () => {
                           updateOrderStatus(order.orderId, "PROCESSING")
                         }
                         className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
-                        Pending
+                        Accept
                       </button>
                     </span>
                   )}
