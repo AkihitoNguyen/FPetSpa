@@ -1,10 +1,25 @@
-import React from "react";
+// eslint-disable-next-line no-unused-vars
+import React from "react";  
 import { useNavigate } from "react-router-dom";
 import { assets } from "../../assets/assets";
-import ServiceContent from "../../components/Content/ServiceContent";
 import ServiceContent2 from "../../components/Content/ServiceContent2";
+import { useSelector } from "react-redux";
+
 const Service = () => {
   const navigate = useNavigate();
+
+  // Assume isLoggedIn is a state variable that determines login status
+  const isLoggedIn = useSelector((state) => state.auth.login?.currentUser);
+
+  const handleBookingClick = () => {
+    if (isLoggedIn) {
+      navigate("/booking");
+    } else {
+      // If not logged in, show login prompt and redirect to /login
+      alert("Please log in to book a service.");
+      navigate("/login", { state: { returnTo: "/service" } });
+    }
+  };
 
   return (
     <div className="max-h-screen max-w-full mt-10">
@@ -20,7 +35,7 @@ const Service = () => {
             At Fpet, we understand that your pet is family, and we treat them as{" "}
             <br />
             such. With a range of services including pet sitting, and <br />
-            personalized training, we're here to support you and your pet every{" "}
+            personalized training, were here to support you and your pet every{" "}
             <br />
             step of the way. Trust us to provide the care and attention your{" "}
             <br />
@@ -28,9 +43,7 @@ const Service = () => {
           </p>
           <button
             className="border rounded-full bg-black text-white py-2.5 px-16"
-            onClick={() => {
-              navigate("/booking");
-            }}>
+            onClick={handleBookingClick}>
             Booking
           </button>
         </div>

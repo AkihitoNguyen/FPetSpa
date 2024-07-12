@@ -12,25 +12,13 @@ import Checkbox from '@mui/material/Checkbox';
 import Grid from '@mui/material/Grid';
 import Box from '@mui/material/Box';
 
-import Typography from '@mui/material/Typography';
+
 import { assets } from "../../assets/assets";
 import { createTheme, ThemeProvider } from '@mui/material/styles';
 import Paper from '@mui/material/Paper';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-function Copyright(props) {
-    return (
-        <Typography variant="body2" color="text.secondary" align="center" {...props}>
-            {'Copyright © '}
-            <Link color="inherit" to="https://mui.com/">
-                Your Website
-            </Link>{' '}
-            {new Date().getFullYear()}
-            {'.'}
-        </Typography>
-    );
-}
 
 const defaultTheme = createTheme();
 
@@ -107,7 +95,7 @@ const Register = () => {
     
         registerUser(newUser, dispatch, navigate)
         .then(() => {
-            toast.success("Register successful!");
+            toast.success("Register successful!Pls confirm email");
         })
         .catch((error) => {
             toast.error("Register failed. Please try again.");
@@ -262,7 +250,7 @@ const Register = () => {
                             </Grid>
                         </Box>
                     </Box>
-                    <Copyright sx={{ mt: 5 }} />
+                    
                 </Grid>
             </Grid>
             <ToastContainer

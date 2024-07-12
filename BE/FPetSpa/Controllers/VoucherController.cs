@@ -68,7 +68,6 @@ namespace FPetSpa.Controllers
                 checkExits.Description = requestVoucher.Description;
                 checkExits.StartDate = requestVoucher.StartDate;
                 checkExits.EndDate = requestVoucher.EndDate;
-                
             }
              _unitOfWork.VoucherRepository.Update(checkExits);
              _unitOfWork.SaveChangesAsync();

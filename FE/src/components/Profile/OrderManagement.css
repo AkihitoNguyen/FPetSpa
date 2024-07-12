@@ -1,0 +1,24 @@
+
+  .status-text-green {
+    border: 1px solid #96ff299c;
+    border-radius: 5px;
+    background-color: #96ff299c;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    width: 79px;
+    justify-content: center;
+    color: #44d844;
+  }
+  
+  .status-text-yellow {
+    border: 1px solid #ffff2982;
+    border-radius: 5px;
+    background-color: #ffff2982;
+    font-size: 12px;
+    display: flex;
+    align-items: center;
+    width: 79px;
+    justify-content: center;
+    color: #b8b82a;
+  }
