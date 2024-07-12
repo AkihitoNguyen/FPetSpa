@@ -3,10 +3,15 @@ import { Link } from "react-router-dom";
 import { assets } from "../../assets/assets";
 
 const Sidebar = () => {
-  const [showDropdown, setShowDropdown] = useState(false);
+  const [showServicesDropdown, setShowServicesDropdown] = useState(false);
+  const [showBookingDropdown, setShowBookingDropdown] = useState(false);
 
-  const toggleDropdown = () => {
-    setShowDropdown(!showDropdown);
+  const toggleServicesDropdown = () => {
+    setShowServicesDropdown(!showServicesDropdown);
+  };
+
+  const toggleBookingDropdown = () => {
+    setShowBookingDropdown(!showBookingDropdown);
   };
 
   return (
@@ -17,6 +22,9 @@ const Sidebar = () => {
       </div>
       <ul className="mt-2">
         <li className="p-4 text-[#9A9CAE] text-[13.975px] font-medium cursor-pointer hover:text-white">
+          <Link to="/layout/dashboards">Dashboards</Link>
+        </li>
+        <li className="p-4 text-[#9A9CAE] text-[13.975px] font-medium cursor-pointer hover:text-white">
           <Link to="/layout/account-info">Customer</Link>
         </li>
         <li className="p-4 text-[#9A9CAE] text-[13.975px] font-medium cursor-pointer hover:text-white">
@@ -25,36 +33,57 @@ const Sidebar = () => {
         <li className="relative">
           <div
             className="p-4 text-[#9A9CAE] text-[13.975px] font-medium cursor-pointer hover:text-white flex justify-between items-center"
-            onClick={toggleDropdown}
-          >
-            Booking Management
+            onClick={toggleServicesDropdown}>
+            Services Management
             <svg
               className={`transform transition-transform duration-300 ${
-                showDropdown ? "rotate-180" : ""
+                showServicesDropdown ? "rotate-180" : ""
               }`}
               width="12"
               height="12"
-              viewBox="0 0 24 24"
-            >
+              viewBox="0 0 24 24">
               <path fill="currentColor" d="M12 14l-8-8h16z" />
             </svg>
           </div>
-          {showDropdown && (
+          {showServicesDropdown && (
+            <ul className="bg-neutral-900 text-[#9A9CAE] mt-1 text-[13.975px] font-medium transform transition-transform duration-500">
+              <li className="p-4 cursor-pointer hover:text-white">
+                <Link to="/layout/view-service">Services</Link>
+              </li>
+              <li className="p-4 cursor-pointer hover:text-white">
+                <Link to="/layout/add-service">Add Service</Link>
+              </li>
+              <li className="p-4 cursor-pointer hover:text-white">
+                <Link to="/layout/edit-service/:servicesId">Edit Service</Link>
+              </li>
+            </ul>
+          )}
+        </li>
+        <li className="relative">
+          <div
+            className="p-4 text-[#9A9CAE] text-[13.975px] font-medium cursor-pointer hover:text-white flex justify-between items-center"
+            onClick={toggleBookingDropdown}>
+            Booking Management
+            <svg
+              className={`transform transition-transform duration-300 ${
+                showBookingDropdown ? "rotate-180" : ""
+              }`}
+              width="12"
+              height="12"
+              viewBox="0 0 24 24">
+              <path fill="currentColor" d="M12 14l-8-8h16z" />
+            </svg>
+          </div>
+          {showBookingDropdown && (
             <ul className="bg-neutral-900 text-[#9A9CAE] mt-1 text-[13.975px] font-medium transform transition-transform duration-500">
               <li className="p-4 cursor-pointer hover:text-white">
                 <Link to="/layout/service-info">Booking Listing</Link>
               </li>
-              {/* <li className="p-4 cursor-pointer hover:text-white">
-                <Link to="/layout/add-order">Add Order</Link>
-              </li>
-              <li className="p-4 cursor-pointer hover:text-white">
-                <Link to="/layout/edit-order">Edit Order</Link>
-              </li> */}
             </ul>
           )}
         </li>
         <li className="p-4 text-[#9A9CAE] text-[13.975px] font-medium cursor-pointer hover:text-white">
-          <Link to="/layout/order-management">Quản lý đơn hàng</Link>
+          <Link to="/layout/order-management">Order management</Link>
         </li>
         <li className="p-4 text-[#9A9CAE] text-[13.975px] font-medium cursor-pointer hover:text-white">
           <Link to="/layout/transaction">Transaction</Link>

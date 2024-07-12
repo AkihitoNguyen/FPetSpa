@@ -11,7 +11,7 @@ const Product = () => {
         <div className="section-container">
           <div className="bde-columns-163033-102 bde-columns">
             <div className="bde-column-163033-103 bde-column">
-              <h6 className="bde-heading-163033-105 bde-heading">
+              <h6 className="bde-heading-163033-105 bde-heading text-[17px]">
                 Sample Boxes for Dogs
               </h6>
               <h1 className="bde-heading-163033-106 bde-heading">

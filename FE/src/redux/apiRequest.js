@@ -79,7 +79,36 @@ export const signInWithGoogle = async (googleUser, dispatch, navigate) => {
 };
 
 
+export const getAllUsers = async (accessToken, dispatch, axiosJWT) => {
+    const userListDom = document.querySelector(".home-userlist");
+    dispatch(getUserStart());
+    try {
+        const res = await axiosJWT.get("/api/v1/users", {
+            headers: { token: `Bearer ${accessToken}` },
+        });
+        if (!res) {
+            userListDom.innerHTML = `<h2>There is no user!</h2>`;
+        } else {
+            dispatch(getUserSuccess(res.data));
+            console.log(res);
+        }
+    } catch (error) {
+        userListDom.innerHTML = `<h2>${error.response.data}</h2>`;
+        dispatch(getUserFailed());
+    }
+};
 
+export const deleteUser = async (accessToken, dispatch, id, axiosJWT) => {
+    dispatch(deleteUserStart());
+    try {
+        const res = await axiosJWT.delete("/api/v1/users/delete/" + id, {
+            headers: { token: `Bearer ${accessToken}` },
+        });
+        dispatch(deleteUserSuccess(res.data));
+    } catch (error) {
+        dispatch(deleteUserFailed(error.response.data));
+    }
+};
 
 export const logoutUser = async (
     accessToken,

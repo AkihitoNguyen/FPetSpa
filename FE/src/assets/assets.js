@@ -18,6 +18,7 @@ import ser_1 from './ser_1.webp'
 import rawble from './rawble.webp'
 import rawble_1 from './rawble_1.webp'
 import spa from './spa.png'
+import avatar from './avatar.png'
 
 export const assets = {
     spa,
@@ -39,7 +40,8 @@ export const assets = {
     grooming,
     ser_1,
     rawble,
-    rawble_1
+    rawble_1,
+    avatar
 }
 
 
