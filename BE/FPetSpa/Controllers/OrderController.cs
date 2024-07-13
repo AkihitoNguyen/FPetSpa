@@ -275,7 +275,6 @@ namespace FPetSpa.Controllers
             }
             return BadRequest();    
         }
-
         [HttpPut("CheckInSerivces")]
         public async Task<IActionResult> checkInService(string orderId)
         {

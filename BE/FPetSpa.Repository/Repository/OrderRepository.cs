@@ -435,6 +435,7 @@ public class OrderRepository
                 await _context.SaveChangesAsync();
                 byte[] qrCodeBase64 = GenerateQRCode($"{orderId}");
                 var body = this.BodySendMailService(user, order, Pet!, Services!);
+
                 await _sendMailServicers.SendEmailWithQRCodeAsync(
 
                     user.Email!,

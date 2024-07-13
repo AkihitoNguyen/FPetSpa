@@ -1,6 +1,7 @@
+// eslint-disable-next-line no-unused-vars
 import React from 'react'
-import Contact from '../../components/Contact'
-import SupportCenter from '../../components/SupportCenter'
+import Contact from '../../components/Service/Contact'
+import SupportCenter from '../../components/Service/SupportCenter'
 
 const ContactUs = () => {
   return (

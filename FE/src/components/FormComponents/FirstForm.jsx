@@ -1,210 +1,181 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
+const FirstForm = ({ formValues, onChange, services, userPets }) => {
+  const today = dayjs().format("YYYY-MM-DD"); // Use ISO format for comparison
+  const currentTime = dayjs().format("HH:mm:ss");
 
-const FirstForm = ({ formValues, onChange, option }) => {
-  const today = dayjs().format("YYYY-MM-DD");
+  // Function to generate time slots
+  const generateTimeSlots = () => {
+    const slots = ["Chọn khung giờ"];
+    let currentTime = dayjs().hour(8).minute(0).second(0);
+    const endTime = dayjs().hour(19).minute(0).second(0);
+
+    while (currentTime.isBefore(endTime)) {
+      slots.push(currentTime.format("HH:mm:ss"));
+      currentTime = currentTime.add(30, "minute");
+    }
+
+    return slots;
+  };
+
+  const timeSlots = generateTimeSlots();
+
+  // Enhanced onChange handler with validation
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+
+    // Check if the date is today
+    if (name === "date" && value < today) {
+      alert("Ngày không thể là ngày trong quá khứ!");
+      return;
+    }
+
+    // Check if the time slot is in the past for today's date
+    if (name === "timeSlot" && formValues.date === today && value < currentTime) {
+      alert("Khung giờ không thể trong quá khứ!");
+      return;
+    }
+
+    // If valid, propagate the change
+    onChange(e);
+  };
 
   return (
-    //
     <div className="">
-      <div className="mx-auto mt-32 max-w-2xl text-center ">
-        <h2 className="text-3xl font-bold tracking-tight text-gray-900 sm:text-4xl">
-          Customer Information
-        </h2>
-      </div>
-      <form action="#" method="POST" className="mx-auto max-w-xl">
-        {/* name */}
-        <div className="grid grid-cols-3 gap-x-8 gap-y-6 sm:grid-cols-2">
-          <div>
-            <label
-              htmlFor="full-name"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Full name
-            </label>
-            <div className="mt-2.5">
-              <input
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                type="text"
-                name="fullname"
-                id="full-name"
-                onChange={onChange}
-                value={formValues.fullname}
-              />
-            </div>
-          </div>
-
-          {/* phonenumber */}
-          <div>
-            <label
-              htmlFor="phone-number"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Phone number
-            </label>
-            <div className="mt-2.5">
-              <input
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                type="text"
-                name="phonenumber"
-                id="phone-number"
-                onChange={onChange}
-                value={formValues.phonenumber}
-              />
-            </div>
-          </div>
-        </div>
-      </form>
-
+      {/* Pet Information */}
       <div className="mx-auto max-w-2xl text-center mt-5">
         <h3 className="text-xl font-semibold tracking-tight text-gray-900 sm:text-xl">
-          Pet Information
+          Booking Service
         </h3>
       </div>
-      <form className="mx-auto mt-2 max-w-xl sm:mt-5">
+      <div className="mx-auto mt-2 max-w-xl sm:mt-5">
         <div className="grid grid-cols-3 gap-x-8 gap-y-6 sm:grid-cols-2">
-          {/* petname */}
+          {/* Select Pet */}
           <div className="">
             <label
-              htmlFor="pet"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Pet name
+              htmlFor="pet-id"
+              className="block text-sm font-semibold leading-6 text-gray-900"
+            >
+              Chọn thú cưng
             </label>
             <div className="mt-2.5">
-              <input
-                type="text"
-                name="pet"
-                id="pet"
-                onChange={onChange}
-                value={formValues.pet}
+              <select
+                name="petId"
+                id="pet-id"
+                onChange={handleInputChange}
+                value={formValues.petId}
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
+              >
+                <option value="">Chọn thú cưng</option>
+                {userPets.map((pet) => (
+                  <option key={pet.petId} value={pet.petId}>
+                    {pet.petName}
+                  </option>
+                ))}
+              </select>
             </div>
           </div>
 
-          {/* pet age */}
+          {/* Date */}
           <div className="">
             <label
-              htmlFor="pet-age"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Pet age
+              htmlFor="date"
+              className="block text-sm font-semibold leading-6 text-gray-900"
+            >
+              Ngày
             </label>
             <div className="mt-2.5">
               <input
-                type="text"
-                name="petage"
-                id="pet-age"
-                onChange={onChange}
-                value={formValues.petage}
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          {/* type pet */}
-          <div className="">
-            <label
-              htmlFor="pet-type"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Type pet
-            </label>
-            <div className="mt-2.5">
-              <input
-                type="text"
-                name="pettype"
-                id="pet-type"
-                onChange={onChange}
-                value={formValues.pettype}
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-          {/* weight pet */}
-          <div className="">
-            <label
-              htmlFor="weight"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Weight
-            </label>
-            <div className="mt-2.5">
-              <input
-                type="text"
-                name="weight"
-                id="weight"
-                onChange={onChange}
-                value={formValues.weight}
-                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-              />
-            </div>
-          </div>
-
-          {/* time */}
-          <div className="">
-            <label
-              htmlFor="time"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Time
-            </label>
-            <div className="mt-2.5">
-              <input
-                className="border rounded-lg"
                 type="date"
                 id="date"
                 name="date"
-                onChange={onChange}
+                onChange={handleInputChange}
                 value={formValues.date}
                 min={today}
               />
             </div>
           </div>
 
-          {/* service name */}
-          <div className="sm:col-span-2">
+          {/* Time Slot */}
+          <div className="">
             <label
-              htmlFor="service-type"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Select type
-            </label>
-            <div className="mb-6">
-              <select
-                className="block shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="servicetype"
-                name="servicetype"
-                onChange={onChange}
-                value={formValues.servicetype}>
-
-                {option && option.length > 0 ? (
-                  option.map((state) => (
-                    <option key={state.id} value={state.id}>
-                      {state.name}
-                    </option>
-                  ))
-                ) : (
-                  <option value="">No options available</option>
-                )}
-              </select>
-            </div>{" "}
-          </div>
-
-          <div className="sm:col-span-2">
-            <label
-              htmlFor="message"
-              className="block text-sm font-semibold leading-6 text-gray-900">
-              Note
+              htmlFor="time-slot"
+              className="block text-sm font-semibold leading-6 text-gray-900"
+            >
+              Chọn khung giờ
             </label>
             <div className="mt-2.5">
-              <textarea
-                onChange={onChange}
-                value={formValues.message}
-                name="message"
-                id="message"
-                rows={4}
+              <select
+                name="timeSlot"
+                id="time-slot"
+                onChange={handleInputChange}
+                value={formValues.timeSlot}
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                defaultValue={""}
-              />
+              >
+                {timeSlots.map((timeSlot) => (
+                  <option
+                    key={timeSlot}
+                    value={timeSlot}
+                    disabled={formValues.date === today && timeSlot < currentTime}
+                  >
+                    {timeSlot}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Service Type */}
+          <div className="sm:col-span-2 mt-4">
+            <label
+              htmlFor="serviceId"
+              className="block text-sm font-semibold leading-6 text-gray-900"
+            >
+              Chọn dịch vụ
+            </label>
+            <div className="mt-2.5">
+              <select
+                name="serviceId"
+                id="serviceId"
+                onChange={handleInputChange}
+                value={formValues.serviceId}
+                className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+              >
+                <option value="">Chọn dịch vụ</option>
+                {services.map((service) => (
+                  <option key={service.servicesId} value={service.servicesId}>
+                    {service.serviceName}
+                  </option>
+                ))}
+              </select>
+            </div>
+          </div>
+
+          {/* Payment Method */}
+          <div className="sm:col-span-2 mt-4">
+            <label
+              htmlFor="payment-method"
+              className="block text-sm font-semibold leading-6 text-gray-900"
+            >
+              Phương thức thanh toán
+            </label>
+            <div className="mt-2.5">
+              <select
+                className="block shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+                id="payment-method"
+                name="paymentMethod"
+                onChange={handleInputChange}
+                value={formValues.paymentMethod}
+              >
+                <option value="">Chọn phương thức thanh toán</option>
+                <option value="VNPay">VNPay</option>
+              </select>
             </div>
           </div>
         </div>
-      </form>
+      </div>
     </div>
   );
 };

@@ -1,167 +1,286 @@
-// eslint-disable-next-line no-unused-vars
-import React, { useEffect, useState, useContext } from 'react';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import { getAllProduct, getProductsByCategory } from '../../api/apiService';
-import { DropdownButton, Dropdown, Row, Col } from 'react-bootstrap';
-import Grid from '@mui/material/Grid';
-import ListItemText from '@mui/material/ListItemText';
-import { ShopContext } from '../Context/ShopContext';
-import { Link } from 'react-router-dom';
-// import { BsCart4 } from 'react-icons/bs';
-import '../PageProduct/ProductList.css';
-import OutlinedInput from '@mui/material/OutlinedInput';
-import InputLabel from '@mui/material/InputLabel';
-import MenuItem from '@mui/material/MenuItem';
-import FormControl from '@mui/material/FormControl';
-import Select from '@mui/material/Select';
-import Checkbox from '@mui/material/Checkbox';
-// import Rating from '@mui/material/Rating';
-const ProductList = () => {
-  const [productList, setProductList] = useState([]);
-  const [sortedProductList, setSortedProductList] = useState([]);
-  const { addToCart } = useContext(ShopContext);
-  const [selectedCategories, setSelectedCategories] = useState([]);
-  const [sortTitle, setSortTitle] = useState('Sort Options');
+import { useEffect, useState, useContext } from 'react'
+import {
+  Dialog,
+  DialogBackdrop,
+  DialogPanel,
+  Disclosure,
+  DisclosureButton,
+  DisclosurePanel,
+  Menu,
+  MenuButton,
+  MenuItem,
+  MenuItems,
+} from '@headlessui/react'
+import { XMarkIcon } from '@heroicons/react/24/outline'
+import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
+import { getAllProduct, getProductsByCategory } from '../../api/apiService'
+import { ShopContext } from '../Context/ShopContext'
+import { Link } from 'react-router-dom'
+import '../PageProduct/ProductList.css'
+
+function classNames(...classes) {
+  return classes.filter(Boolean).join(' ')
+}
+
+const subCategories = [
+  { name: 'Dog Food', value: 'Dog Food' },
+  { name: 'Cat Food', value: 'Cat Food' },
+  { name: 'Balo', value: 'Balo' },
+  { name: 'Toy', value: 'Toy' },
+  { name: 'Cat Shampoo', value: 'Cat Shampoo' },
+  { name: 'Dog Shampoo', value: 'Dog Shampoo' },
+]
+
+const sortOptions = [
+  { name: 'Default Sorting', value: 'default' },
+  { name: 'Sort By Price: High to Low', value: 'desc' },
+  { name: 'Sort By Price: Low to High', value: 'asc' },
+]
+
+export default function ProductList() {
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
+  const [productList, setProductList] = useState([])
+  const [sortedProductList, setSortedProductList] = useState([])
+  const { addToCart } = useContext(ShopContext) || { addToCart: () => {} }
+  const [selectedCategories, setSelectedCategories] = useState([])
+  const [sortTitle, setSortTitle] = useState('Sort Options')
+  const [currentPage, setCurrentPage] = useState(1)
+  const productsPerPage = 12
+  const [sortOrder, setSortOrder] = useState('default')
 
   useEffect(() => {
-    fetchProducts();
-  }, [selectedCategories]);
+    const fetchProducts = async () => {
+      try {
+        let response
+        if (selectedCategories.length === 0) {
+          response = await getAllProduct()
+        } else {
+          const promises = selectedCategories.map((category) => getProductsByCategory({ category }))
+          const categoryResponses = await Promise.all(promises)
+          const products = categoryResponses.flatMap((response) => response)
+          response = products
+        }
 
-  useEffect(() => {
-    const sortedList = [...productList];
-    sortedList.sort((a, b) => a.price - b.price);
-    sortDefault();
-    setSortedProductList(sortedList);
-  }, [productList]);
-
-  const fetchProducts = async () => {
-    try {
-      let response;
-      if (selectedCategories.length === 0) {
-        response = await getAllProduct(); 
-      } else {
-        const promises = selectedCategories.map(category => getProductsByCategory({ category }));
-        response = await Promise.all(promises).then(responses => responses.flat());
+        console.log('Fetched products:', response)
+        setProductList(response)
+      } catch (error) {
+        console.error('Error fetching products:', error)
       }
-      setProductList(response);
-    } catch (error) {
-      console.error("Error fetching products:", error);
     }
-  };
-  
+    fetchProducts()
+  }, [selectedCategories])
 
-  const sortAscending = () => {
-    const sortedList = [...sortedProductList];
-    sortedList.sort((a, b) => a.price - b.price);
-    setSortedProductList(sortedList);
-    setSortTitle('Sort By Price: Low to High');
-  };
+  useEffect(() => {
+    let sortedList = [...productList]
+    if (sortOrder === 'asc') {
+      sortedList.sort((a, b) => a.price - b.price)
+    } else if (sortOrder === 'desc') {
+      sortedList.sort((a, b) => b.price - a.price)
+    }
+    setSortedProductList(sortedList)
+    setCurrentPage(1)
+  }, [productList, sortOrder])
 
-  const sortDescending = () => {
-    const sortedList = [...sortedProductList];
-    sortedList.sort((a, b) => b.price - a.price);
-    setSortedProductList(sortedList);
-    setSortTitle('Sort By Price: High to Low');
-  };
-  const sortDefault = () => {
-    setSortedProductList(productList);
-    setSortTitle('Default Sorting');
-  };
+  const handleCategoryClick = (value) => {
+    setSelectedCategories((prevCategories) =>
+      prevCategories.includes(value)
+        ? prevCategories.filter((category) => category !== value)
+        : [...prevCategories, value]
+    )
+  }
+
+  const handleSortChange = (value) => {
+    setSortOrder(value)
+    setSortTitle(sortOptions.find((option) => option.value === value).name)
+  }
+
+  const indexOfLastProduct = currentPage * productsPerPage
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage
+  const currentProducts = sortedProductList.slice(indexOfFirstProduct, indexOfLastProduct)
+
+  const paginate = (pageNumber) => setCurrentPage(pageNumber)
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
-        <FormControl sx={{ m: 1, width: 300 }}>
-        <label >Product Type</label>
-          <InputLabel id="demo-multiple-checkbox-label">Categories</InputLabel>
-          <Select
-            labelId="demo-multiple-checkbox-label"
-            id="demo-multiple-checkbox"
-            multiple
-            value={selectedCategories}
-            onChange={(event) => setSelectedCategories(event.target.value)}
-            input={<OutlinedInput label="Categories" />}
-            renderValue={(selected) => selected.join(', ')}
-          >
-            {['Dog Food', 'Cat Food', 'Balo', 'Toy', 'Cake'].map((item, index) => (
-              <MenuItem key={index} value={item}>
-                <Checkbox checked={selectedCategories.includes(item)} />
-                <ListItemText primary={item} />
-              </MenuItem>
-            ))}
-          </Select>
-          <div className='sort'>
-          <Row className="align-items-center">
-            <Col xs="auto">
-              <label>Sort:</label>
-            </Col>
-            <Col xs="auto">
-              <DropdownButton id="demo-multiple-checkbox-label" title={sortTitle}>
-                <Dropdown.Item onClick={sortDefault}>Default Sort</Dropdown.Item>
-                <Dropdown.Item onClick={sortDescending}>Sort By Price: High to Low</Dropdown.Item>
-                <Dropdown.Item onClick={sortAscending}>Sort By Price: Low to High</Dropdown.Item>
-              </DropdownButton>
-            </Col>
-          </Row>
-        </div>
-        </FormControl>
-      </Grid>
+    <div className="bg-white">
+      <div>
+        {/* Mobile filter dialog */}
+        <Dialog open={mobileFiltersOpen} onClose={setMobileFiltersOpen} className="relative z-40 lg:hidden">
+          <DialogBackdrop className="fixed inset-0 bg-black bg-opacity-25 transition-opacity duration-300 ease-linear data-[closed]:opacity-0" />
 
-      <Grid item xs={12}>
-        <Grid container spacing={2} className='product'>
-          {sortedProductList.map((product, index) => (
-            <Grid item key={index} xs={12} sm={6} md={4}>
-              {/* <article className="article-wrapper">
-                <div className="rounded-lg container-project">
-                  <Link to={`/productdisplay/${product.productName}`}>
-                    <img src={product.picture} alt={product.productName} className="img-fluid" />
-                  </Link>
+          <div className="fixed inset-0 z-40 flex">
+            <DialogPanel className="relative ml-auto flex h-full w-full max-w-xs transform flex-col overflow-y-auto bg-white py-4 pb-12 shadow-xl transition duration-300 ease-in-out data-[closed]:translate-x-full">
+              <div className="flex items-center justify-between px-4">
+                <h2 className="text-lg font-medium text-gray-900">Filters</h2>
+                <button
+                  type="button"
+                  onClick={() => setMobileFiltersOpen(false)}
+                  className="-mr-2 flex h-10 w-10 items-center justify-center rounded-md bg-white p-2 text-gray-400"
+                >
+                  <span className="sr-only">Close menu</span>
+                  <XMarkIcon aria-hidden="true" className="h-6 w-6" />
+                </button>
+              </div>
+
+              {/* Filters */}
+              <form className="mt-4 border-t border-gray-200">
+                <h3 className="sr-only">Categories</h3>
+
+                <ul role="list" className="px-2 py-3 font-medium text-gray-900">
+                  {subCategories.map((category) => (
+                    <li key={category.value}>
+                      <button
+                        type="button"
+                        onClick={() => handleCategoryClick(category.value)}
+                        className={`block px-2 py-3 ${selectedCategories.includes(category.value) ? 'text-indigo-600' : ''}`}
+                      >
+                        {category.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </form>
+            </DialogPanel>
+          </div>
+        </Dialog>
+
+        <main className="mx-auto max-w-max px-4 sm:px-6 lg:px-8">
+          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
+            <h1 className="text-4xl font-bold tracking-tight text-gray-900">Product</h1>
+
+            <div className="flex items-center">
+              <Menu as="div" className="relative inline-block text-left">
+                <div>
+                  <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
+                    Sort
+                    <ChevronDownIcon aria-hidden="true" className="-mr-1 ml-1 h-5 w-5 flex-shrink-0 text-gray-400 group-hover:text-gray-500" />
+                  </MenuButton>
                 </div>
-                <div className="project-info">
-                  <div className="flex-pr">
-                    <div className="project-title text-nowrap">{product.productName}</div>
-                    <div className='rating'><Rating name="size-small" defaultValue={5} /></div>
-                    <div className="project-hover">
-                      <BsCart4
-                        className='cart-icon'
-                        onClick={() => addToCart(product.productId, 1)} // Add to cart on click
-                        style={{ marginLeft: '170px', cursor: 'pointer',marginBottom:'-24%' }}
-                      />
+
+                <MenuItems className="absolute right-0 z-10 mt-2 w-40 origin-top-right rounded-md bg-white shadow-2xl ring-1 ring-black ring-opacity-5 focus:outline-none">
+                  <div className="py-1">
+                    {sortOptions.map((option) => (
+                      <MenuItem key={option.value}>
+                        {({ active }) => (
+                          <button
+                            onClick={() => handleSortChange(option.value)}
+                            className={classNames(
+                              option.current ? 'font-medium text-gray-900' : 'text-gray-500',
+                              active ? 'bg-gray-100' : '',
+                              'block px-4 py-2 text-sm'
+                            )}
+                          >
+                            {option.name}
+                          </button>
+                        )}
+                      </MenuItem>
+                    ))}
+                  </div>
+                </MenuItems>
+              </Menu>
+
+              <button
+                type="button"
+                className="-m-2 ml-5 p-2 text-gray-400 hover:text-gray-500 lg:hidden"
+                onClick={() => setMobileFiltersOpen(true)}
+              >
+                <span className="sr-only">Filters</span>
+                <FunnelIcon className="h-5 w-5" aria-hidden="true" />
+              </button>
+            </div>
+          </div>
+
+          <section aria-labelledby="products-heading" className="pb-24 pt-6">
+            <h2 id="products-heading" className="sr-only">Products</h2>
+
+            <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
+              {/* Filters */}
+              <form className="hidden lg:block">
+                <h3 className="sr-only">Categories</h3>
+                <ul role="list" className="space-y-4 border-b border-gray-200 pb-6 text-sm font-medium text-gray-900">
+                  {subCategories.map((category) => (
+                    <li key={category.value}>
+                      <button
+                        type="button"
+                        onClick={() => handleCategoryClick(category.value)}
+                        className={`block px-2 py-3 ${selectedCategories.includes(category.value) ? 'text-indigo-600' : ''}`}
+                      >
+                        {category.name}
+                      </button>
+                    </li>
+                  ))}
+                </ul>
+              </form>
+
+              {/* Product grid */}
+              <div className="lg:col-span-3">
+                <div className="bg-white">
+                  <div className="mx-auto max-w-2xl py-16 px-4 sm:py-20 sm:px-6 lg:max-w-7xl lg:px-8">
+                    <div className="-mt-10 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
+                    {currentProducts.length > 0 ? (
+                        currentProducts.map((product) => (
+                            <div key={product?.productId || 'unknown-product'} className="shadow-md rounded-lg overflow-hidden h-full flex flex-col w-full">
+                              <div className="relative pb-5/4">
+                                {product?.productName ? (
+                                  <Link to={`/productdisplay/${product.productName}`}>
+                                    <img
+                                      src={product.pictureName}
+                                      alt={product.productName}
+                                      className="w-full h-full object-cover"
+                                    />
+                                  </Link>
+                                    ) : (
+                                  <div className="w-full h-full bg-gray-200" />
+                                  )}
+                              </div>
+                              <div className="p-2 flex flex-col flex-grow justify-between">
+                                <div>
+                                  <h4 className="font-bold text-gray-800">{product?.productName || 'Unknown Product'}</h4>
+                                </div>
+                                <div className="flex justify-between items-center mt-3">
+                                  <span className="ordernow-text text-[#d13a3a] font-semibold group-hover:text-gray-800">${product?.price}</span>
+                                  <button
+                                    className="btun4 lg:inline-flex items-center gap-3 group-hover:bg-white/10 bg-[#abd373] shadow-[10px_10px_150px_#ff9f0d] cursor-pointer py-2 px-4 text-sm font-semibold rounded-full butn h-6"
+                                    onClick={() => product?.productId && addToCart(product.productId, 1)}
+                                  >
+                                    Order Now
+                                  </button>
+                                </div>
+                              </div>
+                            </div>
+                                ))
+                                ) : (
+                                <div className="w-full flex justify-center items-center">
+                                  <div className="w-64">
+                                    <div className="animate-pulse">
+                                      <div className="h-32 bg-gray-200 rounded-md"></div>
+                                      <div className="mt-2 h-6 bg-gray-200 rounded-md"></div>
+                                      <div className="mt-2 h-6 bg-gray-200 rounded-md"></div>
+                                    </div>
+                                  </div>
+                                </div>
+                              )}
+                                </div>
+                                <div className="mt-6 flex justify-center">
+                                  <ul className="flex">
+                                    {Array.from({ length: Math.ceil(sortedProductList.length / productsPerPage) }).map((_, index) => (
+                                      <li key={index}>
+                                        <button
+                                          onClick={() => paginate(index + 1)}
+                                          className={`px-3 py-1 ${currentPage === index + 1 ? 'bg-indigo-600 text-white' : 'bg-white text-gray-500'}`}
+                                        >
+                                          {index + 1}
+                                        </button>
+                                      </li>
+                            ))}
+                      </ul>
                     </div>
                   </div>
-                  <div className="types">
-                    <span className="project-type" style={{ backgroundColor: 'rgba(165, 96, 247, 0.43)', color: 'rgb(85, 27, 177)' }}>
-                      ${product.price}
-                    </span>
-                  </div>
                 </div>
-              </article> */}
-                <div className="card">
-  <div className="card-img">
-    <Link to={`/productdisplay/${product.productName}`}>
-    <img src={product.picture} alt={product.productName} className="img-fluid" />
-    </Link>
+              </div>
+            </div>
+          </section>
+        </main>
+      </div>
     </div>
-  <div className="card-info">
-    <p className="text-title">{product.productName} </p>
-    <p className="text-body">{product.productName}</p>
-  </div>
-  <div className="card-footer">
-  <span className="text-title">${product.price}</span>
-  <div className="card-button"  onClick={() => addToCart(product.productId, 1)}>
-    <svg className="svg-icon" viewBox="0 0 20 20">
-      <path d="M17.72,5.011H8.026c-0.271,0-0.49,0.219-0.49,0.489c0,0.271,0.219,0.489,0.49,0.489h8.962l-1.979,4.773H6.763L4.935,5.343C4.926,5.316,4.897,5.309,4.884,5.286c-0.011-0.024,0-0.051-0.017-0.074C4.833,5.166,4.025,4.081,2.33,3.908C2.068,3.883,1.822,4.075,1.795,4.344C1.767,4.612,1.962,4.853,2.231,4.88c1.143,0.118,1.703,0.738,1.808,0.866l1.91,5.661c0.066,0.199,0.252,0.333,0.463,0.333h8.924c0.116,0,0.22-0.053,0.308-0.128c0.027-0.023,0.042-0.048,0.063-0.076c0.026-0.034,0.063-0.058,0.08-0.099l2.384-5.75c0.062-0.151,0.046-0.323-0.045-0.458C18.036,5.092,17.883,5.011,17.72,5.011z"></path>
-      <path d="M8.251,12.386c-1.023,0-1.856,0.834-1.856,1.856s0.833,1.853,1.856,1.853c1.021,0,1.853-0.83,1.853-1.853S9.273,12.386,8.251,12.386z M8.251,15.116c-0.484,0-0.877-0.393-0.877-0.874c0-0.484,0.394-0.878,0.877-0.878c0.482,0,0.875,0.394,0.875,0.878C9.126,14.724,8.733,15.116,8.251,15.116z"></path>
-      <path d="M13.972,12.386c-1.022,0-1.855,0.834-1.855,1.856s0.833,1.853,1.855,1.853s1.854-0.83,1.854-1.853S14.994,12.386,13.972,12.386z M13.972,15.116c-0.484,0-0.878-0.393-0.878-0.874c0-0.484,0.394-0.878,0.878-0.878c0.482,0,0.875,0.394,0.875,0.878C14.847,14.724,14.454,15.116,13.972,15.116z"></path>
-    </svg>
-  </div>
-</div></div>
-            </Grid>
-          ))}
-        </Grid>
-      </Grid>
-    </Grid>
-  );
-};
-
-export default ProductList;
+  )
+}

@@ -79,7 +79,7 @@ const ProductDisplay = () => {
     </div>
     <div className="aspect-h-2 aspect-w-3 overflow-hidden rounded-lg">
       <img
-        src={assets.cat_2}
+        src={product.pictureName}
         alt={product.productName}
         className="h-full w-full object-cover object-center"
       />
@@ -141,27 +141,13 @@ const ProductDisplay = () => {
             <div>
               <h3 className="sr-only">Description</h3>
               <div className="space-y-6">
-                <p className="text-base text-gray-900">{product.description}</p>
+                <p className="text-base text-gray-900">{product.productDescription}</p>
               </div>
             </div>
-
-            {/* <div className="mt-10">
-              <h3 className="text-sm font-medium text-gray-900">Highlights</h3>
-              <div className="mt-4">
-                <ul role="list" className="list-disc space-y-2 pl-4 text-sm">
-                  {product.highlights.map((highlight, index) => (
-                    <li key={index} className="text-gray-400">
-                      <span className="text-gray-600">{highlight}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </div> */}
-
             <div className="mt-10">
               <h2 className="text-sm font-medium text-gray-900">Details</h2>
               <div className="mt-4 space-y-6">
-                <p className="text-sm text-gray-600">{product.details}</p>
+                <p className="text-sm text-gray-600">{product.productDescription}</p>
               </div>
             </div>
           </div>
