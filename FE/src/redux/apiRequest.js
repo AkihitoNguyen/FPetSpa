@@ -35,15 +35,7 @@ export const loginUser = (user, dispatch, navigate) => {
       };
 
       dispatch(loginSuccess(userData));
-
-      // Navigate based on role
-      if (role === 'Customer') {
-        navigate('/');
-      } else if (role === 'Staff') {
-        navigate('/dashboard');
-      }
-
-      return userData;
+      navigate("/");
     })
     .catch((error) => {
       dispatch(loginFailed());

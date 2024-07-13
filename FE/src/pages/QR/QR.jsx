@@ -1,4 +1,4 @@
-import React, { useState, useRef } from 'react';
+import React, { useState } from 'react';
 import QRCode from 'qrcode';
 import { QrReader } from 'react-qr-reader';
 
@@ -28,9 +28,23 @@ function QR() {
     }
   };
 
-  const handleScanFile = (result) => {
+  const handleScanFile = async (result) => {
     if (result) {
       setScanResultFile(result.text);
+      if (result.text) {
+        try {
+          const response = await fetch(`https://fpetspa.azurewebsites.net/api/Order/CheckInSerivces?orderId=${result.text}`, {
+            method: 'PUT',
+          });
+          if (response.status === 200) {
+            alert('Check-In Successfully');
+          } else {
+            console.log('Check-In Failed', response.status);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
   };
 
@@ -38,9 +52,23 @@ function QR() {
     console.log(error);
   };
 
-  const handleScanWebCam = (result) => {
+  const handleScanWebCam = async (result) => {
     if (result) {
       setScanResultWebCam(result.text);
+      if (result.text) {
+        try {
+          const response = await fetch(`https://fpetspa.azurewebsites.net/api/Order/CheckInSerivces?orderId=${result.text}`, {
+            method: 'PUT',
+          });
+          if (response.status === 200) {
+            alert('Check-In Successfully');
+          } else {
+            console.log('Check-In Failed', response.status);
+          }
+        } catch (error) {
+          console.log(error);
+        }
+      }
     }
   };
 
@@ -96,7 +124,7 @@ function QR() {
             delay={300}
             onError={handleErrorWebCam}
             onResult={handleScanWebCam}
-            style={{ width: '100%' }}
+            constraints={{ facingMode: 'user' }}
           />
           <h3 className="mt-2">Scanned By WebCam Code: {scanResultWebCam}</h3>
         </div>

@@ -16,19 +16,19 @@ import MenuItem from "@mui/material/MenuItem";
 import { assets } from "../../assets/assets";
 import "../Navbar/Navbar.css";
 
-
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector((state) => state.auth.login?.currentUser);
   const userId = user?._userId;
   const accessToken = user?.accessToken;
+  const role = user?.role;
   let axiosJWT = createAxiosInstance(user, dispatch, logoutSuccess);
   const { getTotalCartItems } = useContext(ShopContext) || {
     getTotalCartItems: () => 0,
   };
 
-  const [anchorEl, setAnchorEl] = useState("");
+  const [anchorEl, setAnchorEl] = useState(null);
   const open = Boolean(anchorEl);
 
   const handleClick = (event) => {
@@ -36,7 +36,7 @@ const Navbar = () => {
   };
 
   const handleClose = () => {
-    setAnchorEl("");
+    setAnchorEl(null);
   };
 
   const handleLogout = () => {
@@ -100,12 +100,14 @@ const Navbar = () => {
         alt=""
         className="logo"
       />
-      <ul className="navbar-menu">
-        <li onClick={() => navigate("/service")}>Service</li>
-        <li onClick={() => navigate("/product")}>Product</li>
-        <li onClick={() => navigate("/cart")}>About us</li>
-        <li onClick={() => navigate("/contact-us")}>Contact us</li>
-      </ul>
+      {(!user || role !== "Staff") && (
+        <ul className="navbar-menu">
+          <li onClick={() => navigate("/service")}>Service</li>
+          <li onClick={() => navigate("/product")}>Product</li>
+          <li onClick={() => navigate("/about-us")}>About us</li>
+          <li onClick={() => navigate("/contact-us")}>Contact us</li>
+        </ul>
+      )}
       <div className="navbar-right">
         <img src={assets.search} alt="" className="search" />
         {user ? (
@@ -118,7 +120,6 @@ const Navbar = () => {
               onClick={handleClick}>
               <Stack direction="row" spacing={2}>
                 <Avatar {...stringAvatar(user.fullName)} />
-                {/* <Avatar {...stringAvatar(user.id)} /> */}
               </Stack>
             </Button>
             <Menu
@@ -135,6 +136,11 @@ const Navbar = () => {
               <MenuItem onClick={handleClose}>
                 <Link to="/booking-history">Booking history</Link>
               </MenuItem>
+              {role === "Staff" && (
+                <MenuItem onClick={handleClose}>
+                  <Link to="/dashboard">Dashboard</Link>
+                </MenuItem>
+              )}
               <MenuItem onClick={handleClose}>
                 <Link
                   to="/logout"
@@ -153,7 +159,6 @@ const Navbar = () => {
             </Link>
           </div>
         )}
-
         <div className="navbar-cart-icon">
           <Link to="/cart">
             <img src={assets.cart} alt="" className="cart" />

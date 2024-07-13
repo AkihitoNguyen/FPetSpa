@@ -1,7 +1,5 @@
-// eslint-disable-next-line no-unused-vars
 import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
-import PropTypes from 'prop-types'
 
 const FirstForm = ({ formValues, onChange, services, userPets }) => {
   const today = dayjs().format("YYYY-MM-DD"); // Use ISO format for comparison
@@ -147,7 +145,7 @@ const FirstForm = ({ formValues, onChange, services, userPets }) => {
               >
                 <option value="">Chọn dịch vụ</option>
                 {services.map((service) => (
-                  <option key={service.serviceId} value={service.serviceId}>
+                  <option key={service.servicesId} value={service.servicesId}>
                     {service.serviceName}
                   </option>
                 ))}
@@ -180,25 +178,6 @@ const FirstForm = ({ formValues, onChange, services, userPets }) => {
       </div>
     </div>
   );
-};
-
-FirstForm.propTypes = {
-  formValues: PropTypes.shape({
-    petId: PropTypes.string.isRequired,
-    date: PropTypes.string.isRequired,
-    timeSlot: PropTypes.string.isRequired,
-    serviceId: PropTypes.string.isRequired,
-    paymentMethod: PropTypes.string.isRequired,
-  }).isRequired,
-  onChange: PropTypes.func.isRequired,
-  services: PropTypes.arrayOf(PropTypes.shape({
-    serviceId: PropTypes.string.isRequired,
-    serviceName: PropTypes.string.isRequired,
-  })).isRequired,
-  userPets: PropTypes.arrayOf(PropTypes.shape({
-    petId: PropTypes.string.isRequired,
-    petName: PropTypes.string.isRequired,
-  })).isRequired,
 };
 
 export default FirstForm;
