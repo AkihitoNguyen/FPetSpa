@@ -4,6 +4,8 @@ using FPetSpa.Models.ProductModel;
 using FPetSpa.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using System.Linq.Expressions;
 
 namespace FPetSpa.Controllers
 {
@@ -11,62 +13,60 @@ namespace FPetSpa.Controllers
     [ApiController]
     public class FeedBackController : ControllerBase
     {
-        private readonly IUnitOfWork _unitOfWork;
-        public FeedBackController(IUnitOfWork unitOfWork)
+        private readonly UnitOfWork _unitOfWork;
+        public FeedBackController(UnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
         }
-    
-        [HttpGet]
+        /// <summary>
+        /// SortBy (UserFeedBackId = 1,Star = 2)
+        /// 
+        /// SortType (Ascending = 1,Descending = 2,)        
+        /// </summary>
+        /// <param name="RequestSearchFeedBackModel"></param>
+        /// <returns></returns>
+        [HttpGet("SearchFeedback")]
+        public async Task<IActionResult> SearchFeedBack([FromQuery] RequestSearchFeedBackModel requestSearchFeedbackModel)
+        {
+            var sortBy = requestSearchFeedbackModel.SortContent != null ? requestSearchFeedbackModel.SortContent?.sortFeedBackBy.ToString() : null;
+            var sortType = requestSearchFeedbackModel.SortContent != null ? requestSearchFeedbackModel.SortContent?.sortFeedBackType.ToString() : null;
+            Expression<Func<FeedBack, bool>> filter = x =>
+                (string.IsNullOrEmpty(requestSearchFeedbackModel.UserFeedBackId) || x.UserFeedBackId.Contains(requestSearchFeedbackModel.UserFeedBackId)) &&
+                x.Star >= requestSearchFeedbackModel.FromStar &&
+                (x.Star <= requestSearchFeedbackModel.ToStar || requestSearchFeedbackModel.ToStar == null);
+            Func<IQueryable<FeedBack>, IOrderedQueryable<FeedBack>> orderBy = null;
+
+            if (!string.IsNullOrEmpty(sortBy))
+            {
+                if (sortType == SortFeedbackTypeEnum.Ascending.ToString())
+                {
+                    orderBy = query => query.OrderBy(p => EF.Property<object>(p, sortBy));
+                }
+                else if (sortType == SortFeedbackTypeEnum.Descending.ToString())
+                {
+                    orderBy = query => query.OrderByDescending(p => EF.Property<object>(p, sortBy));
+                }
+            }
+            var responseCategorie = _unitOfWork.FeedBackRepository.Get(
+                filter,
+                orderBy,
+                includeProperties: "",
+                pageIndex: requestSearchFeedbackModel.pageIndex,
+                pageSize: requestSearchFeedbackModel.pageSize
+            );
+
+
+            return Ok(responseCategorie);
+        }
+        [HttpGet("GetAllFeedBack")]
         public async Task<IActionResult> GetAll()
         {
             var result = await _unitOfWork.FeedBackRepository.GetAll();
             return Ok(result);
         }
-        [HttpGet("{id}")]
-        public IActionResult GetFeedBackById(int id)
-        {
-            var responseCategories = _unitOfWork.FeedBackRepository.GetById(id);
-            return Ok(responseCategories);
-        }
-        //[HttpPost]
-        //public IActionResult CreateFeedBackk(RequestFeedBackModel requestFeedBackModel)
-        //{
-        //    var feedback = new FeedBack
-        //    {
-        //        UserFeedBackId = requestFeedBackModel.UserId,
-        //        PictureName = requestFeedBackModel.PictureName,
-        //        Star = requestFeedBackModel.Star,
-        //        Description = requestFeedBackModel.Description,
-            
-        //    };
-        //    _unitOfWork.FeedBackRepository.Insert(feedback);
-        //    _unitOfWork.Save();
-        //    return Ok();
-        //}
-        [HttpPut("{id}")]
 
-        public IActionResult UpdateFeedBack(int id, RequestFeedBackModel requestFeedBackModel)
-        {
-            var existedFeedBack = _unitOfWork.FeedBackRepository.GetById(id);
-            if (existedFeedBack != null)
-            {
-                existedFeedBack.OrderId = requestFeedBackModel.OrderId;
-                existedFeedBack.PictureName = requestFeedBackModel.PictureName;
-                existedFeedBack.Star = requestFeedBackModel.Star;
-                existedFeedBack.Description = requestFeedBackModel.Description;
-            }
-            _unitOfWork.FeedBackRepository.Update(existedFeedBack);
-            _unitOfWork.Save();
-            return Ok();
-        }
-        [HttpDelete("{id}")]
-        public IActionResult DeleteFeedBack(int id)
-        {
-            var existedCategory = _unitOfWork.FeedBackRepository.GetById(id);
-            _unitOfWork.FeedBackRepository.Delete(existedCategory);
-            _unitOfWork.Save();
-            return Ok();
-        }
+
+
+
     }
 }
