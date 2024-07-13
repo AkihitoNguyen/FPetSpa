@@ -117,13 +117,14 @@ namespace FPetSpa
             builder.Services.AddScoped<IIdService, IdService>();
             builder.Services.AddScoped<IOrderServices, OrderServices>();
             builder.Services.AddScoped<TransactionService>();
+            builder.Services.AddScoped<ImageService>();
+            builder.Services.AddSingleton(new BotService("https://api.coze.com/v3/chat", "pat_t8mzOeNB4jsfon2OXohlzK2HNhY6yiF7SExbrU30kpxrsfIBmA57bBQd3o3kYXy7"));
             builder.Services.AddControllers()
                     .AddJsonOptions(options =>
                     {
                         options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
                         options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
                         options.JsonSerializerOptions.Converters.Add(new FormatDateTime());
-
                     });
             //Add AWS
             builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
