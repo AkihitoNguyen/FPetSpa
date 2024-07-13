@@ -96,22 +96,22 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<FeedBack>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("FeedBack");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.Id).ValueGeneratedOnAdd();
+
 
             entity.Property(e => e.Description).HasMaxLength(300);
-            entity.Property(e => e.OrderId)
+            entity.Property(e => e.ProductId)
                 .HasMaxLength(20)
-                .HasColumnName("OrderID");
+                .HasColumnName("ProductId");
             entity.Property(e => e.PictureName).HasMaxLength(50);
             entity.Property(e => e.UserFeedBackId)
                 .HasMaxLength(50)
                 .HasColumnName("UserFeedBackID");
 
-            entity.HasOne(d => d.Order).WithMany()
-                .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("FK_FeedBack.OrderID");
+            entity.HasOne(d => d.product).WithMany()
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_FeedBack.ProductId");
 
             entity.HasOne(d => d.UserFeedBack).WithMany()
                 .HasForeignKey(d => d.UserFeedBackId)
@@ -232,6 +232,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<ProductOrderDetail>(entity =>
         {
+
             entity.HasKey(cd => cd.Id);
             entity.Property(i => i.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.OrderId)
@@ -242,7 +243,6 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
             entity.HasOne(d => d.Order).WithMany(p => p.ProductOrderDetails)
                 .HasConstraintName("FK_ProductOrderDetails.OrderID");
-
             entity.HasOne(d => d.Product).WithMany()
                 .HasConstraintName("FK_ProductOrderDetails.ProductId");
 
@@ -271,6 +271,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<ServiceOrderDetail>(entity =>
         {
+
             entity.HasKey(cd => cd.Id);
             entity.Property(i => i.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.OrderId)

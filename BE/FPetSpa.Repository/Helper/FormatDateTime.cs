@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 namespace FPetSpa.Repository.Helper
 {
+
     public class FormatDateTime : JsonConverter<DateTime>
     {
         private const string Format = "dd/MM/yyyy HH:mm:ss";

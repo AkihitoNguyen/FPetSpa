@@ -1,5 +1,4 @@
 ﻿using FPetSpa.Repository.Data;
-
 namespace FPetSpa.Models.VoucherModel
 {
     public class RequestVoucher

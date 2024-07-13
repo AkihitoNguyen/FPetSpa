@@ -34,6 +34,8 @@
     <PackageReference Include="Microsoft.Extensions.Identity.Core" Version="8.0.6" />
     <PackageReference Include="MimeKit" Version="4.6.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
+    <PackageReference Include="PayPal" Version="1.9.1" />
+    <PackageReference Include="PayPalCoreSDK" Version="1.7.1" />
     <PackageReference Include="QRCoder" Version="1.6.0" />
     <PackageReference Include="QRCoder-ImageSharp" Version="0.10.0" />
     <PackageReference Include="Quartz" Version="3.9.0" />

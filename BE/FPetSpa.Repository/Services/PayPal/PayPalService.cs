@@ -1,123 +1,95 @@
-﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
+﻿using FPetSpa.Repository.Model.PayPalModel;
 using FPetSpa.Repository.Services.PayPal;
 using Microsoft.Extensions.Configuration;
+using PayPal.Api;
+using System.Collections.Generic;
+using System.Globalization;
 
 public class PayPalService : IPayPalService
 {
-    private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
 
-    public PayPalService(HttpClient httpClient, IConfiguration configuration)
+    public PayPalService(IConfiguration configuration)
     {
-        _httpClient = httpClient;
         _configuration = configuration;
     }
 
-    public async Task<string> GetAccessTokenAsync()
+    private APIContext GetApiContext()
     {
         var clientId = _configuration["PayPal:ClientId"];
         var clientSecret = _configuration["PayPal:ClientSecret"];
-        var authToken = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
-
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authToken);
-
-        var response = await _httpClient.PostAsync("https://api.sandbox.paypal.com/v1/oauth2/token", new FormUrlEncodedContent(new[]
+        var config = new Dictionary<string, string>
         {
-            new KeyValuePair<string, string>("grant_type", "client_credentials")
-        }));
+            { "mode", _configuration["PayPal:Mode"]! }
+        };
 
-        response.EnsureSuccessStatusCode();
-
-        var payload = await response.Content.ReadFromJsonAsync<PayPalTokenResponse>();
-        return payload.access_token;
+        var accessToken = new OAuthTokenCredential(clientId, clientSecret, config).GetAccessToken();
+        return new APIContext(accessToken) { Config = config };
     }
 
-    public async Task<PayPalPaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest)
+    public PayPalPaymentResponse CreatePayment(PayPalPaymentRequest request, string RETURN_URL, string CANCEL_URL)
     {
-        var accessToken = await GetAccessTokenAsync();
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        var apiContext = GetApiContext();
 
-        var response = await _httpClient.PostAsJsonAsync("https://api.sandbox.paypal.com/v1/payments/payment", paymentRequest);
-        response.EnsureSuccessStatusCode();
+        var payer = new Payer { payment_method = "paypal" };
+        var redirectUrls = new RedirectUrls
+        {
+            cancel_url = CANCEL_URL,
+            return_url = RETURN_URL
+        };
 
-        return await response.Content.ReadFromJsonAsync<PayPalPaymentResponse>();
+        var amount = new Amount
+        {
+            currency = request.Currency,
+            total = request.Amount.ToString("F2",CultureInfo.InvariantCulture)
+        };
+
+        var transactionList = new List<Transaction>
+        {
+            new Transaction
+            {
+                description = request.Description,
+                invoice_number = new Random().Next(100000).ToString(),
+                amount = amount
+            }
+        };
+
+        var payment = new Payment
+        {
+            intent = "sale",
+            payer = payer,
+            transactions = transactionList,
+            redirect_urls = redirectUrls
+        };
+
+        try
+        {
+            var createdPayment = payment.Create(apiContext);
+            var approvalUrl = createdPayment.links.FirstOrDefault(x => x.rel == "approval_url")?.href;
+
+            return new PayPalPaymentResponse
+            {
+                PaymentId = createdPayment.id,
+                ApprovalUrl = approvalUrl
+            };
+        }
+        catch (PayPal.PaymentsException ex)
+        {
+            // Log the exception or handle it appropriately
+            throw new Exception($"Error creating PayPal payment: {ex.Message}");
+        }
     }
 
-    public async Task<PayPalPaymentResponse> ExecutePaymentAsync(string paymentId, string payerId)
+    public Payment ExecutePayment(string paymentId, string payerId)
     {
-        var accessToken = await GetAccessTokenAsync();
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        var apiContext = GetApiContext();
 
-        var executePaymentUrl = $"https://api.sandbox.paypal.com/v1/payments/payment/{paymentId}/execute";
-        var response = await _httpClient.PostAsJsonAsync(executePaymentUrl, new { payer_id = payerId });
+        var paymentExecution = new PaymentExecution { payer_id = payerId };
+        var payment = new Payment { id = paymentId };
 
-        response.EnsureSuccessStatusCode();
+        var executedPayment = payment.Execute(apiContext, paymentExecution);
 
-        return await response.Content.ReadFromJsonAsync<PayPalPaymentResponse>();
+        return executedPayment;
     }
-}
 
-public class PayPalTokenResponse
-{
-    public string access_token { get; set; }
-}
-
-public class PayPalPaymentResponse
-{
-    public string id { get; set; }
-    public string state { get; set; }
-    public PayPalLink[] links { get; set; }
-}
-
-public class PayPalLink
-{
-    public string href { get; set; }
-    public string rel { get; set; }
-    public string method { get; set; }
-}
-
-public class PaymentRequest
-{
-    public string intent { get; set; }
-    public Payer payer { get; set; }
-    public TransactionPayPal[] transactions { get; set; }
-    public RedirectUrls redirect_urls { get; set; }
-}
-
-public class Payer
-{
-    public string payment_method { get; set; }
-}
-
-public class TransactionPayPal
-{
-    public Amount amount { get; set; }
-    public string description { get; set; }
-    public ItemList item_list { get; set; }
-}
-
-public class Amount
-{
-    public string total { get; set; }
-    public string currency { get; set; }
-}
-
-public class ItemList
-{
-    public Item[] items { get; set; }
-}
-
-public class Item
-{
-    public string name { get; set; }
-    public string currency { get; set; }
-    public string price { get; set; }
-    public string quantity { get; set; }
-}
-
-public class RedirectUrls
-{
-    public string return_url { get; set; }
-    public string cancel_url { get; set; }
 }

@@ -29,37 +29,23 @@ namespace FPetSpa.Controllers
             var responseCategories = _unitOfWork.FeedBackRepository.GetById(id);
             return Ok(responseCategories);
         }
-        //[HttpPost]
-        //public IActionResult CreateFeedBackk(RequestFeedBackModel requestFeedBackModel)
+
+        //[HttpPut("{id}")]
+
+        //public IActionResult UpdateFeedBack(int id, RequestFeedBackModel requestFeedBackModel)
         //{
-        //    var feedback = new FeedBack
+        //    var existedFeedBack = _unitOfWork.FeedBackRepository.GetById(id);
+        //    if (existedFeedBack != null)
         //    {
-        //        UserFeedBackId = requestFeedBackModel.UserId,
-        //        PictureName = requestFeedBackModel.PictureName,
-        //        Star = requestFeedBackModel.Star,
-        //        Description = requestFeedBackModel.Description,
-            
-        //    };
-        //    _unitOfWork.FeedBackRepository.Insert(feedback);
+        //        existedFeedBack. = requestFeedBackModel.OrderId;
+        //        existedFeedBack.PictureName = requestFeedBackModel.PictureName;
+        //        existedFeedBack.Star = requestFeedBackModel.Star;
+        //        existedFeedBack.Description = requestFeedBackModel.Description;
+        //    }
+        //    _unitOfWork.FeedBackRepository.Update(existedFeedBack);
         //    _unitOfWork.Save();
         //    return Ok();
         //}
-        [HttpPut("{id}")]
-
-        public IActionResult UpdateFeedBack(int id, RequestFeedBackModel requestFeedBackModel)
-        {
-            var existedFeedBack = _unitOfWork.FeedBackRepository.GetById(id);
-            if (existedFeedBack != null)
-            {
-                existedFeedBack.OrderId = requestFeedBackModel.OrderId;
-                existedFeedBack.PictureName = requestFeedBackModel.PictureName;
-                existedFeedBack.Star = requestFeedBackModel.Star;
-                existedFeedBack.Description = requestFeedBackModel.Description;
-            }
-            _unitOfWork.FeedBackRepository.Update(existedFeedBack);
-            _unitOfWork.Save();
-            return Ok();
-        }
         [HttpDelete("{id}")]
         public IActionResult DeleteFeedBack(int id)
         {
