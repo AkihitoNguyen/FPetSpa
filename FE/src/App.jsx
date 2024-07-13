@@ -29,10 +29,10 @@ import User from "./components/DashBoard/User";
 import GetProduct from "./components/DashBoard/ProductManage.jsx/GetProduct";
 import PaymentSuccess from "./components/Checkout/PaymentSuccess";
 import BookingHistory from "./components/Profile/BookingHistory";
-import Dashboards from "./components/DashBoard/Dashboards"
-import AddService from "./components/DashBoard/ServiceManagement.jsx/AddService"
-import EditService from "./components/DashBoard/ServiceManagement.jsx/EditService"
-import ViewService from "./components/DashBoard/ServiceManagement.jsx/ViewService"
+import Dashboards from "./components/DashBoard/Dashboards";
+import AddService from "./components/DashBoard/ServiceManagement.jsx/AddService";
+import EditService from "./components/DashBoard/ServiceManagement.jsx/EditService";
+import ViewService from "./components/DashBoard/ServiceManagement.jsx/ViewService";
 
 import QR from "./pages/QR/QR";
 import AddProduct from "./components/DashBoard/ProductManage.jsx/AddProduct";
@@ -58,15 +58,25 @@ const App = () => {
       "/productdisplay/:productName",
       "/confirm-email",
       "/check-email",
-      "/dashboard",
+      "/dashboard/*",
       "/payment-success",
       "/booking-history",
       "/order-service",
-      "/qr"
+      "/qr",
+      "/layout",
+      "/layout/dashboards",
+      "/layout/add-order/:orderId",
+      "/layout/service-info",
+      "/layout/add-service",
+      "/layout/edit-service/:servicesId",
+      "/layout/view-service",
+      "/layout/account-info",
+      "/layout/product-info",
+      "/layout/add-product"
     ];
 
     const isMatched = routes.some((route) => matchPath(route, location.pathname));
-    setShowNavbarAndFooter(isMatched && !location.pathname.includes("/dashboard") && !location.pathname.includes("/layout"));
+    setShowNavbarAndFooter(isMatched);
   }, [location.pathname]);
 
   return (
@@ -95,10 +105,7 @@ const App = () => {
           <Route path="/booking-history" element={<BookingHistory />} />
           <Route path="/order-service" element={<GetService />} />
           <Route path="/qr" element={<QR />} />
-          <Route
-            path="/productdisplay/:productName"
-            element={<ProductDisplay />}
-          />
+          <Route path="/productdisplay/:productName" element={<ProductDisplay />} />
           <Route path="/confirm-email" element={<ConfirmEmail />} />
           <Route path="/check-email" element={<CheckEmail />} />
 
@@ -112,11 +119,9 @@ const App = () => {
             <Route path="/layout/account-info" element={<User />} />
             <Route path="/layout/product-info" element={<GetProduct />} />
             <Route path="/layout/add-product" element={<AddProduct />} />
-           
-          
           </Route>
 
-        {/* DashBoard */}
+          {/* DashBoard */}
           <Route path="/dashboard/*" element={<DashBoard />} />
 
           {/* Đường dẫn không khớp */}

@@ -33,7 +33,7 @@ const Checkout = () => {
   const fetchProducts = async (customerId, paymentMethod, voucherId) => {
     try {
       console.log('API Call with:', { customerId, paymentMethod, voucherId }); // Log the data being sent
-      const response = await axios.post('https://localhost:7055/api/Order/StartCheckoutProduct', {
+      const response = await axios.post('https://fpetspa.azurewebsites.net/api/Order/StartCheckoutProduct', {
         customerId,
         paymentMethod,
         voucherId
@@ -49,7 +49,7 @@ const Checkout = () => {
   useEffect(() => {
     const fetchVouchers = async () => {
       try {
-        const response = await axios.get('https://localhost:7055/api/Voucher');
+        const response = await axios.get('https://fpetspa.azurewebsites.net/api/Voucher');
         setVouchers(response.data);
       } catch (error) {
         console.error('Error fetching vouchers:', error);
