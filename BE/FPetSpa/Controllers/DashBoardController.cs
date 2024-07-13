@@ -56,5 +56,24 @@ namespace FPetSpa.Controllers
                 return StatusCode(500, $"An error occurred: {ex.Message}");
             }
         }
+        [HttpGet("count-by-date")]
+        public async Task<IActionResult> GetOrderCountByDate([FromQuery] DateTime date)
+        {
+            var count = await _unitOfWork.OrderRepository.GetOrderCountByDate(date);
+            return Ok(count);
+        }
+        [HttpGet("count-by-month")]
+        public async Task<IActionResult> GetOrderCountByMonth([FromQuery] int year, [FromQuery] int month)
+        {
+            var count = await _unitOfWork.OrderRepository.GetOrderCountByMonth(year, month);
+            return Ok(count);
+        }
+
+        [HttpGet("count-by-year")]
+        public async Task<IActionResult> GetOrderCountByYear([FromQuery] int year)
+        {
+            var count = await _unitOfWork.OrderRepository.GetOrderCountByYear(year);
+            return Ok(count);
+        }
     }
 }

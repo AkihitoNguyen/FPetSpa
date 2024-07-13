@@ -103,6 +103,27 @@ public class OrderRepository
 
         return await query.SumAsync(o => o.Total ?? 0);
     }
+    public async Task<int> GetOrderCountByDate(DateTime date)
+    {
+        return await _context.Orders
+            .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Date == date.Date)
+            .CountAsync();
+    }
+
+    public async Task<int> GetOrderCountByMonth(int year, int month)
+    {
+        return await _context.Orders
+            .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Year == year && o.RequiredDate.Value.Month == month)
+            .CountAsync();
+    }
+
+
+    public async Task<int> GetOrderCountByYear(int year)
+    {
+        return await _context.Orders
+            .Where(o => o.RequiredDate.Value.Year == year)
+            .CountAsync();
+    }
 
     public async Task<string> StartCheckoutProduct(string customerId, string staffId, string method, string? voucherCode = null)
     {
