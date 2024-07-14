@@ -7,7 +7,7 @@ namespace FPetSpa.Repository
     {
         GenericRepository<Service> ServiceRepository { get; }
         GenericRepository<Product> ProductRepository { get; }
-        GenericRepository<FeedBack> FeedBackRepository { get; }
+        FeedBackRepository FeedBackRepository { get; }
         GenericRepository<Pet> PetRepository { get; }
         GenericRepository<Order> OrderGenericRepo { get; }
         GenericRepository<Category> CategoryRepository { get; }

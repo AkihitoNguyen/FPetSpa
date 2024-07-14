@@ -20,7 +20,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<Category> Categories { get; set; }
 
-    public virtual DbSet<FeedBack> FeedBacks { get; set; }
+    public virtual DbSet<FeedBack> FeedBack { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
 
