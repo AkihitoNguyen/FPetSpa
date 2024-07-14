@@ -4,6 +4,7 @@ using FPetSpa.Models.ProductModel;
 using FPetSpa.Repository;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using FPetSpa.Repository.Services;
 
 namespace FPetSpa.Controllers
 {
@@ -11,62 +12,102 @@ namespace FPetSpa.Controllers
     [ApiController]
     public class FeedBackController : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
-        public FeedBackController(UnitOfWork unitOfWork)
+        private readonly IFeedBackService _feedBackService;
+        public FeedBackController(IFeedBackService feedBackService)
         {
-            _unitOfWork = unitOfWork;
+            _feedBackService = feedBackService;
         }
-    
         [HttpGet]
-        public async Task<IActionResult> GetAll()
+        public async Task<ActionResult<List<FeedBack>>> GetAllFeedBack()
         {
-            var result = await _unitOfWork.FeedBackRepository.GetAll();
-            return Ok(result);
-        }
-        [HttpGet("{id}")]
-        public IActionResult GetFeedBackById(int id)
-        {
-            var responseCategories = _unitOfWork.FeedBackRepository.GetById(id);
-            return Ok(responseCategories);
-        }
-        //[HttpPost]
-        //public IActionResult CreateFeedBackk(RequestFeedBackModel requestFeedBackModel)
-        //{
-        //    var feedback = new FeedBack
-        //    {
-        //        UserFeedBackId = requestFeedBackModel.UserId,
-        //        PictureName = requestFeedBackModel.PictureName,
-        //        Star = requestFeedBackModel.Star,
-        //        Description = requestFeedBackModel.Description,
-            
-        //    };
-        //    _unitOfWork.FeedBackRepository.Insert(feedback);
-        //    _unitOfWork.Save();
-        //    return Ok();
-        //}
-        [HttpPut("{id}")]
-
-        public IActionResult UpdateFeedBack(int id, RequestFeedBackModel requestFeedBackModel)
-        {
-            var existedFeedBack = _unitOfWork.FeedBackRepository.GetById(id);
-            if (existedFeedBack != null)
+            try
             {
-                existedFeedBack.OrderId = requestFeedBackModel.OrderId;
-                existedFeedBack.PictureName = requestFeedBackModel.PictureName;
-                existedFeedBack.Star = requestFeedBackModel.Star;
-                existedFeedBack.Description = requestFeedBackModel.Description;
+                var feedbacks = await _feedBackService.GetAllFeedBack();
+                return Ok(feedbacks);
             }
-            _unitOfWork.FeedBackRepository.Update(existedFeedBack);
-            _unitOfWork.Save();
-            return Ok();
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
         }
+        [HttpGet("id")]
+        public async Task<ActionResult<FeedBack>> GetFeedBackById(int id)
+        {
+            try
+            {
+                var feedback = await _feedBackService.GetFeedBackById(id);
+                if (feedback == null)
+                {
+                    return NotFound($"Feedback with id {id} not found");
+                }
+                return Ok(feedback);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpGet("productId")]
+        public async Task<ActionResult<FeedBack>> GetFeedBackByProductId(string productId)
+        {
+            try
+            {
+                var feedback = await _feedBackService.GetFeedBackByProductId(productId);
+                if (feedback == null)
+                {
+                    return NotFound($"Feedback with id {productId} not found");
+                }
+                return Ok(feedback);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPost("Create")]
+        public async Task<ActionResult> CreateFeedBack([FromBody] RequestFeedBackModel feedBack)
+        {
+            try
+            {
+                await _feedBackService.CreateFeedBack(feedBack);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
+        [HttpPut("Update")]
+        public async Task<ActionResult> UpdateFeedBack(int id, [FromBody] RequestFeedBackModel feedBack)
+        {
+            try
+            {
+
+                await _feedBackService.UpdateFeedBack(id, feedBack);
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, $"Internal server error: {ex.Message}");
+            }
+        }
+
         [HttpDelete("{id}")]
         public IActionResult DeleteFeedBack(int id)
         {
-            var existedCategory = _unitOfWork.FeedBackRepository.GetById(id);
-            _unitOfWork.FeedBackRepository.Delete(existedCategory);
-            _unitOfWork.Save();
-            return Ok();
+            try
+            {
+                _feedBackService.DeleteFeedBack(id);
+                return Ok();
+            }
+            catch (ApplicationException ex)
+            {
+                return BadRequest(new { message = ex.Message });
+            }
         }
     }
+
 }

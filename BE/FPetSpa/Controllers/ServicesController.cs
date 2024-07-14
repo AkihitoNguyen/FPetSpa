@@ -7,24 +7,27 @@ using static FPetSpa.Model.ServiceModel.RequestSearchServiceModel;
 using System.Linq.Expressions;
 using FPetSpa.Repository.Services;
 using FPetSpa.Models.ServiceModel;
-using FPetSpa.Repository.Data;
+using FPetSpa.Models.ProductModel;
+
 namespace FPetSpa.Controllers
 {
     [Route("api/services")]
     [ApiController]
     public class ServicesController : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IIdService _idService;
+        private readonly ImageController _imageController;
 
-        public ServicesController(UnitOfWork unitOfWork, IIdService service)
+        public ServicesController(IUnitOfWork unitOfWork, IIdService service, ImageController imageController)
         {
             _unitOfWork = unitOfWork;
             _idService = service;
+            _imageController = imageController;
         }
 
-        [HttpGet]
-        public IActionResult SearchService([FromQuery] RequestSearchServiceModel requestSearchServiceModel)
+        [HttpGet("Search")]
+        public async Task<IActionResult> SearchServiceAsync([FromQuery] RequestSearchServiceModel requestSearchServiceModel)
         {
             var sortBy = requestSearchServiceModel.SortContent != null ? requestSearchServiceModel.SortContent?.sortServiceBy.ToString() : null;
             var sortType = requestSearchServiceModel.SortContent != null ? requestSearchServiceModel.SortContent?.sortServiceType.ToString() : null;
@@ -53,14 +56,27 @@ namespace FPetSpa.Controllers
                 pageIndex: requestSearchServiceModel.pageIndex,
                 pageSize: requestSearchServiceModel.pageSize
             );
-            return Ok(responseCategorie);
+            var result = responseCategorie.Select(async x => new ResponseSearchModel
+            {
+                ServicesId = x.ServiceId,
+                ServiceName = x.ServiceName!,
+                Description = x.Description!,
+                PictureServices = await _imageController.GetLinkByName("fpetspaservices", x.PictureName!),
+                Price = x.Price!.Value
+            });
+            return Ok(await Task.WhenAll(result));
         }
 
         [HttpGet("{id}")]
-        public IActionResult GetServiceById(String id)
+        public async Task<IActionResult> GetServiceById(String id)
         {
             var responseCategories = _unitOfWork.ServiceRepository.GetById(id);
-            return Ok(responseCategories);
+            if(responseCategories != null)
+            {
+                responseCategories.PictureName = await _imageController.GetLinkByName("fpetspaservices", responseCategories.PictureName!);
+                return (Ok(responseCategories));    
+            }
+            return BadRequest();
         }
 
         [HttpGet("findByWeight")]
@@ -80,54 +96,65 @@ namespace FPetSpa.Controllers
             return Ok(services);
         }
         [HttpPost]
-        public async Task<IActionResult> CreateService(RequestCreateServiceModel requestCreateServiceModel)
+        public async Task<IActionResult> CreateService(IFormFile File, string SerName, decimal Price)
         {
             var newServiceId = await _idService.GenerateNewServiceIdAsync();
-            var service = new Service
+            var checkImageUpload = await _imageController.UploadFileAsync(File, "fpetspaservices", null);
+            if (checkImageUpload != null)
             {
-                ServiceId = newServiceId,
-                PictureName = requestCreateServiceModel.PictureName,
-                ServiceName = requestCreateServiceModel.ServiceName,
-                MinWeight = requestCreateServiceModel.MinWeight,
-                MaxWeight = requestCreateServiceModel.MaxWeight,
-                Description = requestCreateServiceModel.Description,
-                Price = requestCreateServiceModel.Price,
-                StartDate = requestCreateServiceModel.StartDate,
-                EndDate = requestCreateServiceModel.EndDate,
-                Status = requestCreateServiceModel.Status,
-            };
-            _unitOfWork.ServiceRepository.Insert(service);
-            _unitOfWork.Save();
-            return Ok();
+                var service = new Service
+                {
+                    ServiceId = newServiceId,
+                    PictureName = File.FileName,
+                    ServiceName = SerName,
+                    MinWeight = 0,
+                    MaxWeight = 15,
+                    Description = "",
+                    Price = Price,
+                    StartDate = null,
+                    EndDate = null,
+                    Status = 0,
+                };
+                _unitOfWork.ServiceRepository.Insert(service);
+                _unitOfWork.Save();
+                return Ok();
+            }
+            return BadRequest();
         }
-        [HttpPut("{id}")]
-        public IActionResult UpdateService(String id, RequestCreateServiceModel requestCreateServiceModel)
+        [HttpPut("UpdateServices")]
+        public async Task<IActionResult> UpdateService(RequestCreateServiceModel requestCreateServiceModel)
         {
-            var existedServiceEntity = _unitOfWork.ServiceRepository.GetById(id);
+            var existedServiceEntity = _unitOfWork.ServiceRepository.GetById(requestCreateServiceModel.Id);
             if (existedServiceEntity != null)
             {
-                existedServiceEntity.PictureName = requestCreateServiceModel.PictureName;
-                existedServiceEntity.ServiceName = requestCreateServiceModel.ServiceName;
-                existedServiceEntity.MinWeight = requestCreateServiceModel.MinWeight;
-                existedServiceEntity.MaxWeight = requestCreateServiceModel.MaxWeight;
-                existedServiceEntity.Description = requestCreateServiceModel.Description;
-                existedServiceEntity.Price = requestCreateServiceModel.Price;
-                existedServiceEntity.StartDate = requestCreateServiceModel.StartDate;
-                existedServiceEntity.EndDate = requestCreateServiceModel.EndDate;
-                existedServiceEntity.Status = requestCreateServiceModel.Status;
+                if(requestCreateServiceModel.file != null)
+                {
+                    await _imageController.DeleteFileAsync("fpetspaservices", existedServiceEntity.PictureName!);
+                    await _imageController.UploadFileAsync(requestCreateServiceModel.file, "fpetspaservices", null);
+                    existedServiceEntity.PictureName = requestCreateServiceModel.file.FileName;
+                }
+                if (requestCreateServiceModel.ServiceName != null) existedServiceEntity.ServiceName = requestCreateServiceModel.ServiceName;
+                if (requestCreateServiceModel.Description != null) existedServiceEntity.Description = requestCreateServiceModel.Description;
+                if (requestCreateServiceModel.Price != null) existedServiceEntity.Price = requestCreateServiceModel.Price;
 
-            }
             _unitOfWork.ServiceRepository.Update(existedServiceEntity);
-            _unitOfWork.Save();
-            return Ok();
+                _unitOfWork.Save();
+                return Ok();
+            }
+            return BadRequest();
         }
         [HttpDelete("{id}")]
-        public IActionResult DeleteService(String id)
+        public async Task<IActionResult> DeleteService(String id)
         {
             var existedCategoryEntity = _unitOfWork.ServiceRepository.GetById(id);
-            _unitOfWork.ServiceRepository.Delete(existedCategoryEntity);
-            _unitOfWork.Save();
-            return Ok();
+            if (existedCategoryEntity != null)
+            {
+                await _imageController.DeleteFileAsync("fpetspaservices", existedCategoryEntity.PictureName!);
+                _unitOfWork.ServiceRepository.Delete(existedCategoryEntity);
+                _unitOfWork.Save();
+                return Ok();
+            }
+            return BadRequest();
         }
     }
 }

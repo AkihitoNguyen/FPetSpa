@@ -12,7 +12,10 @@ import Product from "./pages/Product/Product";
 import ProductDisplay from "./components/ProductDisplay/ProductDisplay";
 import ConfirmEmail from "./pages/ConfirmEmail/ConfirmEmail";
 import CheckEmail from "./pages/CheckEmail/CheckEmail";
+
 import "react-toastify/dist/ReactToastify.css";
+import 'semantic-ui-css/semantic.min.css';
+
 import Service from "./pages/Service/Service";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import AboutUs from "./pages/AboutUs/AboutUs";

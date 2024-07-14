@@ -1,12 +1,9 @@
-﻿using FPetSpa.Repository.Model;
-using Microsoft.AspNetCore.Http;
+﻿using FPetSpa.Repository.Data;
+using FPetSpa.Repository.Model;
 using Microsoft.AspNetCore.Identity;
-using System;
-using System.Collections.Generic;
-using System.Linq;
+using System.Collections;
 using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
+using Twilio.Types;
 
 namespace FPetSpa.Repository.Repository
 {
@@ -18,6 +15,16 @@ namespace FPetSpa.Repository.Repository
         public string GenerateRefeshToken();
         public Task<Boolean> logOut(ClaimsPrincipal User);
         public Task<Boolean> ConfirmMail(string token, string mail);
-
+        public Task<IEnumerable> getAllCustomer();
+        public Task<IEnumerable> getAllAdmin();
+        public Task<IdentityResult> SignUpAdmin(SignUpModel admin);
+        public Task<IdentityResult> ForgotPassword(string email);
+        public Task<IdentityResult> ResetPasswordForget(string mail, string password, string token);
+        public Task<ApplicationUser> GetCustomerByEmail(string mail);
+        public Task<ApplicationUser> GetCustomerById(string mail);
+        public Task<Boolean> SendVerificationCode(string phone, Guid userId);
+        public Task<Boolean> VerifyPhoneNumber(string Code, Guid userId);
+        public Task<IdentityResult> ChangePasswork(string email, string passwordOld, string passworkNew);
+        public Task<IdentityResult> RemoveAccount(string email, string password);
     }
 }

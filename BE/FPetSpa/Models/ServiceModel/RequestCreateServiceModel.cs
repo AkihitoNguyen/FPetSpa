@@ -2,24 +2,13 @@
 {
     public class RequestCreateServiceModel
     {
-      //  public string ServiceId { get; set; } = null!;
+       public string Id { get; set; }
 
-        public string? PictureName { get; set; }
+        public string? ServiceName { get; set; } = null!;
 
-        public string? ServiceName { get; set; }
+        public string? Description { get; set; } = null!;
 
-        public decimal? MinWeight { get; set; }
-
-        public decimal? MaxWeight { get; set; }
-
-        public string? Description { get; set; }
-
-        public decimal? Price { get; set; }
-
-        public DateTime? StartDate { get; set; }
-
-        public DateTime? EndDate { get; set; }
-
-        public int? Status { get; set; }
+        public decimal? Price { get; set; } = null!;
+        public IFormFile? file { get; set; } = null!;
     }
 }

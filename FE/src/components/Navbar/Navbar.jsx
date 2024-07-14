@@ -93,7 +93,7 @@ const Navbar = () => {
   }
 
   return (
-    <div className="navbar">
+    <div className="navbar1">
       <img
         onClick={() => navigate("/")}
         src={assets.logo}

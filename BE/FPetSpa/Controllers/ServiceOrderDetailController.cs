@@ -1,8 +1,10 @@
-﻿using FPetSpa.Models.ServiceOrderDetailModel;
+﻿using FPetSpa.Models.ServiceModel;
 using FPetSpa.Repository;
 using FPetSpa.Repository.Data;
+using FPetSpa.Repository.Model.ServiceOrderDetailModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 
 namespace FPetSpa.Controllers
 {
@@ -10,11 +12,13 @@ namespace FPetSpa.Controllers
     [ApiController]
     public class ServiceOrderDetailController : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
+        private readonly ImageController _image;
 
-        public ServiceOrderDetailController(UnitOfWork unitOfWork)
+        public ServiceOrderDetailController(IUnitOfWork unitOfWork, ImageController imageController)
         {
             _unitOfWork = unitOfWork;
+            _image = imageController;
         }
         [HttpGet]
         public async Task<ActionResult> GetAll()
@@ -28,6 +32,23 @@ namespace FPetSpa.Controllers
         public async Task<IActionResult> GetByOrderID(string orderId, string serviceId)
         {
             var serviceOrderDetails = await _unitOfWork.ServiceOrderDetailRepository.GetByOrderID(orderId, serviceId);
+            return Ok(serviceOrderDetails);
+        }
+
+        [HttpGet("getServiceDetailByOrderId")]
+        public async Task<IActionResult> GetOrderServiceDetail(string orderId)
+        {
+            var serviceOrderDetails = _unitOfWork.ServiceOrderDetailRepository.GetAllAsync().Result.Where(x => x.OrderId == orderId);
+            if(!serviceOrderDetails.IsNullOrEmpty()) 
+            {
+                var result = serviceOrderDetails.Select(async x => new ResponseSearchModel
+                {
+                    ServicesId = x.ServiceId!,
+                    ServiceName = _unitOfWork.ServiceRepository.GetByIdAsync(x.ServiceId).Result.ServiceName ?? "Service Removed",
+                    PictureServices = await _image.GetLinkByName("fpetspaservices", _unitOfWork.ServiceRepository.GetById(x.ServiceId!).PictureName!) ?? await _image.GetLinkByName("errorbuckett", "avatar.png"),
+                    Price = x.Price!.Value
+                });
+            }
             return Ok(serviceOrderDetails);
         }
 

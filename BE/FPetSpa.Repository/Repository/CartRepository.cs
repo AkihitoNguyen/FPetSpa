@@ -1,11 +1,6 @@
 ﻿using FPetSpa.Repository.Data;
 using FPetSpa.Repository.Model;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FPetSpa.Repository.Repository
 {
@@ -28,7 +23,7 @@ namespace FPetSpa.Repository.Repository
             return await _context.Carts.FindAsync(id);
         }
 
-        public async Task AddAsync(AddToCartModel request)
+        public async Task<String> AddAsync(AddToCartModel request)
         {
             if (request == null)
             {
@@ -83,8 +78,8 @@ namespace FPetSpa.Repository.Repository
 
                 _context.CartDetails.Update(cartDetail);
             }
-
             await _context.SaveChangesAsync();
+            return cart.CartId;
         }
         public async Task DeleteCartAsync(string cartId)
         {

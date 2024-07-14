@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FPetSpa.Repository.Data;
@@ -23,7 +20,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<Category> Categories { get; set; }
 
-    public virtual DbSet<FeedBack> FeedBacks { get; set; }
+    public virtual DbSet<FeedBack> FeedBack { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
 
@@ -82,10 +79,6 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
                   .OnDelete(DeleteBehavior.Cascade)
                 .HasConstraintName("FK_CartDetails.CartID");
 
-            //entity.HasOne(d => d.Product)
-            //    .WithMany()
-            //    .HasForeignKey(d => d.ProductId)
-            //    .HasConstraintName("FK_CartDetails.ProductID");
         });
 
         modelBuilder.Entity<Category>(entity =>
@@ -103,22 +96,22 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<FeedBack>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("FeedBack");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.Id).ValueGeneratedOnAdd();
+
 
             entity.Property(e => e.Description).HasMaxLength(300);
-            entity.Property(e => e.OrderId)
+            entity.Property(e => e.ProductId)
                 .HasMaxLength(20)
-                .HasColumnName("OrderID");
+                .HasColumnName("ProductId");
             entity.Property(e => e.PictureName).HasMaxLength(50);
             entity.Property(e => e.UserFeedBackId)
                 .HasMaxLength(50)
                 .HasColumnName("UserFeedBackID");
 
-            entity.HasOne(d => d.Order).WithMany()
-                .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("FK_FeedBack.OrderID");
+            entity.HasOne(d => d.product).WithMany()
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_FeedBack.ProductId");
 
             entity.HasOne(d => d.UserFeedBack).WithMany()
                 .HasForeignKey(d => d.UserFeedBackId)
@@ -147,12 +140,13 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.VoucherId)
                 .HasMaxLength(20)
                 .HasColumnName("VoucherID");
+            entity.Property(e => e.Status).HasColumnName("status");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.OrderCustomers)
                 .HasForeignKey(d => d.CustomerId)
                 .HasConstraintName("FK_Order.CustomerID");
 
-            entity.HasOne(d => d.Staff).WithMany(p => p.OrderStaffs)
+            entity.HasOne(d => d.Staff1).WithMany(p => p.OrderStaffs)
                 .HasForeignKey(d => d.StaffId)
                 .HasConstraintName("FK_Order.StaffID");
 
@@ -238,21 +232,22 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<ProductOrderDetail>(entity =>
         {
-            entity.HasNoKey();
 
+            entity.HasKey(cd => cd.Id);
+            entity.Property(i => i.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.OrderId)
                 .HasMaxLength(20)
                 .HasColumnName("OrderID");
             entity.Property(e => e.Price).HasColumnType("money");
             entity.Property(e => e.ProductId).HasMaxLength(20);
 
-            entity.HasOne(d => d.Order).WithMany()
-                .HasForeignKey(d => d.OrderId)
+            entity.HasOne(d => d.Order).WithMany(p => p.ProductOrderDetails)
                 .HasConstraintName("FK_ProductOrderDetails.OrderID");
-
             entity.HasOne(d => d.Product).WithMany()
-                .HasForeignKey(d => d.ProductId)
                 .HasConstraintName("FK_ProductOrderDetails.ProductId");
+
+
+
         });
 
         modelBuilder.Entity<Service>(entity =>
@@ -276,8 +271,9 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<ServiceOrderDetail>(entity =>
         {
-            entity.HasNoKey();
 
+            entity.HasKey(cd => cd.Id);
+            entity.Property(i => i.Id).ValueGeneratedOnAdd();
             entity.Property(e => e.OrderId)
                 .HasMaxLength(20)
                 .HasColumnName("OrderID");
@@ -289,15 +285,12 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
                 .HasColumnName("ServiceID");
 
             entity.HasOne(d => d.Order).WithMany()
-                .HasForeignKey(d => d.OrderId)
                 .HasConstraintName("FK_ServiceOrderDetails.OrderID");
 
             entity.HasOne(d => d.Pet).WithMany()
-                .HasForeignKey(d => d.PetId)
                 .HasConstraintName("FK_ServiceOrderDetails.PetID");
 
             entity.HasOne(d => d.Service).WithMany()
-                .HasForeignKey(d => d.ServiceId)
                 .HasConstraintName("FK_ServiceOrderDetails.ServiceID");
         });
 

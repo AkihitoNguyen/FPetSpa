@@ -1,13 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-
-namespace FPetSpa.Repository.Data;
+﻿namespace FPetSpa.Repository.Data;
 
 public partial class FeedBack
 {
+    public int Id {  get; set; }
     public string? UserFeedBackId { get; set; }
 
-    public string? OrderId { get; set; }
+    public string? ProductId { get; set; }
 
     public string? PictureName { get; set; }
 
@@ -15,7 +13,7 @@ public partial class FeedBack
 
     public string? Description { get; set; }
 
-    public virtual Order? Order { get; set; }
+    public virtual Product? product { get; set; }
 
     public virtual User? UserFeedBack { get; set; }
 }

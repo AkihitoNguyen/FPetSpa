@@ -19,6 +19,9 @@ using FPetSpa.Repository.Model.VnPayModel;
 using FPetSpa.Repository.Services.VnPay;
 using Hangfire;
 using FPetSpa.Controllers;
+using System.ComponentModel;
+using FPetSpa.Repository.Helper;
+using FPetSpa.Repository.Services.PayPal;
 
 namespace FPetSpa
 {
@@ -88,29 +91,53 @@ namespace FPetSpa
               {
                   options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
                   options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
-                  //options.CallbackPath = "/signin-google";
+                  options.CallbackPath = new PathString("/signin-google");
               });
+            builder.Services.AddHttpContextAccessor();
+            builder.Services.AddDistributedMemoryCache();   
+            builder.Services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+                options.Cookie.IsEssential = true;
+            });
 
-            builder.Services.AddCors(options => options.AddDefaultPolicy(policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
-            builder.Services.AddTransient<UnitOfWork>();
+            builder.Services.AddCors(options => options.AddPolicy("AllowAllOrigins", policy => policy.WithOrigins("http://localhost:5173", "https://fpet-spa.vercel.app").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+            builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
             // builder.Services.AddScoped<SendMailServices>();
             builder.Services.AddScoped<IEmailSenderRepository, EmailSenderRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<IProducService, ProductService>();
             builder.Services.AddScoped<IPetService, PetService>();
             builder.Services.AddScoped<ImageController>();
+            builder.Services.AddScoped<ProductOrderDetailController>();
+            builder.Services.AddScoped<ServiceOrderDetailController>();
+            builder.Services.AddScoped<PetController>();
+            builder.Services.AddScoped<OrderRepository>();
+            builder.Services.AddScoped<FeedBackRepository>();
             builder.Services.AddScoped<IIdService, IdService>();
-            builder.Services.AddControllers();
+            builder.Services.AddScoped<IOrderServices, OrderServices>();
+            builder.Services.AddScoped<TransactionService>();
+            builder.Services.AddScoped<ImageService>();
+            builder.Services.AddScoped<IFeedBackService, FeedBackService>();
+            builder.Services.AddSingleton(new BotService("https://api.coze.com/v3/chat", "pat_t8mzOeNB4jsfon2OXohlzK2HNhY6yiF7SExbrU30kpxrsfIBmA57bBQd3o3kYXy7"));
+            builder.Services.AddControllers()
+                    .AddJsonOptions(options =>
+                    {
+                        options.JsonSerializerOptions.ReferenceHandler = System.Text.Json.Serialization.ReferenceHandler.IgnoreCycles;
+                        options.JsonSerializerOptions.DefaultIgnoreCondition = System.Text.Json.Serialization.JsonIgnoreCondition.WhenWritingNull;
+                        options.JsonSerializerOptions.Converters.Add(new FormatDateTime());
+                    });
             //Add AWS
             builder.Services.AddDefaultAWSOptions(builder.Configuration.GetAWSOptions());
             builder.Services.AddAWSService<IAmazonS3>();
             builder.Services.Configure<MailSettingsModel>(builder.Configuration.GetSection("GmailSettings"));
             builder.Services.AddScoped<SendMailServices>();
+            builder.Services.AddHttpClient();
             builder.Services.AddSingleton<IVnPayService, VnPayService>();
+            builder.Services.AddSingleton<IPayPalService, PayPalService>();
             builder.Services.AddHangfire(config => config.UseSqlServerStorage(builder.Configuration.GetConnectionString("FPetDBContext")));
-            builder.Services.AddHangfireServer();
-            //Add Cart
-            
+            builder.Services.AddHangfireServer();   
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             //   builder.Services.AddSwaggerGen();
@@ -144,7 +171,7 @@ namespace FPetSpa
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 option.IncludeXmlComments(xmlPath);
             });
-
+            
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -153,13 +180,13 @@ namespace FPetSpa
                 app.UseSwagger();
                 app.UseSwaggerUI();
             }
-
+            app.UseCors("AllowAllOrigins");
+            app.UseSession();
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseHangfireDashboard();
-            app.UseCors();
 
             app.MapControllers();
 

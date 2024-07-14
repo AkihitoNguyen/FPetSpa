@@ -1,15 +1,9 @@
-﻿using FPetSpa.Repository.Data;
-using FPetSpa.Repository.Helper;
+﻿using FPetSpa.Repository.Helper;
 using FPetSpa.Repository.Model.VnPayModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Policy;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Runtime.InteropServices.JavaScript.JSType;
+using Newtonsoft.Json;
+using static QRCoder.PayloadGenerator.ShadowSocksConfig;
 
 namespace FPetSpa.Repository.Services.VnPay
 {
@@ -42,31 +36,32 @@ namespace FPetSpa.Repository.Services.VnPay
             vnpay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress(context));
             vnpay.AddRequestData("vnp_OrderInfo", "Thanh toán cho đơn hàng:" + vnPayRequestModel.OrderId);
             vnpay.AddRequestData("vnp_OrderType", "other"); //default value: other
-           // vnpay.AddRequestData("vnp_ExpireDate, ", vnPayRequestModel.ExpiredDate.ToString("yyyyMMddHHmmss"));
-            vnpay.AddRequestData("vnp_ReturnUrl", _configuration["VnPay:PaymentBackReturnUrl"]!);
+                                                            // vnpay.AddRequestData("vnp_ExpireDate, ", vnPayRequestModel.ExpiredDate.ToString("yyyyMMddHHmmss"));
+            vnpay.AddRequestData("vnp_ReturnUrl", vnPayRequestModel.ResponseUrl);
 
             vnpay.AddRequestData("vnp_TxnRef", vnPayRequestModel.OrderId); // Mã tham chiếu của giao dịch tại hệ 
             //thống của merchant.Mã này là duy nhất dùng để phân biệt các đơn hàng gửi sang VNPAY.Không được
             //    trùng lặp trong ngày
 
+
             var paymentUrl = vnpay.CreateRequestUrl(_configuration["VnPay:Url"]!, _configuration["VnPay:HashSecret"]!);
-       
+
             return paymentUrl;
         }
 
         public VnPayResponseModel PayymentExecute(IQueryCollection collection)
         {
             var vnpay = new VnPayLibrary();
-            foreach (var(key, value) in collection)
+            foreach (var (key, value) in collection)
             {
-                if(!string.IsNullOrEmpty(key) && key.StartsWith("vnp_"))
+                if (!string.IsNullOrEmpty(key) && key.StartsWith("vnp_"))
                 {
                     vnpay.AddResponseData(key, value.ToString());
                 }
             }
 
-            var vnp_orderId = Convert.ToInt64(vnpay.GetResponseData("vnp_TxnRef"));
-            var vnp_transactionId = Convert.ToInt64(vnpay.GetResponseData("vnp_TransactionNo"));
+            var vnp_orderId = (vnpay.GetResponseData("vnp_TxnRef"));
+            var vnp_transactionId = (vnpay.GetResponseData("vnp_TransactionNo"));
             var vnp_SecureHash = collection.FirstOrDefault(p => p.Key == "vnp_SecureHash").Value;
             var vnp_ResponseCode = vnpay.GetResponseData("vnp_ResponseCode");
             var vnp_OrderInfo = vnpay.GetResponseData("vnp_OrderInfo");
@@ -79,16 +74,59 @@ namespace FPetSpa.Repository.Services.VnPay
                     Success = false,
                 };
             }
-            return new VnPayResponseModel { 
-              Success = true, PaymentMethod = "VnPay",
-              OrderDescription = vnp_OrderInfo,
-              OrderId = vnp_orderId.ToString(),
-              TransactionId = vnp_transactionId.ToString(),
-              Token = vnp_SecureHash.ToString(),
-              VnPayResponseCode = vnp_ResponseCode.ToString(),
+            return new VnPayResponseModel
+            {
+                Success = true,
+                PaymentMethod = "VnPay",
+                OrderDescription = vnp_OrderInfo,
+                OrderId = vnp_orderId.ToString(),
+                TransactionId = vnp_transactionId.ToString(),
+                Token = vnp_SecureHash.ToString(),
+                VnPayResponseCode = vnp_ResponseCode.ToString(),
             };
-
-            
         }
+        public async Task<VnPayBalanceResponse> GetVnPayBalanceAsync(DateTime? startDate, DateTime? endDate, HttpContext context)
+        {
+            VnPayLibrary vnpay = new VnPayLibrary();
+
+            vnpay.AddRequestData("vnp_Version", _configuration["VnPay:Version"]!);
+            vnpay.AddRequestData("vnp_Command", "querydr");
+            vnpay.AddRequestData("vnp_TmnCode", _configuration["VnPay:TmnCode"]!);
+            vnpay.AddRequestData("vnp_TxnRef", Guid.NewGuid().ToString());
+            vnpay.AddRequestData("vnp_OrderInfo", "Query balance");
+            vnpay.AddRequestData("vnp_TransDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
+            vnpay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
+            vnpay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress(context));
+
+            // Nếu startDate và endDate là null, lấy dữ liệu trong ngày
+            var effectiveStartDate = startDate ?? DateTime.Today;
+            var effectiveEndDate = endDate ?? DateTime.Today;
+
+            vnpay.AddRequestData("vnp_BeginDate", effectiveStartDate.ToString("yyyyMMdd"));
+            vnpay.AddRequestData("vnp_EndDate", effectiveEndDate.ToString("yyyyMMdd"));
+
+            var baseUrl = _configuration["VnPay:BalanceApiUrl"];
+            var requestUrl = vnpay.CreateRequestUrl(baseUrl!, _configuration["VnPay:HashSecret"]!);
+
+            using (var httpClient = new HttpClient())
+            {
+                var response = await httpClient.GetAsync(requestUrl);
+                var responseString = await response.Content.ReadAsStringAsync();
+
+                // Assume the response string is in JSON format and deserialize it
+                var vnPayBalanceResponse = JsonConvert.DeserializeObject<VnPayBalanceResponse>(responseString);
+
+                if (vnPayBalanceResponse.Status == 0)
+                {
+                    return vnPayBalanceResponse;
+                }
+                else
+                {
+                    throw new Exception($"Error retrieving balance: {vnPayBalanceResponse.Message}");
+                }
+            }
+        }
+
+
     }
 }

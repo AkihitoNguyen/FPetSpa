@@ -1,4 +1,4 @@
-
+        
 using FPetSpa.Repository;
 
 using FPetSpa.Repository.Data;
@@ -12,6 +12,9 @@ using System.Linq.Expressions;
 using FPetSpa.Repository.Services;
 using Microsoft.AspNetCore.Authorization;
 using System.Configuration;
+using FPetSpa.Repository.Model.ProductOrderDetailModel;
+using FPetSpa.Models.ServiceModel;
+
 
 namespace FPetSpa.Controllers
 {
@@ -20,11 +23,11 @@ namespace FPetSpa.Controllers
     [ApiController]
     public class ProductController : ControllerBase
     {
-        private readonly UnitOfWork _unitOfWork;
+        private readonly IUnitOfWork _unitOfWork;
         private readonly IProducService _productService;
         private readonly ImageController _imageController;
 
-        public ProductController(UnitOfWork unitOfWork, IProducService service, ImageController image)
+        public ProductController(IUnitOfWork unitOfWork, IProducService service, ImageController image)
         {
             _unitOfWork = unitOfWork;
             _productService = service;
@@ -90,9 +93,7 @@ namespace FPetSpa.Controllers
             return Ok(result);
         }
 
-        [HttpGet("{id}")]
-        //[Authorize]
-
+        [HttpGet("SearchById")]
         public IActionResult GetProductById(string id)
         {
             var responseCategories = _unitOfWork.ProductRepository.GetById(id);
@@ -104,48 +105,63 @@ namespace FPetSpa.Controllers
         public async Task<IActionResult> CreateProduct(RequestCreateProductModel requestCreateProductModel)
         {
             var newProductId = await _productService.GenerateNewProductIdAsync();
-            var productEntity = new Product
 
+            var checkImageUpload = await _imageController.UploadFileAsync(requestCreateProductModel.file, "productfpetspa", null);
+            if (checkImageUpload != null)
             {
-                ProductId = newProductId,
-                ProductName = requestCreateProductModel.ProductName,
-                PictureName = requestCreateProductModel.PictureName,
-                CategoryId = requestCreateProductModel.CategoryID,
-                ProductQuantity = requestCreateProductModel.ProductQuantity,
-                ProductDescription = requestCreateProductModel.ProductDescription,
-                Price = requestCreateProductModel.Price,
-            };
-            _unitOfWork.ProductRepository.Insert(productEntity);
-            _unitOfWork.Save();
-            return Ok();
-        }
+                var productEntity = new Product
+
+                {
+                    ProductId = newProductId,
+                    ProductName = requestCreateProductModel.ProductName,
+                    PictureName = requestCreateProductModel.file.FileName,
+                    CategoryId = requestCreateProductModel.CategoryID,
+                    ProductQuantity = requestCreateProductModel.ProductQuantity,
+                    ProductDescription = requestCreateProductModel.ProductDescription,
+                    Price = requestCreateProductModel.Price,
+                };
+
+                _unitOfWork.ProductRepository.Insert(productEntity);
+                _unitOfWork.Save();
+                return Ok();
+            }
+            return BadRequest("Can't upload image");
+            }
+        
         [HttpPut("{id}")]
         //[Authorize]
-        public IActionResult UpdateProduct(string id, RequestCreateProductModel requestCreateProductModel)
+        public async Task<IActionResult> UpdateProduct(string id, RequestUpdateProductModel requestCreateProductModel)
         {
             var existedProductEntity = _unitOfWork.ProductRepository.GetById(id);
             if (existedProductEntity != null)
             {
-                existedProductEntity.ProductName = requestCreateProductModel.ProductName;
-                existedProductEntity.PictureName = requestCreateProductModel.PictureName;
-                existedProductEntity.CategoryId = requestCreateProductModel.CategoryID;
+                if(requestCreateProductModel.file != null)
+                {
+                    await _imageController.DeleteFileAsync("productfpetspa", existedProductEntity.PictureName!);
+                    await _imageController.UploadFileAsync(requestCreateProductModel.file, "productfpetspa", null);
+                    existedProductEntity.PictureName = requestCreateProductModel.file.FileName;
+                }
+                if (requestCreateProductModel.ProductQuantity != null)
                 existedProductEntity.ProductQuantity = requestCreateProductModel.ProductQuantity;
-                existedProductEntity.ProductDescription = requestCreateProductModel.ProductDescription;
-
+                if(requestCreateProductModel.Price != null)
                 existedProductEntity.Price = requestCreateProductModel.Price;
-
+                _unitOfWork.ProductRepository.Update(existedProductEntity);
+                _unitOfWork.Save();
             }
-            _unitOfWork.ProductRepository.Update(existedProductEntity);
-            _unitOfWork.Save();
             return Ok();
         }
         [HttpDelete("{id}")]
-        public IActionResult DeleteProduct(string id)
+        public async Task<IActionResult> DeleteProduct(string id)
         {
             var existedCategoryEntity = _unitOfWork.ProductRepository.GetById(id);
-            _unitOfWork.ProductRepository.Delete(existedCategoryEntity);
-            _unitOfWork.Save();
-            return Ok();
+            if (existedCategoryEntity != null)
+            {
+                await _imageController.DeleteFileAsync("productfpetspa", existedCategoryEntity.ProductName!);
+                _unitOfWork.ProductRepository.Delete(existedCategoryEntity);
+                _unitOfWork.Save();
+                return Ok();
+            }
+            return BadRequest();
         }
 
     }
