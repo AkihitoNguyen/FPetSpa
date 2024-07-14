@@ -47,8 +47,6 @@ namespace FPetSpa.Controllers
             if (respone == null || respone.VnPayResponseCode != "00") return BadRequest();
             return Ok(respone);
         }
-
-
         [HttpGet("balance")]
         public async Task<IActionResult> GetBalance([FromQuery] DateTime? startDate, [FromQuery] DateTime? endDate)
         {

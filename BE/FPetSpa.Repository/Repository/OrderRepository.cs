@@ -17,6 +17,7 @@ using System.Drawing;
 using System;
 using System.IO;
 using System.Drawing.Imaging;
+using FPetSpa.Repository.Model.OrderModel;
 using MailKit.Search;
 using FPetSpa.Repository.Model.PayPalModel;
 using PayPal.Api;
@@ -49,19 +50,39 @@ public class OrderRepository
     {
         return await _context.Orders.CountAsync();
     }
-    public async Task<(decimal, decimal)> GetRevenueForTwoMonthsAsync(DateTime month1, DateTime month2)
+    public async Task<decimal> CompareOrdersForTwoMonthsAsync(int year1, int month1, int year2, int month2)
     {
-        var revenueMonth1 = await _context.Orders
-            .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Month == month1.Month && o.RequiredDate.Value.Year == month1.Year)
-            .SumAsync(o => o.Total ?? 0);
+        // Xác định khoảng thời gian của tháng thứ nhất
+        var startOfMonth1 = new DateTime(year1, month1, 1);
+        var endOfMonth1 = startOfMonth1.AddMonths(1).AddDays(-1);
 
-        var revenueMonth2 = await _context.Orders
-            .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Month == month2.Month && o.RequiredDate.Value.Year == month2.Year)
-            .SumAsync(o => o.Total ?? 0);
+        // Xác định khoảng thời gian của tháng thứ hai
+        var startOfMonth2 = new DateTime(year2, month2, 1);
+        var endOfMonth2 = startOfMonth2.AddMonths(1).AddDays(-1);
 
-        return (revenueMonth1, revenueMonth2);
+        // Tổng số đơn hàng của tháng thứ nhất
+        var ordersMonth1 = await _context.Orders
+            .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Date >= startOfMonth1 && o.RequiredDate.Value.Date <= endOfMonth1)
+            .CountAsync();
+
+        // Tổng số đơn hàng của tháng thứ hai
+        var ordersMonth2 = await _context.Orders
+            .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Date >= startOfMonth2 && o.RequiredDate.Value.Date <= endOfMonth2)
+            .CountAsync();
+
+        // Tính toán phần trăm thay đổi
+        return CalculatePercentageChange(ordersMonth1, ordersMonth2);
     }
 
+    private decimal CalculatePercentageChange(int oldTotal, int newTotal)
+    {
+        if (oldTotal == 0)
+        {
+            return newTotal == 0 ? 0 : 100;
+        }
+        return ((decimal)(newTotal - oldTotal) / oldTotal) * 100;
+    }
+ 
     public async Task<decimal> GetTotalRevenueAsync(DateTime? fromDate, DateTime? toDate)
     {
         var query = _context.Orders.AsQueryable();
@@ -77,6 +98,53 @@ public class OrderRepository
         }
 
         return await query.SumAsync(o => o.Total ?? 0);
+    }
+
+    public async Task<List<OrderResponse>> GetOrderStatsByDateRange(DateTime startDate, DateTime endDate)
+    {
+        try
+        {
+            var orders = await _context.Orders
+                .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Date >= startDate.Date && o.RequiredDate.Value.Date <= endDate.Date)
+                .Include(o => o.ProductOrderDetails)
+                .ToListAsync();
+
+            var groupedOrders = orders.GroupBy(o => o.RequiredDate.Value.Date)
+                .Select(g => new OrderResponse
+                {
+                    Date = g.Key.ToString("dd/MM/yyyy"), 
+                    OrderCount = g.Count(),
+                    ProductCount = g.Sum(o => o.ProductOrderDetails.Sum(pod => pod.Quantity ?? 0)),
+                    TotalAmount = (decimal)g.Sum(o => o.Total)
+                })
+                .ToList();
+
+            return groupedOrders;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in GetOrderStatsByDateRange: {ex.Message}");
+            return new List<OrderResponse>();
+        }
+    }
+
+
+
+
+
+    public async Task<int> GetOrderCountByMonth(int year, int month)
+    {
+        return await _context.Orders
+            .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Year == year && o.RequiredDate.Value.Month == month)
+            .CountAsync();
+    }
+
+
+    public async Task<int> GetOrderCountByYear(int year)
+    {
+        return await _context.Orders
+            .Where(o => o.RequiredDate.Value.Year == year)
+            .CountAsync();
     }
 
     public async Task<string> StartCheckoutProduct(string customerId, string staffId, string method, string? voucherCode = null)

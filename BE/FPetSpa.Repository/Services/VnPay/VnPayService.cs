@@ -126,7 +126,5 @@ namespace FPetSpa.Repository.Services.VnPay
                 }
             }
         }
-
-
     }
 }
