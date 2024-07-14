@@ -207,12 +207,12 @@ const PetProfile = () => {
   return (
     <div className="p-8">
       <div className="flex justify-between items-center mb-8">
-        <h2 className="text-2xl font-semibold">Thông tin vật nuôi</h2>
+        <h2 className="text-2xl font-semibold">Pet Information</h2>
         <button
           className="px-4 py-2 bg-blue-500 text-white rounded-md"
           onClick={handleRegisterPetInfo}
         >
-          + Đăng ký thông tin vật nuôi
+          + Add Pet
         </button>
       </div>
 
@@ -222,7 +222,7 @@ const PetProfile = () => {
         <>
           <div className="mb-6">
             <p className="text-lg font-semibold mb-2">
-              Số lượng pet có: {petData.length}
+              Quantity Pet: {petData.length}
             </p>
           </div>
 
@@ -238,35 +238,35 @@ const PetProfile = () => {
                 ) : (
                   <>
                     <h3 className="text-xl font-semibold mb-2">
-                      Vật nuôi #{index + 1}
+                      Pet #{index + 1}
                     </h3>
                     <div className="flex items-center mb-2">
-                      <span className="font-semibold mr-2">Tên vật nuôi:</span>
+                      <span className="font-semibold mr-2">Name :</span>
                       <span>{pet.petName}</span>
                     </div>
                     <div className="flex items-center mb-2">
-                      <span className="font-semibold mr-2">Giới tính vật nuôi:</span>
+                      <span className="font-semibold mr-2">Gender :</span>
                       <span>{pet.petGender}</span>
                     </div>
                     <div className="flex items-center mb-2">
-                      <span className="font-semibold mr-2">Loại vật nuôi:</span>
+                      <span className="font-semibold mr-2">Type :</span>
                       <span>{pet.petType}</span>
                     </div>
                     <div className="flex items-center mb-2">
-                      <span className="font-semibold mr-2">Cân nặng vật nuôi:</span>
+                      <span className="font-semibold mr-2">Weight :</span>
                       <span>{pet.petWeight}</span>
                     </div>
                     <button
                       className="px-4 py-2 bg-blue-700 text-white rounded-md mr-2"
                       onClick={() => handleEditPet(pet.petId)}
                     >
-                      Chỉnh sửa
+                     Edit
                     </button>
                     <button
                       className="px-4 py-2 bg-red-700 text-white rounded-md"
                       onClick={() => setDeletingPetId(pet.petId)}
                     >
-                      Xóa
+                      Remove
                     </button>
                   </>
                 )}

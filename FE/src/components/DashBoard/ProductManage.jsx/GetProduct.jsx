@@ -1,4 +1,4 @@
-import React, {  useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import UpdateProduct from "./UpdateProduct";
@@ -37,13 +37,33 @@ const GetProduct = () => {
     setShowModal(true);
   };
 
-  const handleRemove = (productId) => {
-    alert(`Remove product ${productId}`);
+  const handleRemove = async (productId) => {
+    const confirmed = window.confirm("Are you sure you want to delete this product?");
+    if (!confirmed) return;
+
+    try {
+      await axios.delete(`https://fpetspa.azurewebsites.net/api/products/${productId}`);
+      setProducts((prevProducts) =>
+        prevProducts.filter((product) => product.productId !== productId)
+      );
+      alert('Product removed successfully!');
+    } catch (error) {
+      console.error("Error removing product:", error);
+      alert('Failed to remove product.');
+    }
   };
 
   const closeModal = () => {
     setSelectedProduct(null);
     setShowModal(false);
+  };
+
+  const handleProductUpdate = (updatedProduct) => {
+    setProducts((prevProducts) =>
+      prevProducts.map((product) =>
+        product.productId === updatedProduct.productId ? updatedProduct : product
+      )
+    );
   };
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -57,7 +77,9 @@ const GetProduct = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h2 className="text-2xl font-bold mb-4">Danh sách sản phẩm</h2>
+      <div className="flex justify-between items-center mb-4">
+        <h2 className="text-2xl font-bold">List Product</h2>
+      </div>
       {loading ? (
         <div className="bg-white rounded shadow p-6 w-full max-w-xl mx-auto">
           <div className="animate-pulse flex space-x-4">
@@ -71,30 +93,30 @@ const GetProduct = () => {
           </div>
         </div>
       ) : (
-        <div>
+        <div className="overflow-x-auto">
           <table className="min-w-full bg-white border border-gray-200">
             <thead>
               <tr className="bg-gray-100">
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Ảnh
+                  Picture 
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Tên sản phẩm
+                  Product 
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Loại
+                  Category
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Mô tả
+                  Description
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Số lượng
+                  Quantity
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Giá
+                  Price
                 </th>
                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Hành động
+                  Action
                 </th>
               </tr>
             </thead>
@@ -130,12 +152,12 @@ const GetProduct = () => {
                     <button
                       onClick={() => handleUpdate(product.productId)}
                       className="text-indigo-600 hover:text-indigo-900">
-                      Cập nhật
+                      Edit /
                     </button>
                     <button
                       onClick={() => handleRemove(product.productId)}
                       className="ml-2 text-red-600 hover:text-red-900">
-                      Xóa
+                      Remove
                     </button>
                   </td>
                 </tr>
@@ -166,28 +188,31 @@ const GetProduct = () => {
           </div>
         </div>
       )}
-      
-      {showModal && selectedProduct && (
+
+      {showModal && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-end justify-center min-h-screen pt-4 px-4 pb-20 text-center sm:block sm:p-0">
-            <div
-              className="fixed inset-0 transition-opacity"
-              aria-hidden="true">
-              <div className="absolute inset-0 bg-gray-500 opacity-75"></div>
-            </div>
+          <div className="flex items-center justify-center min-h-screen">
+            <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
-            <span
-              className="hidden sm:inline-block sm:align-middle sm:h-screen"
-              aria-hidden="true">
-              &#8203;
-            </span>
-
-            <div className="inline-block align-bottom bg-white rounded-lg text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-lg sm:w-full">
-              <div className="bg-white px-4 pt-5 pb-4 sm:p-6 sm:pb-4">
-                <UpdateProduct
-                  product={selectedProduct}
-                  closeModal={closeModal}
-                />
+            <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-7xl w-full">
+              <div className="bg-white px-4 pt-0 pb-4 sm:p-6 sm:pb-4">
+                <div className="sm:flex justify-center sm:items-center">
+                  <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">            
+                      <UpdateProduct
+                        product={selectedProduct}
+                        closeModal={closeModal}
+                        onUpdate={handleProductUpdate}
+                      />
+                  </div>
+                </div>
+              </div>
+              <div className="bg-gray-50 px-4 py-3 sm:px-6 sm:flex sm:flex-row-reverse">
+                <button
+                  type="button"
+                  className="w-full inline-flex justify-center rounded-md border border-transparent shadow-sm px-4 py-2 bg-red-600 text-base font-medium text-white hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 sm:ml-3 sm:w-auto sm:text-sm"
+                  onClick={closeModal}>
+                  Close
+                </button>
               </div>
             </div>
           </div>

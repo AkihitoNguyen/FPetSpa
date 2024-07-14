@@ -8,6 +8,8 @@ import { Routes, Route } from "react-router-dom";
 import Dashboards from "../../components/DashBoard/Dashboards";
 import EditService from "../../components/DashBoard/ServiceManagement.jsx/EditService";
 import ViewService from "../../components/DashBoard/ServiceManagement.jsx/ViewService";
+import AddProduct from "../../components/DashBoard/ProductManage.jsx/AddProduct";
+
 
 const DashBoard = () => {
   return (
@@ -23,7 +25,8 @@ const DashBoard = () => {
           <Route path="/layout/add-order" element={<AddOrder />} />
           <Route path="/layout/edit-order" element={<EditService />} />
           <Route path="/layout/view-order" element={<ViewService />} />
-
+          <Route path="/layout/add-product" element={<AddProduct />} />
+      
 
         </Routes>
       </div>

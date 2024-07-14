@@ -26,7 +26,7 @@ const BookingService = () => {
     serviceId: "",
     petId: "",
     customerId: currentUser.userId,
-    paymentMethod: "",
+    paymentMethod: ""  
   });
 
   const [services, setServices] = useState([]);
@@ -108,7 +108,8 @@ const BookingService = () => {
       values.timeSlot !== "" &&
       values.serviceId !== "" &&
       values.petId !== "" &&
-      values.paymentMethod !== ""
+      values.paymentMethod !== "" &&
+      values.paymentMethod !== null
     );
   };
 
@@ -136,6 +137,7 @@ const BookingService = () => {
           serviceId: values.serviceId,
           paymentMethod: values.paymentMethod,
           bookingDatetime: datetime,
+
         }
       );
 

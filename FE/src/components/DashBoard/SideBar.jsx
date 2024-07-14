@@ -5,6 +5,7 @@ import { assets } from "../../assets/assets";
 const Sidebar = () => {
   const [showServicesDropdown, setShowServicesDropdown] = useState(false);
   const [showBookingDropdown, setShowBookingDropdown] = useState(false);
+  const [showProductDropdown,setshowProductDropdown] = useState(false);
 
   const toggleServicesDropdown = () => {
     setShowServicesDropdown(!showServicesDropdown);
@@ -12,6 +13,9 @@ const Sidebar = () => {
 
   const toggleBookingDropdown = () => {
     setShowBookingDropdown(!showBookingDropdown);
+  };
+  const toggleProductDropdown = () => {
+    setshowProductDropdown(!showProductDropdown);
   };
 
   return (
@@ -27,9 +31,35 @@ const Sidebar = () => {
         <li className="p-4 text-[#9A9CAE] text-[13.975px] font-medium cursor-pointer hover:text-white">
           <Link to="/layout/account-info">Customer</Link>
         </li>
-        <li className="p-4 text-[#9A9CAE] text-[13.975px] font-medium cursor-pointer hover:text-white">
-          <Link to="/layout/product-info">Catalog</Link>
+
+        <li className="relative">
+          <div
+            className="p-4 text-[#9A9CAE] text-[13.975px] font-medium cursor-pointer hover:text-white flex justify-between items-center"
+            onClick={toggleProductDropdown}>
+            Product Manager
+            <svg
+              className={`transform transition-transform duration-300 ${
+                showProductDropdown ? "rotate-180" : ""
+              }`}
+              width="12"
+              height="12"
+              viewBox="0 0 24 24">
+              <path fill="currentColor" d="M12 14l-8-8h16z" />
+            </svg>
+          </div>
+          {showProductDropdown && (
+            <ul className="bg-neutral-900 text-[#9A9CAE] mt-1 text-[13.975px] font-medium transform transition-transform duration-500">
+              <li className="p-4 cursor-pointer hover:text-white">
+                <Link to="/layout/product-info">Product</Link>
+              </li>
+              <li className="p-4 cursor-pointer hover:text-white">
+                <Link to="/layout/add-product">Add Product</Link>
+              </li>
+             
+            </ul>
+          )}
         </li>
+
         <li className="relative">
           <div
             className="p-4 text-[#9A9CAE] text-[13.975px] font-medium cursor-pointer hover:text-white flex justify-between items-center"

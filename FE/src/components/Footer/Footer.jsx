@@ -17,7 +17,7 @@ const Footer = () => {
                 </div>
             </div>
 
-            {/* <div className='flex items-start gap-80 text-start'>
+            <div className='flex items-start gap-80 text-start'>
                 <div className='flex items-start flex-col bg-cover text-left relative'>
                     <h6 className='pl-8'>Support</h6>
                     <ul className=''>
@@ -64,7 +64,7 @@ const Footer = () => {
                         </li>
                     </ul>
                 </div>
-            </div> */}
+            </div>
         </div>
     )
 }

@@ -2,105 +2,56 @@ import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
 
 const FirstForm = ({ formValues, onChange, services, userPets }) => {
-  const today = dayjs().format("YYYY-MM-DD"); // Ngày hiện tại dùng cho min của input date
-  const currentTime = dayjs().format("HH:mm:ss"); // Thời gian hiện tại dùng để disable các khung giờ trong quá khứ
+  const today = dayjs().format("YYYY-MM-DD"); // Use ISO format for comparison
+  const currentTime = dayjs().format("HH:mm:ss");
 
-  // State để lưu trữ số slot còn lại
-  const [remainingSlots, setRemainingSlots] = useState([]);
-
-  // Hàm sinh danh sách các khung giờ từ 08:00 đến 19:00 cách nhau 30 phút
+  // Function to generate time slots
   const generateTimeSlots = () => {
-    const slots = [];
+    const slots = ["Chọn khung giờ"];
     let currentTime = dayjs().hour(8).minute(0).second(0);
     const endTime = dayjs().hour(19).minute(0).second(0);
 
     while (currentTime.isBefore(endTime)) {
       slots.push(currentTime.format("HH:mm:ss"));
-      currentTime = currentTime.add(60, "minute");
+      currentTime = currentTime.add(30, "minute");
     }
 
     return slots;
   };
 
-  // Hàm gọi API để lấy dữ liệu booking
-  const fetchBookings = async () => {
-    try {
-      const response = await fetch(
-        "https://fpetspa.azurewebsites.net/api/Order/GetAllOrderService"
-      );
-      if (!response.ok) {
-        throw new Error("Failed to fetch bookings");
-      }
-      const bookings = await response.json();
-      return bookings;
-    } catch (error) {
-      console.error("Error fetching bookings:", error);
-      throw error;
-    }
-  };
+  const timeSlots = generateTimeSlots();
 
-  // Hàm tính toán số slot còn lại dựa trên dữ liệu từ API
-  const calculateRemainingSlots = async () => {
-    try {
-      const bookings = await fetchBookings();
-
-      const remaining = generateTimeSlots().map((timeSlot) => {
-        // Tính tổng số lượng đã đặt cho từng khung giờ
-        const bookedCount = bookings
-          .filter(
-            (booking) =>
-              booking.bookingDate === formValues.date &&
-              booking.timeSlot === timeSlot
-          )
-          .reduce((total, booking) => total + booking.quantity, 0);
-
-        const remainingSlots = 10 - bookedCount; // Giả sử mỗi khung giờ có tối đa 10 slot
-
-        return { timeSlot, remaining: remainingSlots };
-      });
-
-      setRemainingSlots(remaining);
-    } catch (error) {
-      console.error("Error calculating remaining slots:", error);
-    }
-  };
-
-  // Sử dụng useEffect để tính toán số slot còn lại khi ngày hoặc khung giờ thay đổi
-  useEffect(() => {
-    calculateRemainingSlots();
-  }, [formValues.date, formValues.timeSlot]);
-
-  // Xử lý sự kiện thay đổi input
+  // Enhanced onChange handler with validation
   const handleInputChange = (e) => {
     const { name, value } = e.target;
 
-    // Kiểm tra ngày không được trong quá khứ
+    // Check if the date is today
     if (name === "date" && value < today) {
       alert("Ngày không thể là ngày trong quá khứ!");
       return;
     }
 
-    // Kiểm tra khung giờ không được trong quá khứ nếu ngày là hôm nay
+    // Check if the time slot is in the past for today's date
     if (name === "timeSlot" && formValues.date === today && value < currentTime) {
       alert("Khung giờ không thể trong quá khứ!");
       return;
     }
 
-    // Truyền sự kiện thay đổi lên component cha (nếu cần)
+    // If valid, propagate the change
     onChange(e);
   };
 
   return (
     <div className="">
-      {/* Phần thông tin thú cưng */}
+      {/* Pet Information */}
       <div className="mx-auto max-w-2xl text-center mt-5">
         <h3 className="text-xl font-semibold tracking-tight text-gray-900 sm:text-xl">
-          Đặt dịch vụ
+          Booking Service
         </h3>
       </div>
       <div className="mx-auto mt-2 max-w-xl sm:mt-5">
         <div className="grid grid-cols-3 gap-x-8 gap-y-6 sm:grid-cols-2">
-          {/* Chọn thú cưng */}
+          {/* Select Pet */}
           <div className="">
             <label
               htmlFor="pet-id"
@@ -126,7 +77,7 @@ const FirstForm = ({ formValues, onChange, services, userPets }) => {
             </div>
           </div>
 
-          {/* Chọn ngày */}
+          {/* Date */}
           <div className="">
             <label
               htmlFor="date"
@@ -147,7 +98,7 @@ const FirstForm = ({ formValues, onChange, services, userPets }) => {
             </div>
           </div>
 
-          {/* Chọn khung giờ */}
+          {/* Time Slot */}
           <div className="">
             <label
               htmlFor="time-slot"
@@ -163,20 +114,20 @@ const FirstForm = ({ formValues, onChange, services, userPets }) => {
                 value={formValues.timeSlot}
                 className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
               >
-                {remainingSlots.map((slot) => (
+                {timeSlots.map((timeSlot) => (
                   <option
-                    key={slot.timeSlot}
-                    value={slot.timeSlot}
-                    disabled={formValues.date === today && slot.timeSlot < currentTime}
+                    key={timeSlot}
+                    value={timeSlot}
+                    disabled={formValues.date === today && timeSlot < currentTime}
                   >
-                    {`${slot.timeSlot} (${slot.remaining} slots left)`}
+                    {timeSlot}
                   </option>
                 ))}
               </select>
             </div>
           </div>
 
-          {/* Chọn dịch vụ */}
+          {/* Service Type */}
           <div className="sm:col-span-2 mt-4">
             <label
               htmlFor="serviceId"
@@ -194,7 +145,7 @@ const FirstForm = ({ formValues, onChange, services, userPets }) => {
               >
                 <option value="">Chọn dịch vụ</option>
                 {services.map((service) => (
-                  <option key={service.serviceId} value={service.serviceId}>
+                  <option key={service.servicesId} value={service.servicesId}>
                     {service.serviceName}
                   </option>
                 ))}
@@ -202,7 +153,7 @@ const FirstForm = ({ formValues, onChange, services, userPets }) => {
             </div>
           </div>
 
-          {/* Chọn phương thức thanh toán */}
+          {/* Payment Method */}
           <div className="sm:col-span-2 mt-4">
             <label
               htmlFor="payment-method"
