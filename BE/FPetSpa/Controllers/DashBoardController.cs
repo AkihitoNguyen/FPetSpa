@@ -23,12 +23,7 @@ namespace FPetSpa.Controllers
             var orderCount = await _unitOfWork.OrderRepository.GetOrderCount();
             return Ok(orderCount);
         }
-        [HttpGet("compare-orders")]
-        public async Task<IActionResult> CompareOrders([FromQuery] int year1, [FromQuery] int month1, [FromQuery] int year2, [FromQuery] int month2)
-        {
-            var result = await _unitOfWork.OrderRepository.CompareOrdersForTwoMonthsAsync(year1, month1, year2, month2);
-            return Ok(result);
-        }
+   
         [HttpGet("total-revenue")]
         public async Task<IActionResult> GetTotalRevenue()
         {
