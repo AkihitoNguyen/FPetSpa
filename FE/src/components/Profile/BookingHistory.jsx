@@ -133,9 +133,11 @@ const BookingHistory = () => {
           className="px-2 py-1 border border-gray-300 rounded">
           <option value="all">All</option>
           <option value="0">Pending</option>
-          <option value="1">Staff Accepted</option>
-          <option value="2">Completed</option>
-          <option value="3">Failed</option>
+          <option value="1">Proccessing</option>
+          <option value="2">Staff Accepted</option>
+          <option value="3">Completed</option>
+          <option value="5">Failed</option>
+         
         </select>
       </div>
       {filteredOrders.length === 0 ? (
@@ -189,15 +191,21 @@ const BookingHistory = () => {
                       <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-red-600 bg-red-100">
                         Failed
                       </span>
-                    ) : order.status === 1 ? (
+                    ) : order.status === 2 ? (
                       <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-blue-600 bg-blue-100">
                         Staff Accepted
+                      </span>
+                    )
+                    : order.status === 1 ? (
+                      <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-yellow-600 bg-yellow-100">
+                        Processing
                       </span>
                     ) : (
                       <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-green-600 bg-green-100">
                         Completed
                       </span>
-                    )}
+                    )
+                    }
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
                     {order.status === 0 && (

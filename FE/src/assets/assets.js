@@ -20,6 +20,11 @@ import rawble_1 from './rawble_1.webp'
 import spa from './spa.png'
 import avatar from './avatar.png'
 import Icon_VNPAY_QR from './Icon_VNPAY_QR.png'
+import about_us1 from './about_us1.jpeg'
+import spa2 from './spa2.png'
+import dog_home from './dog_home.png'
+import Grooming_dog from './Grooming_dog.png'
+import team from './team.jpg'
 export const assets = {
     spa,
     logo,
@@ -42,8 +47,12 @@ export const assets = {
     rawble,
     rawble_1,
     avatar,
-    Icon_VNPAY_QR
-
+    Icon_VNPAY_QR,
+    about_us1,
+    spa2,
+    dog_home,
+    Grooming_dog,
+    team
 }
 
 

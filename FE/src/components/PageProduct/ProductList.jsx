@@ -1,25 +1,23 @@
-import { useEffect, useState, useContext } from 'react'
+import { useEffect, useState, useContext } from 'react';
 import {
   Dialog,
   DialogBackdrop,
   DialogPanel,
-  Disclosure,
-  DisclosureButton,
-  DisclosurePanel,
   Menu,
   MenuButton,
   MenuItem,
   MenuItems,
-} from '@headlessui/react'
-import { XMarkIcon } from '@heroicons/react/24/outline'
-import { ChevronDownIcon, FunnelIcon, MinusIcon, PlusIcon } from '@heroicons/react/20/solid'
-import { getAllProduct, getProductsByCategory } from '../../api/apiService'
-import { ShopContext } from '../Context/ShopContext'
-import { Link } from 'react-router-dom'
-import '../PageProduct/ProductList.css'
+} from '@headlessui/react';
+import { XMarkIcon } from '@heroicons/react/24/outline';
+import { ChevronDownIcon, FunnelIcon } from '@heroicons/react/20/solid';
+import { getAllProduct, getProductsByCategory } from '../../api/apiService';
+import { ShopContext } from '../Context/ShopContext';
+import { Link } from 'react-router-dom';
+import SearchProduct from './SearchProduct';
+import '../PageProduct/ProductList.css';
 
 function classNames(...classes) {
-  return classes.filter(Boolean).join(' ')
+  return classes.filter(Boolean).join(' ');
 }
 
 const subCategories = [
@@ -29,76 +27,83 @@ const subCategories = [
   { name: 'Toy', value: 'Toy' },
   { name: 'Cat Shampoo', value: 'Cat Shampoo' },
   { name: 'Dog Shampoo', value: 'Dog Shampoo' },
-]
+];
 
 const sortOptions = [
   { name: 'Default Sorting', value: 'default' },
   { name: 'Sort By Price: High to Low', value: 'desc' },
   { name: 'Sort By Price: Low to High', value: 'asc' },
-]
+];
 
 export default function ProductList() {
-  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false)
-  const [productList, setProductList] = useState([])
-  const [sortedProductList, setSortedProductList] = useState([])
-  const { addToCart } = useContext(ShopContext) || { addToCart: () => {} }
-  const [selectedCategories, setSelectedCategories] = useState([])
-  const [sortTitle, setSortTitle] = useState('Sort Options')
-  const [currentPage, setCurrentPage] = useState(1)
-  const productsPerPage = 12
-  const [sortOrder, setSortOrder] = useState('default')
+  const [mobileFiltersOpen, setMobileFiltersOpen] = useState(false);
+  const [productList, setProductList] = useState([]);
+  const [sortedProductList, setSortedProductList] = useState([]);
+  const { addToCart } = useContext(ShopContext) || { addToCart: () => {} };
+  const [selectedCategories, setSelectedCategories] = useState([]);
+  const [sortTitle, setSortTitle] = useState('Sort Options');
+  const [currentPage, setCurrentPage] = useState(1);
+  const productsPerPage = 12;
+  const [sortOrder, setSortOrder] = useState('default');
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        let response
+        let response;
         if (selectedCategories.length === 0) {
-          response = await getAllProduct()
+          response = await getAllProduct();
         } else {
-          const promises = selectedCategories.map((category) => getProductsByCategory({ category }))
-          const categoryResponses = await Promise.all(promises)
-          const products = categoryResponses.flatMap((response) => response)
-          response = products
+          const promises = selectedCategories.map((category) => getProductsByCategory({ category }));
+          const categoryResponses = await Promise.all(promises);
+          const products = categoryResponses.flatMap((response) => response);
+          response = products;
         }
 
-        console.log('Fetched products:', response)
-        setProductList(response)
+        console.log('Fetched products:', response);
+        setProductList(response);
       } catch (error) {
-        console.error('Error fetching products:', error)
+        console.error('Error fetching products:', error);
       }
-    }
-    fetchProducts()
-  }, [selectedCategories])
+    };
+    fetchProducts();
+  }, [selectedCategories]);
 
   useEffect(() => {
-    let sortedList = [...productList]
+    let sortedList = [...productList];
     if (sortOrder === 'asc') {
-      sortedList.sort((a, b) => a.price - b.price)
+      sortedList.sort((a, b) => a.price - b.price);
     } else if (sortOrder === 'desc') {
-      sortedList.sort((a, b) => b.price - a.price)
+      sortedList.sort((a, b) => b.price - a.price);
     }
-    setSortedProductList(sortedList)
-    setCurrentPage(1)
-  }, [productList, sortOrder])
+    setSortedProductList(sortedList);
+    setCurrentPage(1);
+  }, [productList, sortOrder]);
 
   const handleCategoryClick = (value) => {
     setSelectedCategories((prevCategories) =>
       prevCategories.includes(value)
         ? prevCategories.filter((category) => category !== value)
         : [...prevCategories, value]
-    )
-  }
+    );
+  };
 
   const handleSortChange = (value) => {
-    setSortOrder(value)
-    setSortTitle(sortOptions.find((option) => option.value === value).name)
-  }
+    setSortOrder(value);
+    setSortTitle(sortOptions.find((option) => option.value === value).name);
+  };
 
-  const indexOfLastProduct = currentPage * productsPerPage
-  const indexOfFirstProduct = indexOfLastProduct - productsPerPage
-  const currentProducts = sortedProductList.slice(indexOfFirstProduct, indexOfLastProduct)
+  const indexOfLastProduct = currentPage * productsPerPage;
+  const indexOfFirstProduct = indexOfLastProduct - productsPerPage;
+  const currentProducts = sortedProductList.slice(indexOfFirstProduct, indexOfLastProduct);
 
-  const paginate = (pageNumber) => setCurrentPage(pageNumber)
+  const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleSearchResultSelect = (result) => {
+    const filteredProduct = productList.find((product) => product.productName === result.title);
+    if (filteredProduct) {
+      setSortedProductList([filteredProduct]);
+    }
+  };
 
   return (
     <div className="bg-white">
@@ -148,6 +153,11 @@ export default function ProductList() {
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">Product</h1>
 
             <div className="flex items-center">
+              
+            <div className="mr-0 lg:mr-4"> {/* Adjust margin-right for different screen sizes */}
+              <SearchProduct source={productList} onResultSelect={handleSearchResultSelect} />
+            </div>
+
               <Menu as="div" className="relative inline-block text-left">
                 <div>
                   <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
@@ -189,6 +199,8 @@ export default function ProductList() {
             </div>
           </div>
 
+          
+
           <section aria-labelledby="products-heading" className="pb-24 pt-6">
             <h2 id="products-heading" className="sr-only">Products</h2>
 
@@ -220,8 +232,8 @@ export default function ProductList() {
                         currentProducts.map((product) => (
                             <div key={product?.productId || 'unknown-product'} className="shadow-md rounded-lg overflow-hidden h-full flex flex-col w-full">
                               <div className="relative pb-5/4">
-                                {product?.productName ? (
-                                  <Link to={`/productdisplay/${product.productName}`}>
+                                {product?.productId ? (
+                                  <Link to={`/productdisplay/${product.productId}`}>
                                     <img
                                       src={product.pictureName}
                                       alt={product.productName}
@@ -282,5 +294,5 @@ export default function ProductList() {
         </main>
       </div>
     </div>
-  )
+  );
 }

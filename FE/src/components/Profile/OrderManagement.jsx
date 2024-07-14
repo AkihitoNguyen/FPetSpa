@@ -40,7 +40,7 @@ const OrderManagement = () => {
     };
     const handleRebooking = async (orderId) => {
         try {
-            const response = await axios.put(`https://localhost:7055/api/Order/ReBooking?orderId=${orderId}`);
+            const response = await axios.put(`https://fpetspa.azurewebsites.net/api/Order/ReBooking?orderId=${orderId}`);
             const paymentUrl = response.data; // Assuming response.data contains the payment URL
             window.location.href = paymentUrl;
             // Handle successful rebooking (e.g., show a success message or update state)
@@ -69,7 +69,7 @@ const OrderManagement = () => {
         return status === 0 ? 'status-text-green' : status === 1 ? 'status-text-yellow' : '';
     };
 
-    const userOrders = orders.filter(order => order.customerId === currentUser.userId);
+    const userOrders = orders.filter(order => order.customerId === currentUser.userId && order.orderId.includes("ORP"));
 
     return (
         <div>

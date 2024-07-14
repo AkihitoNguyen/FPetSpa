@@ -27,7 +27,6 @@ const authSlice = createSlice({
       state.login.isFetching = false;
       state.login.error = false;
       state.login.currentUser = action.payload;
-      console.log("Reducer loginSuccess payload:", action.payload);
     },
     loginFailed: (state) => {
       state.login.isFetching = false;

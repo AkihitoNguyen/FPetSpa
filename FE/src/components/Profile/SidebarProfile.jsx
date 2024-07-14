@@ -12,17 +12,17 @@ const SidebarProfile = ({ setActiveSection }) => {
         <li
           className="p-4 hover:bg-gray-700 cursor-pointer"
           onClick={() => setActiveSection("account-info")}>
-          Thông tin tài khoản
+          Profile
         </li>
         <li
           className="p-4 hover:bg-gray-700 cursor-pointer"
           onClick={() => setActiveSection("pet-info")}>
-          Thông tin thú cưng
+          Pet Infomation
         </li>
         <li
           className="p-4 hover:bg-gray-700 cursor-pointer"
           onClick={() => setActiveSection("order-management")}>
-          Quản lý đơn hàng
+          Order Managerment
         </li>
       </ul>
     </div>
