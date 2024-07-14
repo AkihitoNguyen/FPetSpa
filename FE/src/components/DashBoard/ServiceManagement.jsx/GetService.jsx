@@ -27,9 +27,9 @@ const GetService = () => {
         const allOrders = response.data;
         setOrders(allOrders);
 
-        const orsOrders = allOrders.filter((order) =>
-          order.orderId.includes("ORS")
-        );
+        const orsOrders = allOrders
+          .filter((order) => order.orderId.includes("ORS"))
+          .sort((a, b) => b.orderId.localeCompare(a.orderId));
         setFilteredOrders(orsOrders);
       })
       .catch((error) => {
@@ -61,38 +61,31 @@ const GetService = () => {
           },
         }
       );
-
+  
       console.log("Order status updated successfully:", response.data);
-
-      // Cập nhật lại danh sách đơn hàng sau khi cập nhật thành công
-      const updatedOrders = orders.map((order) =>
-        order.orderId === orderId ? { ...order, status: newStatus } : order
-      );
-      setOrders(updatedOrders);
-      // Cập nhật lại danh sách đơn hàng đã lọc
-      const updatedFilteredOrders = updatedOrders.filter(
-        (order) => order.status === parseInt(currentStatus)
-      );
-      setFilteredOrders(updatedFilteredOrders);
+  
+      // Refresh the page after updating the order status
+      window.location.reload();
     } catch (error) {
       console.error("Error updating order status:", error);
     } finally {
       setIsLoading(false);
     }
   };
+  
 
   const statusClass = (status) => {
     switch (status) {
       case 0:
         return "text-[#F6C000] bg-[#FFF8DD]";
       case 1:
-        return "text-blue-600 bg-blue-100";
+        return "text-[#F6C000] bg-[#FFF8DD]";
       case 2:
-        return "text-green-600 bg-green-100";
+        return "text-blue-600 bg-blue-100";
       case 3:
-        return "text-red-600 bg-red-100";
+        return "text-green-600 bg-green-100";
       case 4:
-        return "text-gray-600 bg-gray-100";
+        return "text-red-600 bg-red-100";
       default:
         return "text-gray-900";
     }
@@ -103,13 +96,13 @@ const GetService = () => {
       case 0:
         return "Pending";
       case 1:
-        return "Staff Accepted";
+        return "Processing";
       case 2:
-        return "Completed";
+        return "Staff Accepted";
       case 3:
-        return "Cancelled";
-      case 4:
-        return "Failed";
+        return "Complete";
+        case 4:
+        return "Cancle";
       default:
         return "Unknown";
     }
@@ -361,7 +354,21 @@ const GetService = () => {
                           updateOrderStatus(order.orderId, "PROCESSING")
                         }
                         className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
+                        Process
+                      </button>
+                      <button
+                        onClick={() =>
+                          updateOrderStatus(order.orderId, "STAFFACCEPTED")
+                        }
+                        className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
                         Accept
+                      </button>
+                      <button
+                        onClick={() =>
+                          updateOrderStatus(order.orderId, "CANCLE")
+                        }
+                        className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
+                        Cancle
                       </button>
                     </span>
                   )}

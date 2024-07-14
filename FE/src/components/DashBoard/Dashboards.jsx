@@ -123,18 +123,7 @@ const Dashboards = () => {
   const orderProgress = orderCount !== null ? (orderCount / goal) * 100 : 0;
   const remainingOrders = goal - (orderCount || 0);
 
-  const barData = {
-    labels: ["Apr", "May", "Jun", "Jul"],
-    datasets: [
-      {
-        label: "Expense",
-        backgroundColor: "#f44336",
-        data: [3490, 3000, 2000, 967.01
-        ],
-      },
-      
-    ],
-  };
+
 
   return (
     <div className="bg-[#FCFCFC]">
@@ -253,12 +242,7 @@ const Dashboards = () => {
             <Line data={lineData} />
           </div>
 
-          {/* Income vs Expense chart */}
-          <div className="bg-white p-4 rounded-lg shadow-sm">
-            <strong className="text-lg font-semibold text-blue-900">
-            </strong>
-            <Bar data={barData} />
-          </div>
+
         </div>
       </div>
     </div>

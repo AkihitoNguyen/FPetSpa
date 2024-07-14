@@ -1,20 +1,25 @@
-.navbar {
+.navbar1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
     margin-top: 2px;
     margin-bottom: 1rem;
-    
+    position: -webkit-sticky; 
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+    background-color: white;
 }
 
-.navbar.hidden {
+.navbar1.hidden {
     top: -80px; /* Độ dài của navbar, điều chỉnh tùy thuộc vào chiều cao của navbar */
   }
 
-.navbar .logo {
+.navbar1 .logo {
     position: relative;
     left: 180px;
-    width: 80px;
+    width: 100px;
     cursor: pointer;
 }
 
@@ -26,6 +31,7 @@
     color: #111827;
     font-size: 15.75px;
     font-weight: 500;
+    
 }
 
 
@@ -36,16 +42,19 @@
     align-items: center;
     gap: 30px;
     margin-bottom: 12px;
+    cursor: pointer;
 }
 
 .navbar-right .search {
     width: 20px;
     cursor: pointer;
+    cursor: pointer;
 }
 
 
 .navbar-right .cart {
-    width: 25px;    
+    width: 25px;
+    cursor: pointer;    
 }
 
 /* .navbar button {
@@ -66,6 +75,7 @@
     border-radius: 50px;
     cursor: pointer;
     transition: 0.3s;
+    
 }
 
 .navbar .user {
@@ -101,6 +111,7 @@
 
     .navbar-right {
         gap: 30px;
+        
     }
 
     .navbar-right img {

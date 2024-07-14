@@ -3,6 +3,7 @@ using FPetSpa.Repository.Model.VnPayModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
+using static QRCoder.PayloadGenerator.ShadowSocksConfig;
 
 namespace FPetSpa.Repository.Services.VnPay
 {
@@ -83,11 +84,47 @@ namespace FPetSpa.Repository.Services.VnPay
                 Token = vnp_SecureHash.ToString(),
                 VnPayResponseCode = vnp_ResponseCode.ToString(),
             };
-
-
         }
+        public async Task<VnPayBalanceResponse> GetVnPayBalanceAsync(DateTime? startDate, DateTime? endDate, HttpContext context)
+        {
+            VnPayLibrary vnpay = new VnPayLibrary();
 
+            vnpay.AddRequestData("vnp_Version", _configuration["VnPay:Version"]!);
+            vnpay.AddRequestData("vnp_Command", "querydr");
+            vnpay.AddRequestData("vnp_TmnCode", _configuration["VnPay:TmnCode"]!);
+            vnpay.AddRequestData("vnp_TxnRef", Guid.NewGuid().ToString());
+            vnpay.AddRequestData("vnp_OrderInfo", "Query balance");
+            vnpay.AddRequestData("vnp_TransDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
+            vnpay.AddRequestData("vnp_CreateDate", DateTime.Now.ToString("yyyyMMddHHmmss"));
+            vnpay.AddRequestData("vnp_IpAddr", Utils.GetIpAddress(context));
 
-       
+            // Nếu startDate và endDate là null, lấy dữ liệu trong ngày
+            var effectiveStartDate = startDate ?? DateTime.Today;
+            var effectiveEndDate = endDate ?? DateTime.Today;
+
+            vnpay.AddRequestData("vnp_BeginDate", effectiveStartDate.ToString("yyyyMMdd"));
+            vnpay.AddRequestData("vnp_EndDate", effectiveEndDate.ToString("yyyyMMdd"));
+
+            var baseUrl = _configuration["VnPay:BalanceApiUrl"];
+            var requestUrl = vnpay.CreateRequestUrl(baseUrl!, _configuration["VnPay:HashSecret"]!);
+
+            using (var httpClient = new HttpClient())
+            {
+                var response = await httpClient.GetAsync(requestUrl);
+                var responseString = await response.Content.ReadAsStringAsync();
+
+                // Assume the response string is in JSON format and deserialize it
+                var vnPayBalanceResponse = JsonConvert.DeserializeObject<VnPayBalanceResponse>(responseString);
+
+                if (vnPayBalanceResponse.Status == 0)
+                {
+                    return vnPayBalanceResponse;
+                }
+                else
+                {
+                    throw new Exception($"Error retrieving balance: {vnPayBalanceResponse.Message}");
+                }
+            }
+        }
     }
 }

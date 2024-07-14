@@ -12,7 +12,10 @@ import Product from "./pages/Product/Product";
 import ProductDisplay from "./components/ProductDisplay/ProductDisplay";
 import ConfirmEmail from "./pages/ConfirmEmail/ConfirmEmail";
 import CheckEmail from "./pages/CheckEmail/CheckEmail";
+
 import "react-toastify/dist/ReactToastify.css";
+import 'semantic-ui-css/semantic.min.css';
+
 import Service from "./pages/Service/Service";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import AboutUs from "./pages/AboutUs/AboutUs";
@@ -36,6 +39,8 @@ import ViewService from "./components/DashBoard/ServiceManagement.jsx/ViewServic
 
 import QR from "./pages/QR/QR";
 import AddProduct from "./components/DashBoard/ProductManage.jsx/AddProduct";
+import Transactions from "./components/DashBoard/Transactions";
+import PayInOut from "./components/DashBoard/ServiceManagement.jsx/PayInOut";
 
 const App = () => {
   const [showNavbarAndFooter, setShowNavbarAndFooter] = useState(true);
@@ -72,7 +77,8 @@ const App = () => {
       "/layout/view-service",
       "/layout/account-info",
       "/layout/product-info",
-      "/layout/add-product"
+      "/layout/add-product",
+      "/layout/transaction"
     ];
 
     const isMatched = routes.some((route) => matchPath(route, location.pathname));
@@ -84,7 +90,7 @@ const App = () => {
       <div className="app">
         {showNavbarAndFooter && (
           <>
-            <Navlink />
+            <Navlink/>
             <Navbar />
           </>
         )}
@@ -119,6 +125,8 @@ const App = () => {
             <Route path="/layout/account-info" element={<User />} />
             <Route path="/layout/product-info" element={<GetProduct />} />
             <Route path="/layout/add-product" element={<AddProduct />} />
+            <Route path="/layout/transaction" element={<Transactions />} />
+            <Route path="/layout/pay-in-out" element={<PayInOut/>} />
           </Route>
 
           {/* DashBoard */}

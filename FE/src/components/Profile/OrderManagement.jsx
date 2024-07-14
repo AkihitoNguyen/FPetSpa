@@ -69,7 +69,7 @@ const OrderManagement = () => {
         return status === 0 ? 'status-text-green' : status === 1 ? 'status-text-yellow' : '';
     };
 
-    const userOrders = orders.filter(order => order.customerId === currentUser.userId);
+    const userOrders = orders.filter(order => order.customerId === currentUser.userId && order.orderId.includes("ORP"));
 
     return (
         <div>

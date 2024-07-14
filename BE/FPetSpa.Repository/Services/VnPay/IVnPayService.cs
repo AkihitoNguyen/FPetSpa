@@ -6,7 +6,6 @@ namespace FPetSpa.Repository.Model.VnPayModel
     {
         string CreatePaymentURl(VnPayRequestModel vnPayRequestModel, HttpContext context);
         VnPayResponseModel PayymentExecute(IQueryCollection collection);
-
-
+        public Task<VnPayBalanceResponse> GetVnPayBalanceAsync(DateTime? startDate, DateTime? endDate, HttpContext context);
     }
 }
