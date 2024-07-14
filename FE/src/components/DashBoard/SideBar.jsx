@@ -118,6 +118,9 @@ const Sidebar = () => {
         <li className="p-4 text-[#9A9CAE] text-[13.975px] font-medium cursor-pointer hover:text-white">
           <Link to="/layout/transaction">Transaction</Link>
         </li>
+        <li className="p-4 text-[#9A9CAE] text-[13.975px] font-medium cursor-pointer hover:text-white">
+          <Link to="/layout/pay-in-out">Pay-In-Out</Link>
+        </li>
       </ul>
     </div>
   );
