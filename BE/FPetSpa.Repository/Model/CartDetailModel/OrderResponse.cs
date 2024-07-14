@@ -8,8 +8,9 @@ namespace FPetSpa.Repository.Model.OrderModel
 {
     public class OrderResponse
     {
-        public string OrderId { get; set; }
-        public DateTime? RequiredDate { get; set; }
-        public decimal? Total { get; set; }
+        public String Date { get; set; }
+        public int OrderCount { get; set; }
+        public int ProductCount { get; set; }
+        public decimal TotalAmount { get; set; }
     }
 }

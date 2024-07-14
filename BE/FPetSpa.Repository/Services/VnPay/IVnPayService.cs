@@ -8,6 +8,5 @@ namespace FPetSpa.Repository.Model.VnPayModel
         VnPayResponseModel PayymentExecute(IQueryCollection collection);
 
 
-
     }
 }

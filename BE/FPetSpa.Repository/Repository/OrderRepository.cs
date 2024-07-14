@@ -76,17 +76,7 @@ public class OrderRepository
         }
         return ((decimal)(newTotal - oldTotal) / oldTotal) * 100;
     }
-    public async Task<IEnumerable<OrderResponse>> GetAllOrdersAsync()
-    {
-        return await _context.Orders
-            .Select(o => new OrderResponse
-            {
-                OrderId = o.OrderId,
-                RequiredDate = o.RequiredDate,
-                Total = o.Total
-            })
-            .ToListAsync();
-    }
+ 
     public async Task<decimal> GetTotalRevenueAsync(DateTime? fromDate, DateTime? toDate)
     {
         var query = _context.Orders.AsQueryable();
@@ -103,12 +93,38 @@ public class OrderRepository
 
         return await query.SumAsync(o => o.Total ?? 0);
     }
-    public async Task<int> GetOrderCountByDate(DateTime date)
+
+    public async Task<List<OrderResponse>> GetOrderStatsByDateRange(DateTime startDate, DateTime endDate)
     {
-        return await _context.Orders
-            .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Date == date.Date)
-            .CountAsync();
+        try
+        {
+            var orders = await _context.Orders
+                .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Date >= startDate.Date && o.RequiredDate.Value.Date <= endDate.Date)
+                .Include(o => o.ProductOrderDetails)
+                .ToListAsync();
+
+            var groupedOrders = orders.GroupBy(o => o.RequiredDate.Value.Date)
+                .Select(g => new OrderResponse
+                {
+                    Date = g.Key.ToString("dd/MM/yyyy"), 
+                    OrderCount = g.Count(),
+                    ProductCount = g.Sum(o => o.ProductOrderDetails.Sum(pod => pod.Quantity ?? 0)),
+                    TotalAmount = (decimal)g.Sum(o => o.Total)
+                })
+                .ToList();
+
+            return groupedOrders;
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"Error in GetOrderStatsByDateRange: {ex.Message}");
+            return new List<OrderResponse>();
+        }
     }
+
+
+
+
 
     public async Task<int> GetOrderCountByMonth(int year, int month)
     {

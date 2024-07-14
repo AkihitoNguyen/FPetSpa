@@ -1,5 +1,6 @@
 ﻿using FPetSpa.Models.DashBoradController;
 using FPetSpa.Repository;
+using FPetSpa.Repository.Model.OrderModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using System.Globalization;
@@ -38,25 +39,29 @@ namespace FPetSpa.Controllers
             }
         }
 
-        [HttpGet("search-total-revenue")]
-        public async Task<IActionResult> SearchTotalRevenue([FromQuery] RequestSearchTotalModel request)
+    
+        [HttpGet("date-range")]
+        public async Task<ActionResult<List<OrderResponse>>> GetOrderStatsByDateRange([FromQuery] DateTime startDate, [FromQuery] DateTime endDate)
         {
             try
             {
-                var totalRevenue = await _unitOfWork.OrderRepository.GetTotalRevenueAsync(request.FromDate, request.ToDate);
-                return Ok(totalRevenue);
+                var orderStats = await _unitOfWork.OrderRepository.GetOrderStatsByDateRange(startDate, endDate);
+
+                if (orderStats == null)
+                {
+                    return NotFound();
+                }
+
+                return Ok(orderStats);
             }
             catch (Exception ex)
             {
-                return StatusCode(500, $"An error occurred: {ex.Message}");
+                return StatusCode(500, $"Internal server error: {ex.Message}");
             }
         }
-        [HttpGet("count-by-date")]
-        public async Task<IActionResult> GetOrderCountByDate([FromQuery] DateTime date)
-        {
-            var count = await _unitOfWork.OrderRepository.GetOrderCountByDate(date);
-            return Ok(count);
-        }
+
+
+
         [HttpGet("count-by-month")]
         public async Task<IActionResult> GetOrderCountByMonth([FromQuery] int year, [FromQuery] int month)
         {
