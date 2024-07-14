@@ -34,6 +34,17 @@ label {
     flex-direction: column;
 }
 
+.ui.grid {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    align-items: stretch;
+    padding: 0;
+    margin-top: -1rem;
+    margin-bottom: -1rem;
+    margin-left: -1rem;
+    margin-right: 0rem;
+}
   
   @media (min-width: 1536px) {
     .MuiGrid-root.MuiGrid-item.MuiGrid-grid-xs-12.MuiGrid-grid-sm-6.MuiGrid-grid-md-4.css-11l5t4l-MuiGrid-root {
