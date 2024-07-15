@@ -10,9 +10,9 @@ const BookingHistory = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filterStatus, setFilterStatus] = useState("all"); // State để lưu trạng thái bộ lọc
-  const [showDeleteModal, setShowDeleteModal] = useState(false); // State để điều khiển việc hiển thị modal
-  const [orderToDelete, setOrderToDelete] = useState(null); // State để lưu trữ thông tin đơn hàng đang được xác nhận để xóa
+  const [filterStatus, setFilterStatus] = useState("all"); // State to store the filter status
+  const [showDeleteModal, setShowDeleteModal] = useState(false); // State to control the modal display
+  const [orderToDelete, setOrderToDelete] = useState(null); // State to store the order being confirmed for deletion
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -37,17 +37,17 @@ const BookingHistory = () => {
         const ordersData = response.data
           .filter((order) => order.customerId === currentUser.userId)
           .map((order) => {
-            // Kiểm tra nếu requiredDate đã hết hạn
+            // Check if requiredDate has expired
             if (isDateExpired(order.requiredDate)) {
-              // Nếu đã hết hạn, cập nhật trạng thái thành "Failed"
+              // If expired, update status to "Failed"
               return {
                 ...order,
-                status: -1, // Giả sử -1 là trạng thái Failed
+                status: -1, // Assume -1 is the Failed status
               };
             }
             return order;
           })
-          .sort((a, b) => b.orderId.localeCompare(a.orderId)); // Sắp xếp các đơn hàng theo orderId mới nhất
+          .sort((a, b) => b.orderId.localeCompare(a.orderId)); // Sort orders by newest orderId
 
         setOrders(ordersData);
       } catch (error) {
@@ -83,7 +83,7 @@ const BookingHistory = () => {
       setOrders(
         orders.filter((order) => order.orderId !== orderToDelete.orderId)
       );
-      setShowDeleteModal(false); // Đóng modal sau khi xóa thành công
+      setShowDeleteModal(false); // Close modal after successful deletion
     } catch (error) {
       console.error("Lỗi khi xóa đơn hàng:", error);
       setError("Đã xảy ra lỗi khi xóa đơn hàng. Vui lòng thử lại.");
@@ -91,23 +91,56 @@ const BookingHistory = () => {
   };
 
   const handleCancelDelete = () => {
-    setShowDeleteModal(false); // Đóng modal nếu người dùng hủy bỏ hành động xóa
+    setShowDeleteModal(false); // Close modal if user cancels the delete action
   };
 
   const handleOpenDeleteModal = (order) => {
     setOrderToDelete(order);
-    setShowDeleteModal(true); // Mở modal và thiết lập thông tin đơn hàng cần xóa
+    setShowDeleteModal(true); // Open modal and set order info for deletion
   };
 
   const handleFilterChange = (event) => {
     setFilterStatus(event.target.value);
   };
 
+  const handlePayment = async (orderId) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${currentUser.accessToken}`,
+        },
+      };
+  
+      const response = await axios.put(
+        `${API_BASE_URL}/Order/ReBooking?orderId=${orderId}`,
+        {},
+        config
+      );
+  
+      window.location.href = response.data;
+    } catch (error) {
+      if (error.response) {
+        // Server responded with a status other than 200 range
+        console.error("Lỗi từ server:", error.response.data);
+        setError(`Đã xảy ra lỗi: ${error.response.data.message}`);
+      } else if (error.request) {
+        // Request was made but no response received
+        console.error("Không nhận được phản hồi từ server:", error.request);
+        setError("Không thể kết nối đến server. Vui lòng thử lại.");
+      } else {
+        // Something else happened in making the request
+        console.error("Lỗi khác:", error.message);
+        setError("Đã xảy ra lỗi không xác định. Vui lòng thử lại.");
+      }
+    }
+  };
+  
+
   const filteredOrders = orders.filter((order) => {
     if (filterStatus === "all") {
-      return true; // Hiển thị tất cả các đơn hàng nếu không có bộ lọc
+      return true; // Display all orders if no filter is applied
     } else {
-      return order.status === parseInt(filterStatus); // Lọc theo trạng thái đã chọn
+      return order.status === parseInt(filterStatus); // Filter by selected status
     }
   });
 
@@ -121,7 +154,7 @@ const BookingHistory = () => {
 
   return (
     <div className="container mx-auto px-4 py-8">
-      <h1 className="text-2xl font-bold mb-4">Danh Sách Đơn Hàng</h1>
+      <h1 className="text-2xl font-bold mb-4">Booking history</h1>
       <div className="mb-4">
         <label htmlFor="filter" className="mr-2 font-semibold">
           Status:
@@ -130,14 +163,14 @@ const BookingHistory = () => {
           id="filter"
           value={filterStatus}
           onChange={handleFilterChange}
-          className="px-2 py-1 border border-gray-300 rounded">
+          className="px-2 py-1 border border-gray-300 rounded"
+        >
           <option value="all">All</option>
           <option value="0">Pending</option>
-          <option value="1">Proccessing</option>
-          <option value="2">Staff Accepted</option>
+          <option value="2">Processing</option>
+          <option value="1">Staff Accepted</option>
           <option value="3">Completed</option>
           <option value="5">Failed</option>
-         
         </select>
       </div>
       {filteredOrders.length === 0 ? (
@@ -191,12 +224,12 @@ const BookingHistory = () => {
                       <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-red-600 bg-red-100">
                         Failed
                       </span>
-                    ) : order.status === 2 ? (
+                    ) : order.status === 1 ? (
                       <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-blue-600 bg-blue-100">
                         Staff Accepted
                       </span>
                     )
-                    : order.status === 1 ? (
+                    : order.status === 2 ? (
                       <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-yellow-600 bg-yellow-100">
                         Processing
                       </span>
@@ -215,6 +248,13 @@ const BookingHistory = () => {
                         Delete
                       </button>
                     )}
+                    {order.status === 1 && (
+                      <button
+                        onClick={() => handlePayment(order.orderId)}
+                        className="ml-4 text-blue-600 hover:text-blue-900">
+                        Payment
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -223,7 +263,7 @@ const BookingHistory = () => {
         </div>
       )}
 
-      {/* Modal xác nhận xóa */}
+      {/* Modal to confirm deletion */}
       {showDeleteModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
           <div className="bg-white p-8 rounded-md shadow-lg">
@@ -239,7 +279,7 @@ const BookingHistory = () => {
               <button
                 onClick={handleCancelDelete}
                 className="border border-gray-300 px-4 py-2 rounded hover:bg-gray-200">
-                Cancle
+                Cancel
               </button>
             </div>
           </div>

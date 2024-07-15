@@ -12,10 +12,6 @@ import Product from "./pages/Product/Product";
 import ProductDisplay from "./components/ProductDisplay/ProductDisplay";
 import ConfirmEmail from "./pages/ConfirmEmail/ConfirmEmail";
 import CheckEmail from "./pages/CheckEmail/CheckEmail";
-
-import "react-toastify/dist/ReactToastify.css";
-import 'semantic-ui-css/semantic.min.css';
-
 import Service from "./pages/Service/Service";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import AboutUs from "./pages/AboutUs/AboutUs";
@@ -36,7 +32,6 @@ import Dashboards from "./components/DashBoard/Dashboards";
 import AddService from "./components/DashBoard/ServiceManagement.jsx/AddService";
 import EditService from "./components/DashBoard/ServiceManagement.jsx/EditService";
 import ViewService from "./components/DashBoard/ServiceManagement.jsx/ViewService";
-
 import QR from "./pages/QR/QR";
 import AddProduct from "./components/DashBoard/ProductManage.jsx/AddProduct";
 import Transactions from "./components/DashBoard/Transactions";
@@ -78,11 +73,13 @@ const App = () => {
       "/layout/account-info",
       "/layout/product-info",
       "/layout/add-product",
-      "/layout/transaction"
+      "/layout/transaction",
+      "/layout/pay-in-out"
     ];
 
     const isMatched = routes.some((route) => matchPath(route, location.pathname));
-    setShowNavbarAndFooter(isMatched);
+    const isLayoutOrDashboardPath = location.pathname.startsWith("/layout") || location.pathname.startsWith("/dashboard");
+    setShowNavbarAndFooter(isMatched && !isLayoutOrDashboardPath);
   }, [location.pathname]);
 
   return (
@@ -90,7 +87,6 @@ const App = () => {
       <div className="app">
         {showNavbarAndFooter && (
           <>
-            <Navlink/>
             <Navbar />
           </>
         )}

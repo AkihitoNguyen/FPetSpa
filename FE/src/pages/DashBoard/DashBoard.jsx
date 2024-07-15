@@ -9,7 +9,6 @@ import Dashboards from "../../components/DashBoard/Dashboards";
 import EditService from "../../components/DashBoard/ServiceManagement.jsx/EditService";
 import ViewService from "../../components/DashBoard/ServiceManagement.jsx/ViewService";
 import AddProduct from "../../components/DashBoard/ProductManage.jsx/AddProduct";
-import AdminNavbar from "../../components/AdminNavbar/AdminNavbar";
 import Transactions from "../../components/DashBoard/Transactions";
 import PayInOut from "../../components/DashBoard/ServiceManagement.jsx/PayInOut";
 
@@ -18,7 +17,6 @@ const DashBoard = () => {
     <div className="flex">
       <Sidebar />
       <div className="flex-1">
-        <AdminNavbar />
         <div className="p-8">
           <Routes>
             <Route path="/dashboards" element={<Dashboards />} />

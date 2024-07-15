@@ -7,17 +7,16 @@ import SecondContent from "../../components/Content/SecondContent";
 import ServiceContent from "../../components/Content/ServiceContent";
 import ThirdContent from "../../components/Content/ThirdContent";
 import MapComponent from "../../components/Maps/MapComponent";
+import Video from "../../components/Video";
 const Home = () => {
   return (
-    <div>
+    <div className="">
+      <Video />
       <Header />
       <ServiceContent />
-      <div className="bg-myCusColor">
-        <FirstContent />
-      </div>
-      <SecondContent />
-      <ThirdContent />
-      <div className="flex justify-center items-center bg-gray-100">
+      <FirstContent />
+      
+      <div className="flex justify-start items-center bg-gray-100">
         <MapComponent />
       </div>
     </div>
