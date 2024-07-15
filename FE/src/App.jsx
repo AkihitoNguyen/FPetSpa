@@ -10,8 +10,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Product from "./pages/Product/Product";
 import ProductDisplay from "./components/ProductDisplay/ProductDisplay";
-import ConfirmEmail from "./pages/ConfirmEmail/ConfirmEmail";
-import CheckEmail from "./pages/CheckEmail/CheckEmail";
+
 import Service from "./pages/Service/Service";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import AboutUs from "./pages/AboutUs/AboutUs";
@@ -34,6 +33,7 @@ import EditService from "./components/DashBoard/ServiceManagement.jsx/EditServic
 import ViewService from "./components/DashBoard/ServiceManagement.jsx/ViewService";
 import QR from "./pages/QR/QR";
 import AddProduct from "./components/DashBoard/ProductManage.jsx/AddProduct";
+import BookingProduct from "./components/DashBoard/ProductManage.jsx/BookingProduct";
 
 const App = () => {
   const [showNavbarAndFooter, setShowNavbarAndFooter] = useState(true);
