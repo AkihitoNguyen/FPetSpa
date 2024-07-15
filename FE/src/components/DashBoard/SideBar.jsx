@@ -109,6 +109,9 @@ const Sidebar = () => {
               <li className="p-4 cursor-pointer hover:text-white">
                 <Link to="/layout/service-info">Booking Listing</Link>
               </li>
+              <li className="p-4 cursor-pointer hover:text-white">
+                <Link to="/layout/booking-product">Booking Product</Link>
+              </li>
             </ul>
           )}
         </li>

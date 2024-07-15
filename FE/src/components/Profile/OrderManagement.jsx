@@ -9,6 +9,7 @@ const OrderManagement = () => {
     const [orderDetails, setOrderDetails] = useState([]);
     const [selectedOrderId, setSelectedOrderId] = useState(null);
     const [error, setError] = useState(null);
+    const [isLoading, setIsLoading] = useState(false);
     const currentUser = useSelector((state) => state.auth.login.currentUser);
 
     const fetchOrders = async (customerId) => {
@@ -18,9 +19,8 @@ const OrderManagement = () => {
                 throw new Error('Network response was not ok');
             }
             let data = await response.json();
-            // Sắp xếp đơn hàng từ ngày mới nhất đến cũ nhất
-            data.sort((a, b) => new Date(b.requiredDate) - new Date(a.requiredDate));
-            setOrders(data);
+            const sortedOrders = data.sort((a, b) => b.orderId.localeCompare(a.orderId));
+            setOrders(sortedOrders);
         } catch (error) {
             setError(error.message);
         }
@@ -38,21 +38,42 @@ const OrderManagement = () => {
             setError(error.message);
         }
     };
+
     const handleRebooking = async (orderId) => {
         try {
             const response = await axios.put(`https://fpetspa.azurewebsites.net/api/Order/ReBooking?orderId=${orderId}`);
             const paymentUrl = response.data; // Assuming response.data contains the payment URL
             window.location.href = paymentUrl;
-            // Handle successful rebooking (e.g., show a success message or update state)
         } catch (error) {
             setError(error.message);
         }
     };
-    
+
+    const updateOrderStatus = async (orderId, newStatus) => {
+        setIsLoading(true);
+        try {
+            await axios.put("https://fpetspa.azurewebsites.net/api/Order/UserAcceptedProductDelivered", null, {
+                params: {
+                    OrderId: orderId,
+                    status: newStatus,
+                },
+            });
+            setOrders(orders.map(order => order.orderId === orderId ? { ...order, status: newStatus } : order));
+            setIsLoading(false);
+        } catch (error) {
+            setError(error.message);
+            setIsLoading(false);
+        }
+    };
 
     useEffect(() => {
         if (currentUser && currentUser.userId) {
             fetchOrders(currentUser.userId);
+            const interval = setInterval(() => {
+                fetchOrders(currentUser.userId);
+            }, 5000); // Fetch orders every 5 seconds
+
+            return () => clearInterval(interval); // Clear interval on component unmount
         }
     }, [currentUser]);
 
@@ -61,19 +82,11 @@ const OrderManagement = () => {
         setSelectedOrderId(orderId);
     };
 
-    const getStatusText = (status) => {
-        return status === 0 ? 'Successfully' : status === 1 ? 'Pending' : '';
-    };
-
-    const getStatusTextClass = (status) => {
-        return status === 0 ? 'status-text-green' : status === 1 ? 'status-text-yellow' : '';
-    };
-
     const userOrders = orders.filter(order => order.customerId === currentUser.userId && order.orderId.includes("ORP"));
 
     return (
         <div>
-            <h1 className="text-2xl font-bold">Quản lý đơn hàng</h1>
+            <h1 className="text-2xl font-bold">OrderMangerment</h1>
             {error ? (
                 <p className="mt-4 text-red-500">Error: {error}</p>
             ) : orders.length === 0 ? (
@@ -101,6 +114,9 @@ const OrderManagement = () => {
                                 <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
                                     Detail
                                 </th>
+                                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                                    Action
+                                </th>
                             </tr>
                         </thead>
                         <tbody>
@@ -116,16 +132,78 @@ const OrderManagement = () => {
                                         {order.total}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <span className={`ml-2 ${getStatusTextClass(order.transactionStatus)}`}>{getStatusText(order.transactionStatus)}</span>
+                                        {order.transactionStatus === 0 ? (
+                                            <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-yellow-600 bg-yellow-100">
+                                                PAID
+                                            </span>
+                                        ) : order.transactionStatus === 1 ? (
+                                            <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-red-600 bg-red-100">
+                                                NOT PAID
+                                            </span>
+                                        ) : null}
                                     </td>
                                     <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                                        <span className={`ml-2 ${getStatusTextClass(order.status)}`}>{getStatusText(order.status)}</span>
+                                        {order.status === 0 ? (
+                                            <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-yellow-600 bg-yellow-100">
+                                                Pending
+                                            </span>
+                                        ) 
+                                        : order.status === 1 ? (
+                                            <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-blue-600 bg-blue-100">
+                                                Staff Accepted
+                                            </span>
+                                        ) 
+                                        : order.status === 2 ? (
+                                            <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-blue-600 bg-blue-100">
+                                                Processing
+                                            </span>
+                                        )
+                                        : order.status === 3 ? (
+                                            <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-yellow-600 bg-yellow-100">
+                                                Shipped
+                                            </span>
+                                        ) 
+                                        : order.status === 4 ? (
+                                            <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-green-600 bg-green-100">
+                                                Delivered
+                                            </span>
+                                        ) 
+                                        : order.status === 5 ? (
+                                            <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-fuchsia-600 bg-fuchsia-100">
+                                                Ready For Pickup
+                                            </span>
+                                        ) : (
+                                            <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-green-600 bg-green-100">
+                                                Successfully
+                                            </span>
+                                        )}
                                     </td>
                                     <td className="px-6 py-4 text-sm text-gray-500">
                                         <button onClick={() => handleOrderClick(order.orderId)} className="text-blue-500 hover:underline">
                                             View Details
                                         </button>
                                     </td>
+                                    <td className="px-6 py-4 text-sm text-gray-500">
+                                        {order.status === 3 && (
+                                            <button 
+                                                onClick={() => updateOrderStatus(order.orderId, "Delivered")} 
+                                                className="text-green-500 hover:underline"
+                                                disabled={isLoading}
+                                            >
+                                                Delivered
+                                            </button>
+                                        )}
+                                        {order.status === 4 || order.status === 6 ? (
+                                            <button 
+                                                onClick={() => handleFeedback(order.orderId)} 
+                                                className="text-blue-500 hover:underline ml-2"
+                                            >
+                                                Feedback
+                                            </button>
+                                        ) : null}
+                                    </td>
+
+ 
                                 </tr>
                             ))}
                         </tbody>
@@ -194,7 +272,7 @@ const OrderManagement = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    {selectedOrderId && orders.find(order => order.orderId === selectedOrderId && order.transactionStatus === 1) && (
+                                    {selectedOrderId && orders.find(order => order.orderId === selectedOrderId && order.status === 1) && (
                                         <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                             <button
                                                 type="button"
@@ -206,14 +284,14 @@ const OrderManagement = () => {
                                         </div>
                                     )}
                                     <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
-                                            <button
-                                                type="button"
-                                                className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
-                                                onClick={() => setSelectedOrderId(null)}
-                                            >
-                                                Close
-                                            </button>
-                                        </div>
+                                        <button
+                                            type="button"
+                                            className="inline-flex w-full justify-center rounded-md bg-red-600 px-3 py-2 text-sm font-semibold text-white shadow-sm hover:bg-red-500 sm:ml-3 sm:w-auto"
+                                            onClick={() => setSelectedOrderId(null)}
+                                        >
+                                            Close
+                                        </button>
+                                    </div>
                                 </DialogPanel>
                             </div>
                         </div>
