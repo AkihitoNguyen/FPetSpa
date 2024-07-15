@@ -20,14 +20,15 @@ import rawble_1 from './rawble_1.webp'
 import spa from './spa.png'
 import avatar from './avatar.png'
 import Icon_VNPAY_QR from './Icon_VNPAY_QR.png'
-import about_us1 from './about_us1.jpeg'
-import spa2 from './spa2.png'
-import dog_home from './dog_home.png'
-import Grooming_dog from './Grooming_dog.png'
-import team from './team.jpg'
+import vnpayLogo from './vnpay_logo.png'
+import paypalLogo from './paypal_logo.png'
+import Cute_Pet_2 from './Cute_Pet_2.mp4'
 export const assets = {
     spa,
     logo,
+    Cute_Pet_2,
+    vnpayLogo,
+    paypalLogo,
     cart,
     search,
     facebook,

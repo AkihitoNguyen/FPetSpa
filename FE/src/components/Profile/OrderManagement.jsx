@@ -86,7 +86,7 @@ const OrderManagement = () => {
 
     return (
         <div>
-            <h1 className="text-2xl font-bold">OrderMangerment</h1>
+            <h1 className="text-2xl font-bold">Order Management</h1>
             {error ? (
                 <p className="mt-4 text-red-500">Error: {error}</p>
             ) : orders.length === 0 ? (
@@ -298,7 +298,7 @@ const OrderManagement = () => {
                     </Dialog>
                 </>
             ) : (
-                <p className="mt-4">Không có đơn hàng nào liên quan đến người dùng hiện tại.</p>
+                <p className="mt-4">There are no orders related to the current user.</p>
             )}
         </div>
     );
