@@ -67,7 +67,7 @@
     transition: 0.3s;
 } */
 
-.navbar button {
+.navbar1 button {
     top: -4px;
     right: -7px;
     font-size: 12px;
@@ -78,7 +78,7 @@
     
 }
 
-.navbar .user {
+.navbar1 .user {
     width: 23.5px;
     right: -55px;
     top: 12px;
@@ -88,7 +88,7 @@
     display: flex;
     gap: 7px;
 }
-.navbar li {
+.navbar1 li {
     cursor: pointer;
 }
 
@@ -100,7 +100,7 @@
 
 
 @media (max-width: 1050px) {
-    .navbar .logo {
+    .navbar1 .logo {
         width: 140px;
     }
 
@@ -124,7 +124,7 @@
 }
 
 @media (max-width: 900px) {
-    .navbar .logo {
+    .navbar1 .logo {
         width: 120px;
     }
 
