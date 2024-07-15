@@ -48,8 +48,12 @@ export const assets = {
     rawble,
     rawble_1,
     avatar,
-    Icon_VNPAY_QR
-
+    Icon_VNPAY_QR,
+    about_us1,
+    spa2,
+    dog_home,
+    Grooming_dog,
+    team
 }
 
 

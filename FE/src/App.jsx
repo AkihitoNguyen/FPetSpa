@@ -34,8 +34,6 @@ import EditService from "./components/DashBoard/ServiceManagement.jsx/EditServic
 import ViewService from "./components/DashBoard/ServiceManagement.jsx/ViewService";
 import QR from "./pages/QR/QR";
 import AddProduct from "./components/DashBoard/ProductManage.jsx/AddProduct";
-import Transactions from "./components/DashBoard/Transactions";
-import PayInOut from "./components/DashBoard/ServiceManagement.jsx/PayInOut";
 
 const App = () => {
   const [showNavbarAndFooter, setShowNavbarAndFooter] = useState(true);
@@ -56,8 +54,6 @@ const App = () => {
       "/profile",
       "/checkout",
       "/productdisplay/:productName",
-      "/confirm-email",
-      "/check-email",
       "/dashboard/*",
       "/payment-success",
       "/booking-history",
@@ -107,9 +103,8 @@ const App = () => {
           <Route path="/booking-history" element={<BookingHistory />} />
           <Route path="/order-service" element={<GetService />} />
           <Route path="/qr" element={<QR />} />
-          <Route path="/productdisplay/:productName" element={<ProductDisplay />} />
-          <Route path="/confirm-email" element={<ConfirmEmail />} />
-          <Route path="/check-email" element={<CheckEmail />} />
+          <Route path="/productdisplay/:productId" element={<ProductDisplay />} />
+          
 
           <Route path="/layout" element={<Layout />}>
             <Route path="/layout/dashboards" element={<Dashboards />} />
@@ -121,8 +116,7 @@ const App = () => {
             <Route path="/layout/account-info" element={<User />} />
             <Route path="/layout/product-info" element={<GetProduct />} />
             <Route path="/layout/add-product" element={<AddProduct />} />
-            <Route path="/layout/transaction" element={<Transactions />} />
-            <Route path="/layout/pay-in-out" element={<PayInOut/>} />
+            <Route path="/layout/booking-product" element={<BookingProduct />} />
           </Route>
 
           {/* DashBoard */}
