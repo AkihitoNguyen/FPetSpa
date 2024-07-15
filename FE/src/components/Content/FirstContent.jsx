@@ -96,7 +96,7 @@ const FirstContent = () => {
         <div className="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
           <img
             alt="Customer 1"
-            src={assets.customer1}
+            src={assets.team}
             className="w-full h-48 object-cover rounded-lg mb-4"
           />
           <h3 className="text-2xl font-bold mb-2">John's Experience</h3>
@@ -107,7 +107,7 @@ const FirstContent = () => {
         <div className="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
           <img
             alt="Customer 2"
-            src={assets.customer2}
+            src={assets.team}
             className="w-full h-48 object-cover rounded-lg mb-4"
           />
           <h3 className="text-2xl font-bold mb-2">Sophie's Review</h3>
@@ -118,7 +118,7 @@ const FirstContent = () => {
         <div className="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
           <img
             alt="Customer 3"
-            src={assets.customer3}
+            src={assets.team}
             className="w-full h-48 object-cover rounded-lg mb-4"
           />
           <h3 className="text-2xl font-bold mb-2">Emily's Feedback</h3>

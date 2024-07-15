@@ -16,7 +16,7 @@ const Home = () => {
       <ServiceContent />
       <FirstContent />
       
-      <div className="flex justify-start items-center bg-gray-100">
+      <div className="flex justify-start items-center w-80 bg-gray-100">
         <MapComponent />
       </div>
     </div>

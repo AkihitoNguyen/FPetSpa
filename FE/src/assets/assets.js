@@ -23,6 +23,12 @@ import Icon_VNPAY_QR from './Icon_VNPAY_QR.png'
 import vnpayLogo from './vnpay_logo.png'
 import paypalLogo from './paypal_logo.png'
 import Cute_Pet_2 from './Cute_Pet_2.mp4'
+import about_us1 from './about_us1.jpeg'
+import dog_home from './dog_home.png'
+import team from './team.jpg'
+import Grooming_dog from './Grooming_dog.png'
+import spa2 from './spa2.png'
+
 export const assets = {
     spa,
     logo,
@@ -50,10 +56,10 @@ export const assets = {
     avatar,
     Icon_VNPAY_QR,
     about_us1,
-    spa2,
     dog_home,
-    Grooming_dog,
-    team
+    team,
+    Grooming_dog ,
+    spa2,
 }
 
 

@@ -2,7 +2,7 @@ import React from 'react';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 const containerStyle = {
-  width: '94rem',
+  width: '126.5rem',
   height: '40rem'
 };
 
@@ -13,7 +13,7 @@ const center = {
 
 const MapComponent = () => {
   return (
-    <div className="relative w-72 h-full">
+    <div className="relative w-80 h-full">
       <LoadScript googleMapsApiKey="AIzaSyBqGhInS-WbsZORgWtCN0FQlV__9N-gNIA">
         <GoogleMap
           mapContainerStyle={containerStyle}
