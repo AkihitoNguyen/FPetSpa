@@ -11,9 +11,6 @@ import Register from "./pages/Register/Register";
 import Product from "./pages/Product/Product";
 import ProductDisplay from "./components/ProductDisplay/ProductDisplay";
 
-import "react-toastify/dist/ReactToastify.css";
-import 'semantic-ui-css/semantic.min.css';
-
 import Service from "./pages/Service/Service";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import AboutUs from "./pages/AboutUs/AboutUs";
@@ -34,11 +31,13 @@ import Dashboards from "./components/DashBoard/Dashboards";
 import AddService from "./components/DashBoard/ServiceManagement.jsx/AddService";
 import EditService from "./components/DashBoard/ServiceManagement.jsx/EditService";
 import ViewService from "./components/DashBoard/ServiceManagement.jsx/ViewService";
-import BookingProduct from "./components/DashBoard/ProductManage.jsx/BookingProduct";
-
 import QR from "./pages/QR/QR";
 import AddProduct from "./components/DashBoard/ProductManage.jsx/AddProduct";
+
 import SearchResult from "./components/PageProduct/SearchResult";
+
+import BookingProduct from "./components/DashBoard/ProductManage.jsx/BookingProduct";
+
 
 const App = () => {
   const [showNavbarAndFooter, setShowNavbarAndFooter] = useState(true);
@@ -74,13 +73,17 @@ const App = () => {
       "/layout/account-info",
       "/layout/product-info",
       "/layout/add-product",
+
       "/layout/booking-product",
       "/search"
 
+      "/layout/transaction",
+      "/layout/pay-in-out"
     ];
 
     const isMatched = routes.some((route) => matchPath(route, location.pathname));
-    setShowNavbarAndFooter(isMatched);
+    const isLayoutOrDashboardPath = location.pathname.startsWith("/layout") || location.pathname.startsWith("/dashboard");
+    setShowNavbarAndFooter(isMatched && !isLayoutOrDashboardPath);
   }, [location.pathname]);
 
   return (
@@ -88,7 +91,6 @@ const App = () => {
       <div className="app">
         {showNavbarAndFooter && (
           <>
-            <Navlink />
             <Navbar />
           </>
         )}

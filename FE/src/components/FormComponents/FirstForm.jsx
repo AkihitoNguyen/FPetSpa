@@ -187,7 +187,9 @@ const FirstForm = ({ formValues, onChange, services, userPets }) => {
                   onChange={handleInputChange}
                   checked={formValues.paymentMethod === "VNPay"}
                 />
+
                 <img src={assets.Icon_VNPAY_QR1} alt="VNPay Logo" className="h-8 ml-2" />
+
               </label>
               <label className="inline-flex items-center ml-4">
                 <input
@@ -198,7 +200,9 @@ const FirstForm = ({ formValues, onChange, services, userPets }) => {
                   onChange={handleInputChange}
                   checked={formValues.paymentMethod === "PayPal"}
                 />
+
                 <img src={assets.paypal_logo1} alt="PayPal Logo" className="h-8 ml-2" />
+
               </label>
             </div>
           </div>

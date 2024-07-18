@@ -20,11 +20,13 @@ import rawble_1 from './rawble_1.webp'
 import spa from './spa.png'
 import avatar from './avatar.png'
 import Icon_VNPAY_QR from './Icon_VNPAY_QR.png'
+import vnpayLogo from './vnpay_logo.png'
+import paypalLogo from './paypal_logo.png'
+import Cute_Pet_2 from './Cute_Pet_2.mp4'
 import about_us1 from './about_us1.jpeg'
-import spa2 from './spa2.png'
 import dog_home from './dog_home.png'
-import Grooming_dog from './Grooming_dog.png'
 import team from './team.jpg'
+
 import PayPal_Logo from './PayPal_Logo.png'
 import banner_product from './banner_product.png'
 import banner_product1 from './banner_product1.png'
@@ -33,9 +35,16 @@ import paypal_logo1 from './paypal_logo1.png'
 import Icon_VNPAY_QR1 from './Icon_VNPAY_QR1.png'
 import banner_product2 from './banner_product2.png'
 import banner_product3 from './banner_product3.png'
+
+import Grooming_dog from './Grooming_dog.png'
+import spa2 from './spa2.png'
+
 export const assets = {
     spa,
     logo,
+    Cute_Pet_2,
+    vnpayLogo,
+    paypalLogo,
     cart,
     search,
     facebook,
@@ -57,8 +66,8 @@ export const assets = {
     avatar,
     Icon_VNPAY_QR,
     about_us1,
-    spa2,
     dog_home,
+
     Grooming_dog,
     team,
     PayPal_Logo,
@@ -68,7 +77,12 @@ export const assets = {
     paypal_logo1,
     Icon_VNPAY_QR1,
     banner_product2,
-    banner_product3
+    banner_product3,
+
+    team,
+    Grooming_dog ,
+    spa2,
+
 }
 
 

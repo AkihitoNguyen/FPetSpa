@@ -1,5 +1,8 @@
-// SearchBar.jsx
-import React, { useState } from 'react';
+
+import React, { useState, useEffect } from 'react';
+import PropTypes from 'prop-types';
+import { debounce, escapeRegExp, filter } from 'lodash';
+
 import { useNavigate } from 'react-router-dom';
 
 const SearchProduct = () => {
