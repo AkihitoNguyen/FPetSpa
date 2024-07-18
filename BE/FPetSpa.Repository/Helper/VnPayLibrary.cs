@@ -12,6 +12,8 @@ namespace FPetSpa.Repository.Helper
         private readonly SortedList<string, string> _requestData = new SortedList<string, string>(new VnPayCompare());
         private readonly SortedList<string, string> _responseData = new SortedList<string, string>(new VnPayCompare());
 
+        public SortedList<string, string> RequestData => _requestData;
+
         public void AddRequestData(string key, string value)
         {
             if (!string.IsNullOrEmpty(value))

@@ -6,14 +6,16 @@ using System.Threading.Tasks;
 
 namespace FPetSpa.Repository.Helper
 {
-    public enum OrderStatusEnum
+    public enum OrderProductStatusEnum
     {
         Pending = 0,
         StaffAccepted = 1,
         Processing = 2,
-        Sucessfully = 3,
-        Cancel = 4,
-        False = 5
-
+        Shipped = 3,
+        Delivered = 4,
+        ReadyForPickup = 5,
+        Succesfully = 6,
+        Cancel = 7,
+        False = 8
     }
 }

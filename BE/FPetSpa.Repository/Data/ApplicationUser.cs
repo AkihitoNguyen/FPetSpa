@@ -7,7 +7,7 @@ namespace FPetSpa.Repository.Data
     {
         public string FullName { get; set; } = null!;
         public string Gmail { get; set; } = null!;
-        public string PhoneNumber { get; set; } = null!;
-        public bool PhoneNumberConfirmed { get; set; } = false;
+        public string? PhoneNumber { get; set; } = null!;
+        public bool? PhoneNumberConfirmed { get; set; } = false;
     }
 }

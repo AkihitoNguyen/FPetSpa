@@ -7,5 +7,6 @@
         public string? TransactionStatus { get; set; }
         public string? OrderId {  get; set; }
         public string? CustomeriD { get; set; }
+        public string? DeliveryOption {  get; set; }
     }
 }

@@ -1,123 +1,194 @@
-﻿using System.Net.Http.Headers;
-using System.Net.Http.Json;
+﻿using Azure.Core;
+using FPetSpa.Repository.Model.PayPalModel;
 using FPetSpa.Repository.Services.PayPal;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using PayPal.Api;
+using System.Collections.Generic;
+using System.Globalization;
+using Twilio.TwiML.Voice;
 
 public class PayPalService : IPayPalService
 {
-    private readonly HttpClient _httpClient;
     private readonly IConfiguration _configuration;
 
-    public PayPalService(HttpClient httpClient, IConfiguration configuration)
+    public PayPalService(IConfiguration configuration)
     {
-        _httpClient = httpClient;
         _configuration = configuration;
     }
 
-    public async Task<string> GetAccessTokenAsync()
+    private APIContext GetApiContext()
     {
         var clientId = _configuration["PayPal:ClientId"];
         var clientSecret = _configuration["PayPal:ClientSecret"];
-        var authToken = Convert.ToBase64String(System.Text.Encoding.ASCII.GetBytes($"{clientId}:{clientSecret}"));
-
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Basic", authToken);
-
-        var response = await _httpClient.PostAsync("https://api.sandbox.paypal.com/v1/oauth2/token", new FormUrlEncodedContent(new[]
+        var config = new Dictionary<string, string>
         {
-            new KeyValuePair<string, string>("grant_type", "client_credentials")
-        }));
+            { "mode", _configuration["PayPal:Mode"]! }
+        };
 
-        response.EnsureSuccessStatusCode();
-
-        var payload = await response.Content.ReadFromJsonAsync<PayPalTokenResponse>();
-        return payload.access_token;
+        var accessToken = new OAuthTokenCredential(clientId, clientSecret, config).GetAccessToken();
+        return new APIContext(accessToken) { Config = config };
     }
 
-    public async Task<PayPalPaymentResponse> CreatePaymentAsync(PaymentRequest paymentRequest)
+    public PayPalPaymentResponse CreatePayment(PayPalPaymentRequest request, string RETURN_URL, string CANCEL_URL)
     {
-        var accessToken = await GetAccessTokenAsync();
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        var apiContext = GetApiContext();
 
-        var response = await _httpClient.PostAsJsonAsync("https://api.sandbox.paypal.com/v1/payments/payment", paymentRequest);
-        response.EnsureSuccessStatusCode();
+        var payer = new Payer { payment_method = "paypal" };
+        var redirectUrls = new RedirectUrls
+        {
+            cancel_url = CANCEL_URL,
+            return_url = RETURN_URL
+        };
 
-        return await response.Content.ReadFromJsonAsync<PayPalPaymentResponse>();
+        var amount = new Amount
+        {
+            currency = request.Currency,
+            total = request.Amount.ToString("F2", CultureInfo.InvariantCulture)
+        };
+
+        var transactionList = new List<Transaction>
+        {
+            new Transaction
+            {
+                description = request.Description,
+                invoice_number = new Random().Next(100000).ToString(),
+                amount = amount
+            }
+        };
+
+        var payment = new Payment
+        {
+            intent = "sale",
+            payer = payer,
+            transactions = transactionList,
+            redirect_urls = redirectUrls
+        };
+
+        try
+        {
+            var createdPayment = payment.Create(apiContext);
+            var approvalUrl = createdPayment.links.FirstOrDefault(x => x.rel == "approval_url")?.href;
+
+            return new PayPalPaymentResponse
+            {
+                PaymentId = createdPayment.id,
+                ApprovalUrl = approvalUrl
+            };
+        }
+        catch (PayPal.PaymentsException ex)
+        {
+            // Log the exception or handle it appropriately
+            throw new Exception($"Error creating PayPal payment: {ex.Message}");
+        }
     }
 
-    public async Task<PayPalPaymentResponse> ExecutePaymentAsync(string paymentId, string payerId)
+    public Payment ExecutePayment(string paymentId, string payerId)
     {
-        var accessToken = await GetAccessTokenAsync();
-        _httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+        var apiContext = GetApiContext();
 
-        var executePaymentUrl = $"https://api.sandbox.paypal.com/v1/payments/payment/{paymentId}/execute";
-        var response = await _httpClient.PostAsJsonAsync(executePaymentUrl, new { payer_id = payerId });
+        var paymentExecution = new PaymentExecution { payer_id = payerId };
+        var payment = new Payment { id = paymentId };
 
-        response.EnsureSuccessStatusCode();
+        var executedPayment = payment.Execute(apiContext, paymentExecution);
 
-        return await response.Content.ReadFromJsonAsync<PayPalPaymentResponse>();
+        return executedPayment;
     }
-}
 
-public class PayPalTokenResponse
-{
-    public string access_token { get; set; }
-}
+    public List<Object> transacitonList(int count = 10, string startId = null, decimal? minAmount = null, decimal? maxAmount = null, string startDate = null, string endDate = null, int? month = null, int? year = null)
+    {
+        var apiContext = GetApiContext();
 
-public class PayPalPaymentResponse
-{
-    public string id { get; set; }
-    public string state { get; set; }
-    public PayPalLink[] links { get; set; }
-}
+        var transactionList = Payment.List(apiContext, count: count, startId: startId);
 
-public class PayPalLink
-{
-    public string href { get; set; }
-    public string rel { get; set; }
-    public string method { get; set; }
-}
+        var transactions = new List<object>();
+        foreach (var payment in transactionList.payments)
+        {
+            var amount = decimal.Parse(payment.transactions[0].amount.total, CultureInfo.InvariantCulture);
+            var currency = payment.transactions[0].amount.currency;
+            var createTime = DateTime.Parse(payment.create_time);
 
-public class PaymentRequest
-{
-    public string intent { get; set; }
-    public Payer payer { get; set; }
-    public TransactionPayPal[] transactions { get; set; }
-    public RedirectUrls redirect_urls { get; set; }
-}
+            // Filter by amount
+            if (minAmount.HasValue && amount < minAmount.Value) continue;
+            if (maxAmount.HasValue && amount > maxAmount.Value) continue;
 
-public class Payer
-{
-    public string payment_method { get; set; }
-}
+            // Filter by date range
+            if (!string.IsNullOrEmpty(startDate) && !string.IsNullOrEmpty(endDate))
+            {
+                var startDateTime = DateTime.Parse(startDate);
+                var endDateTime = DateTime.Parse(endDate);
+                if (createTime < startDateTime || createTime > endDateTime) continue;
+            }
 
-public class TransactionPayPal
-{
-    public Amount amount { get; set; }
-    public string description { get; set; }
-    public ItemList item_list { get; set; }
-}
+            // Filter by month and year
+            if (month.HasValue && createTime.Month != month.Value) continue;
+            if (year.HasValue && createTime.Year != year.Value) continue;
 
-public class Amount
-{
-    public string total { get; set; }
-    public string currency { get; set; }
-}
+            transactions.Add(new
+            {
+                Id = payment.id,
+                State = payment.state,
+                Amount = amount,
+                Currency = currency,
+                Description = payment.transactions[0].description,
+                CreateTime = createTime
+            });
+        }
+        return transactions;
 
-public class ItemList
-{
-    public Item[] items { get; set; }
-}
+    }
 
-public class Item
-{
-    public string name { get; set; }
-    public string currency { get; set; }
-    public string price { get; set; }
-    public string quantity { get; set; }
-}
+    public PayPalBalanceResponse GetTransactions(DateTime? startDate = null, DateTime? endDate = null)
+    {
+        try
+        {
+            var apiContext = GetApiContext();
 
-public class RedirectUrls
-{
-    public string return_url { get; set; }
-    public string cancel_url { get; set; }
+            // Thiết lập thời gian mặc định là ngày hôm nay nếu không được cung cấp
+            if (!startDate.HasValue)
+            {
+                startDate = DateTime.Today;
+            }
+
+            if (!endDate.HasValue)
+            {
+                endDate = DateTime.Today.AddDays(1).AddTicks(-1);
+            }
+
+            // Truy vấn lịch sử giao dịch
+            var transactions = Payment.List(apiContext, count: 100, startId: null, startTime: startDate.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"), endTime: endDate.Value.ToString("yyyy-MM-ddTHH:mm:ssZ"));
+
+            // Tính toán tổng số tiền vào và ra
+            decimal totalIn = 0;
+            decimal totalOut = 0;
+
+            foreach (var transaction in transactions.payments)
+            {
+                if (transaction.state == "approved")
+                {
+                    var amount = decimal.Parse(transaction.transactions[0].amount.total);
+                    if (transaction.intent == "sale")
+                    {
+                        totalIn += amount;
+                    }
+                    else if (transaction.intent == "refund")
+                    {
+                        totalOut += amount;
+                    }
+                }
+            }
+
+            return new PayPalBalanceResponse
+            {
+                ToTalIn = totalIn,
+                ToTalOut = totalOut
+            };
+        }
+        catch (Exception ex)
+        {
+            // Log the error details
+            return null;
+        }
+    }
+
 }
