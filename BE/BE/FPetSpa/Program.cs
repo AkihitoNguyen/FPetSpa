@@ -22,6 +22,9 @@ using FPetSpa.Controllers;
 using System.ComponentModel;
 using FPetSpa.Repository.Helper;
 using FPetSpa.Repository.Services.PayPal;
+using Microsoft.Extensions.DependencyInjection;
+using System;
+using Hangfire.SqlServer;
 
 namespace FPetSpa
 {
@@ -62,8 +65,6 @@ namespace FPetSpa
             builder.Services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                //      options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                //     options.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
                 options.DefaultSignInScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultScheme = CookieAuthenticationDefaults.AuthenticationScheme;
                 options.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
@@ -91,10 +92,10 @@ namespace FPetSpa
               {
                   options.ClientId = builder.Configuration.GetSection("GoogleKeys:ClientId").Value;
                   options.ClientSecret = builder.Configuration.GetSection("GoogleKeys:ClientSecret").Value;
-                  options.CallbackPath = new PathString("/signin-google");
+                  options.CallbackPath = new PathString("/GoogleResponse");
               });
             builder.Services.AddHttpContextAccessor();
-            builder.Services.AddDistributedMemoryCache();   
+            builder.Services.AddDistributedMemoryCache();
             builder.Services.AddSession(options =>
             {
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
@@ -102,9 +103,8 @@ namespace FPetSpa
                 options.Cookie.IsEssential = true;
             });
 
-            builder.Services.AddCors(options => options.AddPolicy("AllowAllOrigins", policy => policy.WithOrigins("http://localhost:5173", "https://fpet-spa.vercel.app").AllowAnyHeader().AllowAnyMethod().AllowCredentials()));
+            builder.Services.AddCors(options => options.AddPolicy("AllowAllOrigins", policy => policy.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod()));
             builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-            // builder.Services.AddScoped<SendMailServices>();
             builder.Services.AddScoped<IEmailSenderRepository, EmailSenderRepository>();
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<IProducService, ProductService>();
@@ -119,6 +119,11 @@ namespace FPetSpa
             builder.Services.AddScoped<TransactionService>();
             builder.Services.AddScoped<ImageService>();
             builder.Services.AddScoped<GoogleMapService>();
+<<<<<<< HEAD:BE/BE/FPetSpa/Program.cs
+=======
+            builder.Services.AddScoped<TimeSlotService>();
+            builder.Services.AddScoped<IFeedBackService, FeedBackService>();
+>>>>>>> b93e53d9cbf364b09703c444af04cab68e1821a6:BE/FPetSpa/Program.cs
             builder.Services.AddSingleton(new BotService("https://api.coze.com/v3/chat", "pat_t8mzOeNB4jsfon2OXohlzK2HNhY6yiF7SExbrU30kpxrsfIBmA57bBQd3o3kYXy7"));
             builder.Services.AddControllers()
                     .AddJsonOptions(options =>
@@ -135,8 +140,21 @@ namespace FPetSpa
             builder.Services.AddHttpClient();
             builder.Services.AddSingleton<IVnPayService, VnPayService>();
             builder.Services.AddSingleton<IPayPalService, PayPalService>();
-            builder.Services.AddHangfire(config => config.UseSqlServerStorage(builder.Configuration.GetConnectionString("FPetDBContext")));
-            builder.Services.AddHangfireServer();   
+            builder.Services.AddSingleton<TimeSlotJob>();
+            builder.Services.AddHangfire(config => config
+                 .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                 .UseSimpleAssemblyNameTypeSerializer()
+                 .UseRecommendedSerializerSettings()
+                 .UseSqlServerStorage(builder.Configuration.GetConnectionString("FPetDBContext"), new SqlServerStorageOptions
+                 {
+                     CommandBatchMaxTimeout = TimeSpan.FromMinutes(5),
+                     SlidingInvisibilityTimeout = TimeSpan.FromMinutes(5),
+                     QueuePollInterval = TimeSpan.Zero,
+                     UseRecommendedIsolationLevel = true,
+                     DisableGlobalLocks = true
+                 }));
+            builder.Services.AddHangfireServer();
+
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             //   builder.Services.AddSwaggerGen();
@@ -170,7 +188,7 @@ namespace FPetSpa
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 option.IncludeXmlComments(xmlPath);
             });
-            
+
             var app = builder.Build();
 
             // Configure the HTTP request pipeline.
@@ -184,11 +202,19 @@ namespace FPetSpa
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.MapControllers();
 
             app.UseHangfireDashboard();
 
-            app.MapControllers();
 
+            var timeSlotJob = app.Services.GetRequiredService<TimeSlotJob>();
+            RecurringJob.AddOrUpdate(
+                "CreateSlotWeek",
+                () => timeSlotJob.CreateSlotWeekJob(),
+                Cron.Daily //(DayOfWeek.Monday, 0, 0) // Schedule to run at midnight every Monday
+            );
+
+            app.UseRouting();
             app.Run();
         }
     }

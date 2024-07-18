@@ -21,7 +21,7 @@ namespace FPetSpa.Controllers
         [HttpGet("getAllTransaction")]   
         public async Task<IActionResult> getAllTransaction()
         {
-            var result =  _unitOfWork.TransactionRepository.GetAllAsync();
+            var result = await  _unitOfWork.TransactionRepository.GetAllAsync();
             if(result != null)
             return Ok(result);
             return BadRequest("Something went wrong!!!");

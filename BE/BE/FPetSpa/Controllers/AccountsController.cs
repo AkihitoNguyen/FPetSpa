@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Mvc;
+using Newtonsoft.Json.Linq;
 using Twilio.Types;
 
 namespace FPetSpa.Controllers
@@ -54,30 +55,49 @@ namespace FPetSpa.Controllers
             return Ok(result);
         }
 
-        [HttpGet("login-google")]
-        public IActionResult Login()
-        {
-            var authenticationProperties = new AuthenticationProperties { RedirectUri = Url.Action("GoogleResponse") };
-            return Challenge(authenticationProperties, GoogleDefaults.AuthenticationScheme);
-        }
 
-        [HttpGet("signin-google")]
-        public async Task<IActionResult> GoogleResponse()
+        [HttpPost("GoogleResponse")]
+        public async Task<IActionResult> GoogleResponse(string accessToken)
         {
-            var result = await HttpContext.AuthenticateAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            if (result?.Principal != null)
+            if (string.IsNullOrEmpty(accessToken))
             {
-                var claims = result.Principal.Identities.FirstOrDefault()?.Claims;
-                var Name = claims?.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Name)?.Value;
-                var gmail = claims?.FirstOrDefault(c => c.Type == System.Security.Claims.ClaimTypes.Email)?.Value;
-                if (gmail != null)
-                {
-                    var token = await _unitOfWork._IaccountRepository.SignInWithGoogle(gmail, Name);
-                    return Redirect($"http://localhost:5173/login?token={token.AccessToken}&FullName={token.FullName}&RefreshToken={token.RefreshToken}");
-                }
+                return BadRequest("Access token is required.");
             }
-            return BadRequest("Error logging in with Google");
+
+            // Xác thực token với Google
+            var client = new HttpClient();
+            var requestUri = $"https://www.googleapis.com/oauth2/v3/userinfo?access_token={accessToken}";
+
+            HttpResponseMessage response;
+            try
+            {
+                response = await client.GetAsync(requestUri);
+                response.EnsureSuccessStatusCode();
+            }
+            catch (HttpRequestException e)
+            {
+                return BadRequest($"Error validating access token: {e.Message}");
+            }
+
+            var content = await response.Content.ReadAsStringAsync();
+            var userInfo = JObject.Parse(content);
+
+            var email = userInfo.Value<string>("email");
+            var fullName = userInfo.Value<string>("name");
+            if (string.IsNullOrEmpty(email))
+            {
+                return BadRequest("Invalid Google token.");
+            }
+            if (string.IsNullOrEmpty(fullName))
+            {
+                return BadRequest("Invalid Google token.");
+            }
+            var token = await _unitOfWork._IaccountRepository.SignInWithGoogle(email, fullName);
+            if(token == null) return BadRequest();
+            return Ok(token);
         }
+            
+        
 
         [HttpPost("log-out")]
         // [Authorize]

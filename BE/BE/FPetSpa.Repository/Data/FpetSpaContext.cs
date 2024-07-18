@@ -20,7 +20,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<Category> Categories { get; set; }
 
-    public virtual DbSet<FeedBack> FeedBacks { get; set; }
+    public virtual DbSet<FeedBack> FeedBack { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
 
@@ -38,13 +38,20 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<Transaction> Transactions { get; set; }
     public virtual DbSet<BookingTime> BookingTime { get; set; }
+<<<<<<< HEAD:BE/BE/FPetSpa.Repository/Data/FpetSpaContext.cs
 
+=======
+>>>>>>> b93e53d9cbf364b09703c444af04cab68e1821a6:BE/FPetSpa.Repository/Data/FpetSpaContext.cs
     public virtual DbSet<Voucher> Vouchers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
+<<<<<<< HEAD:BE/BE/FPetSpa.Repository/Data/FpetSpaContext.cs
+=======
+
+>>>>>>> b93e53d9cbf364b09703c444af04cab68e1821a6:BE/FPetSpa.Repository/Data/FpetSpaContext.cs
         modelBuilder.Entity<BookingTime>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -52,6 +59,13 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.Time)
                 .HasMaxLength(20)
                 .HasColumnName("BookingTime");
+<<<<<<< HEAD:BE/BE/FPetSpa.Repository/Data/FpetSpaContext.cs
+=======
+            entity.Property(e => e.Date)
+                    .HasColumnName("Date");
+            entity.Property(e => e.MaxSlots)
+                .HasColumnName("MaxSlots");
+>>>>>>> b93e53d9cbf364b09703c444af04cab68e1821a6:BE/FPetSpa.Repository/Data/FpetSpaContext.cs
         });
 
         modelBuilder.Entity<Cart>(entity =>
@@ -258,9 +272,6 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
                 .HasConstraintName("FK_ProductOrderDetails.OrderID");
             entity.HasOne(d => d.Product).WithMany()
                 .HasConstraintName("FK_ProductOrderDetails.ProductId");
-
-
-
         });
 
         modelBuilder.Entity<Service>(entity =>
