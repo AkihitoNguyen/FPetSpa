@@ -31,8 +31,12 @@ import banner_product1 from './banner_product1.png'
 import Cute_Pet_2 from './Cute_Pet_2.mp4'
 import paypal_logo1 from './paypal_logo1.png'
 import Icon_VNPAY_QR1 from './Icon_VNPAY_QR1.png'
-import banner_product2 from './banner_product2.png'
-import banner_product3 from './banner_product3.png'
+import Slider_1 from './Slider_1.png'
+import Slider_2 from './Slider_2.png'
+import Slider_3 from './Slider_3.png'
+import Slider_4 from './Slider_4.png'
+import Slider_5 from './Slider_5.png'
+
 export const assets = {
     spa,
     logo,
@@ -67,8 +71,11 @@ export const assets = {
     Cute_Pet_2,
     paypal_logo1,
     Icon_VNPAY_QR1,
-    banner_product2,
-    banner_product3
+    Slider_1,
+    Slider_2,
+    Slider_3,
+    Slider_4,
+    Slider_5,
 }
 
 

@@ -12,16 +12,55 @@ import { FcGoogle } from "react-icons/fc";
 // import { jwtDecode } from "jwt-decode";
 import { useAuth } from "src/context/AuthProvider";
 
+<<<<<<< HEAD
+            {/* Comment Submission Form */}
+            <div className="mt-8 bg-gray-100 p-6 rounded-lg shadow-md">
+              <h3 className="text-lg font-medium text-gray-900">Leave a Comment</h3>
+                <form onSubmit={handleSubmitComment} className="mt-4 space-y-4">
+                  <div>
+                    <label htmlFor="commentText" className="block text-sm font-medium text-gray-700">Comment</label>
+                    <textarea
+                      placeholder='Give your feedback....'
+                      id="commentText"
+                      name="commentText"
+                      value={commentText}
+                      onChange={(e) => setCommentText(e.target.value)}
+                      rows="4"
+                      required
+                      className="w-full bg-slate-100 text-slate-600 h-28 placeholder:text-slate-600 placeholder:opacity-50 border border-slate-200 col-span-6 resize-none outline-none rounded-lg p-2 duration-300 focus:border-slate-600"
+                    ></textarea>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700">Rating</label>
+                    <div className="flex space-x-1 mt-1">
+                      {renderStarRating()}
+                    </div>
+                  </div>
+                  <div>
+                    <button
+                      type="submit"
+                      className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                    >Submit</button>
+                  </div>
+                </form>
+            </div>
+=======
 const RegisterPage = () => {
     const { loginWithGoogle } = useAuth();
+>>>>>>> 107f8d347047d8d106bd242ea00b381c11eaa333
 
     const navigate = useNavigate();
     const location = useLocation();
 
     const [isLoading, setIsLoading] = useState(false);
 
+<<<<<<< HEAD
+     const handleSubmitComment = async (e) => {
+    e.preventDefault();
+=======
     const [existingEmail, setExistingEmail] = useState(null);
     const [errors, setErrors] = useState({});
+>>>>>>> 107f8d347047d8d106bd242ea00b381c11eaa333
 
     const [password, setPassword] = useState("");
     const [type, setType] = useState('password');
@@ -49,6 +88,45 @@ const RegisterPage = () => {
             setType('password')
         }
     }
+<<<<<<< HEAD
+  };
+
+
+      // const handleSubmitComment = async (e,productId) => {
+    //     e.preventDefault();
+    
+    //     const newComment = {
+    //       userFeedBackId: currentUser.userId,
+    //       productId: productId,
+    //       pictureName: '',
+    //       star: commentStar,
+    //       description: commentText,
+    //     };
+    // console.log(productId)
+    //     try {
+    //       const response = await fetch('https://fpetspa.azurewebsites.net/api/FeedBack/Create', {
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //           'Authorization': `Bearer ${currentUser.accessToken}`
+    //         },
+    //         body: JSON.stringify(newComment),
+    //       });
+    
+    //       if (!response.ok) {
+    //         throw new Error('Network response was not ok');
+    //       }
+    
+    //       const result = await response.json();
+    //       setComments([...comments, result]);
+    //       setCommentName('');
+    //       setCommentText('');
+    //       setCommentStar(5);
+    //     } catch (error) {
+    //       console.error("Error submitting comment:", error);
+    //     }
+    //   };
+=======
 
     // Handle register form
     const handleRegisterForm = async (e) => {
@@ -458,3 +536,4 @@ export default RegisterPage;
     //     },
     //     flow: 'auth-code', // Use 'auth-code' for the authorization code flow
     //   });
+>>>>>>> 107f8d347047d8d106bd242ea00b381c11eaa333

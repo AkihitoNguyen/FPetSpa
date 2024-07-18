@@ -151,7 +151,7 @@ export default function ProductList() {
         </Dialog>
 
         <main className="mx-auto max-w-max px-4 sm:px-6 lg:px-8">
-          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-8 " >
+          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-8">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">Product</h1>
 
             <div className="flex items-center">

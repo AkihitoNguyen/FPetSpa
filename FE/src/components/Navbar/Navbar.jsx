@@ -78,21 +78,45 @@ const Navbar = () => {
   }
 
   return (
-    <div className="sticky top-0 z-10 flex items-center justify-between p-4 bg-white shadow-md">
-      <img
+    <div className="bg-white shadow-md">
+     <div className="mx-36 sticky top-0 z-10 flex items-center justify-between p-[12px] ">
+     <img
         onClick={() => navigate("/")}
         src={assets.logo}
         alt=""
-        className="w-16 cursor-pointer"
+        className="w-14 cursor-pointer"
       />
-      <div className="hidden md:flex flex-grow justify-center">
-        <ul className="flex text-3xl  gap-6 text-gray-900 font-medium">
-          <li onClick={() => navigate("/service")} className="cursor-pointer">Service</li>
-          <li onClick={() => navigate("/product")} className="cursor-pointer">Product</li>
-          <li onClick={() => navigate("/about-us")} className="cursor-pointer">About us</li>
-          <li onClick={() => navigate("/contact-us")} className="cursor-pointer">Contact us</li>
-        </ul>
+      <div className="hidden md:flex justify-center items-center flex-grow">
+        <div className="max-w-3xl w-full">
+          <ul className="flex justify-center gap-10 m-0 text-gray-900 font-normal">
+            <li
+              onClick={() => navigate("/service")}
+              className="cursor-pointer text-[#262626] text-[16px] hover:text-[#FC819E]"
+            >
+              Service
+            </li>
+            <li
+              onClick={() => navigate("/product")}
+              className="cursor-pointer text-[#262626] text-[16px] hover:text-[#FC819E]"
+            >
+              Product
+            </li>
+            <li
+              onClick={() => navigate("/about-us")}
+              className="cursor-pointer text-[#262626] text-[16px] hover:text-[#FC819E]"
+            >
+              About us
+            </li>
+            <li
+              onClick={() => navigate("/contact-us")}
+              className="cursor-pointer text-[#262626] text-[16px] hover:text-[#FC819E]"
+            >
+              Contact us
+            </li>
+          </ul>
+        </div>
       </div>
+
       <div className="flex items-center gap-4">
         <div className="hidden md:block">
           <SearchProduct onResultSelect={(result) => console.log(result)} />
@@ -101,8 +125,10 @@ const Navbar = () => {
           <Menu as="div" className="relative">
             <Menu.Button>
               <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-blue-500 flex items-center justify-center">
-                  <span className="text-white">{stringAvatar(user.fullName).children}</span>
+                <div className="w-10 h-10 rounded-full bg-[#FC819E] flex items-center justify-center">
+                  <span className="text-white">
+                    {stringAvatar(user.fullName).children}
+                  </span>
                 </div>
               </div>
             </Menu.Button>
@@ -122,7 +148,7 @@ const Navbar = () => {
                       <Link
                         to="/profile"
                         className={`${
-                          active ? 'bg-gray-100' : ''
+                          active ? "bg-gray-100" : ""
                         } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
                       >
                         Profile
@@ -134,7 +160,7 @@ const Navbar = () => {
                       <Link
                         to="/booking-history"
                         className={`${
-                          active ? 'bg-gray-100' : ''
+                          active ? "bg-gray-100" : ""
                         } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
                       >
                         Booking history
@@ -147,7 +173,7 @@ const Navbar = () => {
                         <Link
                           to="/dashboard"
                           className={`${
-                            active ? 'bg-gray-100' : ''
+                            active ? "bg-gray-100" : ""
                           } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
                         >
                           Dashboard
@@ -160,7 +186,7 @@ const Navbar = () => {
                       <button
                         onClick={handleLogout}
                         className={`${
-                          active ? 'bg-gray-100' : ''
+                          active ? "bg-gray-100" : ""
                         } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
                       >
                         Logout
@@ -174,15 +200,21 @@ const Navbar = () => {
         ) : (
           <div className="flex gap-2">
             <Link to="/login" className="flex gap-2">
-              <img src={assets.user} alt="" className="w-6" />
-              <button className="text-sm font-medium transition duration-300" onClick={() => navigate("/login")}>Login</button>
+              <button
+                className="text-[16px] text-[#FC819E] font-semibold border-1 border-[#FC819E] rounded-xl px-4 py-1 transition duration-300  hover:bg-[#FC819E] hover:text-white"
+                onClick={() => navigate("/login")}
+              >
+                Log in
+              </button>
             </Link>
           </div>
         )}
         <div className="relative">
           <Link to="/cart" className="relative">
             <img src={assets.cart} alt="" className="w-6" />
-            <div className="absolute -right-4 -top-2 w-6 h-5 flex items-center justify-center text-sm bg-black text-white rounded-full">{getTotalCartItems()}</div>
+            <div className="absolute -right-4 -top-2 w-6 h-5 flex items-center justify-center text-sm bg-[#FC819E] text-white rounded-full">
+              {getTotalCartItems()}
+            </div>
           </Link>
         </div>
       </div>
@@ -209,7 +241,7 @@ const Navbar = () => {
                     <Link
                       to="/service"
                       className={`${
-                        active ? 'bg-gray-100' : ''
+                        active ? "bg-gray-100" : ""
                       } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
                     >
                       Service
@@ -221,7 +253,7 @@ const Navbar = () => {
                     <Link
                       to="/product"
                       className={`${
-                        active ? 'bg-gray-100' : ''
+                        active ? "bg-gray-100" : ""
                       } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
                     >
                       Product
@@ -233,7 +265,7 @@ const Navbar = () => {
                     <Link
                       to="/about-us"
                       className={`${
-                        active ? 'bg-gray-100' : ''
+                        active ? "bg-gray-100" : ""
                       } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
                     >
                       About us
@@ -245,7 +277,7 @@ const Navbar = () => {
                     <Link
                       to="/contact-us"
                       className={`${
-                        active ? 'bg-gray-100' : ''
+                        active ? "bg-gray-100" : ""
                       } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
                     >
                       Contact us
@@ -258,6 +290,7 @@ const Navbar = () => {
         </Menu>
       </div>
       <ToastContainer />
+     </div>
     </div>
   );
 };

@@ -17,7 +17,7 @@ const SearchProduct = () => {
   return (
     <form onSubmit={handleSearch} className="relative">
       <input
-        className="rounded-full px-8 py-3 border-2 border-transparent focus:outline-none focus:border-blue-500 placeholder-gray-400 transition-all duration-300 shadow-md"
+        className="rounded-full px-4 py-2.5 border-2 border-transparent focus:outline-none focus:border-[#FC819E] placeholder-gray-400 transition-all duration-300 shadow-md"
         type="text"
         value={query}
         onChange={(e) => setQuery(e.target.value)}
