@@ -14,6 +14,8 @@
             _unitOfWork = unitOfWork;
         }
 
+
+
         public async Task<string> GenerateNewOrderIdAsync()
         {
             var lastProduct = (await _unitOfWork.OrderGenericRepo.GetAll()).Where(c => c.OrderId.Substring(0, 3).Equals("ORS"))

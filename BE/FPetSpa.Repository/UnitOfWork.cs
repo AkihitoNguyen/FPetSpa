@@ -10,7 +10,7 @@ namespace FPetSpa.Repository
         private GenericRepository<Product> _product;
         private CartRepository<Cart> _cart;
         private CartDetailRepository<CartDetail> _cartDetails;
-        private GenericRepository<FeedBack> _feedback;
+        private FeedBackRepository _feedback;
         private ServiceOrderDetailRepository<ServiceOrderDetail> _serviceOrderDetailRepository;
         private ProductOrderDetailRepositoty<ProductOrderDetail> _productOrderDetailRepository;
         private GenericRepository<Pet> _pet;
@@ -18,7 +18,7 @@ namespace FPetSpa.Repository
         private GenericRepository<Category> _category;
         private GenericRepository<Transaction> _transaction;
         private GenericRepository<Voucher> _voucher;
-
+        private GenericRepository<BookingTime> _bookingTime;
         public OrderRepository OrderRepository { get; }
         public IAccountRepository _IaccountRepository { get; }
         public UnitOfWork(FpetSpaContext context, IAccountRepository accountRepository, OrderRepository orderRepository)
@@ -83,13 +83,13 @@ namespace FPetSpa.Repository
                 return _product;
             }
         }
-        public GenericRepository<FeedBack> FeedBackRepository
+        public FeedBackRepository FeedBackRepository
         {
             get
             {
                 if (_feedback == null)
                 {
-                    this._feedback = new GenericRepository<FeedBack>(_context);
+                    this._feedback = new FeedBackRepository(_context);
                 }
                 return _feedback;
             }
@@ -152,17 +152,7 @@ namespace FPetSpa.Repository
                 return this._orderGenericRepository;
             }
         }
-        public GenericRepository<Voucher> VoucherRepository
-        {
-            get
-            {
-                if (_voucher == null)
-                {
-                    this._voucher = new GenericRepository<Voucher>(_context);
-                }
-                return this._voucher;
-            }
-        }
+
         public GenericRepository<Transaction> TransactionRepository
         {
             get
@@ -174,6 +164,19 @@ namespace FPetSpa.Repository
                 return this._transaction;
             }
         }
+
+        public GenericRepository<BookingTime> BookingTime
+        {
+            get
+            {
+                if (_bookingTime == null)
+                {
+                    this._bookingTime = new GenericRepository<BookingTime>(_context);
+                }
+                return this._bookingTime;
+            }
+        }
+
 
 
         public async Task<int> SaveChangesAsync()

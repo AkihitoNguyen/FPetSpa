@@ -65,7 +65,8 @@ namespace FPetSpa.Controllers
             (string.IsNullOrEmpty(model.OrderStatus) || x.Status == OrderStatus) &&
             (model.CreatedDate == null || x.RequiredDate.Equals(model.CreatedDate)) &&
             (model.CustomeriD == null || x.CustomerId.Equals(model.CustomeriD)) && 
-            (model.OrderId == null || x.OrderId.Equals(model.OrderId));
+            (model.OrderId == null || x.OrderId.Equals(model.OrderId)) &&
+            (model.DeliveryOption == null || x.DeliveryOption!.Equals(model.DeliveryOption));
 
             var response = _unitOfWork.OrderGenericRepo.Get
                 (
@@ -91,6 +92,7 @@ namespace FPetSpa.Controllers
                             Status = p.Status,
                             Total = p.Total,
                             VoucherId = p.VoucherId,
+                            DeliveryOption = p.DeliveryOption!,
                             TransactionStatus = (await _unitOfWork.TransactionRepository.GetByIdAsync(p.TransactionId!)).Status 
                         };
                         listResponse.Add(responseModel);
@@ -108,6 +110,7 @@ namespace FPetSpa.Controllers
                         Status = p.Status,
                         Total = p.Total,
                         VoucherId = p.VoucherId,
+                        DeliveryOption = p.DeliveryOption!,
                         TransactionStatus = (await _unitOfWork.TransactionRepository.GetByIdAsync(p.TransactionId!)).Status
                     };
                     listResponse.Add(responseModel);
@@ -135,11 +138,12 @@ namespace FPetSpa.Controllers
                 model.PetId,
                 model.PaymentMethod,
                 model.bookingDateTime,
-                 model.VoucherId
+                 null
                 );
-            if (result != null) return Ok(result);
+            if (result) return Ok("Booking Successfully! Please wait staff for accepting!");
             return BadRequest("Something went wrong!!!");
         }
+
 
         [HttpPost("StartCheckoutProduct")]
         public async Task<IActionResult> StartcheckoutProduct(OrderProductModelRequest model)
@@ -147,8 +151,8 @@ namespace FPetSpa.Controllers
             const string idAdminAuto = "fee3ede4-5aa2-484b-bc12-7cdc4d9437ac";
             if (model != null)
             {
-                var result = await _unitOfWork.OrderRepository.StartCheckoutProduct(model.CustomerId, idAdminAuto, model.PaymentMethod, model.VoucherId);
-                if (result != null) return Ok(result);
+                var result = await _unitOfWork.OrderRepository.StartCheckoutProduct(model.CustomerId, idAdminAuto, model.PaymentMethod, model.VoucherId, model.DeliveryOption);
+                if (result) return Ok("Booking Successfully! Please wait staff for accepting!");
                 return BadRequest("Something went wrong!!");
             }
             return BadRequest("Cracking...Please comeback latter");
@@ -176,7 +180,7 @@ namespace FPetSpa.Controllers
                 case "PAYPAL":
                     var paymentId = Request.Query["paymentId"];
                     var payerId = Request.Query["payerId"];
-                    var paypalResponse = await _payPalServices.ExecutePaymentAsync(paymentId, payerId);
+                    var paypalResponse =  _payPalServices.ExecutePayment(paymentId, payerId);
                     if (paypalResponse == null) return BadRequest();
                     checkRepsone = true;
                     break;
@@ -226,18 +230,8 @@ namespace FPetSpa.Controllers
             var order = _unitOfWork.OrderGenericRepo.GetById(OrderId);
             if (order != null)
             {
-                if (!string.IsNullOrEmpty(status))
-                {
-                    if (status.ToUpper().Equals("PROCESSING") || status.ToUpper().Equals("STAFFACCEPTED") || status.ToUpper().Equals("SUCCESSFULLY"))
-                    {
-                        if (status.ToUpper().Equals("PROCESSING")) order.Status = (byte)OrderStatusEnum.Processing;
-                        else if (status.ToUpper().Equals("STAFFACCEPTED")) order.Status = (byte)OrderStatusEnum.StaffAccepted;
-                        else order.Status = (byte)OrderStatusEnum.Sucessfully;
-                        await _unitOfWork.SaveChangesAsync() ;
-                        return Ok("Update Successfully");
-                    }else if(status.ToUpper().Equals("CANCEL")) order.Status = (byte)OrderStatusEnum.Cancel;
-                    return BadRequest("Field Status incorrect");
-                }
+                  var result = await _unitOfWork.OrderRepository.UpdateOrderStatus(OrderId, status);
+                  if(result == true) return Ok();
             }
             return BadRequest("Something went wrong!!!");
         }
@@ -279,20 +273,44 @@ namespace FPetSpa.Controllers
         {
             if(orderId != null)
             {
-                var result = _unitOfWork.OrderRepository.ReOrder(orderId);
+                var result = await _unitOfWork.OrderRepository.ReOrder(orderId);
                 if(result != null) return Ok(result);
             }
             return BadRequest();    
         }
+
         [HttpPut("CheckInSerivces")]
         public async Task<IActionResult> checkInService(string orderId)
         {
             if(orderId != null)
             {
-                var check = _unitOfWork.OrderRepository.CheckInService(orderId);
-                if(check != null) return Ok("Check-In Successfully");
+                var check = await  _unitOfWork.OrderRepository.CheckInService(orderId);
+                if(check) return Ok("Check-In Successfully");
             }
             return BadRequest();
         }
+
+        [HttpPut("UpdateStatusForOrderProduct")]
+        public async Task<IActionResult> updateStatusForOrderProduct([FromQuery]string orderId, string Status)
+        {
+            if(orderId != null && Status != null)
+            {
+                var result = await _unitOfWork.OrderRepository.UpdateProductOrderStatus(orderId, Status);
+                if(result == true) return Ok("Update successfully");
+            }
+            return BadRequest();
+        }
+
+        [HttpPut("UserAcceptedProductDelivered")]
+        public async Task<IActionResult> UserAcceptedProductDelivered([FromQuery] string orderId, string Status)
+        {
+            if (orderId != null && Status != null)
+            {
+                var result = await _unitOfWork.OrderRepository.UpdateProductOrderStatusByUser(orderId, Status);
+                if (result == true) return Ok("Update successfully");
+            }
+            return BadRequest();
+        }
+
     }
 }

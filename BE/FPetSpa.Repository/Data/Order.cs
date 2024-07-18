@@ -11,6 +11,7 @@ public partial class Order
     public decimal? Total { get; set; }
     public string? VoucherId { get; set; }
     public string? TransactionId { get; set; }
+    public string? DeliveryOption {  get; set; }
     public byte Status { get; set; }
     public virtual User? Customer { get; set; }
 
@@ -18,7 +19,7 @@ public partial class Order
 
     [JsonIgnore]
     public virtual Transaction? Transaction { get; set; }
-
+    [JsonIgnore]
     public virtual Voucher? Voucher { get; set; }
 
     [JsonIgnore]

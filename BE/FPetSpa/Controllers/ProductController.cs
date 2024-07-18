@@ -1,4 +1,4 @@
-    
+        
 using FPetSpa.Repository;
 
 using FPetSpa.Repository.Data;
@@ -14,6 +14,7 @@ using Microsoft.AspNetCore.Authorization;
 using System.Configuration;
 using FPetSpa.Repository.Model.ProductOrderDetailModel;
 using FPetSpa.Models.ServiceModel;
+using Hangfire.Logging.LogProviders;
 
 
 namespace FPetSpa.Controllers
@@ -34,13 +35,7 @@ namespace FPetSpa.Controllers
             _imageController = image;
         }
 
-        /// <summary>
-        /// SortBy (ProductId = 1,ProductName = 2,CategoryId = 3,ProductQuantity = 4,Price = 5,)
-        /// 
-        /// SortType (Ascending = 1,Descending = 2,)        
-        /// </summary>
-        /// <param name="requestSearchProductModel"></param>
-        /// <returns></returns>
+
         [HttpGet]
         public async Task<IActionResult> SearchProduct([FromQuery] RequestSearchProductModel requestSearchProductModel)
         {
@@ -94,10 +89,25 @@ namespace FPetSpa.Controllers
         }
 
         [HttpGet("SearchById")]
-        public IActionResult GetProductById(string id)
+        public async Task<ActionResult> GetProductById(string id)
         {
             var responseCategories = _unitOfWork.ProductRepository.GetById(id);
-            return Ok(responseCategories);
+            if(responseCategories != null)
+            {
+                var result = new ResponseProductSearchModel
+                {
+                    ProductId = responseCategories.ProductId,
+                    PictureName = await _imageController.GetLinkByName("productfpetspa", responseCategories.PictureName!),
+                    Price = responseCategories.Price,
+                    ProductQuantity = responseCategories.ProductQuantity,
+                    ProductDescription = responseCategories.ProductDescription,
+                    ProductName = responseCategories.ProductName!,
+                    CategoryName = _unitOfWork.CategoryRepository.GetById(responseCategories.CategoryId!).CategoryName!
+
+                };
+                return Ok(result);  
+            }
+            return BadRequest();
         }
 
         [HttpPost("Create-Product")]

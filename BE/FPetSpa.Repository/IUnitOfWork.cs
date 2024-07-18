@@ -7,7 +7,6 @@ namespace FPetSpa.Repository
     {
         GenericRepository<Service> ServiceRepository { get; }
         GenericRepository<Product> ProductRepository { get; }
-        GenericRepository<FeedBack> FeedBackRepository { get; }
         GenericRepository<Pet> PetRepository { get; }
         GenericRepository<Order> OrderGenericRepo { get; }
         GenericRepository<Category> CategoryRepository { get; }
@@ -18,6 +17,9 @@ namespace FPetSpa.Repository
         ProductOrderDetailRepositoty<ProductOrderDetail> productOrderDetailRepository { get; }
         GenericRepository<Voucher> VoucherRepository { get; }
         OrderRepository OrderRepository { get; }
+        GenericRepository<BookingTime> BookingTime {  get; }
+        FeedBackRepository FeedBackRepository { get; }
+   
         IAccountRepository _IaccountRepository { get; }
         Task<int> SaveChangesAsync();
         void Save();

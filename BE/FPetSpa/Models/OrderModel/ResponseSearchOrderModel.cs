@@ -11,5 +11,6 @@ namespace FPetSpa.Models.OrderModel
         public string? VoucherId { get; set; }
         public byte Status { get; set; }
         public int TransactionStatus { get; set; }
+        public string DeliveryOption {  get; set; }
     }
 }

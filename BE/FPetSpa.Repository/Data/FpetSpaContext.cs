@@ -20,7 +20,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<Category> Categories { get; set; }
 
-    public virtual DbSet<FeedBack> FeedBacks { get; set; }
+    public virtual DbSet<FeedBack> FeedBack { get; set; }
 
     public virtual DbSet<Order> Orders { get; set; }
 
@@ -37,13 +37,27 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
     public virtual DbSet<ServiceOrderDetail> ServiceOrderDetails { get; set; }
 
     public virtual DbSet<Transaction> Transactions { get; set; }
-
-
+    public virtual DbSet<BookingTime> BookingTime { get; set; }
     public virtual DbSet<Voucher> Vouchers { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
+
+
+        modelBuilder.Entity<BookingTime>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).ValueGeneratedOnAdd();
+            entity.Property(e => e.Time)
+                .HasMaxLength(20)
+                .HasColumnName("BookingTime");
+            entity.Property(e => e.Date)
+                    .HasColumnName("Date");
+            entity.Property(e => e.MaxSlots)
+                .HasColumnName("MaxSlots");
+        });
+
         modelBuilder.Entity<Cart>(entity =>
         {
             entity.HasKey(e => e.CartId).HasName("PK__Cart__51BCD79747FAC93A");
@@ -96,22 +110,22 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         modelBuilder.Entity<FeedBack>(entity =>
         {
-            entity
-                .HasNoKey()
-                .ToTable("FeedBack");
+            entity.HasKey(x => x.Id);
+            entity.Property(x => x.Id).ValueGeneratedOnAdd();
+
 
             entity.Property(e => e.Description).HasMaxLength(300);
-            entity.Property(e => e.OrderId)
+            entity.Property(e => e.ProductId)
                 .HasMaxLength(20)
-                .HasColumnName("OrderID");
+                .HasColumnName("ProductId");
             entity.Property(e => e.PictureName).HasMaxLength(50);
             entity.Property(e => e.UserFeedBackId)
                 .HasMaxLength(50)
                 .HasColumnName("UserFeedBackID");
 
-            entity.HasOne(d => d.Order).WithMany()
-                .HasForeignKey(d => d.OrderId)
-                .HasConstraintName("FK_FeedBack.OrderID");
+            entity.HasOne(d => d.product).WithMany()
+                .HasForeignKey(d => d.ProductId)
+                .HasConstraintName("FK_FeedBack.ProductId");
 
             entity.HasOne(d => d.UserFeedBack).WithMany()
                 .HasForeignKey(d => d.UserFeedBackId)
@@ -140,6 +154,9 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.VoucherId)
                 .HasMaxLength(20)
                 .HasColumnName("VoucherID");
+            entity.Property(e => e.DeliveryOption)
+                .HasMaxLength(20)
+                .HasColumnName("DeliveryOption");
             entity.Property(e => e.Status).HasColumnName("status");
 
             entity.HasOne(d => d.Customer).WithMany(p => p.OrderCustomers)
@@ -245,9 +262,6 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
                 .HasConstraintName("FK_ProductOrderDetails.OrderID");
             entity.HasOne(d => d.Product).WithMany()
                 .HasConstraintName("FK_ProductOrderDetails.ProductId");
-
-
-
         });
 
         modelBuilder.Entity<Service>(entity =>
