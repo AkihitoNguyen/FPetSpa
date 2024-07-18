@@ -1,5 +1,6 @@
 ﻿using FPetSpa.Repository.Data;
 using FPetSpa.Repository.Repository;
+using Microsoft.AspNetCore.Identity;
 
 namespace FPetSpa.Repository
 {
@@ -27,7 +28,6 @@ namespace FPetSpa.Repository
             _IaccountRepository = accountRepository;
             this.OrderRepository = orderRepository;
         }
-
         public GenericRepository<Voucher> VoucherRepository
         {
             get
@@ -39,6 +39,7 @@ namespace FPetSpa.Repository
                 return this._voucher;
             }
         }
+       
         public GenericRepository<Service> ServiceRepository
         {
             get

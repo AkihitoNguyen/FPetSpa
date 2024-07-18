@@ -18,8 +18,7 @@ namespace FPetSpa.Repository
         ProductOrderDetailRepositoty<ProductOrderDetail> productOrderDetailRepository { get; }
         GenericRepository<Voucher> VoucherRepository { get; }
         OrderRepository OrderRepository { get; }
-         GenericRepository<BookingTime> BookingTime {  get; }
-
+        GenericRepository<BookingTime> BookingTime {  get; }
         IAccountRepository _IaccountRepository { get; }
         Task<int> SaveChangesAsync();
         void Save();

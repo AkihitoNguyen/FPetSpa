@@ -1,4 +1,5 @@
 ﻿using FPetSpa.Repository;
+using FPetSpa.Repository.Data;
 using FPetSpa.Repository.Model;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
@@ -120,6 +121,7 @@ namespace FPetSpa.Controllers
             if (result != null) return Ok(result);
             return BadRequest("Not Found");
         }
+       
         [HttpGet("getUserByMail")]
         public async Task<IActionResult> getCustomerByMail(string mail)
         {

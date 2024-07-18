@@ -56,6 +56,18 @@ namespace FPetSpa.Controllers
             {
                 return BadRequest("New quantity is required.");
             }
+            if (request.Quantity <= 0)
+
+            {
+                return BadRequest(new { message = "Invalid quantity" });
+            }
+            
+            var checkQuantity = _unitOfWork.ProductRepository.GetById(productId).ProductQuantity;
+            if (checkQuantity == 0 || checkQuantity - request.Quantity < 0)
+            {
+                
+                return BadRequest(new { message = "Out of stock" });
+            }
 
             try
             {
