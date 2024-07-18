@@ -193,6 +193,7 @@ const ProductDisplay = () => {
           </div>
 
           <div className="mt-4 lg:mt-0 lg:border-l lg:border-gray-200 lg:pl-8">
+            <div className='bg-pink-50 rounded p-7'>
             <h1 className="text-2xl font-bold tracking-tight text-gray-900 sm:text-3xl">{product.productName}</h1>
             <p className="mt-4 text-3xl tracking-tight text-gray-900">${product.price}</p>
 
@@ -231,11 +232,12 @@ const ProductDisplay = () => {
             </div>
 
             <button
-              className="mt-10 flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-8 py-3 text-base font-medium text-white hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+              className="mt-10 flex items-center justify-center border border-transparent bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full animate-pulse"
               onClick={handleAddToCart}
             >
               Add to cart
             </button>
+            </div>
           </div>
         </div>
       </div>
@@ -667,7 +669,7 @@ const ProductDisplay = () => {
         <div className='related-product bg-white'>
   <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
     <h2 className="text-center text-2xl font-bold tracking-tight text-gray-900 mb-6">Customers also purchased</h2>
-    <div className="flex justify-center  space-x-6">
+    {/* <div className="flex justify-center space-x-6 ">
       {relatedProducts.slice(0, 4).map((product) => (
         <div key={product.productId} className="w-60">
           <div className="aspect-w-1 aspect-h-1 rounded-md overflow-hidden bg-gray-200 lg:aspect-none group">
@@ -680,11 +682,32 @@ const ProductDisplay = () => {
             </Link>
           </div>
           <div className="mt-4 flex justify-between">
-            <p className="text-sm font-medium text-gray-900">{product.price}</p>
+          <h4 className="font-bold text-gray-800">{product.productName}</h4>
           </div>
+          <p className="text-sm font-medium text-gray-900">${product.price}</p> 
+        </div>
+      ))}
+    </div> */}
+    <div className="flex justify-center space-x-6 ">
+      {relatedProducts.slice(0, 4).map((product) => (
+        <div key={product.productId} className="w-60 h-96 bg-pink-100 rounded-3xl text-neutral-300 p-4 flex flex-col items-start justify-center gap-3 hover:bg-gray-900 hover:shadow-2xl hover:shadow-sky-400 transition-shadow">
+          <div className="aspect-w-1 aspect-h-1 rounded-md overflow-hidden bg-gray-200 lg:aspect-none group">
+            <Link to={`/productdisplay/${product.productId}`}>
+              <img
+                src={product.pictureName}
+                alt={product.productName}
+                className="object-cover object-center w-52 h-56 bg-sky-300 rounded-2xl"
+              />
+            </Link>
+          </div>
+          <div className="mt-4 flex justify-between">
+          <h4 className="font-bold text-gray-800">{product.productName}</h4>
+          </div>
+          <p className="text-sm font-medium text-gray-900">${product.price}</p> 
         </div>
       ))}
     </div>
+
   </div>
 </div>
 
