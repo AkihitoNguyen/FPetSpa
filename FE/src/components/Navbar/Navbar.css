@@ -1,4 +1,4 @@
-.navbar1 {
+/* .navbar1 {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -13,7 +13,7 @@
 }
 
 .navbar1.hidden {
-    top: -80px; /* Độ dài của navbar, điều chỉnh tùy thuộc vào chiều cao của navbar */
+    top: -80px; 
   }
 
 .navbar1 .logo {
@@ -56,17 +56,6 @@
     width: 25px;
     cursor: pointer;    
 }
-
-/* .navbar button {
-    top: -13px;
-    right: -85px;
-    font-size: 12px;
-    font-weight: 500;
-    border-radius: 50px;
-    cursor: pointer;
-    transition: 0.3s;
-} */
-
 .navbar1 button {
     top: -4px;
     right: -7px;
@@ -95,7 +84,6 @@
 
 
 
-/* search */
 
 
 
@@ -170,4 +158,4 @@
     font-size: 17px;
     background: black;
     color: white;
-}
+} */

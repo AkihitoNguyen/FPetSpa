@@ -1,4 +1,4 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect, useState, useContext, useCallback, useRef} from 'react';
 import {
   Dialog,
   DialogBackdrop,
@@ -13,8 +13,9 @@ import { ChevronDownIcon, FunnelIcon } from '@heroicons/react/20/solid';
 import { getAllProduct, getProductsByCategory } from '../../api/apiService';
 import { ShopContext } from '../Context/ShopContext';
 import { Link } from 'react-router-dom';
-import SearchProduct from './SearchProduct';
 import '../PageProduct/ProductList.css';
+import { LazyLoadImage } from 'react-lazy-load-image-component';
+import 'react-lazy-load-image-component/src/effects/blur.css';
 
 function classNames(...classes) {
   return classes.filter(Boolean).join(' ');
@@ -45,28 +46,30 @@ export default function ProductList() {
   const [currentPage, setCurrentPage] = useState(1);
   const productsPerPage = 12;
   const [sortOrder, setSortOrder] = useState('default');
+  const productsSectionRef = useRef(null);
+
+  const fetchProducts = useCallback(async () => {
+    try {
+      let response;
+      if (selectedCategories.length === 0) {
+        response = await getAllProduct();
+      } else {
+        const promises = selectedCategories.map((category) => getProductsByCategory({ category }));
+        const categoryResponses = await Promise.all(promises);
+        const products = categoryResponses.flatMap((response) => response);
+        response = products;
+      }
+
+      console.log('Fetched products:', response);
+      setProductList(response);
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  }, [selectedCategories]);
 
   useEffect(() => {
-    const fetchProducts = async () => {
-      try {
-        let response;
-        if (selectedCategories.length === 0) {
-          response = await getAllProduct();
-        } else {
-          const promises = selectedCategories.map((category) => getProductsByCategory({ category }));
-          const categoryResponses = await Promise.all(promises);
-          const products = categoryResponses.flatMap((response) => response);
-          response = products;
-        }
-
-        console.log('Fetched products:', response);
-        setProductList(response);
-      } catch (error) {
-        console.error('Error fetching products:', error);
-      }
-    };
     fetchProducts();
-  }, [selectedCategories]);
+  }, [fetchProducts]);
 
   useEffect(() => {
     let sortedList = [...productList];
@@ -78,6 +81,12 @@ export default function ProductList() {
     setSortedProductList(sortedList);
     setCurrentPage(1);
   }, [productList, sortOrder]);
+
+  useEffect(() => {
+    if (productsSectionRef.current) {
+      productsSectionRef.current.scrollIntoView({ behavior: 'smooth' });
+    }
+  }, [currentPage, selectedCategories, sortOrder]);
 
   const handleCategoryClick = (value) => {
     setSelectedCategories((prevCategories) =>
@@ -98,15 +107,8 @@ export default function ProductList() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const handleSearchResultSelect = (result) => {
-    const filteredProduct = productList.find((product) => product.productName === result.title);
-    if (filteredProduct) {
-      setSortedProductList([filteredProduct]);
-    }
-  };
-
   return (
-    <div className="bg-white">
+    <div className="bg-white"  ref={productsSectionRef}>
       <div>
         {/* Mobile filter dialog */}
         <Dialog open={mobileFiltersOpen} onClose={setMobileFiltersOpen} className="relative z-40 lg:hidden">
@@ -149,15 +151,11 @@ export default function ProductList() {
         </Dialog>
 
         <main className="mx-auto max-w-max px-4 sm:px-6 lg:px-8">
-          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
+          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-8 " >
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">Product</h1>
 
             <div className="flex items-center">
               
-            <div className="mr-0 lg:mr-4"> {/* Adjust margin-right for different screen sizes */}
-              <SearchProduct source={productList} onResultSelect={handleSearchResultSelect} />
-            </div>
-
               <Menu as="div" className="relative inline-block text-left">
                 <div>
                   <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">
@@ -172,7 +170,10 @@ export default function ProductList() {
                       <MenuItem key={option.value}>
                         {({ active }) => (
                           <button
-                            onClick={() => handleSortChange(option.value)}
+                            onClick={(e) => {
+                              e.preventDefault();
+                              handleSortChange(option.value);
+                            }}
                             className={classNames(
                               option.current ? 'font-medium text-gray-900' : 'text-gray-500',
                               active ? 'bg-gray-100' : '',
@@ -199,7 +200,7 @@ export default function ProductList() {
             </div>
           </div>
 
-          <section aria-labelledby="products-heading" className="pb-24 pt-6">
+          <section aria-labelledby="products-heading" className="pb-24 pt-6" >
             <h2 id="products-heading" className="sr-only">Products</h2>
 
             <div className="grid grid-cols-1 gap-x-8 gap-y-10 lg:grid-cols-4">
@@ -226,64 +227,70 @@ export default function ProductList() {
                 <div className="bg-white">
                   <div className="mx-auto max-w-2xl py-16 px-4 sm:py-20 sm:px-6 lg:max-w-7xl lg:px-8">
                     <div className="-mt-10 grid grid-cols-1 gap-y-10 gap-x-6 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
-                    {currentProducts.length > 0 ? (
+                      {currentProducts.length > 0 ? (
                         currentProducts.map((product) => (
-                            <div key={product?.productId || 'unknown-product'} className="shadow-md rounded-lg overflow-hidden h-full flex flex-col w-full">
-                              <div className="relative pb-5/4">
-                                {product?.productId ? (
-                                  <Link to={`/productdisplay/${product.productId}`}>
-                                    <img
-                                      src={product.pictureName}
-                                      alt={product.productName}
-                                      className="w-full h-full object-cover"
-                                    />
-                                  </Link>
-                                    ) : (
-                                  <div className="w-full h-full bg-gray-200" />
-                                  )}
+                          <div
+                            key={product?.productId || 'unknown-product'}
+                            className="shadow-md rounded-lg overflow-hidden h-full flex flex-col w-full"
+                          >
+                            <div className="relative pb-5/4">
+                              {product?.productId ? (
+                                <Link to={`/productdisplay/${product.productId}`}>
+                                  <LazyLoadImage
+                                    src={product.pictureName}
+                                    alt={product.productName}
+                                    effect="blur"
+                                    className="w-full h-full object-cover"
+                                  />
+                                </Link>
+                              ) : (
+                                <div className="w-full h-full bg-gray-200" />
+                              )}
+                            </div>
+                            <div className="p-2 flex flex-col flex-grow justify-between">
+                              <div>
+                                <h4 className="font-bold text-gray-800">{product?.productName || 'Unknown Product'}</h4>
                               </div>
-                              <div className="p-2 flex flex-col flex-grow justify-between">
-                                <div>
-                                  <h4 className="font-bold text-gray-800">{product?.productName || 'Unknown Product'}</h4>
-                                </div>
-                                <div className="flex justify-between items-center mt-3">
-                                  <span className="ordernow-text text-[#d13a3a] font-semibold group-hover:text-gray-800">${product?.price}</span>
-                                  <button
-                                    className="btun4 lg:inline-flex items-center gap-3 group-hover:bg-white/10 bg-[#abd373] shadow-[10px_10px_150px_#ff9f0d] cursor-pointer py-2 px-4 text-sm font-semibold rounded-full butn h-6"
-                                    onClick={() => product?.productId && addToCart(product.productId, 1)}
-                                  >
-                                    Order Now
-                                  </button>
-                                </div>
+                              <div className="flex justify-between items-center mt-3">
+                                <span className="ordernow-text text-[#d13a3a] font-semibold group-hover:text-gray-800">${product?.price}</span>
+                                <button
+                                  className="btun4 lg:inline-flex items-center gap-3 border border-transparent bg-pink-500 hover:bg-pink-700 text-white font-bold py-2 px-4 rounded-full animate-pulse"
+                                  onClick={() => product?.productId && addToCart(product.productId, 1)}
+                                >
+                                  Order Now
+                                </button>
                               </div>
                             </div>
-                                ))
-                                ) : (
-                                <div className="w-full flex justify-center items-center">
-                                  <div className="w-64">
-                                    <div className="animate-pulse">
-                                      <div className="h-32 bg-gray-200 rounded-md"></div>
-                                      <div className="mt-2 h-6 bg-gray-200 rounded-md"></div>
-                                      <div className="mt-2 h-6 bg-gray-200 rounded-md"></div>
-                                    </div>
-                                  </div>
-                                </div>
-                              )}
-                                </div>
-                                <div className="mt-6 flex justify-center">
-                                  <ul className="flex">
-                                    {Array.from({ length: Math.ceil(sortedProductList.length / productsPerPage) }).map((_, index) => (
-                                      <li key={index}>
-                                        <button
-                                          onClick={() => paginate(index + 1)}
-                                          className={`px-3 py-1 ${currentPage === index + 1 ? 'bg-indigo-600 text-white' : 'bg-white text-gray-500'}`}
-                                        >
-                                          {index + 1}
-                                        </button>
-                                      </li>
-                            ))}
+                          </div>
+                        ))
+                      ) : (
+                        <div className="w-full flex justify-center items-center">
+                          <div className="w-64">
+                            <div className="animate-pulse">
+                              <div className="h-32 bg-gray-200 rounded-md"></div>
+                              <div className="mt-2 h-6 bg-gray-200 rounded-md"></div>
+                              <div className="mt-2 h-6 bg-gray-200 rounded-md"></div>
+                            </div>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="mt-6 flex justify-center rounded">
+                      <ul className="flex">
+                        {Array.from({ length: Math.ceil(sortedProductList.length / productsPerPage) }).map((_, index) => (
+                          <li key={index}>
+                            <button
+                              onClick={() => paginate(index + 1)}
+                              className={`px-3 py-1 ${currentPage === index + 1 ? 'bg-indigo-600 text-white rounded' : 'bg-white text-gray-500 rounded'}`}
+                            >
+                              {index + 1}
+                            </button>
+                          </li>
+                        ))}
                       </ul>
                     </div>
+
                   </div>
                 </div>
               </div>

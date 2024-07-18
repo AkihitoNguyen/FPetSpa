@@ -19,26 +19,47 @@ const BookingProduct = () => {
     fetchOrders();
   }, []);
 
-  const fetchOrders = () => {
+  useEffect(() => {
+    fetchOrders();
+  }, []);
+  
+  const fetchOrders = async () => {
     setIsLoading(true);
-    axios
-      .get("https://fpetspa.azurewebsites.net/api/Order/GetAllOrder")
-      .then((response) => {
-        const allOrders = response.data;
-        setOrders(allOrders);
-
-        const orsOrders = allOrders
-          .filter((order) => order.orderId.includes("ORP"))
-          .sort((a, b) => b.orderId.localeCompare(a.orderId));
-        setFilteredOrders(orsOrders);
-      })
-      .catch((error) => {
-        console.error("Error fetching orders:", error);
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
+    try {
+      const response = await axios.get("https://fpetspa.azurewebsites.net/api/Order/GetAllOrder");
+      const allOrders = response.data;
+      setOrders(allOrders);
+  
+      const orsOrders = allOrders.filter((order) => order.orderId.includes("ORP")).sort((a, b) => b.orderId.localeCompare(a.orderId));
+  
+      // Fetch transaction statuses
+      const ordersWithTransactionStatus = await Promise.all(
+        orsOrders.map(async (order) => {
+          const transactionStatus = await fetchTransactionStatus(order.transactionId);
+          return { ...order, transactionStatus };
+        })
+      );
+  
+      setFilteredOrders(ordersWithTransactionStatus);
+    } catch (error) {
+      console.error("Error fetching orders:", error);
+    } finally {
+      setIsLoading(false);
+    }
   };
+  
+  const fetchTransactionStatus = async (transactionId) => {
+    try {
+      const response = await axios.get(
+        `https://fpetspa.azurewebsites.net/api/Transaction/getTransactionById?transactionId=${transactionId}`
+      );
+      return response.data.status;
+    } catch (error) {
+      console.error("Error fetching transaction status:", error);
+      return "Unknown";
+    }
+  };
+  
 
   // Tính toán danh sách đơn hàng hiển thị trên từng trang
   const indexOfLastOrder = currentPage * pageSize;
@@ -115,6 +136,29 @@ const BookingProduct = () => {
         return "Unknown";
     }
   };
+
+  const statusClass1 = (status) => {
+    switch (status) {
+      case 0:
+        return "text-[#F6C000] bg-[#FFF8DD]";
+      case 1:
+        return "text-blue-600 bg-blue-100";
+      default:
+        return "text-gray-900";
+    }
+  };
+
+  const statusText1 = (status) => {
+    switch (status) {
+      case 0:
+        return "Paid";
+      case 1:
+        return "Not Paid";
+      default:
+        return "Unknown";
+    }
+  };
+
 
   const filterOrdersByStatus = (status) => {
     const filtered = orders.filter((order) => order.status === status);
@@ -304,6 +348,9 @@ const BookingProduct = () => {
             DeliveryOption
             </th>
             <th className="px-6 py-3 text-left text-[12.35px] font-semibold text-gray-500 uppercase tracking-wider">
+            Transaction
+            </th>
+            <th className="px-6 py-3 text-left text-[12.35px] font-semibold text-gray-500 uppercase tracking-wider">
               Total
             </th>
             <th className="px-6 py-3 text-left text-[12.35px] font-semibold text-gray-500 uppercase tracking-wider">
@@ -343,7 +390,11 @@ const BookingProduct = () => {
               <td className="px-6 py-4 whitespace-nowrap text-[13.975px] font-semibold">
                 {order.deliveryOption}
               </td>
-
+              <td className="px-6 py-4 whitespace-nowrap text-[13.975px] font-semibold">
+                  <span className={`text-[11.05px] font-semibold px-2 py-1 rounded ${statusClass1(order.transactionStatus)}`}>
+                    {statusText1(order.transactionStatus)}
+                  </span>
+              </td>
               <td className="px-6 py-4 whitespace-nowrap text-[13.975px] font-semibold text-[#78829D]">
                 ${order.total}
               </td>

@@ -1,20 +1,36 @@
 import React, { useState, useEffect } from "react";
 import dayjs from "dayjs";
+import { assets } from "../../assets/assets";
+import axios from "axios"; // Import axios for API calls
 
 const FirstForm = ({ formValues, onChange, services, userPets }) => {
-  const today = dayjs().format("YYYY-MM-DD"); // Use ISO format for comparison
+  const today = dayjs().format("YYYY-MM-DD"); // Sử dụng định dạng ISO để so sánh
   const currentTime = dayjs().format("HH:mm:ss");
+  const [bookingTimes, setBookingTimes] = useState([]);
+
+  useEffect(() => {
+    // Function to fetch booking times from API
+    const fetchBookingTimes = async () => {
+      try {
+        const response = await axios.get(
+          "https://fpetspa.azurewebsites.net/api/BookingTime/GetAllBookingTime"
+        );
+        setBookingTimes(response.data); // Lưu danh sách khung giờ từ API vào state
+      } catch (error) {
+        console.error("Error fetching booking times:", error);
+      }
+    };
+
+    fetchBookingTimes(); // Gọi hàm fetch khi component được render
+  }, []); // Dependency array rỗng để gọi API chỉ một lần khi component mount
 
   // Function to generate time slots
   const generateTimeSlots = () => {
     const slots = ["Chọn khung giờ"];
-    let currentTime = dayjs().hour(8).minute(0).second(0);
-    const endTime = dayjs().hour(19).minute(0).second(0);
-
-    while (currentTime.isBefore(endTime)) {
-      slots.push(currentTime.format("HH:mm:ss"));
-      currentTime = currentTime.add(30, "minute");
-    }
+    
+    bookingTimes.forEach((time) => {
+      slots.push(time.time); // Thêm các khung giờ từ API vào danh sách slots
+    });
 
     return slots;
   };
@@ -161,17 +177,29 @@ const FirstForm = ({ formValues, onChange, services, userPets }) => {
             >
               Phương thức thanh toán
             </label>
-            <div className="mt-2.5">
-              <select
-                className="block shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                id="payment-method"
-                name="paymentMethod"
-                onChange={handleInputChange}
-                value={formValues.paymentMethod}
-              >
-                <option value="">Chọn phương thức thanh toán</option>
-                <option value="VNPay">VNPay</option>
-              </select>
+            <div className="mt-2.5 flex items-center">
+              <label className="inline-flex items-center">
+                <input
+                  type="checkbox"
+                  className="form-checkbox h-5 w-5 text-indigo-600"
+                  name="paymentMethod"
+                  value="VNPay"
+                  onChange={handleInputChange}
+                  checked={formValues.paymentMethod === "VNPay"}
+                />
+                <img src={assets.Icon_VNPAY_QR1} alt="VNPay Logo" className="h-8 ml-2" />
+              </label>
+              <label className="inline-flex items-center ml-4">
+                <input
+                  type="checkbox"
+                  className="form-checkbox h-5 w-5 text-indigo-600"
+                  name="paymentMethod"
+                  value="PayPal"
+                  onChange={handleInputChange}
+                  checked={formValues.paymentMethod === "PayPal"}
+                />
+                <img src={assets.paypal_logo1} alt="PayPal Logo" className="h-8 ml-2" />
+              </label>
             </div>
           </div>
         </div>

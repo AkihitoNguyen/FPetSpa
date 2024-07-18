@@ -137,20 +137,14 @@ const BookingService = () => {
           serviceId: values.serviceId,
           paymentMethod: values.paymentMethod,
           bookingDatetime: datetime,
-
         }
       );
 
       console.log("Booking created:", response.data);
 
-      const paymentUrl = response.data;
-
-      if (paymentUrl) {
-        window.location.href = paymentUrl;
-      } else {
-        console.error("Không tìm thấy URL thanh toán trong phản hồi");
-        setLoading(false);
-      }
+      setShowSuccessPopup(true);
+      setShowSuccessIcon(true);
+      setLoading(false);
     } catch (error) {
       console.error("Lỗi khi tạo booking:", error);
       setLoading(false);
@@ -224,7 +218,8 @@ const BookingService = () => {
                   ) : null}
                 </div>
               )}
-              <h2 className="text-lg font-bold mb-4">Booking successfully!</h2>
+              <h2 className="text-lg font-bold mb-4">Booking successfully! <br />
+               Please wait for staff to accept</h2>
               {!showLoadingInPopup && (
                 <button
                   onClick={handleConfirmSuccess}
@@ -242,15 +237,8 @@ const BookingService = () => {
           </div>
         )}
         {handleForms()}
-        <div className="flex justify-between mt-4">
-          <button
-            type="button"
-            onClick={handlePrev}
-            className="bg-gray-500 hover:bg-gray-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
-            disabled={page === 0}
-          >
-            Previous
-          </button>
+        <div className="flex justify-center mt-4">
+         
           {page === formLength - 1 ? (
             <button
               type="button"

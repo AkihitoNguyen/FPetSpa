@@ -38,6 +38,7 @@ import BookingProduct from "./components/DashBoard/ProductManage.jsx/BookingProd
 
 import QR from "./pages/QR/QR";
 import AddProduct from "./components/DashBoard/ProductManage.jsx/AddProduct";
+import SearchResult from "./components/PageProduct/SearchResult";
 
 const App = () => {
   const [showNavbarAndFooter, setShowNavbarAndFooter] = useState(true);
@@ -73,7 +74,9 @@ const App = () => {
       "/layout/account-info",
       "/layout/product-info",
       "/layout/add-product",
-      "/layout/booking-product"
+      "/layout/booking-product",
+      "/search"
+
     ];
 
     const isMatched = routes.some((route) => matchPath(route, location.pathname));
@@ -107,7 +110,7 @@ const App = () => {
           <Route path="/order-service" element={<GetService />} />
           <Route path="/qr" element={<QR />} />
           <Route path="/productdisplay/:productId" element={<ProductDisplay />} />
-          
+          <Route path="/search" element={<SearchResult />} />
 
           <Route path="/layout" element={<Layout />}>
             <Route path="/layout/dashboards" element={<Dashboards />} />

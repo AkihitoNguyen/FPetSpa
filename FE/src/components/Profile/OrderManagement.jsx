@@ -1,15 +1,18 @@
 import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react';
-import '../Profile/OrderManagement.css';
 import axios from 'axios';
-
+import '../Profile/OrderManagement.css';
+import { StarIcon } from '@heroicons/react/20/solid';
 const OrderManagement = () => {
     const [orders, setOrders] = useState([]);
     const [orderDetails, setOrderDetails] = useState([]);
     const [selectedOrderId, setSelectedOrderId] = useState(null);
     const [error, setError] = useState(null);
     const [isLoading, setIsLoading] = useState(false);
+    const [commentText, setCommentText] = useState('');
+    const [commentStar, setCommentStar] = useState(5);
+    const [comments, setComments] = useState([]);
     const currentUser = useSelector((state) => state.auth.login.currentUser);
 
     const fetchOrders = async (customerId) => {
@@ -82,11 +85,60 @@ const OrderManagement = () => {
         setSelectedOrderId(orderId);
     };
 
+    const handleSubmitComment = async (e, productId) => {
+        e.preventDefault();
+
+        const newComment = {
+            userFeedBackId: currentUser.userId,
+            productId: productId,
+            pictureName:'',
+            star: commentStar,
+            description: commentText,
+        };
+
+        try {
+            const response = await fetch('https://fpetspa.azurewebsites.net/api/FeedBack/Create', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${currentUser.accessToken}`
+                },
+                body: JSON.stringify(newComment),
+            });
+
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
+            }
+
+            const result = await response.json();
+            setComments([...comments, result]);
+            setCommentText('');
+            setCommentStar(5);
+        } catch (error) {
+            console.error("Error submitting comment:", error);
+        }
+    };
+
+
     const userOrders = orders.filter(order => order.customerId === currentUser.userId && order.orderId.includes("ORP"));
 
+    const renderStarRating = () => {
+        const stars = [];
+        for (let i = 1; i <= 5; i++) {
+          stars.push(
+            <StarIcon
+              key={i}
+              className={`h-5 w-5 cursor-pointer ${i <= commentStar ? 'text-yellow-400' : 'text-gray-300'}`}
+              onClick={() => handleStarClick(i)}
+            />
+          );
+        }
+        return stars;
+      };
+    
     return (
         <div>
-            <h1 className="text-2xl font-bold">OrderMangerment</h1>
+            <h1 className="text-2xl font-bold">OrderManagement</h1>
             {error ? (
                 <p className="mt-4 text-red-500">Error: {error}</p>
             ) : orders.length === 0 ? (
@@ -193,17 +245,15 @@ const OrderManagement = () => {
                                                 Delivered
                                             </button>
                                         )}
-                                        {order.status === 4 || order.status === 6 ? (
+                                        {(order.status === 4 || order.status === 6) && (
                                             <button 
-                                                onClick={() => handleFeedback(order.orderId)} 
+                                                onClick={() => handleOrderClick(order.orderId)} 
                                                 className="text-blue-500 hover:underline ml-2"
                                             >
                                                 Feedback
                                             </button>
-                                        ) : null}
+                                        )}
                                     </td>
-
- 
                                 </tr>
                             ))}
                         </tbody>
@@ -292,6 +342,43 @@ const OrderManagement = () => {
                                             Close
                                         </button>
                                     </div>
+                                    {orderDetails.map((detail) => (
+    <div key={detail.productId} className="mt-8 bg-gray-100 p-6 rounded-lg shadow-md">
+        <h3 className="text-lg font-medium text-gray-900">Leave a Comment</h3>
+        <form onSubmit={(e) => handleSubmitComment(e, detail.productId)} className="mt-4 space-y-4">
+            <div>
+                <label htmlFor={`commentText-${detail.productId}`} className="block text-sm font-medium text-gray-700">
+                    Comment
+                </label>
+                <textarea
+                    placeholder="Give your feedback...."
+                    id={`commentText-${detail.productId}`}
+                    name="commentText"
+                    value={commentText}
+                    onChange={(e) => setCommentText(e.target.value)}
+                    rows="4"
+                    required
+                    className="w-full bg-slate-100 text-slate-600 h-28 placeholder:text-slate-600 placeholder:opacity-50 border border-slate-200 col-span-6 resize-none outline-none rounded-lg p-2 duration-300 focus:border-slate-600"
+                ></textarea>
+            </div>
+            <div>
+                <label className="block text-sm font-medium text-gray-700">Rating</label>
+                <div className="flex space-x-1 mt-1">
+                    {renderStarRating()}
+                </div>
+            </div>
+            <div>
+                <button
+                    type="submit"
+                    className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 transition duration-200 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                    Submit
+                </button>
+            </div>
+        </form>
+    </div>
+))}
+
                                 </DialogPanel>
                             </div>
                         </div>

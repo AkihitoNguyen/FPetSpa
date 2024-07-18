@@ -226,29 +226,28 @@ const Checkout = () => {
                 </div>
 
                 <div className="flex gap-4 mt-4">
-                  <button
-                    onClick={() => handleCheckout('VNPay')}
-                    className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded flex items-center"
-                  >
-                    <img
-                      src={assets.Icon_VNPAY_QR}
-                      alt="VNPay Logo"
-                      className="w-6 h-6 mr-2"
-                    />
-                    Pay with VNPay
-                  </button>
-                  <button
-                    onClick={() => handleCheckout('PayPal')}
-                    className="bg-yellow-500 hover:bg-yellow-600 text-white font-bold py-2 px-4 rounded flex items-center"
-                  >
-                    <img
-                      src={assets.Icon_PAYPAL}
-                      alt="PayPal Logo"
-                      className="w-6 h-6 mr-2"
-                    />
-                    Pay with PayPal
-                  </button>
+                    <button
+                        onClick={() => handleCheckout('VNPay')}
+                        className="hover:bg-blue-400 font-bold py-2 px-4 rounded flex items-center justify-center h-20 w-48"
+                    >
+                        <img
+                            src={assets.Icon_VNPAY_QR}
+                            alt="VNPay Logo"
+                            className="h-14"
+                        />
+                    </button>
+                    <button
+                        onClick={() => handleCheckout('PayPal')}
+                        className="hover:bg-yellow-400 font-bold py-2 px-4 rounded flex items-center justify-center h-20 w-48"
+                    >
+                        <img
+                            src={assets.PayPal_Logo}
+                            alt="PayPal Logo"
+                            className="h-14"
+                        />
+                    </button>
                 </div>
+
 
                 <div className="md:w-full mx-auto">
                   <div className="bg-white rounded-lg shadow-md p-6 mb-4 overflow-auto">

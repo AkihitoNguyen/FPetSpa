@@ -6,16 +6,20 @@ import FirstContent from '../../components/Content/FirstContent'
 import SecondContent from '../../components/Content/SecondContent'
 import ServiceContent from '../../components/Content/ServiceContent'
 import ThirdContent from '../../components/Content/ThirdContent'
+import Video from '../../components/Video'
 const Home = () => {
   return (
+    // <div>
+    //     <Header/>
+    //     <ServiceContent/>
+    //     <div className='bg-myCusColor'>
+    //     <FirstContent/>
+    //     </div>
+    //     <SecondContent/>
+    //     <ThirdContent/>
+    // </div>
     <div>
-        <Header/>
-        <ServiceContent/>
-        <div className='bg-myCusColor'>
-        <FirstContent/>
-        </div>
-        <SecondContent/>
-        <ThirdContent/>
+      <Video/>
     </div>
   )
 }

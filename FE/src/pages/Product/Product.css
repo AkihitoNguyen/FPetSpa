@@ -1,77 +1,71 @@
+/* import React, { useState, useEffect } from 'react';
+import { BsChevronCompactLeft, BsChevronCompactRight } from 'react-icons/bs';
+import { RxDotFilled } from 'react-icons/rx';
+import { assets } from '../../assets/assets';
 
-/* * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
-   */
-   .breakdance {
-    background-color: #f8f9fa;
-    padding: 20px;
-    width: 90%;
-    margin: auto;
-}
-  
-  .bde-section {
-    margin: 20px 0; 
-  }
-  
-  .section-container {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-  }
-  
-  .bde-columns {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-  }
-  
-  .bde-column {
-    flex: 1;
-    min-width: 300px; 
-    margin: 10px;
-  }
-  
-  .bde-heading {
-    margin-bottom: 10px;
-    color: #333; 
-  }
-  
-  .bde-heading-163033-105 {
-    font-size: 1.25rem; 
-    font-weight: 600;
-  }
-  
-  .bde-heading-163033-106 {
-    font-size: 2rem; 
-    font-weight: 700; 
-  }
-  
-  .bde-rich-text {
-    margin-top: 15px;
-    color: #666; 
-  }
-  
-  .bde-image {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-  }
-  
-  .breakdance-image {
-    max-width: 80%;
-    height: auto; 
-  }
-  
-  .breakdance-image-container {
-    width: 90%;
-    overflow: hidden; 
-  }
-  
-  .breakdance-image-object {
-    width: 90%;
-    height: auto;
-  }
-  
+const Slide = () => {
+  const slides = [
+    {
+      url: assets.Slider_1,
+    },
+    {
+      url: assets.Slider_2,
+    },
+    {
+      url: assets.Slider_3,
+
+    },
+    {
+      url: assets.Slider_4,
+
+    },
+    {
+      url: assets.Slider_5,
+    },
+  ];
+
+  const [currentIndex, setCurrentIndex] = useState(0);
+
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentIndex((prevIndex) =>
+        prevIndex === slides.length - 1 ? 0 : prevIndex + 1
+      );
+    }, 5000); // Chuyển đổi slide sau mỗi 5 giây
+
+    return () => {
+      clearInterval(interval); // Xóa bỏ interval khi component unmount
+    };
+  }, [slides.length]); // Dependency array chỉ cần slides.length để đảm bảo useEffect được gọi lại khi slides thay đổi
+
+
+  const goToSlide = (slideIndex) => {
+    setCurrentIndex(slideIndex);
+  };
+
+  return (
+    <div className='max-w-[1196px] h-[424px] w-full m-auto pt-[14px] relative group'>
+      <div
+        style={{ backgroundImage: `url(${slides[currentIndex].url})` }}
+        className='w-full h-full rounded-2xl bg-center bg-cover duration-500'
+      ></div>
+
+      
+      <div className='flex top-4 justify-center py-2'>
+        {slides.map((slide, slideIndex) => (
+          <div
+            key={slideIndex}
+            onClick={() => goToSlide(slideIndex)}
+            className={`text-2xl cursor-pointer ${
+              currentIndex === slideIndex ? 'text-gray-900' : 'text-gray-400'
+            }`}
+          >
+            <RxDotFilled />
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+};
+
+export default Slide; */

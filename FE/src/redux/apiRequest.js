@@ -44,6 +44,9 @@ export const loginUser = (user, dispatch, navigate) => {
 };
 
 
+
+
+
 // https://localhost:7055/api/account/signin/customer
 // https://fpetspa.azurewebsites.net/api/account/signin/customer
 
@@ -54,7 +57,7 @@ export const registerUser = async (user, dispatch, navigate) => {
   try {
       await axios.post(`https://fpetspa.azurewebsites.net/api/account/signup/customer`, user);
       dispatch(registerSuccess());
-      navigate("/check-email", { state: { message: "Please check your email to confirm your registration." } });
+      navigate("/login", { state: { message: "Please check your email to confirm your registration." } });
   } catch (error) {
       console.error("Register error:", error); 
       dispatch(registerFailed());
@@ -62,37 +65,24 @@ export const registerUser = async (user, dispatch, navigate) => {
   }
 };
 //https://localhost:7055/api/account/signup/customer
-// /https://fpetspa.azurewebsites.net/api/account/signup/customer
+//https://fpetspa.azurewebsites.net/api/account/signup/customer
 
-export const SignGoogle = (googleUser, dispatch, navigate) => {
+export const signInWithGoogle = async (googleUser, dispatch, navigate) => {
     dispatch(loginStart());
-    return axios.post(`https://fpetspa.azurewebsites.net/api/account/signin/customer`, user)
-      .then((res) => {
-        const accessToken = res.data.accessToken;
-        const refreshToken = res.data.refreshToken;
-        const decodedToken = jwtDecode(accessToken);
-        const userId = decodedToken["jti"];
-        const fullName = res.data.fullName;
-  
-        const googleUser = {
-          accessToken,
-          refreshToken,
-          userId,
-          fullName,
-        };
-  
-        dispatch(loginSuccess(userData));
+    try {
+        const res = await axios.get("https://fpetspa.azurewebsites.net/api/account/login-google", googleUser, {
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            withCredentials: true
+        });
+        dispatch(loginSuccess(res.data));
         navigate("/");
-        return userData;
-      })
-      .catch((error) => {
+    } catch (error) {
+        console.log(error);
         dispatch(loginFailed());
-        throw error;
-      });
+    }
   };
-
-
-
 
 
 export const logoutUser = async (

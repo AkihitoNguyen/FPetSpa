@@ -78,9 +78,9 @@ const GetService = () => {
     switch (status) {
       case 0:
         return "text-[#F6C000] bg-[#FFF8DD]";
-      case 1:
-        return "text-[#F6C000] bg-[#FFF8DD]";
       case 2:
+        return "text-[#F6C000] bg-[#FFF8DD]";
+      case 1:
         return "text-blue-600 bg-blue-100";
       case 3:
         return "text-green-600 bg-green-100";
@@ -95,9 +95,9 @@ const GetService = () => {
     switch (status) {
       case 0:
         return "Pending";
-      case 1:
-        return "Processing";
       case 2:
+        return "Processing";
+      case 1:
         return "Staff Accepted";
       case 3:
         return "Complete";
@@ -227,12 +227,12 @@ const GetService = () => {
                   Pending
                 </button>
                 <button
-                  onClick={() => handleSelect(1)}
+                  onClick={() => handleSelect(2)}
                   className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
                   Staff Accepted
                 </button>
                 <button
-                  onClick={() => handleSelect(2)}
+                  onClick={() => handleSelect(1)}
                   className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
                   Completed
                 </button>
