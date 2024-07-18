@@ -17,47 +17,6 @@ namespace FPetSpa.Controllers
         private readonly IFeedBackService _feedBackService;
         public FeedBackController(IFeedBackService feedBackService)
         {
-<<<<<<< HEAD:BE/BE/FPetSpa/Controllers/FeedBackController.cs
-            _unitOfWork = unitOfWork;
-        }
-    
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            var result = await _unitOfWork.FeedBackRepository.GetAll();
-            return Ok(result);
-        }
-        [HttpGet("{id}")]
-        public IActionResult GetFeedBackById(int id)
-        {
-            var responseCategories = _unitOfWork.FeedBackRepository.GetById(id);
-            return Ok(responseCategories);
-        }
-
-        //[HttpPut("{id}")]
-
-        //public IActionResult UpdateFeedBack(int id, RequestFeedBackModel requestFeedBackModel)
-        //{
-        //    var existedFeedBack = _unitOfWork.FeedBackRepository.GetById(id);
-        //    if (existedFeedBack != null)
-        //    {
-        //        existedFeedBack. = requestFeedBackModel.OrderId;
-        //        existedFeedBack.PictureName = requestFeedBackModel.PictureName;
-        //        existedFeedBack.Star = requestFeedBackModel.Star;
-        //        existedFeedBack.Description = requestFeedBackModel.Description;
-        //    }
-        //    _unitOfWork.FeedBackRepository.Update(existedFeedBack);
-        //    _unitOfWork.Save();
-        //    return Ok();
-        //}
-        [HttpDelete("{id}")]
-        public IActionResult DeleteFeedBack(int id)
-        {
-            var existedCategory = _unitOfWork.FeedBackRepository.GetById(id);
-            _unitOfWork.FeedBackRepository.Delete(existedCategory);
-            _unitOfWork.Save();
-            return Ok();
-=======
 
             _feedBackService = feedBackService;
         }
@@ -152,7 +111,6 @@ namespace FPetSpa.Controllers
                     return BadRequest(new { message = ex.Message });
                 }
             }
->>>>>>> b93e53d9cbf364b09703c444af04cab68e1821a6:BE/FPetSpa/Controllers/FeedBackController.cs
         }
 
     }

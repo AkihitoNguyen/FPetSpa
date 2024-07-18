@@ -119,11 +119,8 @@ namespace FPetSpa
             builder.Services.AddScoped<TransactionService>();
             builder.Services.AddScoped<ImageService>();
             builder.Services.AddScoped<GoogleMapService>();
-<<<<<<< HEAD:BE/BE/FPetSpa/Program.cs
-=======
             builder.Services.AddScoped<TimeSlotService>();
             builder.Services.AddScoped<IFeedBackService, FeedBackService>();
->>>>>>> b93e53d9cbf364b09703c444af04cab68e1821a6:BE/FPetSpa/Program.cs
             builder.Services.AddSingleton(new BotService("https://api.coze.com/v3/chat", "pat_t8mzOeNB4jsfon2OXohlzK2HNhY6yiF7SExbrU30kpxrsfIBmA57bBQd3o3kYXy7"));
             builder.Services.AddControllers()
                     .AddJsonOptions(options =>
