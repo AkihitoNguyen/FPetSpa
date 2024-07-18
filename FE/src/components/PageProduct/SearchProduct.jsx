@@ -1,63 +1,30 @@
-import React, { useState, useEffect } from 'react';
-import PropTypes from 'prop-types';
-import { debounce, escapeRegExp, filter } from 'lodash';
+// SearchBar.jsx
+import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-const SearchProduct = ({ source, onResultSelect }) => {
-  const initialState = {
-    isLoading: false,
-    results: [],
-    value: '',
-  };
 
-  const [searchState, setSearchState] = useState(initialState);
+const SearchProduct = () => {
+  const [query, setQuery] = useState('');
   const navigate = useNavigate();
-  const handleResultSelect = (e, { result }) => {
-    setSearchState((prevState) => ({ ...prevState, value: result.title }));
-    navigate(`/productdisplay/${result.title}`);
-    onResultSelect(result);
+
+  const handleSearch = async (e) => {
+    e.preventDefault();
+    if (query) {
+      navigate(`/search?query=${query}`);
+      setQuery(''); // Reset the search input field
+    }
   };
-
-  const handleSearchChange = debounce((e, { value }) => {
-    setSearchState((prevState) => ({ ...prevState, isLoading: true, value }));
-
-    setTimeout(() => {
-      if (value.length < 1) return setSearchState((prevState) => ({ ...prevState, ...initialState }));
-
-      const re = new RegExp(escapeRegExp(value), 'i');
-      const isMatch = (result) => re.test(result.productName);
-
-      setSearchState((prevState) => ({
-        ...prevState,
-        isLoading: false,
-        results: filter(source, isMatch).map(product => ({
-          title: product.productName,
-          description: product.productDescription,
-          image: product.pictureName,
-          price: `$${product.price}`
-        })),
-      }));
-    }, 100);
-  }, 100);
 
   return (
-    <Grid>
-      <GridColumn width={6}>
-        <Search
-          fluid
-          loading={searchState.isLoading}
-          onResultSelect={handleResultSelect}
-          onSearchChange={handleSearchChange}
-          results={searchState.results}
-          value={searchState.value}
-        />
-      </GridColumn>
-    </Grid>
+    <form onSubmit={handleSearch} className="relative">
+      <input
+        className="rounded-full px-4 py-2.5 border-2 border-transparent focus:outline-none focus:border-[#FC819E] placeholder-gray-400 transition-all duration-300 shadow-md"
+        type="text"
+        value={query}
+        onChange={(e) => setQuery(e.target.value)}
+        placeholder="Search for products"
+      />
+    </form>
   );
-};
-
-SearchProduct.propTypes = {
-  source: PropTypes.array.isRequired,
-  onResultSelect: PropTypes.func.isRequired,
 };
 
 export default SearchProduct;

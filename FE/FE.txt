@@ -2,7 +2,6 @@
             {/* Comment Submission Form */}
             <div className="mt-8 bg-gray-100 p-6 rounded-lg shadow-md">
               <h3 className="text-lg font-medium text-gray-900">Leave a Comment</h3>
-              {user ? (
                 <form onSubmit={handleSubmitComment} className="mt-4 space-y-4">
                   <div>
                     <label htmlFor="commentText" className="block text-sm font-medium text-gray-700">Comment</label>
@@ -30,16 +29,11 @@
                     >Submit</button>
                   </div>
                 </form>
-              ) : (
-                <div className="mt-4 text-sm text-gray-600">
-                  Please <a href="/login" className="text-indigo-600 hover:text-indigo-500">login</a> to leave a comment.
-                </div>
-              )}
             </div>
 
 
 
-              const handleSubmitComment = async (e) => {
+     const handleSubmitComment = async (e) => {
     e.preventDefault();
 
     const newComment = {
@@ -73,3 +67,39 @@
       console.error("Error submitting comment:", error);
     }
   };
+
+
+      // const handleSubmitComment = async (e,productId) => {
+    //     e.preventDefault();
+    
+    //     const newComment = {
+    //       userFeedBackId: currentUser.userId,
+    //       productId: productId,
+    //       pictureName: '',
+    //       star: commentStar,
+    //       description: commentText,
+    //     };
+    // console.log(productId)
+    //     try {
+    //       const response = await fetch('https://fpetspa.azurewebsites.net/api/FeedBack/Create', {
+    //         method: 'POST',
+    //         headers: {
+    //           'Content-Type': 'application/json',
+    //           'Authorization': `Bearer ${currentUser.accessToken}`
+    //         },
+    //         body: JSON.stringify(newComment),
+    //       });
+    
+    //       if (!response.ok) {
+    //         throw new Error('Network response was not ok');
+    //       }
+    
+    //       const result = await response.json();
+    //       setComments([...comments, result]);
+    //       setCommentName('');
+    //       setCommentText('');
+    //       setCommentStar(5);
+    //     } catch (error) {
+    //       console.error("Error submitting comment:", error);
+    //     }
+    //   };

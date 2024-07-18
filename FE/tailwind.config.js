@@ -12,6 +12,9 @@ export default {
       sm: ['14px', '15.75px', '18px' ,'20px', '32px' ,'46px'], 
     },
     extend: {
+      width: {
+        'fill-available': '-webkit-fill-available',
+      },
       colors: {
         'myPink' : '#FF9494',
         'myCusColor' : '#fcfafa',
@@ -58,7 +61,8 @@ export default {
     'Segoe UI Emoji', 
     'Segoe UI Symbol', 
     'Noto Color Emoji'
-  ]
+  ],
+  'segoe': ['"segoe ui"', 'sans-serif'],
     }
   },
   

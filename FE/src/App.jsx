@@ -5,16 +5,17 @@ import Navbar from "./components/Navbar/Navbar";
 import Cart from "./pages/Cart/Cart";
 import PlaceOrder from "./pages/PlaceOrder/PlaceOrder";
 import Home from "./pages/Home/Home";
-import Footer from "./components/Footer/Footer";
 import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Product from "./pages/Product/Product";
 import ProductDisplay from "./components/ProductDisplay/ProductDisplay";
 
+import "react-toastify/dist/ReactToastify.css";
+import "semantic-ui-css/semantic.min.css";
+
 import Service from "./pages/Service/Service";
 import ContactUs from "./pages/ContactUs/ContactUs";
 import AboutUs from "./pages/AboutUs/AboutUs";
-import Navlink from "./components/Navlink/Navlink";
 import BookingService from "./pages/Service/BookingService";
 import Profile from "./pages/Profile/Profile";
 import DashBoard from "./pages/DashBoard/DashBoard";
@@ -31,9 +32,13 @@ import Dashboards from "./components/DashBoard/Dashboards";
 import AddService from "./components/DashBoard/ServiceManagement.jsx/AddService";
 import EditService from "./components/DashBoard/ServiceManagement.jsx/EditService";
 import ViewService from "./components/DashBoard/ServiceManagement.jsx/ViewService";
+import BookingProduct from "./components/DashBoard/ProductManage.jsx/BookingProduct";
+
 import QR from "./pages/QR/QR";
 import AddProduct from "./components/DashBoard/ProductManage.jsx/AddProduct";
-import BookingProduct from "./components/DashBoard/ProductManage.jsx/BookingProduct";
+import SearchResult from "./components/PageProduct/SearchResult";
+import SecondForm from "./components/FormComponents/SecondForm";
+import FirstForm from "./components/FormComponents/FirstForm";
 
 const App = () => {
   const [showNavbarAndFooter, setShowNavbarAndFooter] = useState(true);
@@ -69,13 +74,16 @@ const App = () => {
       "/layout/account-info",
       "/layout/product-info",
       "/layout/add-product",
-      "/layout/transaction",
-      "/layout/pay-in-out"
+      "/layout/booking-product",
+      "/search",
+      "/second-form",
+      "/first-form"
     ];
 
-    const isMatched = routes.some((route) => matchPath(route, location.pathname));
-    const isLayoutOrDashboardPath = location.pathname.startsWith("/layout") || location.pathname.startsWith("/dashboard");
-    setShowNavbarAndFooter(isMatched && !isLayoutOrDashboardPath);
+    const isMatched = routes.some((route) =>
+      matchPath(route, location.pathname)
+    );
+    setShowNavbarAndFooter(isMatched);
   }, [location.pathname]);
 
   return (
@@ -96,27 +104,38 @@ const App = () => {
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
           <Route path="/product" element={<Product />} />
+          <Route path="/first-form" element={<FirstForm />} />
           <Route path="/booking" element={<BookingService />} />
+          <Route path="/second-form" element={<SecondForm />} />
           <Route path="/profile" element={<Profile />} />
           <Route path="/checkout" element={<Checkout />} />
           <Route path="/payment-success" element={<PaymentSuccess />} />
           <Route path="/booking-history" element={<BookingHistory />} />
           <Route path="/order-service" element={<GetService />} />
           <Route path="/qr" element={<QR />} />
-          <Route path="/productdisplay/:productId" element={<ProductDisplay />} />
-          
+          <Route
+            path="/productdisplay/:productId"
+            element={<ProductDisplay />}
+          />
+          <Route path="/search" element={<SearchResult />} />
 
           <Route path="/layout" element={<Layout />}>
             <Route path="/layout/dashboards" element={<Dashboards />} />
             <Route path="/layout/add-order/:orderId" element={<AddOrder />} />
             <Route path="/layout/service-info" element={<GetService />} />
             <Route path="/layout/add-service" element={<AddService />} />
-            <Route path="/layout/edit-service/:servicesId" element={<EditService />} />
+            <Route
+              path="/layout/edit-service/:servicesId"
+              element={<EditService />}
+            />
             <Route path="/layout/view-service" element={<ViewService />} />
             <Route path="/layout/account-info" element={<User />} />
             <Route path="/layout/product-info" element={<GetProduct />} />
             <Route path="/layout/add-product" element={<AddProduct />} />
-            <Route path="/layout/booking-product" element={<BookingProduct />} />
+            <Route
+              path="/layout/booking-product"
+              element={<BookingProduct />}
+            />
           </Route>
 
           {/* DashBoard */}
@@ -126,11 +145,7 @@ const App = () => {
           <Route path="*" element={<NotFound />} />
         </Routes>
       </div>
-      {showNavbarAndFooter && (
-        <div className="bg-gray-700">
-          <Footer />
-        </div>
-      )}
+      {showNavbarAndFooter && <div className="bg-gray-700"></div>}
     </>
   );
 };

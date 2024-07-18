@@ -1,7 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { assets } from "../../assets/assets";
-import ServiceContent2 from "../../components/Content/ServiceContent2";
 import { useSelector } from "react-redux";
 
 const Service = () => {
@@ -53,9 +52,7 @@ const Service = () => {
           />
         </div>
       </div>
-      <div className="bg-myCusColor">
-        <ServiceContent2 />
-      </div>
+
     </div>
   );
 };

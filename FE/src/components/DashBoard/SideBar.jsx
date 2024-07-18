@@ -19,7 +19,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="min-h-screen bg-neutral-900 text-white">
+    <div className="min-h-screen w-64 bg-neutral-900 text-white">
       <div className="flex justify-center items-center gap-3 p-4 font-bold text-lg border-b">
         <img src={assets.logo} alt="" className="w-16" />
         <div>FPet Spa</div>

@@ -66,6 +66,7 @@
     "semantic-ui-css": "^2.5.0",
     "semantic-ui-react": "^2.1.5",
     "swiper": "^11.1.4",
+    "tw-elements-react": "^1.0.0-alpha-end",
     "yarn": "^1.22.22"
   },
   "devDependencies": {

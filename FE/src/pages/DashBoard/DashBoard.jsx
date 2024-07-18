@@ -9,29 +9,26 @@ import Dashboards from "../../components/DashBoard/Dashboards";
 import EditService from "../../components/DashBoard/ServiceManagement.jsx/EditService";
 import ViewService from "../../components/DashBoard/ServiceManagement.jsx/ViewService";
 import AddProduct from "../../components/DashBoard/ProductManage.jsx/AddProduct";
-import Transactions from "../../components/DashBoard/Transactions";
-import PayInOut from "../../components/DashBoard/ServiceManagement.jsx/PayInOut";
+import BookingProduct from "../../components/DashBoard/ProductManage.jsx/BookingProduct";
 
 const DashBoard = () => {
   return (
     <div className="flex">
       <Sidebar />
-      <div className="flex-1">
-        <div className="p-8">
-          <Routes>
-            <Route path="/dashboards" element={<Dashboards />} />
-            <Route path="/account-info" element={<User />} />
-            <Route path="/product-info" element={<GetProduct />} />
-            <Route path="/service-info" element={<GetService />} />
-            <Route path="/add-service" element={<GetService />} />
-            <Route path="/add-order/:orderId" element={<AddOrder />} />
-            <Route path="/edit-service/:servicesId" element={<EditService />} />
-            <Route path="/view-service" element={<ViewService />} />
-            <Route path="/add-product" element={<AddProduct />} />
-            <Route path="/transaction" element={<Transactions />} />
-            <Route path="/layout/pay-in-out" element={<PayInOut />} />
-          </Routes>
-        </div>
+      <div className="flex-1 p-8">
+        <Routes>
+          <Route path="/layout/dashboards" element={<Dashboards />} />
+          <Route path="/layout/account-info" element={<User />} />
+          <Route path="/layout/product-info" element={<GetProduct />} />
+          <Route path="/layout/service-info" element={<GetService />} />
+          <Route path="/layout/add-service" element={<GetService />} />
+          <Route path="/layout/add-order" element={<AddOrder />} />
+          <Route path="/layout/edit-order" element={<EditService />} />
+          <Route path="/layout/view-order" element={<ViewService />} />
+          <Route path="/layout/add-product" element={<AddProduct />} />
+          <Route path="/layout/booking-product" element={<BookingProduct />} />
+
+        </Routes>
       </div>
     </div>
   );

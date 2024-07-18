@@ -13,7 +13,6 @@ import { ChevronDownIcon, FunnelIcon } from '@heroicons/react/20/solid';
 import { getAllProduct, getProductsByCategory } from '../../api/apiService';
 import { ShopContext } from '../Context/ShopContext';
 import { Link } from 'react-router-dom';
-import SearchProduct from './SearchProduct';
 import '../PageProduct/ProductList.css';
 
 function classNames(...classes) {
@@ -98,12 +97,6 @@ export default function ProductList() {
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
-  const handleSearchResultSelect = (result) => {
-    const filteredProduct = productList.find((product) => product.productName === result.title);
-    if (filteredProduct) {
-      setSortedProductList([filteredProduct]);
-    }
-  };
 
   return (
     <div className="bg-white">
@@ -149,15 +142,11 @@ export default function ProductList() {
         </Dialog>
 
         <main className="mx-auto max-w-max px-4 sm:px-6 lg:px-8">
-          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-24">
+          <div className="flex items-baseline justify-between border-b border-gray-200 pb-6 pt-8">
             <h1 className="text-4xl font-bold tracking-tight text-gray-900">Product</h1>
 
             <div className="flex items-center">
               
-            <div className="mr-0 lg:mr-4"> {/* Adjust margin-right for different screen sizes */}
-              <SearchProduct source={productList} onResultSelect={handleSearchResultSelect} />
-            </div>
-
               <Menu as="div" className="relative inline-block text-left">
                 <div>
                   <MenuButton className="group inline-flex justify-center text-sm font-medium text-gray-700 hover:text-gray-900">

@@ -8,7 +8,8 @@ import { Provider } from "react-redux";
 import { store, persistor } from './redux/store';
 import { PersistGate } from 'redux-persist/integration/react';
 import ShopContextProvider from './components/Context/ShopContext.jsx';
-
+import 'react-toastify/dist/ReactToastify.css';
+import 'semantic-ui-css/semantic.min.css';
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
