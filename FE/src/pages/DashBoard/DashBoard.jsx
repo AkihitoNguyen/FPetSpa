@@ -13,9 +13,12 @@ import BookingProduct from "../../components/DashBoard/ProductManage.jsx/Booking
 
 const DashBoard = () => {
   return (
-    <div className="flex">
+    <div className="flex bg-[#F5F7F8]">
       <Sidebar />
-      <div className="flex-1 p-8">
+      <div className="flex-1 p-8 bg-[#F5F7F8]">
+        <div>
+          
+        </div>
         <Routes>
           <Route path="/layout/dashboards" element={<Dashboards />} />
           <Route path="/layout/account-info" element={<User />} />

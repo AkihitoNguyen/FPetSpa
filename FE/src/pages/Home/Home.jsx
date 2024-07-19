@@ -10,9 +10,9 @@ const Home = () => {
       <div className="mb-[69px]">
         <Slide />
       </div>
-      <div className="flex items-center">
+      <div className="flex justify-center items-center">
         {/* left content */}
-        <div className="w-[550px] flex flex-col mx-80 mr-[20px] mt-[23px] lg:mb-[30px] text-white bg-[#DA7297] rounded-xl px-[28px] pt-[12px] pb-[16px]">
+        <div className="w-[550px] flex flex-col mx-80 mr-[20px] mt-[23px] md:ml-1 lg:mr-4 text-white bg-[#DA7297] rounded-xl px-[28px] pt-[12px] pb-[16px]">
           <div>
             <div className="text-[18px] font-bold">
               MAKE AN APPOINTMENT IN ONLY 30 SECONDS

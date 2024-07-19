@@ -45,55 +45,18 @@ const App = () => {
   const location = useLocation();
 
   useEffect(() => {
-    const routes = [
-      "/",
-      "/service",
-      "/about-us",
-      "/contact-us",
-      "/cart",
-      "/order",
-      "/login",
-      "/register",
-      "/product",
-      "/booking",
-      "/profile",
-      "/checkout",
-      "/productdisplay/:productName",
-      "/dashboard/*",
-      "/payment-success",
-      "/booking-history",
-      "/order-service",
-      "/qr",
-      "/layout",
-      "/layout/dashboards",
-      "/layout/add-order/:orderId",
-      "/layout/service-info",
-      "/layout/add-service",
-      "/layout/edit-service/:servicesId",
-      "/layout/view-service",
-      "/layout/account-info",
-      "/layout/product-info",
-      "/layout/add-product",
-      "/layout/booking-product",
-      "/search",
-      "/second-form",
-      "/first-form"
-    ];
-
-    const isMatched = routes.some((route) =>
-      matchPath(route, location.pathname)
+    const routesToHideNavbar = ["/dashboard", "/layout"];
+    const isLayoutOrDashboardRoute = routesToHideNavbar.some(route =>
+      location.pathname.startsWith(route)
     );
-    setShowNavbarAndFooter(isMatched);
+
+    setShowNavbarAndFooter(!isLayoutOrDashboardRoute);
   }, [location.pathname]);
 
   return (
     <>
       <div className="app">
-        {showNavbarAndFooter && (
-          <>
-            <Navbar />
-          </>
-        )}
+        {showNavbarAndFooter && <Navbar />}
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/service" element={<Service />} />
@@ -113,33 +76,23 @@ const App = () => {
           <Route path="/booking-history" element={<BookingHistory />} />
           <Route path="/order-service" element={<GetService />} />
           <Route path="/qr" element={<QR />} />
-          <Route
-            path="/productdisplay/:productId"
-            element={<ProductDisplay />}
-          />
+          <Route path="/productdisplay/:productId" element={<ProductDisplay />} />
           <Route path="/search" element={<SearchResult />} />
 
           <Route path="/layout" element={<Layout />}>
-            <Route path="/layout/dashboards" element={<Dashboards />} />
-            <Route path="/layout/add-order/:orderId" element={<AddOrder />} />
-            <Route path="/layout/service-info" element={<GetService />} />
-            <Route path="/layout/add-service" element={<AddService />} />
-            <Route
-              path="/layout/edit-service/:servicesId"
-              element={<EditService />}
-            />
-            <Route path="/layout/view-service" element={<ViewService />} />
-            <Route path="/layout/account-info" element={<User />} />
-            <Route path="/layout/product-info" element={<GetProduct />} />
-            <Route path="/layout/add-product" element={<AddProduct />} />
-            <Route
-              path="/layout/booking-product"
-              element={<BookingProduct />}
-            />
+            <Route path="dashboards" element={<Dashboards />} />
+            <Route path="add-order/:orderId" element={<AddOrder />} />
+            <Route path="service-info" element={<GetService />} />
+            <Route path="add-service" element={<AddService />} />
+            <Route path="edit-service/:servicesId" element={<EditService />} />
+            <Route path="view-service" element={<ViewService />} />
+            <Route path="account-info" element={<User />} />
+            <Route path="product-info" element={<GetProduct />} />
+            <Route path="add-product" element={<AddProduct />} />
+            <Route path="booking-product" element={<BookingProduct />} />
           </Route>
 
-          {/* DashBoard */}
-          <Route path="/dashboard/*" element={<DashBoard />} />
+          <Route path="/layout/dashboards" element={<DashBoard />} />
 
           {/* Đường dẫn không khớp */}
           <Route path="*" element={<NotFound />} />

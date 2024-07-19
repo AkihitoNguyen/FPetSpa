@@ -38,19 +38,19 @@ const AdminNavbar = () => {
   };
 
   return (
-    <div className="bg-white h-16 px-4 flex justify-between items-center border-b border-gray-200">
-      <div className="relative">
+    <div className="w-[1600px] h-16 px-4 mt-4 flex justify-between items-start border-b border-gray-200">
+      <div className="relative ">
         <HiOutlineSearch
           fontSize={20}
-          className="text-gray-400 absolute top-1/2 -translate-y-1/2 left-3"
+          className="text-gray-400 absolute top-1/2 -translate-y-1/2 left-3 "
         />
         <input
           type="text"
           placeholder="Search..."
-          className="text-sm focus:outline-none active:outline-none h-10 w-[24rem] border border-gray-300 rounded-sm pl-11 px-[20px]"
+          className="text-sm focus:outline-none active:outline-none h-10 w-[24rem] border border-gray-300 rounded-lg pl-11 px-[20px]"
         />
       </div>
-      <div className="flex items-center ml-[35rem] gap-2 mr-2 relative">
+      <div className="flex items-center ml-[65rem] gap-2 mr-2 relative">
         <HiOutlineChatAlt fontSize={24} />
         <HiOutlineBell fontSize={24} />
         {user ? (
