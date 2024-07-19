@@ -6,15 +6,15 @@ import AdminNavbar from "./AdminNavbar/AdminNavbar";
 
 const Layout = () => {
   return (
-    <div className="flex">
-      <div className="">
+    <div className="flex bg-[#F5F7F8]">
+      <div className="bg-[#F5F7F8]">
       <Sidebar />
       </div>
-      <div className="flex flex-col">
-        <div className="w-[1200px]">
+      <div className="flex flex-col bg-[#F5F7F8]">
+        <div className="w-[1200px] bg-[#F5F7F8]">
           <AdminNavbar />
         </div>
-        <div className="flex justify-center items-center">
+        <div className="flex justify-center items-center bg-[#F5F7F8]">
           <Outlet />
         </div>
       </div>

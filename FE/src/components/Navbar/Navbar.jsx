@@ -167,7 +167,8 @@ const Navbar = () => {
                       </Link>
                     )}
                   </Menu.Item>
-                  {role === "Staff" && (
+                  {role === ("Admin","Staff") && (
+                     navigate("/layout/dashboards"),
                     <Menu.Item>
                       {({ active }) => (
                         <Link

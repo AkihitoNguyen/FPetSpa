@@ -188,7 +188,7 @@ const BookingService = () => {
   };
 
   return (
-    <div className="flex flex-col items-center justify-center mb-20 bg-[#EEEEEE]">
+    <div className="flex flex-col items-center justify-center bg-[#EEEEEE] mb-10">
       <div className="w-full max-w-lg">
         {showSuccessPopup && (
           <div className="fixed inset-0 flex items-center justify-center z-50">
@@ -237,18 +237,18 @@ const BookingService = () => {
           </div>
         )}
         {handleForms()}
-        <div className="flex justify-center mt-4">
+        <div className="w-[464px] flex justify-center ml-6 bg-white mb-10 pb-3">
          
           {page === formLength - 1 ? (
             <button
               type="button"
               onClick={handleSubmit}
-              className={`bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ${
+              className={`bg-[#FC819E] hover:bg-[#f5698a] text-white font-bold py-2 px-10 rounded focus:outline-none focus:shadow-outline ${
                 !canProceed() ? "opacity-50 cursor-not-allowed" : ""
               }`}
               disabled={!canProceed()}
             >
-              Submit
+              Booking now
             </button>
           ) : (
             <button
