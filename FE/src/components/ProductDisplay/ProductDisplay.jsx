@@ -9,7 +9,7 @@ import Avatar from "@mui/material/Avatar";
 import Stack from "@mui/material/Stack";
 import '../ProductDisplay/ProductDisplay.css';
 import { assets } from '../../assets/assets';
-
+import Loading from '../Loading';
 
 const ProductDisplay = () => {
   const { productId } = useParams();
@@ -20,7 +20,8 @@ const ProductDisplay = () => {
   const [users, setUsers] = useState([]);
   const [commentStar, setCommentStar] = useState(5);
   const [relatedProducts, setRelatedProducts] = useState([]);
- 
+  const [isLoading, setIsLoading] = useState(true);
+
 
 
 
@@ -36,9 +37,11 @@ const ProductDisplay = () => {
       if (response) {
         setProduct(response);
         fetchRelatedProducts(response.categoryName); // Fetch related products by category
+        setIsLoading(false);
       }
     } catch (error) {
       console.error("Error fetching product:", error);
+      setIsLoading(false);
     }
   };
 
@@ -50,8 +53,10 @@ const ProductDisplay = () => {
       }
       const data = await response.json();
       setComments(data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching comments:", error);
+      setIsLoading(false);
     }
   };
 
@@ -63,8 +68,10 @@ const ProductDisplay = () => {
       }
       const data = await response.json();
       setUsers(data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching users:", error);
+      setIsLoading(false);
     }
   };
 
@@ -76,8 +83,10 @@ const ProductDisplay = () => {
       }
       const data = await response.json();
       setRelatedProducts(data);
+      setIsLoading(false);
     } catch (error) {
       console.error("Error fetching related products:", error);
+      setIsLoading(false);
     }
   };
 
@@ -179,8 +188,16 @@ const ProductDisplay = () => {
 
 
   return (
+    <div>
+
+    
+    {isLoading ? (
+      <Loading />
+    ) : (
     <div className="bg-white">
-      <div className="pt-6">
+    
+        <div className="pt-6">
+        
         {/* Image gallery */}
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 lg:py-16">
         <div className="lg:grid lg:grid-cols-2 lg:gap-x-8">
@@ -667,52 +684,36 @@ const ProductDisplay = () => {
 
         {/* Related products */}
         <div className='related-product bg-white'>
-  <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
-    <h2 className="text-center text-2xl font-bold tracking-tight text-gray-900 mb-6">Customers also purchased</h2>
-    {/* <div className="flex justify-center space-x-6 ">
-      {relatedProducts.slice(0, 4).map((product) => (
-        <div key={product.productId} className="w-60">
-          <div className="aspect-w-1 aspect-h-1 rounded-md overflow-hidden bg-gray-200 lg:aspect-none group">
-            <Link to={`/productdisplay/${product.productId}`}>
-              <img
-                src={product.pictureName}
-                alt={product.productName}
-                className="object-cover object-center w-full h-full"
-              />
-            </Link>
-          </div>
-          <div className="mt-4 flex justify-between">
-          <h4 className="font-bold text-gray-800">{product.productName}</h4>
-          </div>
-          <p className="text-sm font-medium text-gray-900">${product.price}</p> 
-        </div>
-      ))}
-    </div> */}
-    <div className="flex justify-center space-x-6 ">
-      {relatedProducts.slice(0, 4).map((product) => (
-        <div key={product.productId} className="w-60 h-96 bg-pink-100 rounded-3xl text-neutral-300 p-4 flex flex-col items-start justify-center gap-3 hover:bg-gray-900 hover:shadow-2xl hover:shadow-sky-400 transition-shadow">
-          <div className="aspect-w-1 aspect-h-1 rounded-md overflow-hidden bg-gray-200 lg:aspect-none group">
-            <Link to={`/productdisplay/${product.productId}`}>
-              <img
-                src={product.pictureName}
-                alt={product.productName}
-                className="object-cover object-center w-52 h-56 bg-sky-300 rounded-2xl"
-              />
-            </Link>
-          </div>
-          <div className="mt-4 flex justify-between">
-          <h4 className="font-bold text-gray-800">{product.productName}</h4>
-          </div>
-          <p className="text-sm font-medium text-gray-900">${product.price}</p> 
-        </div>
-      ))}
-    </div>
-
-  </div>
-</div>
+              <div className="mx-auto max-w-7xl px-4 py-16 sm:px-6 sm:py-24 lg:px-8">
+                <h2 className="text-center text-2xl font-bold tracking-tight text-gray-900 mb-6">Customers also purchased</h2>
+                <div className="flex justify-center space-x-6 ">
+                  {relatedProducts.slice(0, 4).map((product) => (
+                    <div key={product.productId} className="w-60 h-96 bg-pink-100 rounded-3xl text-neutral-300 p-4 flex flex-col items-start justify-center gap-3 hover:bg-gray-900 hover:shadow-2xl hover:shadow-sky-400 transition-shadow">
+                      <div className="aspect-w-1 aspect-h-1 rounded-md overflow-hidden bg-gray-200 lg:aspect-none group">
+                        <Link to={`/productdisplay/${product.productId}`}>
+                          <img
+                            src={product.pictureName}
+                            alt={product.productName}
+                            className="object-cover object-center w-52 h-56 bg-sky-300 rounded-2xl"
+                          />
+                        </Link>
+                      </div>
+                      <div className="mt-4 flex justify-between">
+                      <h4 className="font-bold text-gray-800">{product.productName}</h4>
+                      </div>
+                      <p className="text-sm font-medium text-gray-900">${product.price}</p> 
+                    </div>
+                  ))}
+                </div>
+              </div>
+           </div>
 
 
       </div>
+      
+     
+    </div>
+    )}
     </div>
   );
 };

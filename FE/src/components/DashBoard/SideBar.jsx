@@ -197,14 +197,25 @@ const Sidebar = () => {
               </li>
               <li
                 className={`p-4 cursor-pointer `}
-                onClick={() => handleLinkClick("/layout/add-booking")}>
-                <Link to="/layout/add-booking" className="hover:text-[#607D8B]">
+                onClick={() => handleLinkClick("/layout/add-order/:orderId")}>
+                <Link to="/layout/add-order/:orderId" className="hover:text-[#607D8B]">
                   Add Booking
                 </Link>
               </li>
             </ul>
           )}
         </li>
+        <Link to="/layout/staff" className="hover:text-[#607D8B]">
+          <li
+            className={`flex gap-3 py-3 pl-2.5 pr-3 ml-2 mr-4 text-[16px] font-medium cursor-pointer hover:bg-[#FC819E] hover:py-1 hover:rounded-lg ${
+              activeLink === "/layout/dashboards"
+                ? "bg-[#FC819E] text-white rounded-lg hover:text-white"
+                : "text-[#607D8B]"
+            }`}
+            onClick={() => handleLinkClick("/layout/staff")}>
+            Staff
+          </li>
+        </Link>
       </ul>
     </div>
   );

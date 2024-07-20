@@ -39,6 +39,8 @@ import AddProduct from "./components/DashBoard/ProductManage.jsx/AddProduct";
 import SearchResult from "./components/PageProduct/SearchResult";
 import SecondForm from "./components/FormComponents/SecondForm";
 import FirstForm from "./components/FormComponents/FirstForm";
+import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
+import Staff from "./components/DashBoard/Staff"
 
 const App = () => {
   const [showNavbarAndFooter, setShowNavbarAndFooter] = useState(true);
@@ -78,6 +80,7 @@ const App = () => {
           <Route path="/qr" element={<QR />} />
           <Route path="/productdisplay/:productId" element={<ProductDisplay />} />
           <Route path="/search" element={<SearchResult />} />
+          <Route path="/forgot-password" element={<ForgotPassword/>}/>
 
           <Route path="/layout" element={<Layout />}>
             <Route path="dashboards" element={<Dashboards />} />
@@ -90,8 +93,9 @@ const App = () => {
             <Route path="product-info" element={<GetProduct />} />
             <Route path="add-product" element={<AddProduct />} />
             <Route path="booking-product" element={<BookingProduct />} />
+            <Route path="staff" element={<Staff/>}/> 
           </Route>
-
+          
           <Route path="/layout/dashboards" element={<DashBoard />} />
 
           {/* Đường dẫn không khớp */}

@@ -7,8 +7,6 @@ import { logoutSuccess } from "../../redux/authSlice";
 import { ShopContext } from "../../components/Context/ShopContext";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import { Menu, Transition } from "@headlessui/react";
-import { Fragment } from "react";
 import { assets } from "../../assets/assets";
 import SearchProduct from "../../components/PageProduct/SearchProduct";
 
@@ -22,6 +20,17 @@ const Navbar = () => {
   let axiosJWT = createAxiosInstance(user, dispatch, logoutSuccess);
   const { getTotalCartItems } = useContext(ShopContext) || {
     getTotalCartItems: () => 0,
+  };
+ 
+  const [showAvatarDropdown, setShowAvatarDropdown] = useState(false);
+  const [showBanner,setShowBanner] = useState(false);
+
+  const toggleAvatarDropdown = () => {
+    setShowAvatarDropdown(!showAvatarDropdown);
+  };
+
+  const toggleShowBanner = () => {
+    setShowBanner(!showBanner);
   };
 
   const handleLogout = () => {
@@ -78,9 +87,9 @@ const Navbar = () => {
   }
 
   return (
-    <div className="bg-white shadow-md">
-     <div className="mx-36 sticky top-0 z-10 flex items-center justify-between p-[12px] ">
-     <img
+    
+      <div className="sticky top-0 z-10 flex items-center justify-between p-[12px] bg-white shadow-md ">
+      <img
         onClick={() => navigate("/")}
         src={assets.logo}
         alt=""
@@ -116,183 +125,122 @@ const Navbar = () => {
           </ul>
         </div>
       </div>
-
       <div className="flex items-center gap-4">
         <div className="hidden md:block">
           <SearchProduct onResultSelect={(result) => console.log(result)} />
         </div>
         {user ? (
-          <Menu as="div" className="relative">
-            <Menu.Button>
-              <div className="flex items-center">
-                <div className="w-10 h-10 rounded-full bg-[#FC819E] flex items-center justify-center">
-                  <span className="text-white">
-                    {stringAvatar(user.fullName).children}
-                  </span>
+          <div className="relative">
+            <div
+              className="flex items-center cursor-pointer"
+              onClick={() => toggleAvatarDropdown(!showAvatarDropdown)}
+            >
+              <div className="w-10 h-10 rounded-full bg-[#FC819E] flex items-center justify-center">
+                <span className="text-white">{stringAvatar(user.fullName).children}</span>
+              </div>
+            </div>
+            {showAvatarDropdown && (
+              <div className="absolute right-0 mt-2 w-48 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+                <div className="py-1">
+                  <Link
+                    to="/profile"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => toggleAvatarDropdown(false)}
+                  >
+                    Profile
+                  </Link>
+                  <Link
+                    to="/booking-history"
+                    className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                    onClick={() => toggleAvatarDropdown(false)}
+                  >
+                    Booking history
+                  </Link>
+                  {role === "Staff" && (
+                    <Link
+                      to="/dashboard"
+                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                      onClick={() => toggleAvatarDropdown(false)}
+                    >
+                      Dashboard
+                    </Link>
+                  )}
+                  <button
+                    onClick={() => {
+                      handleLogout();
+                      toggleAvatarDropdown(false);
+                    }}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
                 </div>
               </div>
-            </Menu.Button>
-            <Transition
-              as={Fragment}
-              enter="transition ease-out duration-100"
-              enterFrom="transform opacity-0 scale-95"
-              enterTo="transform opacity-100 scale-100"
-              leave="transition ease-in duration-75"
-              leaveFrom="transform opacity-100 scale-100"
-              leaveTo="transform opacity-0 scale-95"
-            >
-              <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
-                <div className="py-1">
-                  <Menu.Item>
-                    {({ active }) => (
-                      <Link
-                        to="/profile"
-                        className={`${
-                          active ? "bg-gray-100" : ""
-                        } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
-                      >
-                        Profile
-                      </Link>
-                    )}
-                  </Menu.Item>
-                  <Menu.Item>
-                    {({ active }) => (
-                      <Link
-                        to="/booking-history"
-                        className={`${
-                          active ? "bg-gray-100" : ""
-                        } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
-                      >
-                        Booking history
-                      </Link>
-                    )}
-                  </Menu.Item>
-                  {role === ("Admin","Staff") && (
-                     navigate("/layout/dashboards"),
-                    <Menu.Item>
-                      {({ active }) => (
-                        <Link
-                          to="/dashboard"
-                          className={`${
-                            active ? "bg-gray-100" : ""
-                          } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
-                        >
-                          Dashboard
-                        </Link>
-                      )}
-                    </Menu.Item>
-                  )}
-                  <Menu.Item>
-                    {({ active }) => (
-                      <button
-                        onClick={handleLogout}
-                        className={`${
-                          active ? "bg-gray-100" : ""
-                        } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
-                      >
-                        Logout
-                      </button>
-                    )}
-                  </Menu.Item>
-                </div>
-              </Menu.Items>
-            </Transition>
-          </Menu>
+            )}
+          </div>
         ) : (
           <div className="flex gap-2">
             <Link to="/login" className="flex gap-2">
-              <button
-                className="text-[16px] text-[#FC819E] font-semibold border-1 border-[#FC819E] rounded-xl px-4 py-1 transition duration-300  hover:bg-[#FC819E] hover:text-white"
-                onClick={() => navigate("/login")}
-              >
-                Log in
-              </button>
+              <img src={assets.user} alt="" className="w-6" />
+              <button className="text-[16px] text-[#FC819E] font-semibold border-1 border-[#FC819E] rounded-xl px-4 py-1 transition duration-300  hover:bg-[#FC819E] hover:text-white" onClick={() => navigate("/login")}>Login</button>
             </Link>
           </div>
         )}
         <div className="relative">
           <Link to="/cart" className="relative">
             <img src={assets.cart} alt="" className="w-6" />
-            <div className="absolute -right-4 -top-2 w-6 h-5 flex items-center justify-center text-sm bg-[#FC819E] text-white rounded-full">
-              {getTotalCartItems()}
-            </div>
+            <div className="absolute -right-4 -top-2 w-6 h-5 flex items-center justify-center text-sm bg-[#FC819E] text-white rounded-full">{getTotalCartItems()}</div>
           </Link>
         </div>
       </div>
       <div className="md:hidden flex items-center">
-        <Menu as="div" className="relative">
-          <Menu.Button>
-            <div className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center">
-              <span className="text-gray-700">☰</span>
-            </div>
-          </Menu.Button>
-          <Transition
-            as={Fragment}
-            enter="transition ease-out duration-100"
-            enterFrom="transform opacity-0 scale-95"
-            enterTo="transform opacity-100 scale-100"
-            leave="transition ease-in duration-75"
-            leaveFrom="transform opacity-100 scale-100"
-            leaveTo="transform opacity-0 scale-95"
+        <div className="relative">
+          <div
+            className="w-10 h-10 rounded-full bg-gray-200 flex items-center justify-center cursor-pointer"
+            onClick={() => toggleShowBanner(!showBanner)}
           >
-            <Menu.Items className="absolute right-0 mt-2 w-48 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
+            <span className="text-gray-700">☰</span>
+          </div>
+          {showBanner && (
+            <div className="absolute right-0 mt-2 w-48 origin-top-right bg-white divide-y divide-gray-100 rounded-md shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">
               <div className="py-1">
-                <Menu.Item>
-                  {({ active }) => (
-                    <Link
-                      to="/service"
-                      className={`${
-                        active ? "bg-gray-100" : ""
-                      } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
-                    >
-                      Service
-                    </Link>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <Link
-                      to="/product"
-                      className={`${
-                        active ? "bg-gray-100" : ""
-                      } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
-                    >
-                      Product
-                    </Link>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <Link
-                      to="/about-us"
-                      className={`${
-                        active ? "bg-gray-100" : ""
-                      } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
-                    >
-                      About us
-                    </Link>
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  {({ active }) => (
-                    <Link
-                      to="/contact-us"
-                      className={`${
-                        active ? "bg-gray-100" : ""
-                      } flex justify-between w-full px-4 py-2 text-sm text-gray-700`}
-                    >
-                      Contact us
-                    </Link>
-                  )}
-                </Menu.Item>
+                <Link
+                  to="/service"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => toggleShowBanner(false)}
+                >
+                  Service
+                </Link>
+                <Link
+                  to="/product"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => toggleShowBanner(false)}
+                >
+                  Product
+                </Link>
+                <Link
+                  to="/about-us"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => toggleShowBanner(false)}
+                >
+                  About us
+                </Link>
+                <Link
+                  to="/contact-us"
+                  className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                  onClick={() => toggleShowBanner(false)}
+                >
+                  Contact us
+                </Link>
               </div>
-            </Menu.Items>
-          </Transition>
-        </Menu>
+            </div>
+          )}
+        </div>
       </div>
       <ToastContainer />
-     </div>
     </div>
+   
+    
   );
 };
 
