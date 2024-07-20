@@ -9,5 +9,6 @@ namespace FPetSpa.Repository.Data
         public string Gmail { get; set; } = null!;
         public string? PhoneNumber { get; set; } = null!;
         public bool? PhoneNumberConfirmed { get; set; } = false;
+      
     }
 }

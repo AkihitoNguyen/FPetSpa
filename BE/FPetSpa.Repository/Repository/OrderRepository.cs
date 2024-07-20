@@ -147,7 +147,20 @@ public class OrderRepository
             .Where(o => o.RequiredDate.Value.Year == year)
             .CountAsync();
     }
-
+    public async Task<IEnumerable<OrderStatistics>> GetOrderStatisticsAsync()
+    {
+        return await _context.Orders
+            .GroupBy(o => o.RequiredDate.Value.Date)
+            .Select(g => new OrderStatistics
+            {
+                Date = g.Key,
+                TotalOrders = g.Count(),
+                SuccessfulOrders = g.Count(o => o.Status == 0),
+                FailedOrders = g.Count(o => o.Status == 1)
+            })
+            .OrderBy(os => os.Date)
+            .ToListAsync();
+    }
     public async Task<Boolean> StartCheckoutProduct(string customerId, string staffId, string method, string? voucherCode = null, string? DeliveryOption = null, decimal? ShippingCost = null)
     {
         var methodIn = _context.PaymentMethods.ToDictionary(p => p.MethodName, p => p.MethodId);

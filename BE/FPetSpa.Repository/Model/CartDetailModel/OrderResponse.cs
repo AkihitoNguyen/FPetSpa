@@ -13,4 +13,11 @@ namespace FPetSpa.Repository.Model.OrderModel
         public int ProductCount { get; set; }
         public decimal TotalAmount { get; set; }
     }
+    public class OrderStatistics
+    {
+        public DateTime Date { get; set; }
+        public int TotalOrders { get; set; }
+        public int SuccessfulOrders { get; set; }
+        public int FailedOrders { get; set; }
+    }
 }

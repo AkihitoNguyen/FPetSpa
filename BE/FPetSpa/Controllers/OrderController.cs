@@ -19,6 +19,7 @@ using System.Linq.Expressions;
 using System.Transactions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using TransactionStatus = FPetSpa.Repository.Helper.TransactionStatus;
+using System.Linq;
 
 namespace FPetSpa.Controllers
 {
@@ -29,13 +30,37 @@ namespace FPetSpa.Controllers
         private readonly IVnPayService _vnpayServices;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPayPalService _payPalServices;
+        private readonly IOrderServices _orderService;
 
-        public OrderController(IUnitOfWork unitOfWork, IVnPayService vnPayService, IPayPalService payPalService)
+        public OrderController(IUnitOfWork unitOfWork, IVnPayService vnPayService, IPayPalService payPalService, IOrderServices orderService)
         {
             _vnpayServices = vnPayService;
             _unitOfWork = unitOfWork;
             _payPalServices = payPalService;
+            _orderService = orderService;
         }
+
+        [HttpPost("AssignStaff")]
+        public async Task<IActionResult> AssignSpecificStaffAndNotifyCustomer(string orderId, string staffId)
+        {
+            var result = await _orderService.AssignStaffToOrderAsync(orderId, staffId);
+
+            if (!result) return NotFound("Order or staff not found");
+
+            var staffList = await _orderService.getAllStaff();     
+            var staff = staffList.FirstOrDefault(s => s.Id.Equals(staffId, StringComparison.OrdinalIgnoreCase));
+
+            string message = $"Your pet will be taken care of by {staff.FullName}.";
+            var response = new
+            {
+                Message = message,
+            };
+
+            return Ok(response);
+        }
+
+
+
 
 
         [HttpGet("OrderSearch")]

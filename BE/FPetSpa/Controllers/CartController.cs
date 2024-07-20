@@ -16,6 +16,7 @@ namespace FPetSpa.Controllers
        
         private readonly IUnitOfWork _unitOfWork;
         private readonly ILogger<CartController> _logger;
+        
 
         public CartController(IUnitOfWork unitOfWork,ILogger<CartController> logger)
         {
@@ -48,26 +49,31 @@ namespace FPetSpa.Controllers
         [HttpPost("AddtoCart")]
         public async Task<ActionResult> Create(AddToCartModel request)
         {
-            try
+            if (await _unitOfWork._IaccountRepository.GetCustomerById(request.UserId) == null)
             {
-                var cartId = await _unitOfWork.Carts.AddAsync(request);
-                return CreatedAtAction(nameof(GetById), new { id = request.UserId }, cartId);
+                return BadRequest(new { message = "User is not available!!" });
             }
-            catch (InvalidOperationException ex)
+            if (_unitOfWork.ProductRepository.GetById(request.ProductId) == null)
             {
-                return BadRequest(new { message = ex.Message });
+                return BadRequest(new { message = "Product is not available" });
             }
-            catch (ArgumentException ex)
+            if (request.Quantity <= 0)
+
             {
-                return NotFound(new { message = ex.Message });
-            }
-            catch (Exception ex)
-            {
-                _logger.LogError(ex, "An error occurred while adding to the cart.");
-                return StatusCode(500, "An error occurred while processing your request.");
+                return BadRequest(new { message = "Invalid quantity" });
             }
 
+            var checkQuantity = _unitOfWork.ProductRepository.GetById(request.ProductId).ProductQuantity;
+            if (checkQuantity == 0)
+            {
+                return BadRequest(new { message = "Out of stock" });
+
+            }         
+                var cartId = await _unitOfWork.Carts.AddAsync(request);
+                return CreatedAtAction(nameof(GetById), new { id = request.UserId }, cartId);
         }
+
+       
 
         [HttpDelete("Delete")]
         public async Task<IActionResult> DeleteCart(string id)

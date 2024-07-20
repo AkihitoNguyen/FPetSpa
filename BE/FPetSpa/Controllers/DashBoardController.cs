@@ -75,5 +75,22 @@ namespace FPetSpa.Controllers
             var count = await _unitOfWork.OrderRepository.GetOrderCountByYear(year);
             return Ok(count);
         }
+        [HttpGet("GetOrderStatistics")]
+        public async Task<ActionResult<IEnumerable<OrderStatistics>>> GetOrderStatistics()
+        {
+            try
+            {
+                var statistics = await _unitOfWork.OrderRepository.GetOrderStatisticsAsync();
+                if (statistics == null || !statistics.Any())
+                {
+                    return NotFound(new { message = "No order statistics available" });
+                }
+                return Ok(statistics);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
     }
 }
