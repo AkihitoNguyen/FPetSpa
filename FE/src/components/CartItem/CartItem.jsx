@@ -1,5 +1,5 @@
 // eslint-disable-next-line no-unused-vars
-import React, { useContext } from 'react';
+import React, { useContext, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { ShopContext } from '../Context/ShopContext';
 import { Link } from 'react-router-dom';
@@ -26,6 +26,10 @@ const CartItem = () => {
     return <p>Error: {error}</p>;
   }
 
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
 const cartProducts = Array.isArray(products) ? products.filter(product => cartItems[product.productId] > 0) : [];
 console.log(cartProducts);
   return (

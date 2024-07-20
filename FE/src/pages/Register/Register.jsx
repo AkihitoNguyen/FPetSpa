@@ -1,26 +1,10 @@
 import { useState } from "react";
-import '../Register/Register.css';
 import { registerUser } from "../../redux/apiRequest";
 import { useDispatch } from "react-redux";
 import { useNavigate, Link } from "react-router-dom";
-
-import Button from '@mui/material/Button';
-import CssBaseline from '@mui/material/CssBaseline';
-import TextField from '@mui/material/TextField';
-import FormControlLabel from '@mui/material/FormControlLabel';
-import Checkbox from '@mui/material/Checkbox';
-import Grid from '@mui/material/Grid';
-import Box from '@mui/material/Box';
-
-
 import { assets } from "../../assets/assets";
-import { createTheme, ThemeProvider } from '@mui/material/styles';
-import Paper from '@mui/material/Paper';
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-
-
-const defaultTheme = createTheme();
 
 const Register = () => {
     const [email, setEmail] = useState("");
@@ -95,7 +79,7 @@ const Register = () => {
     
         registerUser(newUser, dispatch, navigate)
         .then(() => {
-            toast.success("Register successful!Pls confirm email");
+            toast.success("Register successful! Please confirm email.");
         })
         .catch((error) => {
             toast.error("Register failed. Please try again.");
@@ -141,118 +125,86 @@ const Register = () => {
     };
 
     return (
-        <ThemeProvider theme={defaultTheme}>
-            <Grid container component="main" sx={{ height: '100vh' }}>
-                <CssBaseline />
-                <Grid
-                    item
-                    xs={false}
-                    sm={4}
-                    md={7}
-                    sx={{
-                        backgroundImage: `url(${assets.spa})`,
-                        backgroundRepeat: 'no-repeat',
-                        backgroundColor: (t) =>
-                            t.palette.mode === 'light' ? t.palette.grey[50] : t.palette.grey[900],
-                        backgroundSize: 'cover',
-                        backgroundPosition: 'center',
-                    }}
-                />
-                <Grid item xs={12} sm={8} md={5} component={Paper} elevation={6} square>
-                    <Box
-                        sx={{
-                            my: 8,
-                            mx: 4,
-                            display: 'flex',
-                            flexDirection: 'column',
-                            alignItems: 'center',
-                        }}
-                    >
-                        <div className="text-center">
-                            <h2 className="block antialiased tracking-normal font-sans text-4xl leading-[1.3] text-inherit font-bold mb-4">Join Us Today</h2>
-                            <p className="block antialiased font-sans text-blue-gray-900 text-lg font-normal">Enter your email and password to register.</p>
+        <div className="relative min-h-screen bg-cover bg-center" style={{ backgroundImage: `url(${assets.spa})` }}>
+            <div className="absolute inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
+                <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
+                    <div className="text-center">
+                        <h2 className="block antialiased tracking-normal font-sans text-4xl leading-[1.3] text-inherit font-bold mb-4">Join Us Today</h2>
+                        <p className="block antialiased font-sans text-blue-gray-900 text-lg font-normal">Enter your email and password to register.</p>
+                    </div>
+                    <form onSubmit={handleRegister} noValidate className="space-y-4 mt-4">
+                        <div>
+                            <label htmlFor="fullName" className="block text-sm font-medium text-gray-700">Full Name</label>
+                            <input
+                                id="fullName"
+                                name="fullName"
+                                type="text"
+                                required
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                onChange={handleFullNameChange}
+                            />
+                            {errors.fullName && <p className="mt-2 text-sm text-red-600">{errors.fullName}</p>}
                         </div>
-                        <Box component="form" noValidate onSubmit={handleRegister} sx={{ mt: 3 }}>
-                            <Grid container spacing={2}>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        autoComplete="given-name"
-                                        name="fullName"
-                                        required
-                                        fullWidth
-                                        id="fullName"
-                                        label="Full Name"
-                                        autoFocus
-                                        onChange={handleFullNameChange}
-                                    />
-                                    {errors.fullName && <p className="error-message">{errors.fullName}</p>}
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        id="email"
-                                        label="Email Address"
-                                        name="email"
-                                        autoComplete="email"
-                                        onChange={handleEmailChange}
-                                    />
-                                    {errors.email && <p className="error-message">{errors.email}</p>}
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        name="password"
-                                        label="Password"
-                                        type="password"
-                                        id="password"
-                                        autoComplete="new-password"
-                                        onChange={handlePasswordChange}
-                                    />
-                                    {errors.password && <p className="error-message">{errors.password}</p>}
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <TextField
-                                        required
-                                        fullWidth
-                                        name="confirmPassword"
-                                        label="Confirm Password"
-                                        type="password"
-                                        id="confirmPassword"
-                                        autoComplete="new-password"
-                                        onChange={handleConfirmPasswordChange}
-                                    />
-                                    {errors.confirmPassword && <p className="error-message">{errors.confirmPassword}</p>}
-                                </Grid>
-                                <Grid item xs={12}>
-                                    <FormControlLabel
-                                        control={<Checkbox value="allowExtraEmails" color="primary" />}
-                                        label="I want to receive inspiration, marketing promotions and updates via email."
-                                    />
-                                </Grid>
-                            </Grid>
-                            <Button
-                                type="submit"
-                                fullWidth
-                                variant="contained"
-                                sx={{ mt: 3, mb: 2 }}
-                            >
-                                Sign Up
-                            </Button>
-                            <Grid container justifyContent="flex-end">
-                                <Grid item>
-                                    <Link to='/login' variant="body2">
-                                    <p className="block antialiased font-sans text-base leading-relaxed text-center text-blue-gray-500 font-medium mt-4">Already have an account?
-                                        <a className="hover:text-blue-800 ml-1" >Sign in</a></p>
-                                    </Link>
-                                </Grid>
-                            </Grid>
-                        </Box>
-                    </Box>
-                    
-                </Grid>
-            </Grid>
+                        <div>
+                            <label htmlFor="email" className="block text-sm font-medium text-gray-700">Email Address</label>
+                            <input
+                                id="email"
+                                name="email"
+                                type="email"
+                                autoComplete="email"
+                                required
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                onChange={handleEmailChange}
+                            />
+                            {errors.email && <p className="mt-2 text-sm text-red-600">{errors.email}</p>}
+                        </div>
+                        <div>
+                            <label htmlFor="password" className="block text-sm font-medium text-gray-700">Password</label>
+                            <input
+                                id="password"
+                                name="password"
+                                type="password"
+                                autoComplete="new-password"
+                                required
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                onChange={handlePasswordChange}
+                            />
+                            {errors.password && <p className="mt-2 text-sm text-red-600">{errors.password}</p>}
+                        </div>
+                        <div>
+                            <label htmlFor="confirmPassword" className="block text-sm font-medium text-gray-700">Confirm Password</label>
+                            <input
+                                id="confirmPassword"
+                                name="confirmPassword"
+                                type="password"
+                                autoComplete="new-password"
+                                required
+                                className="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm placeholder-gray-400 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                onChange={handleConfirmPasswordChange}
+                            />
+                            {errors.confirmPassword && <p className="mt-2 text-sm text-red-600">{errors.confirmPassword}</p>}
+                        </div>
+                        <div className="flex items-center">
+                            <input
+                                id="allowExtraEmails"
+                                name="allowExtraEmails"
+                                type="checkbox"
+                                className="h-4 w-4 text-indigo-600 border-gray-300 rounded"
+                            />
+                            <label htmlFor="allowExtraEmails" className="ml-2 block text-sm text-gray-900">I want to receive inspiration, marketing promotions and updates via email.</label>
+                        </div>
+                        <button
+                            type="submit"
+                            className="w-full flex justify-center py-2 px-4 border border-transparent rounded-md shadow-sm text-sm font-medium text-white bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500"
+                        >
+                            Sign Up
+                        </button>
+                        <div className="flex justify-between">
+                            <Link to='/login' className="text-sm text-indigo-600 hover:text-indigo-500">Already have an account? Sign in</Link>
+                        </div>
+                    </form>
+                </div>
+            </div>
             <ToastContainer
                 position="top-right"
                 autoClose={5000}
@@ -265,7 +217,7 @@ const Register = () => {
                 pauseOnHover
                 theme="dark"
             />
-        </ThemeProvider>
+        </div>
     );
 };
 

@@ -57,7 +57,7 @@ export const registerUser = async (user, dispatch, navigate) => {
   try {
       await axios.post(`https://fpetspa.azurewebsites.net/api/account/signup/customer`, user);
       dispatch(registerSuccess());
-      navigate("/login", { state: { message: "Please check your email to confirm your registration." } });
+      navigate("/login")
   } catch (error) {
       console.error("Register error:", error); 
       dispatch(registerFailed());

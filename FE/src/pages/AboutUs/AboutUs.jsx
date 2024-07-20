@@ -1,8 +1,14 @@
 // eslint-disable-next-line no-unused-vars
-import React from 'react';
+import React,{useEffect} from 'react';
 import { assets } from '../../assets/assets';
 
 const AboutUs = () => {
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
+  
+
   return (
     <div className='mb-5'>
       <div className="relative isolate overflow-hidden bg-gray-900 py-24 sm:py-32 mb-4">

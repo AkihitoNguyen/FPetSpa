@@ -1,0 +1,14 @@
+@keyframes custom-pulse-bounce {
+    0%, 100% {
+      transform: translateY(-25%);
+      opacity: 0.5;
+    }
+    50% {
+      transform: translateY(0);
+      opacity: 1;
+    }
+  }
+  
+  .custom-pulse-bounce {
+    animation: custom-pulse-bounce 1s infinite;
+  }

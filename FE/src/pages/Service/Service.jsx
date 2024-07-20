@@ -1,4 +1,4 @@
-import React from "react";
+import React,{useEffect} from "react";
 import { useNavigate } from "react-router-dom";
 import { assets } from "../../assets/assets";
 import { useSelector } from "react-redux";
@@ -16,7 +16,9 @@ const Service = () => {
       navigate("/login", { state: { returnTo: "/service" } });
     }
   };
-
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     
     <div className="min-h-screen max-w-full mt-10">
