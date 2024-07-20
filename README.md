@@ -2,6 +2,10 @@
 FPetSpa - Pet's Spa Management  
 FE: NodeJs, ReactJs, Tailwind </br>
 BE: C#, Asp.Net API </br>
+
+#Document:
+SRS: ![SRS](https://docs.google.com/document/d/1PnyjlA05YIpVyj3cdOvNwjMbUVC552Uq1i2aptHWwps/edit)
+MAPPING: ![MAPPING](https://docs.google.com/spreadsheets/d/1f23OEP1Lm97303AvnM0e8KWX4jtA3F3aznOH1R-E2gU/edit?gid=1521139569#gid=1521139569)
  --***Member***--
 >> BE: Lê Văn Phước, Huy Ninh, Minh Hoàng, Phi Hùng </br>
 >> FE: Lê Văn Tuấn Anh, Hải Sơn </br>
