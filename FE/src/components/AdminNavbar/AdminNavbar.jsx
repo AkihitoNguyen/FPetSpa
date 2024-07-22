@@ -38,11 +38,11 @@ const AdminNavbar = () => {
   };
 
   return (
-    <div className="w-[1600px] h-16 px-4 mt-4 flex justify-between items-start border-b border-gray-200">
-      <div className="relative ">
+    <div className="w-[1850px] h-16 px-4 mt-4 flex justify-between items-start border-b border-gray-200">
+      <div className="relative">
         <HiOutlineSearch
           fontSize={20}
-          className="text-gray-400 absolute top-1/2 -translate-y-1/2 left-3 "
+          className="text-gray-400 absolute top-1/2 -translate-y-1/2 left-3"
         />
         <input
           type="text"
@@ -50,37 +50,34 @@ const AdminNavbar = () => {
           className="text-sm focus:outline-none active:outline-none h-10 w-[24rem] border border-gray-300 rounded-lg pl-11 px-[20px]"
         />
       </div>
-      <div className="flex items-center ml-[65rem] gap-2 mr-2 relative">
+      <div className="flex items-center gap-2 relative">
         <HiOutlineChatAlt fontSize={24} />
         <HiOutlineBell fontSize={24} />
-        {user ? (
+        {user && user.fullName ? (
           <div className="relative">
-            <div>
-              <button
-                onClick={toggleDropdown}
-                className="flex items-center gap-2 focus:outline-none"
+            <button
+              onClick={toggleDropdown}
+              className="flex items-center gap-2 focus:outline-none"
+            >
+              <span className="text-sm font-semibold">{user.fullName}</span>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                className={`h-4 w-4 transform transition duration-300 ease-in-out ${
+                  isOpen ? "rotate-180" : ""
+                }`}
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke="currentColor"
               >
-                <span className="text-sm font-semibold">{user.fullName}</span>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  className={`h-4 w-4 transform transition duration-300 ease-in-out ${
-                    isOpen ? "rotate-180" : ""
-                  }`}
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke="currentColor"
-                >
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
-                </svg>
-              </button>
-            </div>
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7" />
+              </svg>
+            </button>
             {isOpen && (
               <div className="absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg ring-1 ring-black ring-opacity-5 divide-y divide-gray-100">
                 <div className="py-1">
                   <button
                     onClick={handleLogout}
-                    className={`block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-300 ease-in-out
-                    onClick={closeDropdown}`}
+                    className="block w-full text-left px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-300 ease-in-out"
                   >
                     Logout
                   </button>
@@ -89,9 +86,9 @@ const AdminNavbar = () => {
             )}
           </div>
         ) : (
-          <div>
-            <Link to="/login" className="text-sm font-semibold mr-4">Login</Link>
-          </div>
+          <Link to="/login" className="text-sm font-semibold">
+            Login
+          </Link>
         )}
       </div>
       <ToastContainer />
@@ -99,18 +96,16 @@ const AdminNavbar = () => {
   );
 };
 
-const MenuItem = ({ link, text, onClose }) => {
-  return (
-    <div className="py-1">
-      <Link
-        to={link}
-        className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-300 ease-in-out"
-        onClick={onClose}
-      >
-        {text}
-      </Link>
-    </div>
-  );
-};
+const MenuItem = ({ link, text, onClose }) => (
+  <div className="py-1">
+    <Link
+      to={link}
+      className="block w-full px-4 py-2 text-sm text-gray-700 hover:bg-gray-100 transition duration-300 ease-in-out"
+      onClick={onClose}
+    >
+      {text}
+    </Link>
+  </div>
+);
 
 export default AdminNavbar;

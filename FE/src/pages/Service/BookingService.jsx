@@ -10,7 +10,7 @@ const API_BASE_URL = "https://fpetspa.azurewebsites.net/api";
 const BookingService = () => {
   const currentUser = useSelector((state) => state.auth.login.currentUser);
   const [petData, setPetData] = useState([]);
-  const formList = ["FirstForm"];
+  const formList = ["FirstForm"]; // Đã thêm SecondForm vào formList
 
   const formLength = formList.length;
   const [loading, setLoading] = useState(false);
@@ -20,13 +20,13 @@ const BookingService = () => {
 
   const [page, setPage] = useState(0);
 
+  // Khởi tạo giá trị serviceId là một Set chứa "SER1"
   const [values, setValues] = useState({
     date: "",
     timeSlot: "",
-    serviceId: "",
+    serviceId: new Set(["SER1", "SER2"]), 
     petId: "",
-    customerId: currentUser.userId,
-    paymentMethod: ""  
+    customerId: currentUser?.userId || "",
   });
 
   const [services, setServices] = useState([]);
@@ -74,24 +74,38 @@ const BookingService = () => {
         setServices(response.data);
       })
       .catch((error) => {
-        console.error("Error fetching services:", error);
+        console.error("Lỗi khi lấy dữ liệu dịch vụ:", error);
       });
   }, []);
 
+  // Cập nhật Set khi người dùng chọn dịch vụ
+  const handleServiceSelection = (serviceId) => {
+    setValues((prevValues) => {
+      const updatedServiceIds = new Set(prevValues.serviceId);
+
+      if (updatedServiceIds.has(serviceId)) {
+        updatedServiceIds.delete(serviceId);
+      } else {
+        updatedServiceIds.add(serviceId);
+      }
+
+      return {
+        ...prevValues,
+        serviceId: updatedServiceIds,
+      };
+    });
+  };
+
+  // Xử lý khi thay đổi input
   const onChange = (e) => {
     const { name, value } = e.target;
 
-    if (name === "serviceId") {
-      const selectedService = services.find(
-        (service) => service.serviceId === value
-      );
-      setSelectedServicePrice(selectedService ? selectedService.price : "");
+    if (name !== "serviceId") {
+      setValues((prevValues) => ({
+        ...prevValues,
+        [name]: value,
+      }));
     }
-
-    setValues((prevValues) => ({
-      ...prevValues,
-      [name]: value,
-    }));
   };
 
   const handlePrev = () => {
@@ -106,50 +120,47 @@ const BookingService = () => {
     return (
       values.date !== "" &&
       values.timeSlot !== "" &&
-      values.serviceId !== "" &&
-      values.petId !== "" &&
-      values.paymentMethod !== "" &&
-      values.paymentMethod !== null
+      values.petId !== ""
     );
   };
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-
-    if (!canProceed()) {
-      console.error("Vui lòng điền đầy đủ thông tin để tiếp tục.");
-      return;
-    }
-
+  
     setLoading(true);
-
+  
     const datetime = dayjs(
       `${values.date} ${values.timeSlot}`,
       "DD/MM/YYYY HH:mm:ss"
     ).format("DD/MM/YYYY HH:mm:ss");
-
+  
+    const requestData = {
+      customerId: values.customerId,
+      petId: values.petId,
+      serviceId: Array.from(values.serviceId), 
+      bookingDatetime: datetime,
+    };
+  
+    console.log("Request data:", requestData);
+  
     try {
       const response = await axios.post(
         `${API_BASE_URL}/Order/StartCheckoutServices`,
-        {
-          customerId: values.customerId,
-          petId: values.petId,
-          serviceId: values.serviceId,
-          paymentMethod: values.paymentMethod,
-          bookingDatetime: datetime,
-        }
+        requestData
       );
-
+  
       console.log("Booking created:", response.data);
-
+  
       setShowSuccessPopup(true);
       setShowSuccessIcon(true);
       setLoading(false);
     } catch (error) {
-      console.error("Lỗi khi tạo booking:", error);
+      console.error("Lỗi khi tạo booking:", error.response || error.message);
       setLoading(false);
     }
   };
+  
+  
 
   const handleConfirmSuccess = () => {
     setShowSuccessPopup(false);
@@ -170,8 +181,8 @@ const BookingService = () => {
               ).format("YYYY-MM-DD HH:mm:ss"),
             }}
             onChange={onChange}
-            services={services}
             userPets={petData}
+            onServiceSelection={handleServiceSelection} // Truyền hàm chọn dịch vụ
           />
         );
       case 1:
@@ -179,7 +190,9 @@ const BookingService = () => {
           <SecondForm
             formValues={values}
             onChange={onChange}
+            services={services}
             selectedServicePrice={selectedServicePrice}
+            onServiceSelection={handleServiceSelection} // Truyền hàm chọn dịch vụ
           />
         );
       default:
@@ -218,14 +231,14 @@ const BookingService = () => {
                   ) : null}
                 </div>
               )}
-              <h2 className="text-lg font-bold mb-4">Booking successfully! <br />
-               Please wait for staff to accept</h2>
+              <h2 className="text-lg font-bold mb-4">Đặt lịch thành công! <br />
+               Vui lòng chờ nhân viên xác nhận</h2>
               {!showLoadingInPopup && (
                 <button
                   onClick={handleConfirmSuccess}
                   className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
-                  Confirm
+                  Xác nhận
                 </button>
               )}
             </div>
@@ -238,17 +251,13 @@ const BookingService = () => {
         )}
         {handleForms()}
         <div className="w-[464px] flex justify-center ml-6 bg-white mb-10 pb-3">
-         
           {page === formLength - 1 ? (
             <button
               type="button"
               onClick={handleSubmit}
-              className={`bg-[#FC819E] hover:bg-[#f5698a] text-white font-bold py-2 px-10 rounded focus:outline-none focus:shadow-outline ${
-                !canProceed() ? "opacity-50 cursor-not-allowed" : ""
-              }`}
-              disabled={!canProceed()}
+              className={`bg-[#FC819E] hover:bg-[#f5698a] text-white font-bold py-2 px-10 rounded focus:outline-none focus:shadow-outline`}
             >
-              Booking now
+              Đặt lịch ngay
             </button>
           ) : (
             <button
@@ -256,7 +265,7 @@ const BookingService = () => {
               onClick={handleNext}
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              Next
+              Tiếp theo
             </button>
           )}
         </div>

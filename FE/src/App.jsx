@@ -100,7 +100,9 @@ const App = () => {
 
           {/* Đường dẫn không khớp */}
           <Route path="*" element={<NotFound />} />
+
         </Routes>
+       
       </div>
       {showNavbarAndFooter && <div className="bg-gray-700"></div>}
     </>

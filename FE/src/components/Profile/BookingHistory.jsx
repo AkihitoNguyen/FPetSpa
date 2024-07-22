@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { useSelector } from "react-redux";
+import { toast } from 'react-toastify';
 import Loading from "../Loading";
 
 const API_BASE_URL = "https://fpetspa.azurewebsites.net/api";
@@ -10,9 +11,9 @@ const BookingHistory = () => {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
-  const [filterStatus, setFilterStatus] = useState("all"); // State để lưu trạng thái bộ lọc
-  const [showDeleteModal, setShowDeleteModal] = useState(false); // State để điều khiển việc hiển thị modal
-  const [orderToDelete, setOrderToDelete] = useState(null); // State để lưu trữ thông tin đơn hàng đang được xác nhận để xóa
+  const [filterStatus, setFilterStatus] = useState("all");
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [orderToDelete, setOrderToDelete] = useState(null);
 
   useEffect(() => {
     const fetchOrders = async () => {
@@ -37,17 +38,15 @@ const BookingHistory = () => {
         const ordersData = response.data
           .filter((order) => order.customerId === currentUser.userId)
           .map((order) => {
-            // Kiểm tra nếu requiredDate đã hết hạn
             if (isDateExpired(order.requiredDate)) {
-              // Nếu đã hết hạn, cập nhật trạng thái thành "Failed"
               return {
                 ...order,
-                status: -1, // Giả sử -1 là trạng thái Failed
+                status: -1,
               };
             }
             return order;
           })
-          .sort((a, b) => b.orderId.localeCompare(a.orderId)); // Sắp xếp các đơn hàng theo orderId mới nhất
+          .sort((a, b) => b.orderId.localeCompare(a.orderId));
 
         setOrders(ordersData);
       } catch (error) {
@@ -83,20 +82,51 @@ const BookingHistory = () => {
       setOrders(
         orders.filter((order) => order.orderId !== orderToDelete.orderId)
       );
-      setShowDeleteModal(false); // Đóng modal sau khi xóa thành công
+      setShowDeleteModal(false);
+      toast.success("Đơn hàng đã được xóa thành công!");
     } catch (error) {
       console.error("Lỗi khi xóa đơn hàng:", error);
       setError("Đã xảy ra lỗi khi xóa đơn hàng. Vui lòng thử lại.");
+      toast.error("Đã xảy ra lỗi khi xóa đơn hàng. Vui lòng thử lại.");
+    }
+  };
+
+  const handleRebooking = async (orderId) => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${currentUser.accessToken}`,
+        },
+      };
+
+      if (!orderId || !currentUser || !currentUser.accessToken) {
+        setError("Thiếu thông tin cần thiết để đặt lại đơn hàng.");
+        return;
+      }
+
+      const response = await axios.put(
+        `${API_BASE_URL}/Order/ReBooking?orderId=${orderId}&paymentMethod=VNPay`,
+        {},
+        config
+      );
+
+      const paymentUrl = response.data; // Assuming response.data contains the payment URL
+      window.location.href = paymentUrl; // Redirect to the payment URL
+
+    } catch (error) {
+      console.error("Lỗi khi đặt lại đơn hàng:", error);
+      setError("Đã xảy ra lỗi khi đặt lại đơn hàng. Vui lòng thử lại.");
+      toast.error("Đã xảy ra lỗi khi đặt lại đơn hàng. Vui lòng thử lại.");
     }
   };
 
   const handleCancelDelete = () => {
-    setShowDeleteModal(false); // Đóng modal nếu người dùng hủy bỏ hành động xóa
+    setShowDeleteModal(false);
   };
 
   const handleOpenDeleteModal = (order) => {
     setOrderToDelete(order);
-    setShowDeleteModal(true); // Mở modal và thiết lập thông tin đơn hàng cần xóa
+    setShowDeleteModal(true);
   };
 
   const handleFilterChange = (event) => {
@@ -105,9 +135,9 @@ const BookingHistory = () => {
 
   const filteredOrders = orders.filter((order) => {
     if (filterStatus === "all") {
-      return true; // Hiển thị tất cả các đơn hàng nếu không có bộ lọc
+      return true;
     } else {
-      return order.status === parseInt(filterStatus); // Lọc theo trạng thái đã chọn
+      return order.status === parseInt(filterStatus);
     }
   });
 
@@ -133,11 +163,10 @@ const BookingHistory = () => {
           className="px-2 py-1 border border-gray-300 rounded">
           <option value="all">All</option>
           <option value="0">Pending</option>
-          <option value="1">Proccessing</option>
-          <option value="2">Staff Accepted</option>
+          <option value="2">Check-in</option>
+          <option value="1">Staff Accepted</option>
           <option value="3">Completed</option>
           <option value="5">Failed</option>
-         
         </select>
       </div>
       {filteredOrders.length === 0 ? (
@@ -188,31 +217,44 @@ const BookingHistory = () => {
                         Pending
                       </span>
                     ) : order.status === -1 ? (
-                      <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-red-600 bg-red-100">
-                        Failed
+                      <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-gray-600 bg-gray-100">
+                        Expired
                       </span>
-                    ) : order.status === 2 ? (
+                    ) : order.status === 1 ? (
                       <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-blue-600 bg-blue-100">
                         Staff Accepted
                       </span>
-                    )
-                    : order.status === 1 ? (
+                    ) : order.status === 2 ? (
                       <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-yellow-600 bg-yellow-100">
-                        Processing
+                        Check-in
                       </span>
-                    ) : (
+                    ) : order.status === 3 ? (
                       <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-green-600 bg-green-100">
                         Completed
                       </span>
-                    )
-                    }
+                    ) : order.status === 5 ? (
+                      <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-red-600 bg-red-100">
+                        Failed
+                      </span>
+                    ) : (
+                      <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-gray-600 bg-gray-100">
+                        Unknown
+                      </span>
+                    )}
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap text-sm font-semibold text-gray-900">
-                    {order.status === 0 && (
+                    <button
+                      onClick={() => handleOpenDeleteModal(order)}
+                      className="text-red-600 hover:text-red-900 mr-4"
+                    >
+                      Delete
+                    </button>
+                    {order.status === 5 && (
                       <button
-                        onClick={() => handleOpenDeleteModal(order)}
-                        className="text-red-600 hover:text-red-900">
-                        Delete
+                        onClick={() => handleRebooking(order.orderId)}
+                        className="text-blue-600 hover:text-blue-900"
+                      >
+                        Re-book
                       </button>
                     )}
                   </td>
@@ -222,24 +264,27 @@ const BookingHistory = () => {
           </table>
         </div>
       )}
-
-      {/* Modal xác nhận xóa */}
       {showDeleteModal && (
         <div className="fixed inset-0 flex items-center justify-center z-50">
-          <div className="bg-white p-8 rounded-md shadow-lg">
-            <p className="text-lg font-semibold mb-4">
-              Are you sure you want to cancel your order?
+          <div className="fixed inset-0 bg-black opacity-50"></div>
+          <div className="bg-white p-6 rounded-lg z-10">
+            <h2 className="text-lg font-semibold mb-4">Xác nhận xóa</h2>
+            <p className="mb-4">
+              Bạn có chắc chắn muốn xóa đơn hàng này? Hành động này không thể
+              hoàn tác.
             </p>
             <div className="flex justify-end">
               <button
-                onClick={handleDeleteOrder}
-                className="bg-red-500 text-white px-4 py-2 rounded mr-4 hover:bg-red-600">
-                Accept
+                onClick={handleCancelDelete}
+                className="px-4 py-2 bg-gray-300 hover:bg-gray-400 text-gray-800 rounded mr-2"
+              >
+                Cancel
               </button>
               <button
-                onClick={handleCancelDelete}
-                className="border border-gray-300 px-4 py-2 rounded hover:bg-gray-200">
-                Cancle
+                onClick={handleDeleteOrder}
+                className="px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded"
+              >
+                Xóa
               </button>
             </div>
           </div>

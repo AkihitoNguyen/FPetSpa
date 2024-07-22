@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
-
+import Loading from "../Loading";
 const UserProfile = () => {
   const user = useSelector((state) => state.auth.login?.currentUser);
 
@@ -45,11 +45,11 @@ const UserProfile = () => {
 
   return (
     <div className="max-w-md mx-auto bg-white shadow-md rounded-lg p-6">
-      <h2 className="text-2xl font-semibold text-center mb-4">Thông Tin Cá Nhân</h2>
+      <h2 className="text-2xl font-semibold text-center mb-4">Information</h2>
       <div className="space-y-4">
         <div className="flex flex-col">
           <label htmlFor="fullName" className="text-lg font-medium text-gray-700">
-            Họ Tên
+           Name
           </label>
           <input
             id="fullName"
@@ -75,7 +75,7 @@ const UserProfile = () => {
 
         <div className="flex flex-col">
           <label htmlFor="phoneNumber" className="text-lg font-medium text-gray-700">
-            Số Điện Thoại
+           Phone
           </label>
           <input
             id="phoneNumber"

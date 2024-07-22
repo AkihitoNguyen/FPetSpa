@@ -14,22 +14,26 @@ const SecondForm = () => {
 
   // Hàm xử lý khi bấm chuyển hướng đến trang "/booking"
   const handleClick = () => {
-    localStorage.setItem("selectedServices", JSON.stringify(selectedServices)); // Lưu danh sách dịch vụ đã chọn vào localStorage
+    localStorage.setItem("selectedServices", JSON.stringify(selectedServices));
     navigate("/booking");
   };
 
   // Hàm xử lý khi bấm "Add" để thêm hoặc xóa dịch vụ khỏi danh sách đã chọn
   const handleAddService = (item) => {
+    let updatedServices;
     if (addedServices.includes(item.servicesId)) {
-      setSelectedServices(selectedServices.filter(service => service.servicesId !== item.servicesId));
+      updatedServices = selectedServices.filter(service => service.servicesId !== item.servicesId);
       setTotalCost(totalCost - item.price);
-      setAddedServices(addedServices.filter(serviceId => serviceId !== item.servicesId));
+      setAddedServices(addedServices.filter(servicesId => servicesId !== item.servicesId));
     } else {
-      setSelectedServices([...selectedServices, item]);
+      updatedServices = [...selectedServices, item];
       setTotalCost(totalCost + item.price);
       setAddedServices([...addedServices, item.servicesId]);
     }
+    setSelectedServices(updatedServices);
+    localStorage.setItem("selectedServices", JSON.stringify(updatedServices));
   };
+  
 
   // Sử dụng useEffect để fetch danh sách dịch vụ từ API khi component mount
   useEffect(() => {
