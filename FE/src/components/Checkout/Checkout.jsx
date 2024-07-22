@@ -41,11 +41,10 @@ const Checkout = () => {
         deliveryOption
       });
   
-      const { message } = response.data;
       
       // Display the success message and refresh the page
-      window.alert(message || 'Booking Successfully! Please wait for staff for accepting!');
-      window.location.href = '/';
+      const paymentUrl = response.data; // Assuming response.data contains the payment URL
+      window.location.href = paymentUrl;
   
     } catch (error) {
       console.error('Error fetching cartId:', error.response ? error.response.data : error.message);

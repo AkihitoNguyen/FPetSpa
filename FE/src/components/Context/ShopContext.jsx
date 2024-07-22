@@ -43,7 +43,7 @@ const ShopContextProvider = (props) => {
         setCartItems(cartItemsFromAPI);
         setCartId(fetchedCartId)
       } else {
-        console.error('No cart details found for the user.');
+        
       }
     } catch (error) {
       console.error('Error fetching cartId:', error);

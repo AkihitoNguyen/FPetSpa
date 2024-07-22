@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import '../Product/Product.css';
+
 import ProductList from '../../components/PageProduct/ProductList';
 import { assets } from '../../assets/assets';
 import { RxDotFilled } from 'react-icons/rx';
@@ -15,13 +15,10 @@ const Product = () => {
     },
     {
       url: assets.banner_product2,
-
     },
     {
       url: assets.banner_product3,
-
     },
-
   ];
 
   const [currentIndex, setCurrentIndex] = useState(0);
@@ -43,19 +40,7 @@ const Product = () => {
     setCurrentIndex(slideIndex);
   };
   return (
-    // <div className='breakdance'>
-    //   <div className="pt-80 pb-80 w-11/12 m-auto overflow-hidden relative h-64 md:h-96">
-    //     {slides.map((slide, index) => (
-    //       <div
-    //         key={index}
-    //         className={`absolute inset-0 transition-opacity duration-1000 ${
-    //           index === currentSlide ? 'opacity-100' : 'opacity-0'
-    //         }`}
-    //       >
-    //         <img src={slide.src} alt={slide.alt} className="w-full h-full object-contain " />
-    //       </div>
-    //     ))}
-    //   </div>
+
     <div>
         <div className='max-w-[1196px] h-[424px] w-full m-auto pt-[14px] relative group'>
     <div

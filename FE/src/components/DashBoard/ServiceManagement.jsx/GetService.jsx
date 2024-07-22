@@ -96,7 +96,7 @@ const GetService = () => {
       case 0:
         return "Pending";
       case 2:
-        return "Processing";
+        return "Check-in";
       case 1:
         return "Staff Accepted";
       case 3:

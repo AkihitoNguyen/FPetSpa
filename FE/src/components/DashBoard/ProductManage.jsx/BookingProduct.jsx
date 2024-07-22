@@ -111,6 +111,8 @@ const BookingProduct = () => {
             return "text-fuchsia-600 bg-fuchsia-100"; 
         case 6:
             return "text-green-600 bg-green-100";
+            case 7:
+              return "text-red-600 bg-green-100";
       default:
         return "text-gray-900";
     }
@@ -121,9 +123,9 @@ const BookingProduct = () => {
       case 0:
         return "Pending";
       case 1:
-        return "Staff Accepted";
+        return "PreparingOrder";
       case 2:
-        return "Processing";
+        return "Delivering";
       case 3:
         return "Shipped";
     case 4:
@@ -132,6 +134,8 @@ const BookingProduct = () => {
         return "ReadyForPickup";
     case 6:
         return "Succesfully"
+    case 7: 
+        return "Cancel"
       default:
         return "Unknown";
     }
@@ -281,12 +285,12 @@ const BookingProduct = () => {
                 <button
                   onClick={() => handleSelect(1)}
                   className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
-                  Staff Accepted
+                  PreparingOrder
                 </button>
                 <button
                   onClick={() => handleSelect(2)}
                   className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
-                  Processing
+                  Delivering
                 </button>
                 <button
                   onClick={() => handleSelect(3)}
@@ -309,9 +313,9 @@ const BookingProduct = () => {
                   Sussessfully
                 </button>
                 <button
-                  onClick={() => handleSelect(4)}
+                  onClick={() => handleSelect(7)}
                   className="block w-full px-4 py-2 text-[13px] text-left text-gray-700 hover:bg-gray-100 hover:text-gray-900">
-                  Failed
+                  Cancel
                 </button>
               </div>
             )}
@@ -439,10 +443,17 @@ const BookingProduct = () => {
                       </button>
                       <button
                         onClick={() =>
-                          updateOrderStatus(order.orderId, "STAFFACCEPTED")
+                          updateOrderStatus(order.orderId, "PREPARINGORDER")
                         }
                         className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
-                        Accept
+                        PreparingOrder
+                      </button>
+                      <button
+                        onClick={() =>
+                          updateOrderStatus(order.orderId, "DELIVERING")
+                        }
+                        className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
+                        Delivering
                       </button>
                       <button
                         onClick={() =>

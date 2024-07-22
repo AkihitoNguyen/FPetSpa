@@ -15,6 +15,7 @@ const AddProduct = () => {
   const [thumbnail, setThumbnail] = useState(null);
   const [thumbnailUrl, setThumbnailUrl] = useState(null);
   const [successMessage, setSuccessMessage] = useState('');
+  const [errors, setErrors] = useState({});
 
   useEffect(() => {
     const fetchCategories = async () => {
@@ -35,6 +36,7 @@ const AddProduct = () => {
 
     const imageUrl = URL.createObjectURL(file);
     setThumbnailUrl(imageUrl);
+    setErrors(prevErrors => ({ ...prevErrors, thumbnail: null }));
   };
 
   const handleChange = (e) => {
@@ -43,13 +45,115 @@ const AddProduct = () => {
       ...prevState,
       [name]: value
     }));
+    validateField(name, value);
+  };
+
+  const validateField = (name, value) => {
+    const newErrors = { ...errors };
+    const textPattern = /^[a-zA-Z\s]*$/;
+    const numberPattern = /^\d+$/;
+
+    switch (name) {
+      case 'productName':
+        if (!value.trim()) {
+          newErrors.productName = 'Product Name is required';
+        } else if (!textPattern.test(value)) {
+          newErrors.productName = 'Product Name should not contain special characters or numbers';
+        } else {
+          newErrors.productName = null;
+        }
+        break;
+
+      case 'productDescription':
+        if (!value.trim()) {
+          newErrors.productDescription = 'Product Description is required';
+        } else if (!textPattern.test(value)) {
+          newErrors.productDescription = 'Product Description should not contain special characters or numbers';
+        } else {
+          newErrors.productDescription = null;
+        }
+        break;
+
+      case 'productQuantity':
+        if (!value) {
+          newErrors.productQuantity = 'Product Quantity is required';
+        } else if (!numberPattern.test(value)) {
+          newErrors.productQuantity = 'Product Quantity should be a valid number';
+        } else {
+          newErrors.productQuantity = null;
+        }
+        break;
+
+      case 'price':
+        if (!value) {
+          newErrors.price = 'Price is required';
+        } else if(!numberPattern.test(value)) {
+          newErrors.price = 'Price should be a valid number';
+        }else{
+          newErrors.price = null;
+        }
+        break;
+
+      case 'categoryID':
+        if (!value) {
+          newErrors.categoryID = 'Category is required';
+        } else {
+          newErrors.categoryID = null;
+        }
+        break;
+
+      default:
+        break;
+    }
+
+    setErrors(newErrors);
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Regular expressions for validation
+    const textPattern = /^[a-zA-Z\s]*$/;
+    const numberPattern = /^\d+$/;
+
+    if (!newProduct.productName.trim()) {
+      newErrors.productName = 'Product Name is required';
+    } else if (!textPattern.test(newProduct.productName)) {
+      newErrors.productName = 'Product Name should not contain special characters or numbers';
+    }
+
+    if (!newProduct.productDescription.trim()) {
+      newErrors.productDescription = 'Product Description is required';
+    } else if (!textPattern.test(newProduct.productDescription)) {
+      newErrors.productDescription = 'Product Description should not contain special characters or numbers';
+    }
+
+    if (!newProduct.productQuantity) {
+      newErrors.productQuantity = 'Product Quantity is required';
+    } else if (!numberPattern.test(newProduct.productQuantity)) {
+      newErrors.productQuantity = 'Product Quantity should be a valid number';
+    }
+
+    if (!newProduct.price) {
+      newErrors.price = 'Price is required';
+    } else if (!numberPattern.test(newProduct.price))
+
+    if (!newProduct.categoryID) {
+      newErrors.categoryID = 'Category is required';
+    }
+
+    if (!thumbnail) {
+      newErrors.thumbnail = 'Product thumbnail is required';
+    }
+
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    if (!newProduct.productName || !newProduct.productDescription || !newProduct.categoryID || !thumbnail) {
-      alert('Please fill in all required fields.');
+    if (!validateForm()) {
       return;
     }
 
@@ -80,6 +184,7 @@ const AddProduct = () => {
       });
       setThumbnail(null);
       setThumbnailUrl('');
+      setErrors({});
     } catch (error) {
       console.error('Error adding product:', error.response.data);
       alert('Failed to add product.');
@@ -132,18 +237,17 @@ const AddProduct = () => {
               <div className="block text-[12.35px] text-center font-normal leading-[18.525px] text-[#99A1B7]">
                 Set the product thumbnail image. Only *.png, *.jpg and *.jpeg image files are accepted.
               </div>
+              {errors.thumbnail && (
+                <div className="text-red-500 text-sm mt-2">
+                  {errors.thumbnail}
+                </div>
+              )}
             </div>
           </div>
         </div>
 
-        <div className="bg-[#FFFFFF] w-full lg:w-[860.100px] h-auto border-[0.8px] rounded-md shadow-sm">
-          <form onSubmit={handleSubmit}>
-            <div className="flex justify-between items-center flex-wrap min-h-[70px] px-[29.250px]">
-              <div className="flex justify-between items-center h-[57px] my-[6.5px] mr-[6.5px]">
-                <h2 className="block m-0 text-[19.5px] font-semibold">General</h2>
-              </div>
-            </div>
-
+        <div className="flex flex-col gap-6 lg:gap-7 w-full lg:w-[860.100px]">
+          <form onSubmit={handleSubmit} className="bg-white shadow-md rounded px-8 pt-6 pb-8 mb-4">
             <div className="flex flex-col px-[29.250px] pb-[26px]">
               <label htmlFor="productName" className="text-[13.65px] mb-[6.5px] font-medium">
                 Product Name <span className="text-red-500">*</span>
@@ -158,9 +262,12 @@ const AddProduct = () => {
                 onChange={handleChange}
                 required
               />
-              <div className="text-[12.35px] text-[#99A1B7] font-normal">
-                A product name is required and recommended to be unique.
-              </div>
+              <div className="text-[12.35px] text-[#99A1B7] font-normal">Set the product name.</div>
+              {errors.productName && (
+                <div className="text-red-500 text-sm mt-2">
+                  {errors.productName}
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col px-[29.250px] pb-[26px]">
@@ -177,6 +284,11 @@ const AddProduct = () => {
                 required
               />
               <div className="text-[12.35px] text-[#99A1B7] font-normal">Set the product description.</div>
+              {errors.productDescription && (
+                <div className="text-red-500 text-sm mt-2">
+                  {errors.productDescription}
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col px-[29.250px] pb-[26px]">
@@ -184,7 +296,7 @@ const AddProduct = () => {
                 Product Quantity <span className="text-red-500">*</span>
               </label>
               <input
-                type="number"
+                
                 name="productQuantity"
                 id="productQuantity"
                 placeholder="Product Quantity"
@@ -194,6 +306,11 @@ const AddProduct = () => {
                 required
               />
               <div className="text-[12.35px] text-[#99A1B7] font-normal">Set the product quantity.</div>
+              {errors.productQuantity && (
+                <div className="text-red-500 text-sm mt-2">
+                  {errors.productQuantity}
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col px-[29.250px] pb-[26px]">
@@ -201,7 +318,7 @@ const AddProduct = () => {
                 Price <span className="text-red-500">*</span>
               </label>
               <input
-                type="number"
+                
                 step="0.01"
                 name="price"
                 id="price"
@@ -212,6 +329,11 @@ const AddProduct = () => {
                 required
               />
               <div className="text-[12.35px] text-[#99A1B7] font-normal">Set the product price.</div>
+              {errors.price && (
+                <div className="text-red-500 text-sm mt-2">
+                  {errors.price}
+                </div>
+              )}
             </div>
 
             <div className="flex flex-col px-[29.250px] pb-[26px]">
@@ -234,6 +356,11 @@ const AddProduct = () => {
                 ))}
               </select>
               <div className="text-[12.35px] text-[#99A1B7] font-normal">Select the product category.</div>
+              {errors.categoryID && (
+                <div className="text-red-500 text-sm mt-2">
+                  {errors.categoryID}
+                </div>
+              )}
             </div>
 
             <div className="flex justify-end w-full lg:w-[860.100px] mt-4 mb-3 -ml-11">

@@ -5,7 +5,6 @@ import { VscEye, VscEyeClosed } from "react-icons/vsc";
 import { ToastContainer, toast } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { assets } from "../../assets/assets";
-import './Login.css'; 
 import { useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import { loginStart, loginSuccess, loginFailed } from "../../redux/authSlice";

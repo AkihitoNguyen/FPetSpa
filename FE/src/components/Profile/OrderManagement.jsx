@@ -44,7 +44,7 @@ const OrderManagement = () => {
 
     const handleRebooking = async (orderId) => {
         try {
-            const response = await axios.put(`https://fpetspa.azurewebsites.net/api/Order/ReBooking?orderId=${orderId}`);
+            const response = await axios.put(`https://fpetspa.azurewebsites.net/api/Order/ReOrderProduct?orderId=${orderId}`);
             const paymentUrl = response.data; // Assuming response.data contains the payment URL
             window.location.href = paymentUrl;
         } catch (error) {
@@ -201,13 +201,13 @@ const OrderManagement = () => {
                                             </span>
                                         ) 
                                         : order.status === 1 ? (
-                                            <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-blue-600 bg-blue-100">
-                                                Staff Accepted
+                                            <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-pink-600 bg-pink-100">
+                                                PreparingOrder
                                             </span>
                                         ) 
                                         : order.status === 2 ? (
                                             <span className="text-[11.05px] font-semibold px-2 py-1 rounded text-blue-600 bg-blue-100">
-                                                Processing
+                                                Delivering
                                             </span>
                                         )
                                         : order.status === 3 ? (
@@ -322,7 +322,7 @@ const OrderManagement = () => {
                                             </div>
                                         </div>
                                     </div>
-                                    {selectedOrderId && orders.find(order => order.orderId === selectedOrderId && order.status === 1) && (
+                                    {selectedOrderId && orders.find(order => order.orderId === selectedOrderId && order.transactionStatus === 1) && (
                                         <div className="bg-gray-50 px-4 py-3 sm:flex sm:flex-row-reverse sm:px-6">
                                             <button
                                                 type="button"

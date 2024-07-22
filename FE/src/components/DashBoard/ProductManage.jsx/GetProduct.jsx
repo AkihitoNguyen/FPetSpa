@@ -1,29 +1,43 @@
-import React, { useEffect, useState } from "react";
 import axios from "axios";
 import { LazyLoadImage } from "react-lazy-load-image-component";
 import UpdateProduct from "./UpdateProduct";
 import "react-lazy-load-image-component/src/effects/blur.css";
-
+import React, { useEffect, useState } from "react";
+import { toast, ToastContainer } from 'react-toastify';
 const GetProduct = () => {
   const [products, setProducts] = useState([]);
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
   const [selectedProduct, setSelectedProduct] = useState(null);
   const [showModal, setShowModal] = useState(false);
-  const productsPerPage = 3;
+  const productsPerPage = 4;
 
   const fetchData = async () => {
     try {
       const response = await axios.get(
         "https://fpetspa.azurewebsites.net/api/products?pageSize=100"
       );
-      setProducts(response.data);
+      // In dữ liệu nhận được để kiểm tra
+      console.log('Raw data:', response.data);
+      
+      // Sắp xếp dựa trên phần số trong productId
+      const sortedProducts = response.data.sort((a, b) => {
+        const aNumber = parseInt(a.productId.replace(/[^\d]/g, ''), 10);
+        const bNumber = parseInt(b.productId.replace(/[^\d]/g, ''), 10);
+        return aNumber - bNumber;
+      });
+      
+      // In dữ liệu đã sắp xếp để kiểm tra
+      console.log('Sorted data:', sortedProducts);
+      
+      setProducts(sortedProducts);
       setLoading(false);
     } catch (error) {
       console.error("Error fetching data:", error);
       setLoading(false);
     }
   };
+  
 
   useEffect(() => {
     fetchData();
@@ -46,10 +60,10 @@ const GetProduct = () => {
       setProducts((prevProducts) =>
         prevProducts.filter((product) => product.productId !== productId)
       );
-      alert('Product removed successfully!');
+      toast.success('Product removed successfully!');
     } catch (error) {
       console.error("Error removing product:", error);
-      alert('Failed to remove product.');
+      toast.error('Failed to remove product.');
     }
   };
 
@@ -64,6 +78,7 @@ const GetProduct = () => {
         product.productId === updatedProduct.productId ? updatedProduct : product
       )
     );
+    setShowModal(false); // Đóng modal sau khi cập nhật
   };
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
@@ -152,7 +167,7 @@ const GetProduct = () => {
                     <button
                       onClick={() => handleUpdate(product.productId)}
                       className="text-indigo-600 hover:text-indigo-900">
-                      Edit /
+                      Edit
                     </button>
                     <button
                       onClick={() => handleRemove(product.productId)}
@@ -191,10 +206,10 @@ const GetProduct = () => {
 
       {showModal && (
         <div className="fixed z-10 inset-0 overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen">
+          <div className="flex items-center ml-60 min-h-screen">
             <div className="fixed inset-0 bg-gray-500 bg-opacity-75 transition-opacity"></div>
 
-            <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-7xl w-full">
+            <div className="bg-white rounded-lg overflow-hidden shadow-xl transform transition-all max-w-6xl w-full">
               <div className="bg-white px-4 pt-0 pb-4 sm:p-6 sm:pb-4">
                 <div className="sm:flex justify-center sm:items-center">
                   <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left w-full">            
@@ -218,6 +233,7 @@ const GetProduct = () => {
           </div>
         </div>
       )}
+       <ToastContainer />
     </div>
   );
 };
