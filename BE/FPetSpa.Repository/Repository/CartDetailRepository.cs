@@ -73,7 +73,7 @@ namespace FPetSpa.Repository.Repository
                 var parameters = new[] {
 
             new SqlParameter("@Quantity", Quantity),
-             new SqlParameter("@Price", newPrice),
+            new SqlParameter("@Price", newPrice),
             new SqlParameter("@CartId", cartId),
             new SqlParameter("@ProductId", productId),
 

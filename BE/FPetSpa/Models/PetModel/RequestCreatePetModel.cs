@@ -7,9 +7,7 @@
 
         public string? PetName { get; set; }
 
-        public string? PictureName { get; set; }
-
-        public string? PetGender { get; set; }
+        public IFormFile? file { get; set; } = null;
 
         public string? PetType { get; set; }
 

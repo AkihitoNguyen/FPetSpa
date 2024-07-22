@@ -24,5 +24,6 @@ public partial class Order
 
     [JsonIgnore]
     public ICollection<ProductOrderDetail> ProductOrderDetails { get; set; }
-
+    [JsonIgnore]
+    public ICollection<ServiceOrderDetail> ServiceOrderDetails { get; set; }
 }

@@ -19,8 +19,9 @@ namespace FPetSpa.Repository.Repository
         public Task<IEnumerable> getAllAdmin();
         public Task<IdentityResult> SignUpAdmin(SignUpModel admin);
         public Task<IdentityResult> ForgotPassword(string email);
-        public Task<IdentityResult> ResetPasswordForget(string mail, string password, string token);
+        public Task<IdentityResult> ResetPassword(string email, string password);
         public Task<ApplicationUser> GetCustomerByEmail(string mail);
+        public  Task<IdentityResult> CheckCodeResetPasswork(string email, string code);
         public Task<ApplicationUser> GetCustomerById(string mail);
         public Task<Boolean> SendVerificationCode(string phone, Guid userId);
         public Task<Boolean> VerifyPhoneNumber(string Code, Guid userId);

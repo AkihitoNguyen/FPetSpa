@@ -3,6 +3,7 @@ using FPetSpa.Repository.Model;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Authentication.Google;
+using Microsoft.AspNetCore.Http.HttpResults;
 using Microsoft.AspNetCore.Mvc;
 using Newtonsoft.Json.Linq;
 using Twilio.Types;
@@ -14,10 +15,12 @@ namespace FPetSpa.Controllers
     public class AccountsController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ImageController _image;
 
-        public AccountsController(IUnitOfWork unitOfWork)
+        public AccountsController(IUnitOfWork unitOfWork, ImageController imageController)
         {
             _unitOfWork = unitOfWork;
+            _image = imageController;
         }
 
         [HttpPost("signup/customer")]
@@ -137,7 +140,11 @@ namespace FPetSpa.Controllers
         public async Task<IActionResult> getCustomerById(string id)
         {
             var result = await _unitOfWork._IaccountRepository.GetCustomerById(id);
-            if (result != null) return Ok(result);
+            if (result != null)
+            {
+                result.Image = await _image.GetLinkByName("avataruserfpetspa", result.Image!);
+                return Ok(result);
+            }
             return BadRequest("Not Found");
         }
         [HttpGet("getUserByMail")]
@@ -145,8 +152,12 @@ namespace FPetSpa.Controllers
         {
             if (string.IsNullOrEmpty(mail)) return BadRequest(string.Empty);
             var result = await _unitOfWork._IaccountRepository.GetCustomerByEmail(mail);
-            if (result != null) return Ok(result);
-            return NotFound();
+            if (result != null)
+            {
+                result.Image = await _image.GetLinkByName("avataruserfpetspa", result.Image!);
+                return Ok(result);
+            }
+                return NotFound();
         }
         [HttpPost("send-verification-code")]
         public async Task<IActionResult> SendVerificationCode(string phone, Guid UserId)
@@ -169,6 +180,62 @@ namespace FPetSpa.Controllers
             var result = await _unitOfWork._IaccountRepository.VerifyPhoneNumber(Code, UserId);
             if (result == true) return Ok("Verify successfully");
             return BadRequest("Invalid or expired verification code");
+        }
+
+        [HttpPost("SendCodeResetPassword")]
+        public async Task<IActionResult> SendCodeResetPassword(string email)
+        {
+            if (email == null) return BadRequest();
+            var result = await _unitOfWork._IaccountRepository.ForgotPassword(email);
+            if (result.Succeeded) return Ok("Send code successfully!!!");
+            return BadRequest();
+        }
+
+        [HttpPost("CheckCodeResetPassword")]
+        public async Task<IActionResult> checkCodeResetPassword(string email, string code)
+        {
+            if(email != null && code != null) 
+            {
+                var result = await _unitOfWork._IaccountRepository.CheckCodeResetPasswork(email, code);
+                if (result.Succeeded) return Ok("Correct Code");
+            }
+            return BadRequest();
+        }
+
+
+        [HttpPost("ForgetPassword")]
+        public async Task<IActionResult> ForgetPassword(string email, string password)
+        {
+            if (email != null && password != null)
+            {
+                var result = await _unitOfWork._IaccountRepository.ResetPassword(email, password);
+                if (result.Succeeded) return Ok("Reset password successfully");
+            }
+            return BadRequest();
+        }
+
+        [HttpPost("ChangePassword")]
+        public async Task<IActionResult> ChangePassword(string email, string oldPassword,  string newPassword)
+        {
+            if(email != null && oldPassword != null && newPassword != null)
+            {
+                var result = await _unitOfWork._IaccountRepository.ChangePasswork(email, oldPassword, newPassword);
+                if (result.Succeeded) return Ok("Change Password successfully");
+            }
+            return BadRequest();
+        }
+
+        [HttpPost("UploadUserImage")]
+        public async Task<IActionResult> UpLoad(string id, IFormFile file)
+        {
+          var user = await  _unitOfWork._IaccountRepository.GetCustomerById(id);
+            if (user != null && file != null)
+            {
+                var result = await _image.ImageUser(file);
+                if(result.GetType() == typeof(OkObjectResult)) return Ok("Upload successfully");
+            }
+            return BadRequest("Something went wrong!!!");
+
         }
     }
 }
