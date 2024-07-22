@@ -1,8 +1,10 @@
 ﻿using FPetSpa.Models.DashBoradController;
 using FPetSpa.Repository;
+using FPetSpa.Repository.Data;
 using FPetSpa.Repository.Model.OrderModel;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using System.Globalization;
 
 namespace FPetSpa.Controllers
@@ -12,10 +14,11 @@ namespace FPetSpa.Controllers
     public class DashBoardController : ControllerBase
     {
         private readonly IUnitOfWork _unitOfWork;
-
-        public DashBoardController(IUnitOfWork unitOfWork)
+        private readonly FpetSpaContext _context;
+        public DashBoardController(IUnitOfWork unitOfWork, FpetSpaContext fpetSpaContext)
         {
             _unitOfWork = unitOfWork;
+            _context = fpetSpaContext;
         }
      
         [HttpGet("order-count")]
@@ -75,22 +78,28 @@ namespace FPetSpa.Controllers
             var count = await _unitOfWork.OrderRepository.GetOrderCountByYear(year);
             return Ok(count);
         }
-        [HttpGet("GetOrderStatistics")]
-        public async Task<ActionResult<IEnumerable<OrderStatistics>>> GetOrderStatistics()
+
+        [HttpGet]
+        public async Task<ActionResult<IEnumerable<DashboardData>>> GetDashboardData()
         {
-            try
-            {
-                var statistics = await _unitOfWork.OrderRepository.GetOrderStatisticsAsync();
-                if (statistics == null || !statistics.Any())
-                {
-                    return NotFound(new { message = "No order statistics available" });
-                }
-                return Ok(statistics);
-            }
-            catch (Exception ex)
-            {
-                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
-            }
-        }
+            var dashboardData = await (from order in _context.Orders
+                                       join customer in _context.Users on order.CustomerId equals customer.Id
+                                       join staff in _context.Staff on order.StaffId equals staff.StaffId into staffJoin
+                                       from staff in staffJoin.DefaultIfEmpty()
+                                       join transaction in _context.Transactions on order.TransactionId equals transaction.TransactionId
+                                       join paymentMethod in _context.PaymentMethods on transaction.MethodId equals paymentMethod.MethodId into paymentMethodJoin
+                                       from paymentMethod in paymentMethodJoin.DefaultIfEmpty()
+                                       select new DashboardData
+                                       {
+                                           CustomerName = customer.FullName ,
+                                           Total = order.Total,
+                                           TransactionDate = order.RequiredDate,
+                                           PaymentMethod = paymentMethod.MethodName,
+                                           StaffName = staff.StaffName ,
+                                           Status = order.Status
+                                       }).ToListAsync();
+
+            return Ok(dashboardData);
+        }   
     }
 }

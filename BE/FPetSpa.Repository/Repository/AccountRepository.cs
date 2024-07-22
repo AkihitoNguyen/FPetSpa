@@ -31,16 +31,18 @@ namespace FPetSpa.Repository.Repository
         private readonly IConfiguration configuration;
         private readonly RoleManager<IdentityRole> roleManager;
         private readonly SendMailServices sendMailServices;
-
+        private readonly FpetSpaContext context;
         public AccountRepository(UserManager<ApplicationUser> userManager,
             SignInManager<ApplicationUser> signInManager,
-            IConfiguration configuration, RoleManager<IdentityRole> roleManager, SendMailServices sendMailServices)
+            IConfiguration configuration, RoleManager<IdentityRole> roleManager, SendMailServices sendMailServices, FpetSpaContext spaContext)
         {
             this.userManager = userManager;
             this.signInManager = signInManager;
             this.configuration = configuration;
             this.roleManager = roleManager;
             this.sendMailServices = sendMailServices;
+            this.context = spaContext;
+          
         }
         public async Task<TokenModel> SignInAsync(SignInModel model)
         {
@@ -272,6 +274,14 @@ namespace FPetSpa.Repository.Repository
             if (resutl.Succeeded)
             {
                 //Tao user thanh cong roi se check mail
+                var staff = await userManager.FindByEmailAsync(user.Gmail);
+                await context.Staff.AddAsync(new StaffStatus
+                {
+                    StaffId = staff.Id,
+                    StaffName = staff.FullName,
+                    Status = 0
+                });
+                await context.SaveChangesAsync();   
                 var tokenCode = await userManager.GenerateEmailConfirmationTokenAsync(user);
                 var encodeToken = HttpUtility.UrlEncode(tokenCode);
 

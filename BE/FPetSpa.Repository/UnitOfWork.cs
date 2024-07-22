@@ -11,6 +11,7 @@ namespace FPetSpa.Repository
         private CartRepository<Cart> _cart;
         private CartDetailRepository<CartDetail> _cartDetails;
         private FeedBackRepository _feedback;
+        private StaffRepository _staffRepository;
         private ServiceOrderDetailRepository<ServiceOrderDetail> _serviceOrderDetailRepository;
         private ProductOrderDetailRepositoty<ProductOrderDetail> _productOrderDetailRepository;
         private GenericRepository<Pet> _pet;
@@ -81,6 +82,17 @@ namespace FPetSpa.Repository
                     this._product = new GenericRepository<Product>(_context);
                 }
                 return _product;
+            }
+        }
+        public StaffRepository StaffRepository
+        {
+            get
+            {
+                if (_staffRepository == null)
+                {
+                    this._staffRepository = new StaffRepository(_context);
+                }
+                return _staffRepository;
             }
         }
         public FeedBackRepository FeedBackRepository

@@ -19,7 +19,6 @@ using System.Linq.Expressions;
 using System.Transactions;
 using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 using TransactionStatus = FPetSpa.Repository.Helper.TransactionStatus;
-using System.Linq;
 
 namespace FPetSpa.Controllers
 {
@@ -30,39 +29,28 @@ namespace FPetSpa.Controllers
         private readonly IVnPayService _vnpayServices;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPayPalService _payPalServices;
-        private readonly IOrderServices _orderService;
-
-        public OrderController(IUnitOfWork unitOfWork, IVnPayService vnPayService, IPayPalService payPalService, IOrderServices orderService)
+        private readonly IStaffServices _staffServices;
+        public OrderController(IUnitOfWork unitOfWork, IVnPayService vnPayService, IPayPalService payPalService, IStaffServices staffServices)
         {
             _vnpayServices = vnPayService;
             _unitOfWork = unitOfWork;
             _payPalServices = payPalService;
-            _orderService = orderService;
+            _staffServices = staffServices;
         }
 
-        [HttpPost("AssignStaff")]
-        public async Task<IActionResult> AssignSpecificStaffAndNotifyCustomer(string orderId, string staffId)
+        [HttpPost("{orderId}/assign-staff")]
+        public async Task<IActionResult> AssignStaffToOrder(string orderId)
         {
-            var result = await _orderService.AssignStaffToOrderAsync(orderId, staffId);
-
-            if (!result) return NotFound("Order or staff not found");
-
-            var staffList = await _orderService.getAllStaff();     
-            var staff = staffList.FirstOrDefault(s => s.Id.Equals(staffId, StringComparison.OrdinalIgnoreCase));
-
-            string message = $"Your pet will be taken care of by {staff.FullName}.";
-            var response = new
+            var (success, staff) = await _staffServices.AssignAvailableStaffToOrder(orderId);
+            if (!success)
             {
-                Message = message,
-            };
+                return BadRequest("Không có nhân viên rảnh rỗi hoặc đơn hàng không tồn tại.");
+            }
 
-            return Ok(response);
+            var message = $"Nhân viên {staff.StaffName} đã được gán vào đơn hàng của bạn.";
+            return Ok(new { Message = message});
         }
-
-
-
-
-
+     
         [HttpGet("OrderSearch")]
         public async Task<IActionResult> search([FromQuery] RequestSearchOrderModel model)
         {
@@ -252,12 +240,31 @@ namespace FPetSpa.Controllers
         [HttpPut("UpdateOrderStatus")]
         public async Task<IActionResult> UpdateOrderStatus(string OrderId, string status)
         {
+
             var order = _unitOfWork.OrderGenericRepo.GetById(OrderId);
+            if(order.Status == 0)
+            {
+                var (success, staff) = await _staffServices.AssignAvailableStaffToOrder(OrderId);
+                if (!success)
+                {
+                    return BadRequest("Không có nhân viên rảnh rỗi hoặc đơn hàng không tồn tại.");
+                }
+            }
             if (order != null)
             {
-                  var result = await _unitOfWork.OrderRepository.UpdateOrderStatus(OrderId, status);
-                  if(result == true) return Ok();
+                var result = await _unitOfWork.OrderRepository.UpdateOrderStatus(OrderId, status);
+
+                if (result == true) 
+               
+                {
+                    await _staffServices.UpdateStaffStatusBasedOnOrder(OrderId);
+
+                }
+                return Ok();
+
             }
+
+
             return BadRequest("Something went wrong!!!");
         }
         [HttpDelete("DeleteOrderByOrderId")]

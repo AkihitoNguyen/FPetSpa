@@ -51,6 +51,30 @@ public class OrderRepository
     {
         return await _context.Orders.CountAsync();
     }
+    public async Task<bool> UpdateOrder(FPetSpa.Repository.Data.Order order)
+    {
+        var existingOrder = await _context.Orders.FindAsync(order.OrderId);
+        if (existingOrder == null)
+        {
+            return false; // Đơn hàng không tồn tại
+        }
+
+        // Cập nhật các thuộc tính của đơn hàng
+        existingOrder.CustomerId = order.CustomerId;
+        existingOrder.StaffId = order.StaffId;
+        existingOrder.RequiredDate = order.RequiredDate;
+        existingOrder.Total = order.Total;
+        existingOrder.VoucherId = order.VoucherId;
+        existingOrder.TransactionId = order.TransactionId;
+        existingOrder.DeliveryOption = order.DeliveryOption;
+        existingOrder.Status = order.Status;
+
+        // Cập nhật đơn hàng trong cơ sở dữ liệu
+        _context.Orders.Update(existingOrder);
+        await _context.SaveChangesAsync(); // Lưu thay đổi
+
+        return true; // Cập nhật thành công
+    }
     public async Task<decimal> CompareOrdersForTwoMonthsAsync(int year1, int month1, int year2, int month2)
     {
         // Xác định khoảng thời gian của tháng thứ nhất
@@ -147,20 +171,7 @@ public class OrderRepository
             .Where(o => o.RequiredDate.Value.Year == year)
             .CountAsync();
     }
-    public async Task<IEnumerable<OrderStatistics>> GetOrderStatisticsAsync()
-    {
-        return await _context.Orders
-            .GroupBy(o => o.RequiredDate.Value.Date)
-            .Select(g => new OrderStatistics
-            {
-                Date = g.Key,
-                TotalOrders = g.Count(),
-                SuccessfulOrders = g.Count(o => o.Status == 0),
-                FailedOrders = g.Count(o => o.Status == 1)
-            })
-            .OrderBy(os => os.Date)
-            .ToListAsync();
-    }
+
     public async Task<Boolean> StartCheckoutProduct(string customerId, string staffId, string method, string? voucherCode = null, string? DeliveryOption = null, decimal? ShippingCost = null)
     {
         var methodIn = _context.PaymentMethods.ToDictionary(p => p.MethodName, p => p.MethodId);

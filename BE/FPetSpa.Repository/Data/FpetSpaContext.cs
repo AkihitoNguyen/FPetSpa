@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 
 namespace FPetSpa.Repository.Data;
@@ -15,6 +16,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
     }
 
     public virtual DbSet<Cart> Carts { get; set; }
+    public virtual DbSet<ApplicationUser> Users { get; set; }
 
     public virtual DbSet<CartDetail> CartDetails { get; set; }
 
@@ -39,6 +41,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
     public virtual DbSet<Transaction> Transactions { get; set; }
     public virtual DbSet<BookingTime> BookingTime { get; set; }
     public virtual DbSet<Voucher> Vouchers { get; set; }
+    public DbSet<StaffStatus> Staff{ get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -340,6 +343,22 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
                 .HasMaxLength(20)
                 .IsUnicode(false);
         });
+        modelBuilder.Entity<StaffStatus>(entity =>
+        {
+            entity.ToTable("StaffStatus"); // Tên bảng trong cơ sở dữ liệu
+
+            entity.HasKey(e => e.StaffId); // Khóa chính là StaffId
+
+            entity.Property(e => e.StaffId)
+                  .IsRequired()
+                  .HasMaxLength(450);
+
+            entity.Property(e => e.Status)
+                  .IsRequired();
+
+            entity.Property(e => e.StaffName)
+                  .HasMaxLength(450);
+        });
 
         modelBuilder.Entity<Voucher>(entity =>
         {
@@ -355,6 +374,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         OnModelCreatingPartial(modelBuilder);
     }
+
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }
