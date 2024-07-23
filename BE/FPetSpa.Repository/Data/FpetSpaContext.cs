@@ -203,10 +203,6 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.CustomerId)
                 .HasMaxLength(50)
                 .HasColumnName("CustomerID");
-            entity.Property(e => e.PetGender)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("Pet Gender");
             entity.Property(e => e.PetName)
                 .HasMaxLength(20)
                 .IsUnicode(false)
@@ -298,7 +294,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
                 .HasMaxLength(20)
                 .HasColumnName("ServiceID");
 
-            entity.HasOne(d => d.Order).WithMany()
+            entity.HasOne(d => d.Order).WithMany(d => d.ServiceOrderDetails)
                 .HasConstraintName("FK_ServiceOrderDetails.OrderID");
 
             entity.HasOne(d => d.Pet).WithMany()

@@ -9,8 +9,8 @@ namespace FPetSpa.Repository.Helper
     public enum OrderProductStatusEnum
     {
         Pending = 0,
-        StaffAccepted = 1,
-        Processing = 2,
+        PreparingOrder = 1,
+        Delivering = 2,
         Shipped = 3,
         Delivered = 4,
         ReadyForPickup = 5,

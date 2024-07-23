@@ -49,7 +49,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\FPetSpa.Repository\FPetSpa.Repository.csproj" />
+    <ProjectReference Include="..\FPetSpa.Repository\FPetSpa.Repository.csproj">
+      <Private>True</Private>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

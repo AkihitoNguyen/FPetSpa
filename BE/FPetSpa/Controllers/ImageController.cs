@@ -102,5 +102,45 @@ namespace FPetSpa.Controllers
             };
             return  _s3Clients.GetPreSignedURL(result);
         }
+
+
+        [HttpPost("UploadAvatarUser")]
+        public async Task<IActionResult> ImageUser(IFormFile file)
+        {
+            var bucketName = "avataruserfpetspa";
+            string prefix = null;
+            var _s3Clients = new AmazonS3Client(credentials, Amazon.RegionEndpoint.APSoutheast2);
+            var bucketExists = await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Clients, bucketName);
+            if (!bucketExists) return NotFound($"Bucket {bucketName} does not exist.");
+            var request = new PutObjectRequest()
+            {
+                BucketName = bucketName,
+                Key = string.IsNullOrEmpty(prefix) ? file.FileName : $"{prefix?.TrimEnd('/')}/{file.FileName}",
+                InputStream = file.OpenReadStream()
+            };
+            request.Metadata.Add("Content-Type", file.ContentType);
+            await _s3Clients.PutObjectAsync(request);
+            return Ok($"File {prefix}/{file.FileName} uploaded to S3 successfully!!");
+        }
+
+
+        [HttpPost("UploadAvatarPet")]
+        public async Task<IActionResult> ImagePet(IFormFile file)
+        {
+            var bucketName = "petimagefpetspa";
+            string prefix = null;
+            var _s3Clients = new AmazonS3Client(credentials, Amazon.RegionEndpoint.APSoutheast2);
+            var bucketExists = await Amazon.S3.Util.AmazonS3Util.DoesS3BucketExistV2Async(_s3Clients, bucketName);
+            if (!bucketExists) return NotFound($"Bucket {bucketName} does not exist.");
+            var request = new PutObjectRequest()
+            {
+                BucketName = bucketName,
+                Key = string.IsNullOrEmpty(prefix) ? file.FileName : $"{prefix?.TrimEnd('/')}/{file.FileName}",
+                InputStream = file.OpenReadStream()
+            };
+            request.Metadata.Add("Content-Type", file.ContentType);
+            await _s3Clients.PutObjectAsync(request);
+            return Ok($"File {prefix}/{file.FileName} uploaded to S3 successfully!!");
+        }
     }
 }

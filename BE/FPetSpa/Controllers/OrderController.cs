@@ -132,11 +132,10 @@ namespace FPetSpa.Controllers
         [HttpPost("StartCheckoutServices")]
         public async Task<IActionResult> CheckoutServices(OrderServicesModelRequest model)
         {
-            var result = await _unitOfWork.OrderRepository.StartCheckoutServices(
+                var result = await _unitOfWork.OrderRepository.StartCheckoutServices(
                 model.ServiceId,
                 model.CustomerId!,
                 model.PetId,
-                model.PaymentMethod,
                 model.bookingDateTime,
                  null
                 );
@@ -152,7 +151,7 @@ namespace FPetSpa.Controllers
             if (model != null)
             {
                 var result = await _unitOfWork.OrderRepository.StartCheckoutProduct(model.CustomerId, idAdminAuto, model.PaymentMethod, model.VoucherId, model.DeliveryOption);
-                if (result) return Ok("Booking Successfully! Please wait staff for accepting!");
+                if (result != null) return Ok(result);
                 return BadRequest("Something went wrong!!");
             }
             return BadRequest("Cracking...Please comeback latter");
@@ -269,11 +268,11 @@ namespace FPetSpa.Controllers
         }
 
         [HttpPut("ReBooking")]
-        public async Task<IActionResult> ReBooking(string orderId)
+        public async Task<IActionResult> ReBooking(string orderId, string paymentMethod)
         {
-            if(orderId != null)
+            if(orderId != null && paymentMethod != null)
             {
-                var result = await _unitOfWork.OrderRepository.ReOrder(orderId);
+                var result = await _unitOfWork.OrderRepository.ReOrder(orderId, paymentMethod);
                 if(result != null) return Ok(result);
             }
             return BadRequest();    
@@ -308,6 +307,18 @@ namespace FPetSpa.Controllers
             {
                 var result = await _unitOfWork.OrderRepository.UpdateProductOrderStatusByUser(orderId, Status);
                 if (result == true) return Ok("Update successfully");
+            }
+            return BadRequest();
+        }
+
+
+        [HttpPut("ReOrderProduct")]
+        public async Task<IActionResult> ReOrder(string orderId)
+        {
+            if (orderId != null)
+            {
+                var result = await _unitOfWork.OrderRepository.ReOrderForProduct(orderId);
+                if (result != null) return Ok(result);
             }
             return BadRequest();
         }

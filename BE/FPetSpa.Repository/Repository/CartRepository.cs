@@ -1,5 +1,7 @@
 ﻿using FPetSpa.Repository.Data;
+using FPetSpa.Repository.Helper;
 using FPetSpa.Repository.Model;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 
 namespace FPetSpa.Repository.Repository
@@ -7,12 +9,17 @@ namespace FPetSpa.Repository.Repository
     public class CartRepository<T> where T : class
     {
         protected readonly FpetSpaContext _context;
+      
+      
 
         public CartRepository(FpetSpaContext context)
         {
             _context = context;
         }
 
+
+
+        
         public async Task<IEnumerable<Cart>> GetAllAsync()
         {
             return await _context.Carts.ToListAsync();
@@ -22,7 +29,7 @@ namespace FPetSpa.Repository.Repository
         {
             return await _context.Carts.FindAsync(id);
         }
-
+        
         public async Task<String> AddAsync(AddToCartModel request)
         {
             if (request == null)
