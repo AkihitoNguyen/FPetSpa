@@ -20,7 +20,7 @@ const AddProduct = () => {
   useEffect(() => {
     const fetchCategories = async () => {
       try {
-        const response = await axios.get('https://fpetspa.azurewebsites.net/api/Categories');
+        const response = await axios.get('https://localhost:7055/api/Categories');
         setCategories(response.data);
       } catch (error) {
         console.error('Error fetching categories:', error);
@@ -166,7 +166,7 @@ const AddProduct = () => {
     formData.append('CategoryID', newProduct.categoryID);
 
     try {
-      const response = await axios.post('https://fpetspa.azurewebsites.net/api/products/Create-Product', formData, {
+      const response = await axios.post('https://localhost:7055/api/products/Create-Product', formData, {
         headers: {
           'Content-Type': 'multipart/form-data'
         }

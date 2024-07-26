@@ -15,7 +15,7 @@ const SearchResult = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       setIsLoading(true);
-      const response = await fetch(`https://fpetspa.azurewebsites.net/api/products?pageSize=100`);
+      const response = await fetch(`https://localhost:7055/api/products?pageSize=100`);
       const data = await response.json();
       const filteredProducts = data.filter(product =>
         product.productName.toLowerCase().includes(query.toLowerCase())

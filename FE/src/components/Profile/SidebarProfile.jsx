@@ -1,28 +1,48 @@
-import React from "react";
+import React, { useState } from "react";
 
 const SidebarProfile = ({ setActiveSection }) => {
+  const [activeLink, setActiveLink] = useState(null);
 
+  const handleLinkClick = (link) => {
+    setActiveLink(link);
+    setActiveSection(link);
+  };
 
   return (
-    <div className="min-h-screen  w-64 bg-gray-800 text-white">
-      <div className="p-4 font-bold text-lg border-b border-gray-700">
+    <div className="min-h-screen w-64 my-4 ml-4 bg-[#FFFFFF] border rounded-xl text-white">
+      <div className="p-4 font-bold text-lg border-b">
         <img src="" alt="" />
       </div>
-      <ul className="mt-2">
+      <ul className="mt-2 text-[#607D8B] text-[16px] font-medium">
         <li
-          className="p-4 hover:bg-gray-700 cursor-pointer"
-          onClick={() => setActiveSection("account-info")}>
+          className={`p-4 cursor-pointer ${
+            activeLink === "/account-info"
+              ? "bg-[#FC819E] text-white rounded-lg"
+              : ""
+          }`}
+          onClick={() => handleLinkClick("account-info")}
+        >
           Profile
         </li>
         <li
-          className="p-4 hover:bg-gray-700 cursor-pointer"
-          onClick={() => setActiveSection("pet-info")}>
-          Pet Infomation
+          className={`p-4 cursor-pointer ${
+            activeLink === "/pet-info"
+              ? "bg-[#FC819E] text-white rounded-lg"
+              : ""
+          }`}
+          onClick={() => handleLinkClick("pet-info")}
+        >
+          Pet Information
         </li>
         <li
-          className="p-4 hover:bg-gray-700 cursor-pointer"
-          onClick={() => setActiveSection("order-management")}>
-          Order Managerment
+          className={`p-4 cursor-pointer ${
+            activeLink === "/order-management"
+              ? "bg-[#FC819E] text-white rounded-lg"
+              : ""
+          }`}
+          onClick={() => handleLinkClick("order-management")}
+        >
+          Order Management
         </li>
       </ul>
     </div>

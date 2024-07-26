@@ -93,47 +93,7 @@ const AboutUs = () => {
       </div>
 
       {/* Blog Section */}
-      <div className="mt-12 mx-auto max-w-7xl px-6 lg:px-8">
-        <h2 className="text-4xl font-extrabold tracking-tight text-blue-500 sm:text-5xl text-center">Customer Experiences</h2>
-        <p className="mt-6 text-lg leading-8 text-gray-600 text-center">
-          Read about the experiences of our customers and their pets at Pet Spa.
-        </p>
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 mt-8">
-          <div className="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-            <img
-              alt="Customer 1"
-              src={assets.customer1}
-              className="w-full h-48 object-cover rounded-lg mb-4"
-            />
-            <h3 className="text-2xl font-bold mb-2">John's Experience</h3>
-            <p className="text-gray-600">
-              "Our dog Bella had an amazing time at Pet Spa. The staff was so caring and professional. We will definitely be coming back!"
-            </p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-            <img
-              alt="Customer 2"
-              src={assets.customer2}
-              className="w-full h-48 object-cover rounded-lg mb-4"
-            />
-            <h3 className="text-2xl font-bold mb-2">Sophie's Review</h3>
-            <p className="text-gray-600">
-              "Pet Spa is the best! My cat, Whiskers, was treated like royalty. The grooming services are top-notch."
-            </p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-lg transition-transform transform hover:scale-105">
-            <img
-              alt="Customer 3"
-              src={assets.customer3}
-              className="w-full h-48 object-cover rounded-lg mb-4"
-            />
-            <h3 className="text-2xl font-bold mb-2">Emily's Feedback</h3>
-            <p className="text-gray-600">
-              "I was nervous about taking my puppy to a new place, but Pet Spa exceeded my expectations. They are fantastic!"
-            </p>
-          </div>
-        </div>
-      </div>
+      
     </div>
   );
 };

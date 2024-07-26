@@ -16,46 +16,50 @@ const ShopContextProvider = (props) => {
 
   useEffect(() => {
     if (isLoggedIn) {
-      setUserId(isLoggedIn.userId);
-      fetchCartId(isLoggedIn.userId);
-      fetchProducts(); // Fetch products initially
+      const { userId } = isLoggedIn;
+      if (userId) {
+        setUserId(userId);
+      } else {
+        console.error('User ID is missing.');
+      }
     } else {
       setCartItems({});
       setCartId(null);
     }
   }, [isLoggedIn]);
 
+  useEffect(() => {
+    if (userId) {
+      fetchCartId(userId);
+    }
+  }, [userId, cartId]);
+
   const fetchCartId = async (userId) => {
+    if (!userId) {
+      console.error('User ID is required to fetch cart details.');
+      return;
+    }
+
     try {
-      const response = await axios.get(`https://fpetspa.azurewebsites.net/api/CartDetail/Getbyid`, {
+      const response = await axios.get(`https://localhost:7055/api/CartDetail/Getbyid`, {
         params: { userId: userId }
       });
 
       if (response.data && Array.isArray(response.data) && response.data.length > 0) {
-        const firstCartItem = response.data[0]; // Giả sử tất cả các mục trong mảng có cùng cartId
+        const firstCartItem = response.data[0];
         const fetchedCartId = firstCartItem.cartId;
-
-        // Tạo đối tượng cartItems từ dữ liệu API
+        setProducts(response.data);
         const cartItemsFromAPI = {};
         response.data.forEach(item => {
           cartItemsFromAPI[item.productId] = item.quantity;
         });
         setCartItems(cartItemsFromAPI);
-        setCartId(fetchedCartId)
+        setCartId(fetchedCartId);
       } else {
-        
+        console.error('No cart details found for the user.');
       }
     } catch (error) {
       console.error('Error fetching cartId:', error);
-    }
-  };
-
-  const fetchProducts = async () => {
-    try {
-      const response = await axios.get('https://fpetspa.azurewebsites.net/api/products?pageSize=100'); // Adjust the API endpoint as needed
-      setProducts(response.data);
-    } catch (error) {
-      console.error('Error fetching products:', error);
     }
   };
 
@@ -71,18 +75,18 @@ const ShopContextProvider = (props) => {
 
       setCartItems(updatedCartItems); // Update cartItems immediately
       if (isLoggedIn) {
-        const response = await axios.post(`https://fpetspa.azurewebsites.net/api/Cart/AddtoCart`, {
+        const response = await axios.post(`https://localhost:7055/api/Cart/AddtoCart`, {
           userId: userId,
           productId: productId,
           quantity: quantity
         });
         if (response.data) {
           setCartId(response.data);
-          fetchProducts(); // Fetch products after adding to cart
         }
       }
 
       toast.success('Product added to cart successfully!');
+      await refreshCart(); // Refresh cart after adding an item
     } catch (error) {
       handleCartError(error);
     }
@@ -90,28 +94,26 @@ const ShopContextProvider = (props) => {
 
   const removeFromCart = async (productIdToRemove) => {
     try {
-      if (!contextValue.cartId) {
+      if (!cartId) {
         throw new Error('Cart ID is missing.');
       }
-  
+
       if (cartItems[productIdToRemove] > 0) {
         const updatedCartItems = { ...cartItems };
-        updatedCartItems[productIdToRemove] = 0;
         delete updatedCartItems[productIdToRemove];
         setCartItems(updatedCartItems); // Update cartItems immediately
-  
+
         try {
-          const response = await axios.delete(`https://fpetspa.azurewebsites.net/api/CartDetail/Delete`, {
-            params: { cartId: contextValue.cartId, productId: productIdToRemove }
+          await axios.delete(`https://localhost:7055/api/CartDetail/Delete`, {
+            params: { cartId: cartId, productId: productIdToRemove }
           });
-          console.log('Response from deleting cart detail:', response);
-       
         } catch (error) {
           console.error('Error deleting cart detail:', error);
           toast.error('Failed to delete cart detail. Please try again.');
         }
-  
+
         toast.success('Product removed from cart successfully!');
+        await refreshCart(); // Refresh cart after removing an item
       } else {
         toast.error('This product is not in the cart to remove.');
       }
@@ -119,6 +121,10 @@ const ShopContextProvider = (props) => {
       console.error('Error removing from cart:', error);
       toast.error('Failed to remove product from cart. Please try again.');
     }
+  };
+
+  const refreshCart = async () => {
+    await fetchCartId(userId);
   };
 
   const getTotalCartAmount = () => {
@@ -164,6 +170,7 @@ const ShopContextProvider = (props) => {
     cartItems,
     addToCart,
     removeFromCart,
+    refreshCart, // Add refreshCart to the context value
     cartId,
   };
 

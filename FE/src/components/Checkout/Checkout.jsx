@@ -9,19 +9,17 @@ const Checkout = () => {
   const [userId, setUserId] = useState(null);
   const [vouchers, setVouchers] = useState([]);
   const [selectedVoucher, setSelectedVoucher] = useState(null);
-  const [deliveryOption, setDeliveryOption] = useState('SHIPPING'); // Add delivery option state
+  const [deliveryOption, setDeliveryOption] = useState('SHIPPING');
+  const [showAddressField, setShowAddressField] = useState(true);
+  const [shipCost, setShipCost] = useState(0); // Add ship cost state
+  const [isAddressConfirmed, setIsAddressConfirmed] = useState(false);
+
   const [form, setForm] = useState({
-    firstName: '',
-    lastName: '',
+    fullName: '',
     email: '',
-    country: 'United States',
-    streetAddress: '',
-    city: '',
-    region: '',
-    postalCode: '',
+    streetAddress: ''
   });
 
-  // Fetch current user ID if logged in
   useEffect(() => {
     if (currentUser) {
       setUserId(currentUser.userId);
@@ -30,34 +28,29 @@ const Checkout = () => {
     }
   }, [currentUser]);
 
-  // Function to initiate the checkout process
-  const fetchProducts = async (customerId, paymentMethod, voucherId, deliveryOption) => {
+  const fetchProducts = async (customerId, paymentMethod, voucherId, deliveryOption, shipCost) => {
     try {
-      console.log('API Call with:', { customerId, paymentMethod, voucherId, deliveryOption }); // Log the data being sent
-      const response = await axios.post('https://fpetspa.azurewebsites.net/api/Order/StartCheckoutProduct', {
+      console.log('API Call with:', { customerId, paymentMethod, voucherId, deliveryOption, shipCost });
+      const response = await axios.post('https://localhost:7055/api/Order/StartCheckoutProduct', {
         customerId,
         paymentMethod,
         voucherId,
-        deliveryOption
+        deliveryOption,
+        shipCost
       });
-  
       
-      // Display the success message and refresh the page
       const paymentUrl = response.data; // Assuming response.data contains the payment URL
       window.location.href = paymentUrl;
-  
     } catch (error) {
       console.error('Error fetching cartId:', error.response ? error.response.data : error.message);
       alert('An error occurred while fetching the cartId. Please try again.');
     }
   };
-  
 
-  // Fetch available vouchers on component mount
   useEffect(() => {
     const fetchVouchers = async () => {
       try {
-        const response = await axios.get('https://fpetspa.azurewebsites.net/api/Voucher');
+        const response = await axios.get('https://localhost:7055/api/Voucher');
         setVouchers(response.data);
       } catch (error) {
         console.error('Error fetching vouchers:', error);
@@ -67,17 +60,27 @@ const Checkout = () => {
     fetchVouchers();
   }, []);
 
-  // Handle checkout button click
   const handleCheckout = (paymentMethod) => {
     if (userId) {
       const voucherId = selectedVoucher ? selectedVoucher.voucherId : null;
-      fetchProducts(userId, paymentMethod, voucherId, deliveryOption);
+      fetchProducts(userId, paymentMethod, voucherId, deliveryOption, shipCost);
     } else {
       console.error('User is not logged in.');
     }
   };
 
-  // Handle form input changes
+  const fetchShippingCost = async (toDistrict) => {
+    try {
+      const response = await axios.get(`https://localhost:7055/ShipCost/GetCostShippingGoogleMap?ToDistrict=${toDistrict}`);
+      const { cost } = response.data;
+      setShipCost(cost);
+      setIsAddressConfirmed(true); // Địa chỉ đã được xác nhận
+    } catch (error) {
+      console.error('Error fetching shipping cost:', error);
+    }
+  };
+  
+
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setForm({
@@ -86,25 +89,28 @@ const Checkout = () => {
     });
   };
 
+  const handleDeliveryOptionChange = (e) => {
+    setDeliveryOption(e.target.value);
+    if (e.target.value === 'SHIPPING') {
+      setShowAddressField(true);
+    } else {
+      setShowAddressField(false);
+      setShipCost(0); // Reset shipping cost when not selecting Shipping
+    }
+  };
+
   const { products, cartItems, getTotalCartAmount } = useContext(ShopContext);
   const cartProducts = Array.isArray(products) ? products.filter(product => cartItems[product.productId] > 0) : [];
 
-  // Calculate discounted total
   const getDiscountedTotal = () => {
     const total = getTotalCartAmount();
     const discount = selectedVoucher ? total * parseFloat(selectedVoucher.description) : 0;
-    return (total - discount).toFixed(2);
+    return (total - discount + shipCost).toFixed(2);
   };
 
-  // Handle voucher selection
   const handleVoucherClick = (voucherId) => {
     const selected = vouchers.find(voucher => voucher.voucherId === voucherId);
     setSelectedVoucher(selected);
-  };
-
-  // Handle delivery option changes
-  const handleDeliveryOptionChange = (e) => {
-    setDeliveryOption(e.target.value);
   };
 
   return (
@@ -118,16 +124,16 @@ const Checkout = () => {
                 <h2 className="text-base font-semibold leading-7 text-gray-900">Personal Information</h2>
                 <p className="mt-1 text-sm leading-6 text-gray-600">Use a permanent address where you can receive mail.</p>
                 <div className="mt-10 grid grid-cols-1 gap-x-6 gap-y-8 sm:grid-cols-6">
-                  <div className="sm:col-span-3">
-                    <label htmlFor="firstName" className="block text-sm font-medium leading-6 text-gray-900">
-                      First name
+                  <div className="sm:col-span-full">
+                    <label htmlFor="fullName" className="block text-sm font-medium leading-6 text-gray-900">
+                      Full Name
                     </label>
                     <div className="mt-2">
                       <input
                         type="text"
-                        name="firstName"
-                        id="firstName"
-                        value={form.firstName}
+                        name="fullName"
+                        id="fullName"
+                        value={form.fullName}
                         onChange={handleInputChange}
                         autoComplete="given-name"
                         className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
@@ -135,24 +141,7 @@ const Checkout = () => {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-3">
-                    <label htmlFor="lastName" className="block text-sm font-medium leading-6 text-gray-900">
-                      Last name
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="text"
-                        name="lastName"
-                        id="lastName"
-                        value={form.lastName}
-                        onChange={handleInputChange}
-                        autoComplete="family-name"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
-
-                  <div className="sm:col-span-4">
+                  <div className="sm:col-span-full">
                     <label htmlFor="email" className="block text-sm font-medium leading-6 text-gray-900">
                       Email address
                     </label>
@@ -169,45 +158,32 @@ const Checkout = () => {
                     </div>
                   </div>
 
-                  <div className="sm:col-span-3">
-                    <label htmlFor="country" className="block text-sm font-medium leading-6 text-gray-900">
-                      Country
-                    </label>
-                    <div className="mt-2">
-                      <select
-                        id="country"
-                        name="country"
-                        value={form.country}
-                        onChange={handleInputChange}
-                        autoComplete="country-name"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:max-w-xs sm:text-sm sm:leading-6"
+                  {showAddressField && (
+                    <div className="col-span-full">
+                      <label htmlFor="streetAddress" className="block text-sm font-medium leading-6 text-gray-900">
+                        Street address
+                      </label>
+                      <div className="mt-2">
+                        <input
+                          type="text"
+                          name="streetAddress"
+                          id="streetAddress"
+                          value={form.streetAddress}
+                          onChange={handleInputChange}
+                          autoComplete="street-address"
+                          className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                        />
+                      </div>
+                      <button
+                        onClick={() => fetchShippingCost(form.streetAddress)}
+                        className="mt-2 bg-blue-500 text-white py-2 px-4 rounded"
                       >
-                        <option>United States</option>
-                        <option>Canada</option>
-                        <option>Mexico</option>
-                      </select>
+                        Confirm Address
+                      </button>
                     </div>
-                  </div>
-
-                  <div className="col-span-full">
-                    <label htmlFor="streetAddress" className="block text-sm font-medium leading-6 text-gray-900">
-                      Street address
-                    </label>
-                    <div className="mt-2">
-                      <input
-                        type="text"
-                        name="streetAddress"
-                        id="streetAddress"
-                        value={form.streetAddress}
-                        onChange={handleInputChange}
-                        autoComplete="street-address"
-                        className="block w-full rounded-md border-0 py-1.5 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                      />
-                    </div>
-                  </div>
+                  )}
                 </div>
 
-                {/* Delivery Option */}
                 <div className="mt-4">
                   <label htmlFor="deliveryOption" className="block text-sm font-medium leading-6 text-gray-900">
                     Delivery Option
@@ -224,48 +200,31 @@ const Checkout = () => {
                   </select>
                 </div>
 
-                <div className="flex gap-4 mt-4">
+                {isAddressConfirmed && (
+                  <div className="flex gap-4 mt-4">
                     <button
-                        onClick={() => handleCheckout('VNPay')}
-                        className="hover:bg-blue-400 font-bold py-2 px-4 rounded flex items-center justify-center h-20 w-48"
+                      onClick={() => handleCheckout('VNPay')}
+                      className="hover:bg-blue-400 font-bold py-2 px-4 rounded flex items-center justify-center h-20 w-48"
                     >
-                        <img
-                            src={assets.Icon_VNPAY_QR}
-                            alt="VNPay Logo"
-                            className="h-14"
-                        />
+                      <img
+                        src={assets.Icon_VNPAY_QR}
+                        alt="VNPay Logo"
+                        className="h-14"
+                      />
                     </button>
                     <button
-                        onClick={() => handleCheckout('PayPal')}
-                        className="hover:bg-yellow-400 font-bold py-2 px-4 rounded flex items-center justify-center h-20 w-48"
+                      onClick={() => handleCheckout('PayPal')}
+                      className="hover:bg-yellow-400 font-bold py-2 px-4 rounded flex items-center justify-center h-20 w-48"
                     >
-                        <img
-                            src={assets.PayPal_Logo}
-                            alt="PayPal Logo"
-                            className="h-14"
-                        />
+                      <img
+                        src={assets.PayPal_Logo}
+                        alt="PayPal Logo"
+                        className="h-14"
+                      />
                     </button>
-                </div>
-
-
-                <div className="md:w-full mx-auto">
-                  <div className="bg-white rounded-lg shadow-md p-6 mb-4 overflow-auto">
-                    <div className="flex gap-4 mt-4">
-                      <button
-                        onClick={() => handleVoucherClick('V01')}
-                        className="group relative bg-neutral-800 h-16 w-64 border text-left p-3 text-gray-50 text-base font-bold rounded-lg overflow-hidden before:absolute before:w-12 before:h-12 before:content[''] before:right-1 before:top-1 before:z-10 before:bg-violet-500 before:rounded-full before:blur-lg after:absolute after:z-10 after:w-20 after:h-20 after:content[''] after:bg-rose-300 after:right-8 after:top-3 after:rounded-full after:blur-lg"
-                      >
-                        Voucher Discount 30%
-                      </button>
-                      <button
-                        onClick={() => handleVoucherClick('V02')}
-                        className="group relative bg-neutral-800 h-16 w-64 border text-left p-3 text-gray-50 text-base font-bold rounded-lg overflow-hidden before:absolute before:w-12 before:h-12 before:content[''] before:right-1 before:top-1 before:z-10 before:bg-violet-500 before:rounded-full before:blur-lg after:absolute after:z-10 after:w-20 after:h-20 after:content[''] after:bg-rose-300 after:right-8 after:top-3 after:rounded-full after:blur-lg"
-                      >
-                        Voucher Discount 50%
-                      </button>
-                    </div>
                   </div>
-                </div>
+                )}
+
               </div>
             </div>
           </div>
@@ -292,8 +251,8 @@ const Checkout = () => {
                 <span>${getTotalCartAmount()}</span>
               </div>
               <div className="flex justify-between mb-2">
-                <span>Taxes</span>
-                <span>${(getTotalCartAmount() * 0.1).toFixed(2)}</span>
+                <span>Shipping</span>
+                <span>${shipCost.toFixed(2)}</span>
               </div>
               <div className="flex justify-between mb-2">
                 <span>Voucher</span>

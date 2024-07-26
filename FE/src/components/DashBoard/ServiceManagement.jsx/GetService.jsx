@@ -222,39 +222,34 @@ const GetService = () => {
                   All
                 </button>
                 <button
-                  onClick={() => handleSelect(0)}
-                  className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
-                  Pending
-                </button>
-                <button
                   onClick={() => handleSelect(2)}
                   className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
-                  Staff Accepted
+                  Check-in
                 </button>
                 <button
                   onClick={() => handleSelect(1)}
                   className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
-                  Completed
+                  Staff Accepted
                 </button>
                 <button
                   onClick={() => handleSelect(3)}
                   className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
-                  Cancelled
+                  Completed
                 </button>
                 <button
                   onClick={() => handleSelect(4)}
-                  className="block w-full px-4 py-2 text-[13px] text-left text-gray-700 hover:bg-gray-100 hover:text-gray-900">
-                  Failed
+                  className="block w-full px-4 py-2 text-[13px] text-left text-[#4B5675] hover:bg-gray-100 hover:text-blue-500">
+                  Cancelled
                 </button>
               </div>
             )}
           </div>
 
-          <button
+          {/* <button
             onClick={handleAddOrder}
             className="inline-flex items-center justify-center w-[109.5px] h-[40.3906px] px-[20.5px] py-[11.075px] text-[13.2px] font-medium text-white bg-[#1B84FF] rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
             Add Order
-          </button>
+          </button> */}
         </div>
       )}
 
@@ -349,13 +344,13 @@ const GetService = () => {
                         className="block px-4 py-2 text-sm text-gray-700 w-full text-left">
                         Done
                       </button>
-                      <button
+                      {/* <button
                         onClick={() =>
                           updateOrderStatus(order.orderId, "PROCESSING")
                         }
                         className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
                         Process
-                      </button>
+                      </button> */}
                       <button
                         onClick={() =>
                           updateOrderStatus(order.orderId, "STAFFACCEPTED")
@@ -365,10 +360,10 @@ const GetService = () => {
                       </button>
                       <button
                         onClick={() =>
-                          updateOrderStatus(order.orderId, "CANCLE")
+                          updateOrderStatus(order.orderId, "CANCEL")
                         }
                         className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
-                        Cancle
+                        Cancel
                       </button>
                     </span>
                   )}

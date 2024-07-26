@@ -18,7 +18,7 @@ import {jwtDecode} from "jwt-decode";
 
 export const loginUser = (user, dispatch, navigate) => {
   dispatch(loginStart());
-  return axios.post('https://fpetspa.azurewebsites.net/api/account/signin/customer', user)
+  return axios.post('https://localhost:7055/api/account/signin/customer', user)
     .then((res) => {
       const accessToken = res.data.accessToken;
       const refreshToken = res.data.refreshToken;
@@ -48,14 +48,14 @@ export const loginUser = (user, dispatch, navigate) => {
 
 
 // https://localhost:7055/api/account/signin/customer
-// https://fpetspa.azurewebsites.net/api/account/signin/customer
+// https://localhost:7055/api/account/signin/customer
 
 
 
 export const registerUser = async (user, dispatch, navigate) => {
   dispatch(registerStart());
   try {
-      await axios.post(`https://fpetspa.azurewebsites.net/api/account/signup/customer`, user);
+      await axios.post(`https://localhost:7055/api/account/signup/customer`, user);
       dispatch(registerSuccess());
       navigate("/login")
   } catch (error) {
@@ -65,12 +65,12 @@ export const registerUser = async (user, dispatch, navigate) => {
   }
 };
 //https://localhost:7055/api/account/signup/customer
-//https://fpetspa.azurewebsites.net/api/account/signup/customer
+//https://localhost:7055/api/account/signup/customer
 
 export const signInWithGoogle = async (googleUser, dispatch, navigate) => {
     dispatch(loginStart());
     try {
-        const res = await axios.get("https://fpetspa.azurewebsites.net/api/account/login-google", googleUser, {
+        const res = await axios.get("https://localhost:7055/api/account/login-google", googleUser, {
             headers: {
                 'Content-Type': 'application/json'
             },
@@ -94,7 +94,7 @@ export const logoutUser = async (
 ) => {
     dispatch(logoutStart());
     try {
-        await axiosJWT.post(`https://fpetspa.azurewebsites.net/api/account/log-out`, userId, {
+        await axiosJWT.post(`https://localhost:7055/api/account/log-out`, userId, {
             headers: { Authorization: `Bearer ${accessToken}` },
         });
         dispatch(logoutSuccess());
@@ -104,5 +104,5 @@ export const logoutUser = async (
     }
 };
 // https://localhost:7055/api/account/log-out
-// https://fpetspa.azurewebsites.net/api/account/log-out
+// https://localhost:7055/api/account/log-out
 
