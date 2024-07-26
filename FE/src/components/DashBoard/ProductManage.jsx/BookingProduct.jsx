@@ -15,6 +15,22 @@ const BookingProduct = () => {
 
   const navigate = useNavigate();
 
+  const [customers, setCustomers] = useState([]);
+
+  useEffect(() => {
+    const fetchCustomers = async () => {
+      try {
+        const response = await fetch('https://localhost:7055/api/account/getAllCustomer');
+        const data = await response.json();
+        setCustomers(data);
+      } catch (error) {
+        console.error('Error fetching customers:', error);
+      }
+    };
+
+    fetchCustomers();
+  }, []);
+
   useEffect(() => {
     fetchOrders();
   }, []);
@@ -26,7 +42,7 @@ const BookingProduct = () => {
   const fetchOrders = async () => {
     setIsLoading(true);
     try {
-      const response = await axios.get("https://fpetspa.azurewebsites.net/api/Order/GetAllOrder");
+      const response = await axios.get("https://localhost:7055/api/Order/GetAllOrder");
       const allOrders = response.data;
       setOrders(allOrders);
   
@@ -51,7 +67,7 @@ const BookingProduct = () => {
   const fetchTransactionStatus = async (transactionId) => {
     try {
       const response = await axios.get(
-        `https://fpetspa.azurewebsites.net/api/Transaction/getTransactionById?transactionId=${transactionId}`
+        `https://localhost:7055/api/Transaction/getTransactionById?transactionId=${transactionId}`
       );
       return response.data.status;
     } catch (error) {
@@ -73,7 +89,7 @@ const BookingProduct = () => {
     setIsLoading(true);
     try {
       const response = await axios.put(
-        "https://fpetspa.azurewebsites.net/api/Order/UpdateStatusForOrderProduct",
+        "https://localhost:7055/api/Order/UpdateStatusForOrderProduct",
         null,
         {
           params: {
@@ -191,13 +207,7 @@ const BookingProduct = () => {
     setCurrentStatus(status);
   };
 
-  const handleAddOrder = () => {
-    if (selectedOrders.length > 0) {
-      navigate(`/layout/add-order/${selectedOrders}`);
-    } else {
-      alert("Please select an order to add.");
-    }
-  };
+
 
   const handleCheckboxChange = (orderId) => {
     setSelectedOrders((prevSelected) => {
@@ -224,6 +234,25 @@ const BookingProduct = () => {
   // Chuyển đổi trang
   const paginate = (pageNumber) => {
     setCurrentPage(pageNumber);
+  };
+
+const getCustomerName = (customerId) => {
+    const customer = customers.find((customer) => customer.id === customerId);
+    return customer ? customer.fullName : "Unknown";
+  };
+
+  const handleAutomaticStatusChange = (order) => {
+    if (order.deliveryOption === "SHIPPING") {
+      if (order.status === 1) {
+        updateOrderStatus(order.orderId, "Delivering"); // PreparingOrder -> Delivering
+      } else if (order.status === 2) {
+        updateOrderStatus(order.orderId, "Shipped"); // Delivering -> Shipped
+      }
+    } else if (order.deliveryOption === "PICKUP") {
+      if (order.status === 1) {
+        updateOrderStatus(order.orderId, "ReadyForPickup"); // PreparingOrder  -> ReadyForPickup
+      }
+    }
   };
 
   return (
@@ -321,29 +350,18 @@ const BookingProduct = () => {
             )}
           </div>
 
-          <button
-            onClick={handleAddOrder}
-            className="inline-flex items-center justify-center w-[109.5px] h-[40.3906px] px-[20.5px] py-[11.075px] text-[13.2px] font-medium text-white bg-[#1B84FF] rounded-md hover:bg-blue-600 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-blue-500">
-            Add Order
-          </button>
+    
         </div>
       )}
 
       <table className="min-w-full bg-white border border-gray-200 rounded-md mt-4">
         <thead>
           <tr>
-            <th className="w-[20px] px-6 py-3 text-left text-[12.35px] font-semibold text-gray-500 uppercase tracking-wider">
-              <input
-                type="checkbox"
-                onChange={() => {}}
-                className="cursor-pointer"
-              />
-            </th>
             <th className="px-6 py-3 text-left text-[12.35px] font-semibold text-gray-500 uppercase tracking-wider">
               Order ID
             </th>
             <th className="px-6 py-3 text-left text-[12.35px] font-semibold text-gray-500 uppercase tracking-wider">
-              Customer ID
+              Customer Name
             </th>
             <th className="px-6 py-3 text-left text-[12.35px] font-semibold text-gray-500 uppercase tracking-wider">
               Status
@@ -369,19 +387,11 @@ const BookingProduct = () => {
         <tbody>
           {currentOrders.map((order) => (
             <tr key={order.orderId} className="border-b border-gray-200">
-              <td className="px-6 py-4 whitespace-nowrap">
-                <input
-                  type="checkbox"
-                  checked={selectedOrders.includes(order.orderId)}
-                  onChange={() => handleCheckboxChange(order.orderId)}
-                  className="cursor-pointer"
-                />
-              </td>
               <td className="px-6 py-4 whitespace-nowrap text-[13.975px] font-semibold text-gray-900">
                 {order.orderId}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-[13.975px] font-semibold text-gray-900">
-                {order.customerId}
+              {getCustomerName(order.customerId)}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-[13.975px] font-semibold">
                 <span
@@ -403,96 +413,23 @@ const BookingProduct = () => {
                 ${order.total}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-[13.975px] font-semibold text-[#78829D]">
-                {order.requiredDate}
+                {order.createTime}
               </td>
               <td className="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
                 <div className="relative inline-block text-left">
                   <button
-                    onClick={() => toggleDropdown(order.orderId)}
+                    onClick={() => handleAutomaticStatusChange(order)}
                     className="inline-flex items-center justify-center w-full px-3.5 py-[8.15px] bg-[#F9F9F9] text-[12.35px] font-medium text-gray-700 rounded-md hover:bg-[#E9F3FF] hover:text-[#1B84FF]">
-                    Actions
-                    <svg
-                      className="-mr-1 ml-2 h-4 w-4 mb-[3px] transform transition-transform duration-200"
-                      xmlns="http://www.w3.org/2000/svg"
-                      viewBox="0 0 20 20"
-                      fill="currentColor"
-                      aria-hidden="true">
-                      <path
-                        fillRule="evenodd"
-                        d="M5.293 9.293a1 1 0 011.414 0L10 12.586l3.293-3.293a1 1 0 111.414 1.414l-4 4a1 1 0 01-1.414 0l-4-4a1 1 0 010-1.414z"
-                        clipRule="evenodd"
-                      />
-                    </svg>
+                    Change
                   </button>
 
-                  {dropdownState[order.orderId] && (
-                    <span className="absolute left-0 mt-11 w-32 rounded-md bg-white  z-10">
-                      <button
-                        onClick={() =>
-                          updateOrderStatus(order.orderId, "SUCCESFULLY")
-                        }
-                        className="block px-4 py-2 text-sm text-gray-700 w-full text-left">
-                        Done
-                      </button>
-                      <button
-                        onClick={() =>
-                          updateOrderStatus(order.orderId, "PROCESSING")
-                        }
-                        className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
-                        Process
-                      </button>
-                      <button
-                        onClick={() =>
-                          updateOrderStatus(order.orderId, "PREPARINGORDER")
-                        }
-                        className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
-                        PreparingOrder
-                      </button>
-                      <button
-                        onClick={() =>
-                          updateOrderStatus(order.orderId, "DELIVERING")
-                        }
-                        className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
-                        Delivering
-                      </button>
-                      <button
-                        onClick={() =>
-                          updateOrderStatus(order.orderId, "SHIPPED")
-                        }
-                        className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
-                        Shipped
-                      </button>
-                      <button
-                        onClick={() =>
-                          updateOrderStatus(order.orderId, "READYFORPICKUP")
-                        }
-                        className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
-                        ReadyForPickup
-                      </button>
-                      <button
-                        onClick={() =>
-                          updateOrderStatus(order.orderId, "SUCCESSFULLY")
-                        }
-                        className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
-                        Successfully
-                      </button>
-                      <button
-                        onClick={() =>
-                          updateOrderStatus(order.orderId, "CANCLE")
-                        }
-                        className="block px-4 py-2 text-sm text-gray-700  w-full text-left">
-                        Cancle
-                      </button>
-                    </span>
-                  )}
                 </div>
               </td>
             </tr>
           ))}
         </tbody>
       </table>
-
-      {/* Nút phân trang */}
+      
       <div className="flex justify-center mt-4 space-x-2">
         {Array.from(
           { length: Math.ceil(filteredOrders.length / pageSize) },

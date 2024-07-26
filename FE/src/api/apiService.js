@@ -1,7 +1,7 @@
 import axios from '../utils/axiosClient';
 
 export const getAllProduct = () => {
-  return axios.get(`https://fpetspa.azurewebsites.net/api/products?pageSize=100`);
+  return axios.get(`/products?pageSize=100`);
 };
 
 
@@ -14,7 +14,7 @@ export const getSearchProduct = async ({ product = '' }) => {
 };
 
 export const getProductsByCategory = async ({ category = '' }) => {
-  const response = await fetch(`https://fpetspa.azurewebsites.net/api/products?pageSize=100&categoryName=${category}`);
+  const response = await axios.get(`https://localhost:7055/api/products?pageSize=100&categoryName=${category}`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
@@ -22,7 +22,7 @@ export const getProductsByCategory = async ({ category = '' }) => {
 };
 
 export const getProductById = async ({ productId = '' }) => {
-  const response = await fetch(`https://fpetspa.azurewebsites.net/api/products/SearchById?id=${productId}`);
+  const response = await fetch(`https://localhost:7055/api/products/SearchById?id=${productId}`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
@@ -30,9 +30,9 @@ export const getProductById = async ({ productId = '' }) => {
 };
 
 
-// https://fpetspa.azurewebsites.net/api/products/SearchById?id=${id}
+// https://localhost:7055/api/products/SearchById?id=${id}
 export const getProductName = async ({ productName = '' }) => {
-  const response = await fetch(`https://fpetspa.azurewebsites.net/api/products?productName=${productName}`);
+  const response = await fetch(`https://localhost:7055/api/products?productName=${productName}`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
@@ -42,7 +42,7 @@ export const getProductName = async ({ productName = '' }) => {
 
 
 export const getCartById = async ({ cartId='', productId='' }) => {
-  const response = await fetch(`https://fpetspa.azurewebsites.net/api/CartDetail/Getbyid?cartId=${cartId}&productId=${productId}`);
+  const response = await fetch(`https://localhost:7055/api/CartDetail/Getbyid?cartId=${cartId}&productId=${productId}`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }
@@ -52,7 +52,7 @@ export const getCartById = async ({ cartId='', productId='' }) => {
 
 
 export const getCartByUserId = async (userId) => {
-  const response = await fetch(`https://fpetspa.azurewebsites.net/api/CartDetail/GetById?userId=${userId}`);
+  const response = await fetch(`https://localhost:7055/api/CartDetail/GetById?userId=${userId}`);
   if (!response.ok) {
     throw new Error('Network response was not ok');
   }

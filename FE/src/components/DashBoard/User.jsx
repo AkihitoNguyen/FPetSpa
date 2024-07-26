@@ -6,7 +6,7 @@ const User = () => {
   useEffect(() => {
     const fetchCustomers = async () => {
       try {
-        const response = await fetch('https://fpetspa.azurewebsites.net/api/account/getAllCustomer');
+        const response = await fetch('https://localhost:7055/api/account/getAllCustomer');
         const data = await response.json();
         setCustomers(data);
       } catch (error) {

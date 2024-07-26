@@ -14,7 +14,13 @@ const SecondForm = () => {
 
   // Hàm xử lý khi bấm chuyển hướng đến trang "/booking"
   const handleClick = () => {
+    // Lưu danh sách dịch vụ đã chọn vào localStorage
     localStorage.setItem("selectedServices", JSON.stringify(selectedServices));
+    
+    // Lưu chỉ các serviceId vào localStorage
+    const selectedServiceIds = selectedServices.map(service => service.servicesId);
+    localStorage.setItem("selectedServiceIds", JSON.stringify(selectedServiceIds));
+
     navigate("/booking");
   };
 
@@ -31,16 +37,31 @@ const SecondForm = () => {
       setAddedServices([...addedServices, item.servicesId]);
     }
     setSelectedServices(updatedServices);
+    
+    // Cập nhật localStorage với danh sách các dịch vụ đã chọn
+    const selectedServiceIds = updatedServices.map(service => service.servicesId);
+    localStorage.setItem("selectedServiceIds", JSON.stringify(selectedServiceIds));
+    
+    // Cập nhật localStorage với danh sách dịch vụ đã chọn
     localStorage.setItem("selectedServices", JSON.stringify(updatedServices));
   };
-  
 
   // Sử dụng useEffect để fetch danh sách dịch vụ từ API khi component mount
   useEffect(() => {
-    fetch("https://fpetspa.azurewebsites.net/api/services/search")
+    // Fetch các dịch vụ từ API
+    fetch("https://localhost:7055/api/services/search")
       .then((response) => response.json())
       .then((data) => {
         setServices(data);
+
+        // Lấy danh sách các servicesId từ localStorage và tìm các dịch vụ đã chọn
+        const savedServiceIds = JSON.parse(localStorage.getItem("selectedServiceIds")) || [];
+        const savedServices = data.filter(service => savedServiceIds.includes(service.servicesId));
+        
+        setSelectedServices(savedServices);
+        setAddedServices(savedServiceIds);
+        setTotalCost(savedServices.reduce((total, service) => total + service.price, 0));
+        
         setLoading(false); // Dừng loading khi fetch thành công
       })
       .catch((error) => {
@@ -89,7 +110,7 @@ const SecondForm = () => {
                       </div>
                     </div>
                     <div className="text-[#5F5F5F] text-[12px] line-clamp-3 min-h-[48[x] px-[5px]" role="presentation">
-                      {item.desciption}
+                      {item.description}
                     </div>
                     {/* price */}
                     <div className="px-[5px] flex gap-[5px]">

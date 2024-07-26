@@ -10,12 +10,27 @@ const ForgotPassword = ({ onBackToSignIn }) => {
     const [password, setPassword] = useState("");
     const [confirmPassword, setConfirmPassword] = useState("");
     const [timer, setTimer] = useState(45);
+    const [emailError, setEmailError] = useState("");
+    const [passwordError, setPasswordError] = useState("");
+    const [confirmPasswordError, setConfirmPasswordError] = useState("");
     const inputRefs = useRef([]);
 
     const handleForgotPassword = async (e) => {
         e.preventDefault();
+        setEmailError(''); // Clear previous error
+    
+        if (!forgotPasswordEmail.trim()) {
+            setEmailError("Email cannot be empty.");
+            return;
+        }
+    
+        if (!validateEmail(forgotPasswordEmail)) {
+            setEmailError("Please enter a valid email address.");
+            return;
+        }
+    
         try {
-            const response = await axios.post(`https://fpetspa.azurewebsites.net/api/account/SendCodeResetPassWord?email=${forgotPasswordEmail}`, { email: forgotPasswordEmail });
+            const response = await axios.post(`https://localhost:7055/api/account/SendCodeResetPassWord?email=${forgotPasswordEmail}`, { email: forgotPasswordEmail });
             if (response.status === 200) {
                 toast.info("Forgot password. Please check your email.");
                 setIsCodeSent(true);
@@ -25,9 +40,16 @@ const ForgotPassword = ({ onBackToSignIn }) => {
             toast.error("Failed to send reset link. Please try again.");
         }
     };
+    
 
     const handleForgotPasswordEmailChange = (e) => {
-        setForgotPasswordEmail(e.target.value);
+        const email = e.target.value;
+        setForgotPasswordEmail(email);
+        if (!validateEmail(email)) {
+            setEmailError("Please enter a valid email address.");
+        } else {
+            setEmailError("");
+        }
     };
 
     useEffect(() => {
@@ -95,7 +117,7 @@ const ForgotPassword = ({ onBackToSignIn }) => {
     const handleVerifyCode = async (e) => {
         e.preventDefault();
         try {
-            const response = await axios.post(`https://fpetspa.azurewebsites.net/api/account/CheckCodeResetPassword?email=${forgotPasswordEmail}&&code=${verificationCode.join('')}`, { email: forgotPasswordEmail, code: verificationCode.join('') });
+            const response = await axios.post(`https://localhost:7055/api/account/CheckCodeResetPassword?email=${forgotPasswordEmail}&&code=${verificationCode.join('')}`, { email: forgotPasswordEmail, code: verificationCode.join('') });
             if (response.status === 200) {
                 toast.success("Code verified successfully. You can reset your password now.");
                 setIsCodeVerified(true);
@@ -105,23 +127,54 @@ const ForgotPassword = ({ onBackToSignIn }) => {
         }
     };
 
+    const validatePassword = (password) => {
+        const passwordRegex = /^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@#$%^&*])(?=.{8,})/;
+        return passwordRegex.test(password);
+    };
+
     const handlePasswordChange = (e) => {
-        setPassword(e.target.value);
+        const pwd = e.target.value;
+        setPassword(pwd);
+        if (!validatePassword(pwd)) {
+            setPasswordError("Password must be at least 8 characters long, contain uppercase and lowercase letters, and a special character.");
+        } else {
+            setPasswordError("");
+        }
     };
 
     const handleConfirmPasswordChange = (e) => {
-        setConfirmPassword(e.target.value);
+        const confirmPwd = e.target.value;
+        setConfirmPassword(confirmPwd);
+        if (confirmPwd !== password) {
+            setConfirmPasswordError("Confirm password does not match.");
+        } else {
+            setConfirmPasswordError("");
+        }
     };
 
     const handleResetPassword = async (e) => {
         e.preventDefault();
+        setPasswordError(""); // Clear previous error
+        setConfirmPasswordError(""); // Clear previous error
+        if (!password) {
+            setPasswordError("Password cannot be empty.");
+            return;
+        }
+        if (!confirmPassword) {
+            setConfirmPasswordError("Confirm password cannot be empty.");
+            return;
+        }
+        if (!validatePassword(password)) {
+            setPasswordError("Password must be at least 8 characters long, contain uppercase and lowercase letters, and a special character.");
+            return;
+        }
         if (password !== confirmPassword) {
-            toast.error("Passwords do not match. Please try again.");
+            setConfirmPasswordError("Confirm password does not match.");
             return;
         }
 
         try {
-            const response = await axios.post(`https://fpetspa.azurewebsites.net/api/account/ForgetPassword?email=${forgotPasswordEmail}&&password=${password}`, { email: forgotPasswordEmail, password });
+            const response = await axios.post(`https://localhost:7055/api/account/ForgetPassword?email=${forgotPasswordEmail}&&password=${password}`, { email: forgotPasswordEmail, password });
             if (response.status === 200) {
                 toast.success("Password reset successfully. You can now sign in with your new password.");
                 onBackToSignIn();
@@ -141,6 +194,11 @@ const ForgotPassword = ({ onBackToSignIn }) => {
         }
     }, [isCodeSent, timer]);
 
+    const validateEmail = (email) => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        return emailRegex.test(email);
+    };
+
     return (
         <div className="absolute inset-0 bg-gray-900 bg-opacity-50 flex justify-center items-center">
             <div className="bg-white p-8 rounded-lg shadow-lg w-full max-w-md">
@@ -157,8 +215,10 @@ const ForgotPassword = ({ onBackToSignIn }) => {
                                 placeholder="Email Address"
                                 value={forgotPasswordEmail}
                                 onChange={handleForgotPasswordEmailChange}
+                                onBlur={handleForgotPasswordEmailChange}
                                 required
                             />
+                            {emailError && <div className="text-red-500 text-sm mt-1">{emailError}</div>}
                         </div>
                         <div className="mt-4">
                             <button
@@ -235,8 +295,10 @@ const ForgotPassword = ({ onBackToSignIn }) => {
                                 placeholder="New Password"
                                 value={password}
                                 onChange={handlePasswordChange}
+                                onBlur={handlePasswordChange}
                                 required
                             />
+                            {passwordError && <div className="text-red-500 text-sm mt-1">{passwordError}</div>}
                         </div>
                         <div>
                             <input
@@ -245,8 +307,10 @@ const ForgotPassword = ({ onBackToSignIn }) => {
                                 placeholder="Confirm New Password"
                                 value={confirmPassword}
                                 onChange={handleConfirmPasswordChange}
+                                onBlur={handleConfirmPasswordChange}
                                 required
                             />
+                            {confirmPasswordError && <div className="text-red-500 text-sm mt-1">{confirmPasswordError}</div>}
                         </div>
                         <div className="mt-4">
                             <button

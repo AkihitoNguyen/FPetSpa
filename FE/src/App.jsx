@@ -9,6 +9,7 @@ import Login from "./pages/Login/Login";
 import Register from "./pages/Register/Register";
 import Product from "./pages/Product/Product";
 import ProductDisplay from "./components/ProductDisplay/ProductDisplay";
+import Footer from "./components/Footer/Footer"
 
 import "react-toastify/dist/ReactToastify.css";
 import "semantic-ui-css/semantic.min.css";
@@ -39,8 +40,10 @@ import AddProduct from "./components/DashBoard/ProductManage.jsx/AddProduct";
 import SearchResult from "./components/PageProduct/SearchResult";
 import SecondForm from "./components/FormComponents/SecondForm";
 import FirstForm from "./components/FormComponents/FirstForm";
+import { ToastContainer } from "react-toastify";
+import Transactions from "./components/DashBoard/Transactions";
+import PrivateRoute from "../src/utils/PrivateRoute"
 import ForgotPassword from "./pages/ForgotPassword/ForgotPassword";
-import Staff from "./components/DashBoard/Staff"
 
 const App = () => {
   const [showNavbarAndFooter, setShowNavbarAndFooter] = useState(true);
@@ -58,6 +61,8 @@ const App = () => {
   return (
     <>
       <div className="app">
+      <ToastContainer />
+
         {showNavbarAndFooter && <Navbar />}
         <Routes>
           <Route path="/" element={<Home />} />
@@ -80,31 +85,29 @@ const App = () => {
           <Route path="/qr" element={<QR />} />
           <Route path="/productdisplay/:productId" element={<ProductDisplay />} />
           <Route path="/search" element={<SearchResult />} />
-          <Route path="/forgot-password" element={<ForgotPassword/>}/>
+          <Route path="/forgotpassword" element={<ForgotPassword />} />
 
-          <Route path="/layout" element={<Layout />}>
-            <Route path="dashboards" element={<Dashboards />} />
-            <Route path="add-order/:orderId" element={<AddOrder />} />
-            <Route path="service-info" element={<GetService />} />
-            <Route path="add-service" element={<AddService />} />
-            <Route path="edit-service/:servicesId" element={<EditService />} />
-            <Route path="view-service" element={<ViewService />} />
-            <Route path="account-info" element={<User />} />
-            <Route path="product-info" element={<GetProduct />} />
-            <Route path="add-product" element={<AddProduct />} />
-            <Route path="booking-product" element={<BookingProduct />} />
-            <Route path="staff" element={<Staff/>}/> 
+          <Route path="/layout" element={<PrivateRoute  element={<Layout/>}  allowedRoles={['Admin']}/>}>
+            <Route path="dashboards" element={<PrivateRoute element={<Dashboards />} allowedRoles={['Admin']} />} />
+            <Route path="add-order/:orderId" element={<PrivateRoute element={<AddOrder />} allowedRoles={['Admin']} />} />
+            <Route path="service-info" element={<PrivateRoute element={<GetService />} allowedRoles={['Admin']} />} />
+            <Route path="add-service" element={<PrivateRoute element={<AddService />} allowedRoles={['Admin']} />} />
+            <Route path="edit-service/:servicesId" element={<PrivateRoute element={<EditService />} allowedRoles={['Admin']} />} />
+            <Route path="view-service" element={<PrivateRoute element={<ViewService />} allowedRoles={['Admin']} />} />
+            <Route path="account-info" element={<PrivateRoute element={<User />} allowedRoles={['Admin']} />} />
+            <Route path="product-info" element={<PrivateRoute element={<GetProduct />} allowedRoles={['Admin']} />} />
+            <Route path="add-product" element={<PrivateRoute element={<AddProduct />} allowedRoles={['Admin']} />} />
+            <Route path="booking-product" element={<PrivateRoute element={<BookingProduct />} allowedRoles={['Admin']} />} />
+            <Route path="transactions" element={<PrivateRoute element={<Transactions />} allowedRoles={['Admin']} />} />
           </Route>
-          
+
           <Route path="/layout/dashboards" element={<DashBoard />} />
 
           {/* Đường dẫn không khớp */}
           <Route path="*" element={<NotFound />} />
-
         </Routes>
-       
       </div>
-      {showNavbarAndFooter && <div className="bg-gray-700"></div>}
+      {showNavbarAndFooter && <div className="bg-gray-700"><Footer/></div>}
     </>
   );
 };

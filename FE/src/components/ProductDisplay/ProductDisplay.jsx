@@ -47,7 +47,7 @@ const ProductDisplay = () => {
 
   const fetchComments = async (productId) => {
     try {
-      const response = await fetch(`https://fpetspa.azurewebsites.net/api/FeedBack/productId?productId=${productId}`);
+      const response = await fetch(`https://localhost:7055/api/FeedBack/productId?productId=${productId}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -62,7 +62,7 @@ const ProductDisplay = () => {
 
   const fetchUsers = async () => {
     try {
-      const response = await fetch('https://fpetspa.azurewebsites.net/api/account/getAllCustomer');
+      const response = await fetch('https://localhost:7055/api/account/getAllCustomer');
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }
@@ -77,7 +77,7 @@ const ProductDisplay = () => {
 
   const fetchRelatedProducts = async (categoryName) => {
     try {
-      const response = await fetch(`https://fpetspa.azurewebsites.net/api/products?pageSize=100&categoryName=${categoryName}`);
+      const response = await fetch(`https://localhost:7055/api/products?pageSize=100&categoryName=${categoryName}`);
       if (!response.ok) {
         throw new Error('Network response was not ok');
       }

@@ -1,7 +1,7 @@
 import axios from "axios";
 
 const api = axios.create({
-    baseURL: 'https://fpetspa.azurewebsites.net'
+    baseURL: 'https://localhost:7055/api'
 
 });
 

@@ -9,7 +9,7 @@ import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { assets } from "../../assets/assets";
 import SearchProduct from "../../components/PageProduct/SearchProduct";
-
+import NotificationsIcon from '@mui/icons-material/Notifications';
 const Navbar = () => {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -187,6 +187,9 @@ const Navbar = () => {
             </Link>
           </div>
         )}
+        <div className="relative">
+        <NotificationsIcon/>
+        </div>
         <div className="relative">
           <Link to="/cart" className="relative">
             <img src={assets.cart} alt="" className="w-6" />

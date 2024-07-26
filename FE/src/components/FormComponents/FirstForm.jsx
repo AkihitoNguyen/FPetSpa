@@ -16,7 +16,6 @@ const FirstForm = ({ formValues, onChange, userPets }) => {
   };
 
   useEffect(() => {
-    // Clear selectedServices from localStorage on page refresh
     const handleBeforeUnload = () => {
       localStorage.removeItem("selectedServices");
     };
@@ -29,7 +28,7 @@ const FirstForm = ({ formValues, onChange, userPets }) => {
   }, []);
 
   useEffect(() => {
-    fetch("https://fpetspa.azurewebsites.net/api/BookingTime/GetAllBookingTime")
+    fetch("https://localhost:7055/api/BookingTime/GetAllBookingTime")
       .then((response) => response.json())
       .then((data) => {
         const currentDateTime = new Date();
@@ -103,30 +102,7 @@ const FirstForm = ({ formValues, onChange, userPets }) => {
         <div className="bg-white mt-2">
           <div className="mx-auto mt-2 max-w-xl sm:mt-5 p-4">
             <div className="grid grid-cols-3 gap-x-8 gap-y-6 sm:grid-cols-2">
-              {/* Select Pet */}
-              <div className="sm:col-span-2">
-                <label
-                  htmlFor="pet-id"
-                  className="block text-sm font-semibold leading-6 text-[#FC819E]"
-                >
-                  1. Choose pets
-                </label>
-                <div className="mt-2.5">
-                  <select
-                    name="petId"
-                    id="pet-id"
-                    onChange={onChange}
-                    value={formValues.petId}
-                    className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
-                  >
-                    {userPets.map((pet) => (
-                      <option key={pet.petId} value={pet.petId}>
-                        {pet.petName}
-                      </option>
-                    ))}
-                  </select>
-                </div>
-              </div>
+
 
               {/* Service Type */}
               <div className="sm:col-span-2">
@@ -134,7 +110,7 @@ const FirstForm = ({ formValues, onChange, userPets }) => {
                   htmlFor="serviceId"
                   className="block text-sm font-semibold leading-6 text-[#FC819E]"
                 >
-                  2. Choose services
+                  1. Choose services
                 </label>
                 <div
                   className="mt-2.5 cursor-pointer flex items-center bg-[#f7f7f7] h-11 rounded px-2.5"
@@ -177,6 +153,32 @@ const FirstForm = ({ formValues, onChange, userPets }) => {
                 <div className="text-sm text-[#11B14B]">
                   Total amount to be paid:
                   <span className="font-normal"> {totalAmount}$</span>
+                </div>
+              </div>
+
+                            {/* Select Pet */}
+                            <div className="sm:col-span-2">
+                <label
+                  htmlFor="pet-id"
+                  className="block text-sm font-semibold leading-6 text-[#FC819E]"
+                >
+                  2. Choose pets
+                </label>
+                <div className="mt-2.5">
+                  <select
+                    name="petId"
+                    id="pet-id"
+                    onChange={onChange}
+                    value={formValues.petId}
+                    className="block w-full rounded-md border-0 px-3.5 py-2 text-gray-900 shadow-sm ring-1 ring-inset ring-gray-300 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                  >
+                    <option value="" className="text-gray-500">Choose pet</option>
+                    {userPets.map((pet) => (
+                      <option key={pet.petId} value={pet.petId}>
+                        {pet.petName}
+                      </option>
+                    ))}
+                  </select>
                 </div>
               </div>
 

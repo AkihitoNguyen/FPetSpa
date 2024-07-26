@@ -2,9 +2,23 @@ import React from "react";
 import Slide from "../../components/Slide/Slide";
 import "./Home.css"; // Import the CSS file
 import ServiceName from "../../components/Service/ServiceName";
-import ServiceName2 from "../../components/Service/ServiceName2";
 
+import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 const Home = () => {
+
+  const navigate = useNavigate();
+
+  const isLoggedIn = useSelector((state) => state.auth.login?.currentUser);
+
+  const handleBookingClick = () => {
+    if (isLoggedIn) {
+      navigate("/booking");
+    } else {
+      alert("Please log in to book a service.");
+      navigate("/login", { state: { returnTo: "/" } });
+    }
+  };
   return (
     <div className="bg-[#F5F5F7]">
       <div className="mb-[69px]">
@@ -25,8 +39,8 @@ const Home = () => {
           {/*  */}
           <div className="flex mt-3 gap-4">
             <a
-              href="/booking"
-              className="bg-gradient-to-r from-[#f0f9ff] via-[#cbebff] hover:text-[#262626] hover:from-[#f0f9ff] text-[#262626] text-[16px] font-semibold border-2  border-[#e5e7eb] rounded-lg px-4 py-2">
+              className="bg-gradient-to-r from-[#f0f9ff] via-[#cbebff] hover:text-[#262626] hover:from-[#f0f9ff] text-[#262626] text-[16px] font-semibold border-2  border-[#e5e7eb] rounded-lg px-4 py-2"
+              onClick={handleBookingClick}>
               BOOKING NOW
             </a>
           </div>
@@ -50,7 +64,6 @@ const Home = () => {
         </div>
       </div>
       <ServiceName/>
-      <ServiceName2/>
     </div>
   );
 };

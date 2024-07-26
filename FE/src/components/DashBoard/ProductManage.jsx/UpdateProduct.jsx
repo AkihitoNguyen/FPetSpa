@@ -63,7 +63,7 @@ const UpdateProduct = ({ product, closeModal, onUpdate }) => {
     formData.append('price', updatedProduct.price);
 
     try {
-      await axios.put(`https://fpetspa.azurewebsites.net/api/products/${product.productId}`, formData, {
+      await axios.put(`https://localhost:7055/api/products/${product.productId}`, formData, {
         headers: {
           'Content-Type': 'multipart/form-data',
         },

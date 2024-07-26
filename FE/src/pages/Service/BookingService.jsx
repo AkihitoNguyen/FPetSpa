@@ -5,67 +5,36 @@ import axios from "axios";
 import { useSelector } from "react-redux";
 import dayjs from "dayjs";
 
-const API_BASE_URL = "https://fpetspa.azurewebsites.net/api";
+const API_BASE_URL = "https://localhost:7055/api";
 
 const BookingService = () => {
   const currentUser = useSelector((state) => state.auth.login.currentUser);
   const [petData, setPetData] = useState([]);
-  const formList = ["FirstForm"]; // Đã thêm SecondForm vào formList
-
+  const formList = ["FirstForm"];
   const formLength = formList.length;
+
   const [loading, setLoading] = useState(false);
   const [showSuccessPopup, setShowSuccessPopup] = useState(false);
   const [showLoadingInPopup, setShowLoadingInPopup] = useState(false);
   const [showSuccessIcon, setShowSuccessIcon] = useState(false);
-
   const [page, setPage] = useState(0);
-
-  // Khởi tạo giá trị serviceId là một Set chứa "SER1"
   const [values, setValues] = useState({
     date: "",
     timeSlot: "",
-    serviceId: new Set(["SER1", "SER2"]), 
+    serviceId: [], 
     petId: "",
     customerId: currentUser?.userId || "",
   });
-
   const [services, setServices] = useState([]);
   const [selectedServicePrice, setSelectedServicePrice] = useState("");
 
   useEffect(() => {
     if (!currentUser || !currentUser.accessToken) {
-      console.error("Bạn cần đăng nhập để xem thông tin vật nuôi.");
+      console.error("You need to log in to view pet information.");
       return;
     }
-
     fetchPetData();
   }, [currentUser]);
-
-  const fetchPetData = async () => {
-    try {
-      const config = {
-        headers: {
-          Authorization: `Bearer ${currentUser.accessToken}`,
-        },
-      };
-
-      const response = await axios.get(
-        `${API_BASE_URL}/Pet?customerId=${currentUser.userId}`,
-        config
-      );
-
-      const petInfo = response.data;
-
-      const filteredPets = petInfo.filter(
-        (pet) => pet.customerId === currentUser.userId
-      );
-
-      setPetData(filteredPets);
-    } catch (error) {
-      console.error("Lỗi khi lấy dữ liệu vật nuôi:", error);
-      setPetData([]);
-    }
-  };
 
   useEffect(() => {
     axios
@@ -74,32 +43,67 @@ const BookingService = () => {
         setServices(response.data);
       })
       .catch((error) => {
-        console.error("Lỗi khi lấy dữ liệu dịch vụ:", error);
+        console.error("Error fetching services data:", error);
       });
   }, []);
 
-  // Cập nhật Set khi người dùng chọn dịch vụ
+  useEffect(() => {
+    const storedServiceIds = localStorage.getItem("selectedServiceIds");
+    if (storedServiceIds) {
+      try {
+        // Parse the JSON string into an array of service IDs
+        const serviceIds = JSON.parse(storedServiceIds);
+        if (Array.isArray(serviceIds)) {
+          setValues((prevValues) => ({
+            ...prevValues,
+            serviceId: serviceIds,
+          }));
+        }
+      } catch (error) {
+        console.error("Error parsing data from localStorage:", error);
+      }
+    }
+  }, []);
+
+  const fetchPetData = async () => {
+    try {
+      const config = {
+        headers: {
+          Authorization: `Bearer ${currentUser.accessToken}`,
+        },
+      };
+      const response = await axios.get(
+        `${API_BASE_URL}/Pet?customerId=${currentUser.userId}`,
+        config
+      );
+      const petInfo = response.data;
+      const filteredPets = petInfo.filter(
+        (pet) => pet.customerId === currentUser.userId
+      );
+      setPetData(filteredPets);
+    } catch (error) {
+      console.error("Error fetching pet data:", error);
+      setPetData([]);
+    }
+  };
+
   const handleServiceSelection = (serviceId) => {
     setValues((prevValues) => {
       const updatedServiceIds = new Set(prevValues.serviceId);
-
       if (updatedServiceIds.has(serviceId)) {
         updatedServiceIds.delete(serviceId);
       } else {
         updatedServiceIds.add(serviceId);
       }
-
       return {
         ...prevValues,
-        serviceId: updatedServiceIds,
+        serviceId: Array.from(updatedServiceIds),
       };
     });
   };
 
-  // Xử lý khi thay đổi input
   const onChange = (e) => {
     const { name, value } = e.target;
-
     if (name !== "serviceId") {
       setValues((prevValues) => ({
         ...prevValues,
@@ -126,41 +130,32 @@ const BookingService = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
-  
     setLoading(true);
-  
     const datetime = dayjs(
       `${values.date} ${values.timeSlot}`,
       "DD/MM/YYYY HH:mm:ss"
     ).format("DD/MM/YYYY HH:mm:ss");
-  
     const requestData = {
       customerId: values.customerId,
       petId: values.petId,
-      serviceId: Array.from(values.serviceId), 
+      serviceId: values.serviceId, 
       bookingDatetime: datetime,
     };
-  
-    console.log("Request data:", requestData);
-  
+    console.log("Request data before sending:", requestData); // Check data
     try {
       const response = await axios.post(
         `${API_BASE_URL}/Order/StartCheckoutServices`,
         requestData
       );
-  
       console.log("Booking created:", response.data);
-  
       setShowSuccessPopup(true);
       setShowSuccessIcon(true);
       setLoading(false);
     } catch (error) {
-      console.error("Lỗi khi tạo booking:", error.response || error.message);
+      console.error("Error creating booking:", error.response || error.message);
       setLoading(false);
     }
   };
-  
-  
 
   const handleConfirmSuccess = () => {
     setShowSuccessPopup(false);
@@ -182,7 +177,7 @@ const BookingService = () => {
             }}
             onChange={onChange}
             userPets={petData}
-            onServiceSelection={handleServiceSelection} // Truyền hàm chọn dịch vụ
+            onServiceSelection={handleServiceSelection}
           />
         );
       case 1:
@@ -192,7 +187,7 @@ const BookingService = () => {
             onChange={onChange}
             services={services}
             selectedServicePrice={selectedServicePrice}
-            onServiceSelection={handleServiceSelection} // Truyền hàm chọn dịch vụ
+            onServiceSelection={handleServiceSelection}
           />
         );
       default:
@@ -231,14 +226,14 @@ const BookingService = () => {
                   ) : null}
                 </div>
               )}
-              <h2 className="text-lg font-bold mb-4">Đặt lịch thành công! <br />
-               Vui lòng chờ nhân viên xác nhận</h2>
+              <h2 className="text-lg font-bold mb-4">Booking Successful! <br />
+               Please wait for the staff to confirm</h2>
               {!showLoadingInPopup && (
                 <button
                   onClick={handleConfirmSuccess}
                   className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
                 >
-                  Xác nhận
+                  Confirm
                 </button>
               )}
             </div>
@@ -255,9 +250,12 @@ const BookingService = () => {
             <button
               type="button"
               onClick={handleSubmit}
-              className={`bg-[#FC819E] hover:bg-[#f5698a] text-white font-bold py-2 px-10 rounded focus:outline-none focus:shadow-outline`}
+              className={`bg-[#FC819E] hover:bg-[#f5698a] text-white font-bold py-2 px-10 rounded focus:outline-none focus:shadow-outline ${
+                canProceed() ? "" : "opacity-50 cursor-not-allowed"
+              }`}
+              disabled={!canProceed()}
             >
-              Đặt lịch ngay
+              Confirm
             </button>
           ) : (
             <button
@@ -265,7 +263,16 @@ const BookingService = () => {
               onClick={handleNext}
               className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
             >
-              Tiếp theo
+              Next
+            </button>
+          )}
+          {page > 0 && (
+            <button
+              type="button"
+              onClick={handlePrev}
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline ml-2"
+            >
+              Back
             </button>
           )}
         </div>

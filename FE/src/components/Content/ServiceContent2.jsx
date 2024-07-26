@@ -12,7 +12,7 @@ const ServiceContent2 = () => {
 
   useEffect(() => {
     axios
-      .get("https://fpetspa.azurewebsites.net/api/services/Search")
+      .get("https://localhost:7055/api/services/Search")
       .then((response) => {
         setServices(response.data);
         setIsLoading(false); // Dừng hiển thị loaders khi dữ liệu đã tải xong
