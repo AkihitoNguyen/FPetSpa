@@ -109,7 +109,7 @@ namespace FPetSpa
             builder.Services.AddScoped<IAccountRepository, AccountRepository>();
             builder.Services.AddScoped<IProducService, ProductService>();
             builder.Services.AddScoped<IPetService, PetService>();
-            builder.Services.AddScoped<StaffRepository>();
+            builder.Services.AddScoped<IStaffServices, StaffServices>();
 
             builder.Services.AddScoped<ImageController>();
             builder.Services.AddScoped<ProductOrderDetailController>();
@@ -117,7 +117,6 @@ namespace FPetSpa
             builder.Services.AddScoped<PetController>();
             builder.Services.AddScoped<OrderRepository>();
             builder.Services.AddScoped<IIdService, IdService>();
-            builder.Services.AddScoped<IStaffServices, StaffServices>();
             builder.Services.AddScoped<IOrderServices, OrderServices>();
             builder.Services.AddScoped<TransactionService>();
             builder.Services.AddScoped<ImageService>();

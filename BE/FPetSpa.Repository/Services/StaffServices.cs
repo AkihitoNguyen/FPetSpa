@@ -1,4 +1,5 @@
 ﻿using FPetSpa.Repository.Data;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -115,7 +116,7 @@ namespace FPetSpa.Repository.Services
             {
                 if (!string.IsNullOrEmpty(order.StaffId)) 
                 {
-                    var staff = await _context.Staff.FindAsync(order.StaffId);
+                    var staff =  _context.Staff.FirstOrDefault(x => x.StaffId.Equals(order.StaffId));
                     if (staff != null)
                     {
                         if (staff.Status == 0) 

@@ -57,12 +57,6 @@ namespace FPetSpa.Controllers
             {
                 return BadRequest(new { message = "Product is not available" });
             }
-            if (request.Quantity <= 0)
-
-            {
-                return BadRequest(new { message = "Invalid quantity" });
-            }
-
             var checkQuantity = _unitOfWork.ProductRepository.GetById(request.ProductId).ProductQuantity;
             if (checkQuantity == 0)
             {

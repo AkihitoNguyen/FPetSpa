@@ -19,9 +19,9 @@ namespace FPetSpa.Repository.Services
 
         public void CreateSlotWeek()
         {
-            var startTime = new TimeSpan(8, 0, 0); // 16:00
-            var endTime = new TimeSpan(18, 0, 0); // 20:00
-            var interval = new TimeSpan(0, 30, 0); // 20 minutes
+            var startTime = new TimeSpan(8, 00, 0); // 8:00
+            var endTime = new TimeSpan(18, 00, 0); // 18:00
+            var interval = new TimeSpan(1, 00, 0); // 1 hour khoang cach
 
             for (int i = 0; i < 7; i++) // Loop through 7 days of the week
             {

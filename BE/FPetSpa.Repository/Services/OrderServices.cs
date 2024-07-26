@@ -1,6 +1,4 @@
-﻿using FPetSpa.Repository.Data;
-
-namespace FPetSpa.Repository.Services
+﻿namespace FPetSpa.Repository.Services
 {
     public interface IOrderServices
     {
@@ -10,13 +8,10 @@ namespace FPetSpa.Repository.Services
     public class OrderServices : IOrderServices
     {
         private readonly IUnitOfWork _unitOfWork;
-     
-
 
         public OrderServices(IUnitOfWork unitOfWork)
         {
             _unitOfWork = unitOfWork;
-            
         }
 
 
@@ -43,8 +38,6 @@ namespace FPetSpa.Repository.Services
 
             return $"ORS{newIdNumber}";
         }
-      
-
 
     }
 }

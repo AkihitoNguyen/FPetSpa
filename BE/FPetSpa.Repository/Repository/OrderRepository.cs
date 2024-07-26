@@ -22,6 +22,8 @@ using FPetSpa.Repository.Model.PayPalModel;
 using PayPal.Api;
 using Org.BouncyCastle.Tls.Crypto.Impl.BC;
 using FPetSpa.Repository.Model.OrderModel;
+using GoogleApi.Entities.Search.Video.Common.Enums;
+using static QRCoder.PayloadGenerator.ShadowSocksConfig;
 public class OrderRepository
 {
     private readonly ImageService _image;
@@ -51,30 +53,6 @@ public class OrderRepository
     {
         return await _context.Orders.CountAsync();
     }
-    public async Task<bool> UpdateOrder(FPetSpa.Repository.Data.Order order)
-    {
-        var existingOrder = await _context.Orders.FindAsync(order.OrderId);
-        if (existingOrder == null)
-        {
-            return false; // Đơn hàng không tồn tại
-        }
-
-        // Cập nhật các thuộc tính của đơn hàng
-        existingOrder.CustomerId = order.CustomerId;
-        existingOrder.StaffId = order.StaffId;
-        existingOrder.RequiredDate = order.RequiredDate;
-        existingOrder.Total = order.Total;
-        existingOrder.VoucherId = order.VoucherId;
-        existingOrder.TransactionId = order.TransactionId;
-        existingOrder.DeliveryOption = order.DeliveryOption;
-        existingOrder.Status = order.Status;
-
-        // Cập nhật đơn hàng trong cơ sở dữ liệu
-        _context.Orders.Update(existingOrder);
-        await _context.SaveChangesAsync(); // Lưu thay đổi
-
-        return true; // Cập nhật thành công
-    }
     public async Task<decimal> CompareOrdersForTwoMonthsAsync(int year1, int month1, int year2, int month2)
     {
         // Xác định khoảng thời gian của tháng thứ nhất
@@ -87,12 +65,12 @@ public class OrderRepository
 
         // Tổng số đơn hàng của tháng thứ nhất
         var ordersMonth1 = await _context.Orders
-            .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Date >= startOfMonth1 && o.RequiredDate.Value.Date <= endOfMonth1)
+            .Where(o => o.CreateTime.HasValue && o.CreateTime.Value.Date >= startOfMonth1 && o.CreateTime.Value.Date <= endOfMonth1)
             .CountAsync();
 
         // Tổng số đơn hàng của tháng thứ hai
         var ordersMonth2 = await _context.Orders
-            .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Date >= startOfMonth2 && o.RequiredDate.Value.Date <= endOfMonth2)
+            .Where(o => o.CreateTime.HasValue && o.CreateTime.Value.Date >= startOfMonth2 && o.CreateTime.Value.Date <= endOfMonth2)
             .CountAsync();
 
         // Tính toán phần trăm thay đổi
@@ -108,18 +86,33 @@ public class OrderRepository
         return ((decimal)(newTotal - oldTotal) / oldTotal) * 100;
     }
 
+    public async Task<IEnumerable<OrderStatistics>> GetOrderStatisticsAsync()
+    {
+        return await _context.Orders
+            .GroupBy(o => o.CreateTime.Value.Date)
+            .Select(g => new OrderStatistics
+            {
+                Date = g.Key,
+                TotalOrders = g.Count(),
+                SuccessfulOrders = g.Count(o => o.Status == 0),
+                FailedOrders = g.Count(o => o.Status == 1)
+            })
+            .OrderBy(os => os.Date)
+            .ToListAsync();
+    }
+
     public async Task<decimal> GetTotalRevenueAsync(DateTime? fromDate, DateTime? toDate)
     {
         var query = _context.Orders.AsQueryable();
 
         if (fromDate.HasValue)
         {
-            query = query.Where(o => o.RequiredDate >= fromDate.Value);
+            query = query.Where(o => o.CreateTime >= fromDate.Value);
         }
 
         if (toDate.HasValue)
         {
-            query = query.Where(o => o.RequiredDate <= toDate.Value);
+            query = query.Where(o => o.CreateTime <= toDate.Value);
         }
 
         return await query.SumAsync(o => o.Total ?? 0);
@@ -130,11 +123,11 @@ public class OrderRepository
         try
         {
             var orders = await _context.Orders
-                .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Date >= startDate.Date && o.RequiredDate.Value.Date <= endDate.Date)
+                .Where(o => o.CreateTime.HasValue && o.CreateTime.Value.Date >= startDate.Date && o.CreateTime.Value.Date <= endDate.Date)
                 .Include(o => o.ProductOrderDetails)
                 .ToListAsync();
 
-            var groupedOrders = orders.GroupBy(o => o.RequiredDate.Value.Date)
+            var groupedOrders = orders.GroupBy(o => o.CreateTime.Value.Date)
                 .Select(g => new OrderResponse
                 {
                     Date = g.Key.ToString("dd/MM/yyyy"),
@@ -160,7 +153,7 @@ public class OrderRepository
     public async Task<int> GetOrderCountByMonth(int year, int month)
     {
         return await _context.Orders
-            .Where(o => o.RequiredDate.HasValue && o.RequiredDate.Value.Year == year && o.RequiredDate.Value.Month == month)
+            .Where(o => o.CreateTime.HasValue && o.CreateTime.Value.Year == year && o.CreateTime.Value.Month == month)
             .CountAsync();
     }
 
@@ -168,23 +161,22 @@ public class OrderRepository
     public async Task<int> GetOrderCountByYear(int year)
     {
         return await _context.Orders
-            .Where(o => o.RequiredDate.Value.Year == year)
+            .Where(o => o.CreateTime.Value.Year == year)
             .CountAsync();
     }
 
-    public async Task<Boolean> StartCheckoutProduct(string customerId, string staffId, string method, string? voucherCode = null, string? DeliveryOption = null, decimal? ShippingCost = null)
+    public async Task<string> StartCheckoutProduct(string customerId, string staffId, string method, string? voucherCode = null, string? DeliveryOption = null, decimal? ShippingCost = null)
     {
         var methodIn = _context.PaymentMethods.ToDictionary(p => p.MethodName, p => p.MethodId);
         var methodId = methodIn.TryGetValue(method.ToUpper(), out var resultMethodId) ? resultMethodId : -1;
         if (methodId == -1)
         {
-            return false;
+            return null!;
         }
         if (DeliveryOption.ToUpper().Equals("SHIPPING") || DeliveryOption.ToUpper().Equals("PICKUP"))
         {
             if (DeliveryOption.ToUpper().Equals("SHIPPING")) DeliveryOption = "SHIPPING";
             else DeliveryOption = "PICKUP";
-
             var user = await _userManager.FindByIdAsync(customerId);
             if (user != null)
             {
@@ -193,7 +185,7 @@ public class OrderRepository
                     .FirstOrDefaultAsync(c => c.UserId == customerId);
                 if (cart == null)
                 {
-                    return false!;
+                    return null!;
                 }
                 // Voucher validation and application
                 Voucher? voucher = null;
@@ -206,7 +198,7 @@ public class OrderRepository
                                                   v.EndDate >= DateOnly.FromDateTime(DateTime.Now));
                     if (voucher == null)
                     {
-                        return false; // Invalid voucher
+                        return null!; // Invalid voucher
                     }
                     // Parse the discount percentage
                     if (!double.TryParse(voucher.Description, out discountPercentage))
@@ -237,7 +229,7 @@ public class OrderRepository
                         Price = cd.Price
                     }).ToList(),
                     TransactionId = transaction.TransactionId,
-                    RequiredDate = DateTime.Now,
+                    CreateTime = DateTime.Now,
                     Status = (byte)OrderProductStatusEnum.Pending,
                     VoucherId = voucher?.VoucherId,
                     DeliveryOption = DeliveryOption
@@ -258,14 +250,56 @@ public class OrderRepository
                     tracker.State = EntityState.Modified;
                     _context.SaveChanges();
                 }
-                _context.Transactions.Add(transaction);
-                _context.Orders.Add(orderTemp);
-                _context.Remove(cart);
-                await _context.SaveChangesAsync();
-                return true;
+                string PaymentUrl = null!;
+                using (var transactionCheck = _context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        switch (method.ToUpper())
+                        {
+                            case "VNPAY":
+                                var exchangeRate = await new ConvertUSDtoVND().GetExchangeRateAsync();
+                                double totalInVND = (Double)Math.Round(exchangeRate * orderTemp.Total!.Value, 0, MidpointRounding.AwayFromZero);
+                                var vnPayModel = new VnPayRequestModel
+                                {
+                                    Description = user.FullName + " payment product for FPetSpa",
+                                    OrderId = orderTemp.OrderId + "_" + Guid.NewGuid().ToString(),
+                                    Amount = (Double)totalInVND,
+                                    CreatedDate = DateTime.Now,
+                                    ExpiredDate = DateTime.Now.AddSeconds(60),
+                                    ResponseUrl = $"{_Iconfiguration["VnPay:PaymentBackReturnUrl"]}?method=VNPAY&orderId={orderTemp.OrderId}"
+                                };
+                                PaymentUrl = _vnpayServices.CreatePaymentURl(vnPayModel, _httpContextAccessor.HttpContext);
+                                break;
+                            case "PAYPAL":
+                                PayPalPaymentRequest payPalPaymentRequest = new PayPalPaymentRequest
+                                {
+                                    Amount = orderTemp.Total!.Value,
+                                    Currency = "USD",
+                                    Description = orderTemp.OrderId + "_" + Guid.NewGuid().ToString(),
+                                };
+                                var result = _paypalServices.CreatePayment(payPalPaymentRequest, RETURN_URL + $"?method=PAYPAL&orderId={orderTemp.OrderId}", RETURN_URL);
+                                PaymentUrl = result.ApprovalUrl;
+                                break;
+                            default:
+                                return null;
+                        }
+                        _context.Transactions.Add(transaction);
+                        _context.Orders.Add(orderTemp);
+                        _context.Remove(cart);
+                        await _context.SaveChangesAsync();
+                        _context.Database.CommitTransaction();
+                        return PaymentUrl;
+                    }
+                    catch (Exception e)
+                    {
+                        _context.Database.RollbackTransaction();
+                    }
+                }
+
             }
         }
-        return false;
+        return null;
     }
     public virtual async Task<Boolean> AfterCheckOutProduct(string orderId)
     {
@@ -279,9 +313,12 @@ public class OrderRepository
             if (user != null)
             {
                 transaction.Status = (int)TransactionStatus.PAID;
+                order.Status = (byte)OrderProductStatusEnum.PreparingOrder;
                 var tracker = _context.Transactions.Attach(transaction);
                 tracker.State = EntityState.Modified;
-                await _context.SaveChangesAsync();
+                var tracker_order = _context.Orders.Attach(order);
+                tracker_order.State = EntityState.Modified;
+                 _context.SaveChanges();
                 var productSendHtml = orderDetail.Select(product => $@"
             <tr>
                 <td valign=""top"">
@@ -381,19 +418,13 @@ public class OrderRepository
         }
         return false;
     }
-    public async Task<Boolean> StartCheckoutServices(string ServicesId, string CustomerId, string PetId, string PaymentMethod, DateTime bookingDateTime, string? voucherCode = null)
+    public async Task<Boolean> StartCheckoutServices(string[] ServicesIdList, string CustomerId, string PetId, DateTime bookingDateTime, string? voucherCode = null)
     {
         const string staffID = "fee3ede4-5aa2-484b-bc12-7cdc4d9437ac";
-        var methodIn = _context.PaymentMethods.ToDictionary(p => p.MethodName, p => p.MethodId);
-        var methodId = methodIn.TryGetValue(PaymentMethod.ToUpper(), out var resultMethodId) ? resultMethodId : -1;
-        if (resultMethodId == -1)
-        {
-            return false;
-        }
         var user = await _userManager.FindByIdAsync(CustomerId);
         if (user != null)
         {
-            if (ServicesId == null)
+            if (ServicesIdList.IsNullOrEmpty())
             {
                 return false;
             }
@@ -402,71 +433,36 @@ public class OrderRepository
                 return false;
             }
             var pet = await _context.Pets.FindAsync(PetId);
-            var service = await _context.Services.FindAsync(ServicesId);
-            var totalPriceInUSD = await CalculateServicePrice(service!, pet!.PetWeight);
+            decimal totalPriceInUSD = ServicesIdList.Sum(x => this.CalculateServicePrice(_context.Services.Find(x)!, pet!.PetWeight).Result);
 
-            // Voucher validation and application
-            Voucher? voucher = null;
-            double discountPercentage = 0;
-            if (!string.IsNullOrEmpty(voucherCode))
-            {
-                voucher = await _context.Vouchers
-                    .FirstOrDefaultAsync(v => v.VoucherId == voucherCode &&
-                                              v.StartDate <= DateOnly.FromDateTime(DateTime.Now) &&
-                                              v.EndDate >= DateOnly.FromDateTime(DateTime.Now));
-                if (voucher == null)
-                {
-                    return false; // Invalid voucher
-                }
-
-                // Parse the discount percentage
-                if (!double.TryParse(voucher.Description, out discountPercentage))
-                {
-                    discountPercentage = 0; // Default to 0 if parsing fails
-                }
-            }
-
-            string PaymentUrl = null!;
             string OrderIdTemp = GenerateNewOrderIdServicesAsync();
-            var transaction = new FPetSpa.Repository.Data.Transaction
-            {
-                TransactionId = GenerateNewTransactionIDAsync(),
-                MethodId = methodId,
-                Status = (int)TransactionStatus.NOTPAID,
-                TransactionDate = DateOnly.FromDateTime(DateTime.Now)
-            };
-
             FPetSpa.Repository.Data.Order orderTemp = new FPetSpa.Repository.Data.Order
             {
                 OrderId = OrderIdTemp,
                 StaffId = staffID,
                 CustomerId = CustomerId,
                 Total = totalPriceInUSD,
-                TransactionId = transaction.TransactionId,
-                RequiredDate = bookingDateTime,
+                CreateTime = DateTime.Now,
                 Status = (int)OrderStatusEnum.Pending,
-                VoucherId = voucher?.VoucherId // Save the voucher ID
+                BookingTime = bookingDateTime,
             };
-            // Apply the voucher discount
-            if (discountPercentage > 0)
+
+            List<ServiceOrderDetail> serviceOrderDetails = new List<ServiceOrderDetail>();
+            foreach (var serviceId in ServicesIdList)
             {
-                orderTemp.Total = Decimal.Multiply((decimal)orderTemp.Total, Decimal.Subtract(1, (decimal)discountPercentage));
-                // Apply voucher discount
+                ServiceOrderDetail serviceOrderDetail = new ServiceOrderDetail
+                {
+                    ServiceId = serviceId,
+                    OrderId = OrderIdTemp,
+                    PetId = PetId,
+                    //Discount = discountPercentage,
+                    Price = totalPriceInUSD,
+                    PetWeight = pet.PetWeight
+                };
+                serviceOrderDetails!.Add(serviceOrderDetail);
             }
-
-            ServiceOrderDetail serviceOrderDetail = new ServiceOrderDetail
-            {
-                ServiceId = service.ServiceId,
-                OrderId = OrderIdTemp,
-                PetId = PetId,
-                Discount = discountPercentage,
-                Price = totalPriceInUSD,
-                PetWeight = pet.PetWeight
-            };
-
-            _context.Transactions.Add(transaction);
             _context.Orders.Add(orderTemp);
-            _context.ServiceOrderDetails.Add(serviceOrderDetail);
+            _context.ServiceOrderDetails.AddRange(serviceOrderDetails!);
             await _context.SaveChangesAsync();
             return true;
         }
@@ -492,7 +488,85 @@ public class OrderRepository
                 tracker.State = EntityState.Modified;
                 await _context.SaveChangesAsync();
                 byte[] qrCodeBase64 = GenerateQRCode($"{orderId}");
-                var body = this.BodySendMailService(user, order, Pet!, Services!);
+                var orderDetail = _context.ServiceOrderDetails.Where(x => x.OrderId!.Equals(orderId)).ToList();
+                var productSendHtml = orderDetail.Select(product => $@"
+            <tr>
+                <td valign=""top"">
+                    <!--[if mso | IE]>
+                    <table style=""width: 100%;"">
+                        <tr>
+                    <![endif]-->
+                    <!--[if mso | IE]>
+                    <td valign=""top"">
+                        <table role=""presentation"" border=""0"" cellpadding=""0"" cellspacing=""0"">
+                            <tr>
+                                <td style=""vertical-align:top;"">
+                    <![endif]-->
+                    <div style=""display: inline-block; vertical-align: top;"" class=""product-box-col"">
+                        <table style=""width:100%"">
+                            <tbody>
+                                <tr>
+                                    <td style=""width:200px;padding: 0 30px 0 24px;"" align=""left"" class=""gr-image-container product-box-col"">
+                                        <img src=""{_image.GetLinkByName("fpetspaservices", _context.Services.Find(product.ServiceId)!.PictureName!).Result}"" alt=""{product.ServiceId}"" style=""border:0;display:block;outline:none;text-decoration:none;height:auto;width:100%;"" width=""200"" height=""auto"" />
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!--[if mso | IE]>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <![endif]-->
+                    <!--[if mso | IE]>
+                    </td></tr></table></td>
+                    <![endif]-->
+                    <div style=""display: inline-block; width: 316px; vertical-align: top;"" class=""product-box-col"">
+                        <table style=""width:100%"">
+                            <tbody>
+                                <tr>
+                                    <td valign=""top"">
+                                        <table style=""width: 100%;"">
+                                            <tbody>
+                                                <tr>
+                                                    <td style=""line-height: normal;font-family: Arial;font-size: 16px;color: #1F262F;font-weight: bold;text-decoration: initial;font-style: initial;padding: 20px 0 8px 0;"" align=""left"" class=""product-box-col-text"">
+                                                        {_context.Services.Find(product.ServiceId)!.ServiceName}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style=""line-height: normal;font-family: Arial;font-size: 14px;color: #4D5C70;font-weight: initial;text-decoration: initial;font-style: initial;padding: 0 30px 16px 0;"" align=""left"" class=""product-box-col-text"">
+                                                        {Pet!.PetName}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style=""line-height: normal;font-family: Arial;font-size: 24px;color: #000000;font-weight: bold;text-decoration: initial;font-style: initial;padding: 0 0 10px 0;"" align=""left"" class=""product-box-col-text"">
+                                                        {product.Price:C}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td style=""padding: 27px 0 20px 0;; width:100%"" align=""left"" class=""product-box-col-text"">
+                                                        <div style=""display: inline-block"">
+                                                            <table border=""0"" cellpadding=""0"" cellspacing=""0"" role=""presentation"" style=""border-collapse:separate;line-height:100%;"">
+                                                                <tbody>
+                                                                    <tr></tr>
+                                                                </tbody>
+                                                            </table>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            </tbody>
+                                        </table>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </td>
+            </tr>
+        ").ToList();
+                var productSendHtmlRe = string.Join("", productSendHtml);
+                var body = this.BodySendMailProductPickUp(productSendHtmlRe, user);
                 await _sendMailServicers.SendEmailWithQRCodeAsync(
 
                     user.Email!,
@@ -782,11 +856,11 @@ public class OrderRepository
                 default:
                     return null;
             }
-            var tracker = _context.Orders.Attach(order);
-            tracker.State = EntityState.Modified;
-            _context.SaveChanges();
-            return PaymentUrl!;
         }
+        var tracker = _context.Orders.Attach(order);
+        tracker.State = EntityState.Modified;
+        _context.SaveChanges();
+        return PaymentUrl!;
     }
 
     public async Task<Boolean> DeleteOrderByOrderId(string orderId)
@@ -821,18 +895,102 @@ public class OrderRepository
         return false;
     }
 
-    public async Task<string> ReOrder(string OrderId)
+    public async Task<string> ReOrder(string OrderId, string paymentMethod)
+    {
+        FPetSpa.Repository.Data.Order order = _context.Orders.Find(OrderId);
+        var methodin = _context.PaymentMethods.ToDictionary(p => p.MethodName, p => p.MethodId);
+        var methodid = methodin.TryGetValue(paymentMethod.ToUpper(), out var resultmethodid) ? resultmethodid : -1;
+        if (resultmethodid == -1)
+        {
+            return null ;
+        }
+        if (order == null) return null;
+        var user = _userManager.FindByIdAsync(order.CustomerId!).Result;
+        if (user != null)
+        {
+            FPetSpa.Repository.Data.Transaction transaction = null;
+            if (order.TransactionId != null) transaction = _context.Transactions.Find(order.TransactionId);
+            else
+            {
+                transaction = new FPetSpa.Repository.Data.Transaction
+                {
+                    TransactionId = GenerateNewTransactionIDAsync(),
+                    MethodId = methodid,
+                    Status = (int)TransactionStatus.NOTPAID,
+                    TransactionDate = DateOnly.FromDateTime(DateTime.Now)
+                };
+                order.TransactionId = transaction.TransactionId;
+                _context.Transactions.Add(transaction);
+                _context.Orders.Update(order);
+                _context.SaveChanges(); 
+            }
+            if (transaction != null)
+            {
+                if (transaction.Status == (int)TransactionStatus.PAID) return null;
+                string Method = _context.PaymentMethods.Find(transaction.MethodId)!.MethodName!;
+                
+                string PaymentUrl = null!;
+                using (var transactionCheck = _context.Database.BeginTransaction())
+                {
+                    try
+                    {
+                        switch (Method.ToUpper())
+                        {
+                            case "VNPAY":
+                                var exchangeRate = await new ConvertUSDtoVND().GetExchangeRateAsync();
+                                double totalInVND = (Double)Math.Round(exchangeRate * order.Total!.Value, 0, MidpointRounding.AwayFromZero);
+                                var vnPayModel = new VnPayRequestModel
+                                {
+                                    Description = user.FullName + " payment product for FPetSpa",
+                                    OrderId = order.OrderId + "_" + Guid.NewGuid().ToString(),
+                                    Amount = (Double)totalInVND,
+                                    CreatedDate = DateTime.Now,
+                                    ExpiredDate = DateTime.Now.AddSeconds(60),
+                                    ResponseUrl = $"{_Iconfiguration["VnPay:PaymentBackReturnUrl"]}?method=VNPAY&orderId={order.OrderId}"
+                                };
+                                PaymentUrl = _vnpayServices.CreatePaymentURl(vnPayModel, _httpContextAccessor.HttpContext);
+                                break;
+                            case "PAYPAL":
+                                PayPalPaymentRequest payPalPaymentRequest = new PayPalPaymentRequest
+                                {
+                                    Amount = order.Total!.Value,
+                                    Currency = "USD",
+                                    Description = order.OrderId + "_" + Guid.NewGuid().ToString(),
+                                };
+                                var result = _paypalServices.CreatePayment(payPalPaymentRequest, RETURN_URL + $"?method=PAYPAL&orderId={order.OrderId}", RETURN_URL);
+                                PaymentUrl = result.ApprovalUrl;
+                                break;
+                            default:
+                                return null;
+                        }
+                        _context.Database.CommitTransaction();
+
+                        return PaymentUrl;
+                    }
+                    catch (Exception e)
+                    {
+                        _context.Database.RollbackTransaction();
+                    }
+                }
+            }
+        }
+        return null;
+    }
+
+    public async Task<string> ReOrderForProduct(string OrderId)
     {
         FPetSpa.Repository.Data.Order order = _context.Orders.Find(OrderId);
         if (order == null) return null;
         var user = _userManager.FindByIdAsync(order.CustomerId!).Result;
         if (user != null)
         {
-            FPetSpa.Repository.Data.Transaction transaction = _context.Transactions.Find(order.TransactionId)!;
+           var transaction = _context.Transactions.Find(order.TransactionId);
+
             if (transaction != null)
             {
                 if (transaction.Status == (int)TransactionStatus.PAID) return null;
                 string Method = _context.PaymentMethods.Find(transaction.MethodId)!.MethodName!;
+
                 string PaymentUrl = null!;
                 using (var transactionCheck = _context.Database.BeginTransaction())
                 {
@@ -890,8 +1048,6 @@ public class OrderRepository
 
         }
     }
-
-
     public async Task<Boolean> CheckInService(string OrderId)
     {
         FPetSpa.Repository.Data.Order order = await _context.Orders.FindAsync(OrderId);
@@ -954,16 +1110,12 @@ public class OrderRepository
             if (!string.IsNullOrEmpty(status))
             {
                 var check = false;
-                if(status.ToUpper().Equals("STAFFACCEPTED"))
-                {
-                    order.Status = (byte)OrderProductStatusEnum.StaffAccepted;
-                     check = true;
-                }
+
                 if (order.DeliveryOption.ToUpper().Equals("SHIPPING"))
                 {
-                    if (status.ToUpper().Equals("PROCESSING"))
+                    if (status.ToUpper().Equals("DELIVERING"))
                     {
-                        order.Status = (byte)OrderProductStatusEnum.Processing;
+                        order.Status = (byte)OrderProductStatusEnum.Delivering;
                         check = true;
                     }
                     else if (status.ToUpper().Equals("SHIPPED"))
@@ -977,11 +1129,6 @@ public class OrderRepository
                      if (status.ToUpper().Equals("READYFORPICKUP"))
                     {
                         order.Status = (byte)OrderProductStatusEnum.ReadyForPickup;
-                        check = true;
-                    }
-                    else if (status.ToUpper().Equals("SUCCESSFULLY"))
-                    {
-                        order.Status = (byte)OrderProductStatusEnum.Succesfully;
                         check = true;
                     }
                 }

@@ -3,6 +3,8 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace FPetSpa.Controllers
 {
+    [ApiController]
+    [Route("ShipCost")]
     public class GoogleMapController : Controller
     {
         private readonly GoogleMapService _googleMapService;

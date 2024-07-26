@@ -20,7 +20,8 @@ namespace FPetSpa.Repository
         GenericRepository<BookingTime> BookingTime {  get; }
         FeedBackRepository FeedBackRepository { get; }
         StaffRepository StaffRepository { get; }
-   
+        GenericRepository<PetType> PetType { get; }
+
         IAccountRepository _IaccountRepository { get; }
         Task<int> SaveChangesAsync();
         void Save();

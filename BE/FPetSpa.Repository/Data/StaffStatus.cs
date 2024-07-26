@@ -7,10 +7,10 @@ using System.Threading.Tasks;
 namespace FPetSpa.Repository.Data
 {
     public class StaffStatus
-    {   
-        public string? StaffId { get; set; } 
-        public int Status { get; set; }  
-        
-        public string? StaffName { get; set; }
+    {
+        public int Id { get; set; }
+        public string StaffId { get; set; }
+        public int Status { get; set; }
+        public string StaffName { get; set; }
     }
 }

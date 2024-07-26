@@ -30,27 +30,17 @@ namespace FPetSpa.Controllers
         private readonly IUnitOfWork _unitOfWork;
         private readonly IPayPalService _payPalServices;
         private readonly IStaffServices _staffServices;
-        public OrderController(IUnitOfWork unitOfWork, IVnPayService vnPayService, IPayPalService payPalService, IStaffServices staffServices)
+        private readonly TimeSlotService _timeSlotServices;
+        public OrderController(IUnitOfWork unitOfWork, IVnPayService vnPayService, IPayPalService payPalService, IStaffServices staffServices, TimeSlotService timeSlotServices)
         {
             _vnpayServices = vnPayService;
             _unitOfWork = unitOfWork;
             _payPalServices = payPalService;
             _staffServices = staffServices;
+            _timeSlotServices = timeSlotServices;
         }
 
-        [HttpPost("{orderId}/assign-staff")]
-        public async Task<IActionResult> AssignStaffToOrder(string orderId)
-        {
-            var (success, staff) = await _staffServices.AssignAvailableStaffToOrder(orderId);
-            if (!success)
-            {
-                return BadRequest("Không có nhân viên rảnh rỗi hoặc đơn hàng không tồn tại.");
-            }
 
-            var message = $"Nhân viên {staff.StaffName} đã được gán vào đơn hàng của bạn.";
-            return Ok(new { Message = message});
-        }
-     
         [HttpGet("OrderSearch")]
         public async Task<IActionResult> search([FromQuery] RequestSearchOrderModel model)
         {
@@ -76,10 +66,11 @@ namespace FPetSpa.Controllers
 
             Expression<Func<Order, bool>> filter = x =>
             (string.IsNullOrEmpty(model.OrderStatus) || x.Status == OrderStatus) &&
-            (model.CreatedDate == null || x.RequiredDate.Equals(model.CreatedDate)) &&
+            (model.CreatedDate == null || x.CreateTime.Equals(model.CreatedDate)) &&
             (model.CustomeriD == null || x.CustomerId.Equals(model.CustomeriD)) && 
             (model.OrderId == null || x.OrderId.Equals(model.OrderId)) &&
-            (model.DeliveryOption == null || x.DeliveryOption!.Equals(model.DeliveryOption));
+            (model.DeliveryOption == null || x.DeliveryOption!.Equals(model.DeliveryOption)) &&
+            (model.BookingTime == null || x.BookingTime!.Equals(model.BookingTime));
 
             var response = _unitOfWork.OrderGenericRepo.Get
                 (
@@ -101,13 +92,15 @@ namespace FPetSpa.Controllers
                         {
                             CustomerId = p.CustomerId,
                             OrderId = p.OrderId,
-                            RequiredDate = p.RequiredDate,
+                            RequiredDate = p.CreateTime,
+                            BookingTime = p.BookingTime ?? null,
                             Status = p.Status,
                             Total = p.Total,
                             VoucherId = p.VoucherId,
                             DeliveryOption = p.DeliveryOption!,
-                            TransactionStatus = (await _unitOfWork.TransactionRepository.GetByIdAsync(p.TransactionId!)).Status 
+                            TransactionStatus = 1
                         };
+                        if (p.TransactionId != null) responseModel.TransactionStatus = (await _unitOfWork.TransactionRepository.GetByIdAsync(p.TransactionId!)).Status;
                         listResponse.Add(responseModel);
                     }
 
@@ -119,13 +112,15 @@ namespace FPetSpa.Controllers
                     {
                         CustomerId = p.CustomerId,
                         OrderId = p.OrderId,
-                        RequiredDate = p.RequiredDate,
+                        RequiredDate = p.CreateTime,
                         Status = p.Status,
                         Total = p.Total,
                         VoucherId = p.VoucherId,
                         DeliveryOption = p.DeliveryOption!,
-                        TransactionStatus = (await _unitOfWork.TransactionRepository.GetByIdAsync(p.TransactionId!)).Status
+                        BookingTime = p.BookingTime ?? null,
+                        TransactionStatus = -1
                     };
+                    if (p.TransactionId != null) responseModel.TransactionStatus = (await _unitOfWork.TransactionRepository.GetByIdAsync(p.TransactionId!)).Status;
                     listResponse.Add(responseModel);
                 };
 
@@ -145,11 +140,10 @@ namespace FPetSpa.Controllers
         [HttpPost("StartCheckoutServices")]
         public async Task<IActionResult> CheckoutServices(OrderServicesModelRequest model)
         {
-            var result = await _unitOfWork.OrderRepository.StartCheckoutServices(
+                var result = await _unitOfWork.OrderRepository.StartCheckoutServices(
                 model.ServiceId,
                 model.CustomerId!,
                 model.PetId,
-                model.PaymentMethod,
                 model.bookingDateTime,
                  null
                 );
@@ -165,7 +159,7 @@ namespace FPetSpa.Controllers
             if (model != null)
             {
                 var result = await _unitOfWork.OrderRepository.StartCheckoutProduct(model.CustomerId, idAdminAuto, model.PaymentMethod, model.VoucherId, model.DeliveryOption);
-                if (result) return Ok("Booking Successfully! Please wait staff for accepting!");
+                if (result != null) return Ok(result);
                 return BadRequest("Something went wrong!!");
             }
             return BadRequest("Cracking...Please comeback latter");
@@ -222,7 +216,25 @@ namespace FPetSpa.Controllers
             IEnumerable<Order> list = (await _unitOfWork.OrderGenericRepo.GetAll()).Where(x => x.OrderId.StartsWith("ORS"));
             if(list != null)
             {
-                return Ok(list);
+                List<ResponseSearchOrderModel> listResponse = new List<ResponseSearchOrderModel>();
+                foreach (var p in list)
+                {
+                    var responseModel = new ResponseSearchOrderModel
+                    {
+                        CustomerId = p.CustomerId,
+                        OrderId = p.OrderId,
+                        RequiredDate = p.CreateTime,
+                        BookingTime = p.BookingTime,
+                        Status = p.Status,
+                        Total = p.Total,
+                        VoucherId = p.VoucherId,
+                        DeliveryOption = p.DeliveryOption!,
+                        TransactionStatus = 1
+                    };
+                    if (p.TransactionId != null) responseModel.TransactionStatus = (await _unitOfWork.TransactionRepository.GetByIdAsync(p.TransactionId!)).Status;
+                    listResponse.Add(responseModel);
+                };
+                return Ok(listResponse);
             }else return NotFound();
         }
 
@@ -242,20 +254,32 @@ namespace FPetSpa.Controllers
         {
 
             var order = _unitOfWork.OrderGenericRepo.GetById(OrderId);
-            if(order.Status == 0)
+            if (order.Status == 0 && status.ToUpper().Equals("STAFFACCEPTED"))
             {
                 var (success, staff) = await _staffServices.AssignAvailableStaffToOrder(OrderId);
                 if (!success)
                 {
                     return BadRequest("Không có nhân viên rảnh rỗi hoặc đơn hàng không tồn tại.");
                 }
+
+                var time = TimeOnly.FromDateTime(order.BookingTime.Value);
+                var date = DateOnly.FromDateTime(order.BookingTime.Value);
+                var bookingTime = _unitOfWork.BookingTime.GetAll().Result.FirstOrDefault(x => x.Time.Equals(time) && x.Date.Equals(date));
+                if (bookingTime != null)
+                {
+                    if (bookingTime.MaxSlots == 0) return BadRequest("Don't have enough slots for booking");
+                    bookingTime.MaxSlots -= 1;
+                    _unitOfWork.BookingTime.Update(bookingTime);
+                    await _unitOfWork.SaveChangesAsync();
+                }
+                else return BadRequest("Date not valid");
             }
             if (order != null)
             {
                 var result = await _unitOfWork.OrderRepository.UpdateOrderStatus(OrderId, status);
 
-                if (result == true) 
-               
+                if (result == true)
+
                 {
                     await _staffServices.UpdateStaffStatusBasedOnOrder(OrderId);
 
@@ -263,8 +287,6 @@ namespace FPetSpa.Controllers
                 return Ok();
 
             }
-
-
             return BadRequest("Something went wrong!!!");
         }
         [HttpDelete("DeleteOrderByOrderId")]
@@ -301,11 +323,11 @@ namespace FPetSpa.Controllers
         }
 
         [HttpPut("ReBooking")]
-        public async Task<IActionResult> ReBooking(string orderId)
+        public async Task<IActionResult> ReBooking(string orderId, string paymentMethod)
         {
-            if(orderId != null)
+            if(orderId != null && paymentMethod != null)
             {
-                var result = await _unitOfWork.OrderRepository.ReOrder(orderId);
+                var result = await _unitOfWork.OrderRepository.ReOrder(orderId, paymentMethod);
                 if(result != null) return Ok(result);
             }
             return BadRequest();    
@@ -340,6 +362,18 @@ namespace FPetSpa.Controllers
             {
                 var result = await _unitOfWork.OrderRepository.UpdateProductOrderStatusByUser(orderId, Status);
                 if (result == true) return Ok("Update successfully");
+            }
+            return BadRequest();
+        }
+
+
+        [HttpPut("ReOrderProduct")]
+        public async Task<IActionResult> ReOrder(string orderId)
+        {
+            if (orderId != null)
+            {
+                var result = await _unitOfWork.OrderRepository.ReOrderForProduct(orderId);
+                if (result != null) return Ok(result);
             }
             return BadRequest();
         }

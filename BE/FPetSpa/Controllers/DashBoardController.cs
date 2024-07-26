@@ -20,7 +20,7 @@ namespace FPetSpa.Controllers
             _unitOfWork = unitOfWork;
             _context = fpetSpaContext;
         }
-     
+
         [HttpGet("order-count")]
         public async Task<IActionResult> GetOrderCount()
         {
@@ -78,7 +78,23 @@ namespace FPetSpa.Controllers
             var count = await _unitOfWork.OrderRepository.GetOrderCountByYear(year);
             return Ok(count);
         }
-
+        [HttpGet("GetOrderStatistics")]
+        public async Task<ActionResult<IEnumerable<OrderStatistics>>> GetOrderStatistics()
+        {
+            try
+            {
+                var statistics = await _unitOfWork.OrderRepository.GetOrderStatisticsAsync();
+                if (statistics == null || !statistics.Any())
+                {
+                    return NotFound(new { message = "No order statistics available" });
+                }
+                return Ok(statistics);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(StatusCodes.Status500InternalServerError, new { message = ex.Message });
+            }
+        }
         [HttpGet]
         public async Task<ActionResult<IEnumerable<DashboardData>>> GetDashboardData()
         {
@@ -91,15 +107,20 @@ namespace FPetSpa.Controllers
                                        from paymentMethod in paymentMethodJoin.DefaultIfEmpty()
                                        select new DashboardData
                                        {
-                                           CustomerName = customer.FullName ,
+                                           OrderId = order.OrderId,
+                                           CustomerId = customer.Id,
+                                           CustomerName = customer.FullName,
                                            Total = order.Total,
-                                           TransactionDate = order.RequiredDate,
-                                           PaymentMethod = paymentMethod.MethodName,
-                                           StaffName = staff.StaffName ,
-                                           Status = order.Status
+                                           TransactionDate = order.CreateTime,
+                                           PaymentMethod = paymentMethod != null ? paymentMethod.MethodName : "Unassigned",
+                                           StaffName = staff != null ? staff.StaffName : "Unassigned",
+                                           Status = order.Status,
+                                           DeliveryOption = order.DeliveryOption,
+                                           TransactionStatus = transaction.Status 
                                        }).ToListAsync();
 
             return Ok(dashboardData);
-        }   
+        }
+
     }
 }

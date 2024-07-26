@@ -1,6 +1,7 @@
 ﻿
 
 using FPetSpa.Repository.Data;
+using Microsoft.EntityFrameworkCore;
 
 namespace FPetSpa.Repository.Services
 {
@@ -12,10 +13,12 @@ namespace FPetSpa.Repository.Services
     public class PetService : IPetService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly FpetSpaContext _context;
 
-        public PetService(IUnitOfWork unitOfWork)
+        public PetService(IUnitOfWork unitOfWork, FpetSpaContext context)
         {
             _unitOfWork = unitOfWork;
+            _context = context;
         }
         public async Task<string> GenerateNewPetId()
         {
@@ -35,6 +38,11 @@ namespace FPetSpa.Repository.Services
         public async Task<IEnumerable<Pet>> SearchPetByName(string petName)
         {
             return _unitOfWork.PetRepository.Find(p => p.PetName.Contains(petName));
+        }
+        public async Task<PetType> GetByTypeNameAsync(string typeName)
+        {
+            return await _context.PetType
+                .FirstOrDefaultAsync(pt => pt.Type == typeName);
         }
     }
 }

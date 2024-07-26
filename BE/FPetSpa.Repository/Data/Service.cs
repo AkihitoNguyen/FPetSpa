@@ -21,4 +21,8 @@ public partial class Service
     public DateTime? EndDate { get; set; }
 
     public int? Status { get; set; }
+    public int? PetTypeID { get; set; }
+    public PetType PetType { get; set; }
+
+
 }

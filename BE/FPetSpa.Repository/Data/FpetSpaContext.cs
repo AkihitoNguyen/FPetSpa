@@ -1,6 +1,6 @@
-﻿using Microsoft.AspNetCore.Identity;
-using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
+using Org.BouncyCastle.Asn1.IsisMtt.X509;
 
 namespace FPetSpa.Repository.Data;
 
@@ -17,6 +17,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
     public virtual DbSet<Cart> Carts { get; set; }
     public virtual DbSet<ApplicationUser> Users { get; set; }
+    public virtual DbSet<StaffStatus> Staff { get; set; }
 
     public virtual DbSet<CartDetail> CartDetails { get; set; }
 
@@ -37,11 +38,11 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
     public virtual DbSet<Service> Services { get; set; }
 
     public virtual DbSet<ServiceOrderDetail> ServiceOrderDetails { get; set; }
+    public virtual DbSet<PetType> PetType { get; set; }
 
     public virtual DbSet<Transaction> Transactions { get; set; }
     public virtual DbSet<BookingTime> BookingTime { get; set; }
     public virtual DbSet<Voucher> Vouchers { get; set; }
-    public DbSet<StaffStatus> Staff{ get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -194,6 +195,17 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.MethodName).HasMaxLength(20);
         });
 
+        modelBuilder.Entity<PetType>(entity =>
+        {
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id)
+            .ValueGeneratedOnAdd();
+
+            entity.Property(e => e.Type)
+            .HasMaxLength(10)
+            .HasColumnName("Type");
+        });
+
         modelBuilder.Entity<Pet>(entity =>
         {
             entity.HasKey(e => e.PetId).HasName("PK__Pet__48E538029A90B6D1");
@@ -206,18 +218,12 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.CustomerId)
                 .HasMaxLength(50)
                 .HasColumnName("CustomerID");
-            entity.Property(e => e.PetGender)
-                .HasMaxLength(10)
-                .IsUnicode(false)
-                .HasColumnName("Pet Gender");
             entity.Property(e => e.PetName)
                 .HasMaxLength(20)
                 .IsUnicode(false)
                 .HasColumnName("Pet Name");
-            entity.Property(e => e.PetType)
-                .HasMaxLength(20)
-                .IsUnicode(false)
-                .HasColumnName("Pet Type");
+            entity.Property(e => e.TypeId)
+                .HasColumnName("TypeId");
             entity.Property(e => e.PetWeight)
                 .HasColumnType("decimal(9, 2)")
                 .HasColumnName("Pet Weight");
@@ -226,6 +232,9 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
             entity.HasOne(d => d.Customer).WithMany(p => p.Pets)
                 .HasForeignKey(d => d.CustomerId)
                 .HasConstraintName("FK_Pet.CustomerID");
+            entity.HasOne(d => d.PetType).WithMany()
+                .HasForeignKey(d => d.TypeId)
+                .HasConstraintName("FK_Pet_PetType");
         });
 
         modelBuilder.Entity<Product>(entity =>
@@ -284,7 +293,17 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.Price).HasColumnType("money");
             entity.Property(e => e.ServiceName).HasMaxLength(50);
             entity.Property(e => e.StartDate).HasColumnType("datetime");
+
+            // Thêm cột PetTypeID
+            entity.Property(e => e.PetTypeID).HasColumnName("PetTypeID");
+
+            // Thiết lập mối quan hệ với bảng PetType
+            entity.HasOne(d => d.PetType)
+                .WithMany(p => p.Services)
+                .HasForeignKey(d => d.PetTypeID)
+                .HasConstraintName("FK_Service_PetType");
         });
+
 
         modelBuilder.Entity<ServiceOrderDetail>(entity =>
         {
@@ -301,7 +320,7 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
                 .HasMaxLength(20)
                 .HasColumnName("ServiceID");
 
-            entity.HasOne(d => d.Order).WithMany()
+            entity.HasOne(d => d.Order).WithMany(d => d.ServiceOrderDetails)
                 .HasConstraintName("FK_ServiceOrderDetails.OrderID");
 
             entity.HasOne(d => d.Pet).WithMany()
@@ -347,10 +366,12 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
         {
             entity.ToTable("StaffStatus"); // Tên bảng trong cơ sở dữ liệu
 
-            entity.HasKey(e => e.StaffId); // Khóa chính là StaffId
+            entity.HasKey(e => e.Id); // Khóa chính là Id
+
+            entity.Property(e => e.Id)
+                  .ValueGeneratedOnAdd(); // Sử dụng IDENTITY cho cột Id
 
             entity.Property(e => e.StaffId)
-                  .IsRequired()
                   .HasMaxLength(450);
 
             entity.Property(e => e.Status)
@@ -359,7 +380,6 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
             entity.Property(e => e.StaffName)
                   .HasMaxLength(450);
         });
-
         modelBuilder.Entity<Voucher>(entity =>
         {
             entity.HasKey(e => e.VoucherId).HasName("PK__Voucher__3AEE79C1F400B288");
@@ -374,7 +394,6 @@ public partial class FpetSpaContext : IdentityDbContext<ApplicationUser>
 
         OnModelCreatingPartial(modelBuilder);
     }
-
 
     partial void OnModelCreatingPartial(ModelBuilder modelBuilder);
 }

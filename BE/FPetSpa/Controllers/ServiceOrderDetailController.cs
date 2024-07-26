@@ -1,4 +1,5 @@
-﻿using FPetSpa.Models.ServiceModel;
+﻿using FPetSpa.Models.OrderModel;
+using FPetSpa.Models.ServiceModel;
 using FPetSpa.Repository;
 using FPetSpa.Repository.Data;
 using FPetSpa.Repository.Model.ServiceOrderDetailModel;
@@ -39,17 +40,21 @@ namespace FPetSpa.Controllers
         public async Task<IActionResult> GetOrderServiceDetail(string orderId)
         {
             var serviceOrderDetails = _unitOfWork.ServiceOrderDetailRepository.GetAllAsync().Result.Where(x => x.OrderId == orderId);
-            if(!serviceOrderDetails.IsNullOrEmpty()) 
+            var order = _unitOfWork.OrderGenericRepo.GetById(orderId);
+            if (!serviceOrderDetails.IsNullOrEmpty() && order != null)
             {
-                var result = serviceOrderDetails.Select(async x => new ResponseSearchModel
+                var result = serviceOrderDetails.Select(async x => new ResponseSearchModelCustom
                 {
                     ServicesId = x.ServiceId!,
                     ServiceName = _unitOfWork.ServiceRepository.GetByIdAsync(x.ServiceId).Result.ServiceName ?? "Service Removed",
                     PictureServices = await _image.GetLinkByName("fpetspaservices", _unitOfWork.ServiceRepository.GetById(x.ServiceId!).PictureName!) ?? await _image.GetLinkByName("errorbuckett", "avatar.png"),
-                    Price = x.Price!.Value
+                    Price = x.Price!.Value,
+                    BookingTime = order.BookingTime ?? null,
+                    TransactionDate =  _unitOfWork.TransactionRepository.GetById(order.TransactionId).TransactionDate ?? null,
                 });
+                return Ok(await Task.WhenAll(result));
             }
-            return Ok(serviceOrderDetails);
+            return BadRequest();
         }
 
         [HttpDelete("{orderId}&{serviceId}")]
@@ -113,5 +118,7 @@ namespace FPetSpa.Controllers
             return Ok("Service order detail added successfully.");
 
         }
+       
     }
+
 }

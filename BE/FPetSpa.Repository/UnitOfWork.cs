@@ -11,7 +11,6 @@ namespace FPetSpa.Repository
         private CartRepository<Cart> _cart;
         private CartDetailRepository<CartDetail> _cartDetails;
         private FeedBackRepository _feedback;
-        private StaffRepository _staffRepository;
         private ServiceOrderDetailRepository<ServiceOrderDetail> _serviceOrderDetailRepository;
         private ProductOrderDetailRepositoty<ProductOrderDetail> _productOrderDetailRepository;
         private GenericRepository<Pet> _pet;
@@ -20,6 +19,9 @@ namespace FPetSpa.Repository
         private GenericRepository<Transaction> _transaction;
         private GenericRepository<Voucher> _voucher;
         private GenericRepository<BookingTime> _bookingTime;
+        private StaffRepository _staffRepository;
+        private GenericRepository<PetType> _petType;
+
         public OrderRepository OrderRepository { get; }
         public IAccountRepository _IaccountRepository { get; }
         public UnitOfWork(FpetSpaContext context, IAccountRepository accountRepository, OrderRepository orderRepository)
@@ -38,6 +40,17 @@ namespace FPetSpa.Repository
                     this._voucher = new GenericRepository<Voucher>(_context);
                 }
                 return this._voucher;
+            }
+        }
+        public StaffRepository StaffRepository
+        {
+            get
+            {
+                if (_staffRepository == null)
+                {
+                    this._staffRepository = new StaffRepository(_context);
+                }
+                return _staffRepository;
             }
         }
         public GenericRepository<Service> ServiceRepository
@@ -82,17 +95,6 @@ namespace FPetSpa.Repository
                     this._product = new GenericRepository<Product>(_context);
                 }
                 return _product;
-            }
-        }
-        public StaffRepository StaffRepository
-        {
-            get
-            {
-                if (_staffRepository == null)
-                {
-                    this._staffRepository = new StaffRepository(_context);
-                }
-                return _staffRepository;
             }
         }
         public FeedBackRepository FeedBackRepository
@@ -189,7 +191,17 @@ namespace FPetSpa.Repository
             }
         }
 
-
+        public GenericRepository<PetType> PetType
+        {
+            get
+            {
+                if (_petType == null)
+                {
+                    this._petType = new GenericRepository<PetType>(_context);
+                }
+                return this._petType;
+            }
+        }
 
         public async Task<int> SaveChangesAsync()
         {

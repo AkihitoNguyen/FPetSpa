@@ -7,11 +7,9 @@
 
         public string? PetName { get; set; }
 
-        public string? PictureName { get; set; }
+        public IFormFile? file { get; set; } = null;
 
-        public string? PetGender { get; set; }
-
-        public string? PetType { get; set; }
+        public int? PetType { get; set; }
 
         public decimal? PetWeight { get; set; }
     }

@@ -1,17 +1,25 @@
-﻿namespace FPetSpa.Repository.Services
+﻿using FPetSpa.Repository.Data;
+using FPetSpa.Repository.Model;
+using Microsoft.EntityFrameworkCore;
+
+namespace FPetSpa.Repository.Services
 {
     public interface IIdService
     {
         Task<string> GenerateNewServiceIdAsync();
+        Task<PetType> GetByTypeNameAsync(string typeName);
+        Task<IEnumerable<Service>> GetByPetTypeNameAsync(string petTypeName);
     }
 
     public class IdService : IIdService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly FpetSpaContext _context;
 
-        public IdService(IUnitOfWork unitOfWork)
+        public IdService(IUnitOfWork unitOfWork, FpetSpaContext context)
         {
             _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<string> GenerateNewServiceIdAsync()
@@ -29,6 +37,25 @@
 
             return $"SER{newIdNumber}";
         }
+        public async Task<PetType> GetByTypeNameAsync(string typeName)
+        {
+            return await _context.PetType
+                .FirstOrDefaultAsync(pt => pt.Type == typeName);
+        }
 
+        public async Task<IEnumerable<Service>> GetByPetTypeNameAsync(string petTypeName)
+        {
+            var petType = await _context.PetType
+                .FirstOrDefaultAsync(pt => pt.Type == petTypeName);
+
+            if (petType == null)
+            {
+                return Enumerable.Empty<Service>();
+            }
+
+            return await _context.Services
+                .Where(s => s.PetTypeID == petType.Id)
+                .ToListAsync();
+        }
     }
 }

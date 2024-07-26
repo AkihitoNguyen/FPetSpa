@@ -8,6 +8,8 @@ using System.Linq.Expressions;
 using FPetSpa.Repository.Services;
 using FPetSpa.Models.ServiceModel;
 using FPetSpa.Models.ProductModel;
+using FPetSpa.Repository.Repository;
+using FPetSpa.Repository.Model;
 
 namespace FPetSpa.Controllers
 {
@@ -78,7 +80,35 @@ namespace FPetSpa.Controllers
             }
             return BadRequest();
         }
+        [HttpGet("petType/{petTypeName}")]
+        public async Task<IActionResult> GetServiceByPetType(string petTypeName)
+        {
+    
+            var services = await _idService.GetByPetTypeNameAsync(petTypeName);
 
+            if (services.Any())
+            {
+            
+                var petType = await _idService.GetByTypeNameAsync(petTypeName);
+
+            
+                var serviceModels = await Task.WhenAll(services.Select(async service => new ServicePetModel
+                {
+                    ServiceID = service.ServiceId,
+                    ServiceName = service.ServiceName,
+                    Description = service.Description,
+                    PictureName = string.IsNullOrEmpty(service.PictureName) ? null :
+                        await _imageController.GetLinkByName("fpetspaservices", service.PictureName),
+                    Price = (decimal)service.Price,
+                    Status = (int)service.Status,
+                    PetType = petType != null ? petType.Type : null 
+                }));
+
+                return Ok(serviceModels);
+            }
+
+            return NotFound();
+        }
         [HttpGet("findByWeight")]
         public IActionResult GetServicesByWeight([FromQuery] RequestWeightFilterServiceModel request)
         {

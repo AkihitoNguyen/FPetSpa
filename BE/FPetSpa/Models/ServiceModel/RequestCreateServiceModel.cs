@@ -11,4 +11,5 @@
         public decimal? Price { get; set; } = null!;
         public IFormFile? file { get; set; } = null!;
     }
+   
 }
